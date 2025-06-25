@@ -1,0 +1,27 @@
+.introPanel {
+  padding: 1rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.dropzone {
+  padding: 0.5rem 1rem;
+  border: 2px dashed #3db3e3;
+  background: #ffffff;
+  color: #0c436a;
+  border-radius: 6px;
+  cursor: pointer;
+  line-height: 0rem;
+  font-size: 0.85rem;
+}
+
+.description {
+  flex: 2;
+  font-size: 0.9rem;
+  color: #333;
+}

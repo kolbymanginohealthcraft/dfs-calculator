@@ -1,0 +1,141 @@
+.rightPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1rem;
+  background: #f0fdf7;
+  min-width: 0;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 10;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.resetBtn {
+  background: #fcecec;
+  border: 1px solid #d64550;
+  color: #d64550;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.resetBtn:hover {
+  background: #f8d8d8;
+}
+
+.scoreBox {
+  background: #d9f7ea;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  border-left: 5px solid #7fbc42;
+}
+
+.scrollArea {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 0.5rem;
+}
+
+.scoreSubsection {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #b5e2c1;
+  border-radius: 6px;
+}
+
+.scoreSubsection h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: #007cbb;
+}
+
+.tickRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.88rem;
+  border-bottom: 1px solid #ddd;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.tickRow label {
+  flex: 1.6;
+  margin-right: 0.5rem;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.tickControls {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.tickControls button {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  background: #e1f4ec;
+  border: 1px solid #7fbc42;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.tickControls button:hover {
+  background: #d0efdb;
+}
+
+.tickValue {
+  min-width: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+}
+
+.startScore {
+  color: #666;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.gain {
+  border-left: 4px solid #7fbc42;
+  background: #eefaea;
+}
+
+.loss {
+  border-left: 4px solid #d64550;
+  background: #fde8e7;
+}
+
+.delta {
+  margin-left: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.positive {
+  color: #7fbc42;
+}
+
+.negative {
+  color: #c62828;
+}

@@ -1,0 +1,102 @@
+:root {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-weight: 400;
+  color: #333;
+  background-color: #f6f9f8;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+
+.page {
+  padding: 0 2rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+
+#root,
+.app-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0c436a;
+  color: white;
+  padding: 1rem 2rem;
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+/* Top Summary Panel */
+.topPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem 2rem;
+  background: #e5f4fc;
+  border-bottom: 1px solid #ccc;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+
+/* Layout */
+.layout {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  width: 100%;
+  min-height: 0;
+}
+
+.leftPanel,
+.middlePanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1rem;
+  min-width: 0;
+}
+
+
+.middlePanel {
+  background: #f2f9fe;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+.middlePanel h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #007cbb;
+}
+
+.middlePanel p {
+  font-size: 0.85rem;
+  color: #444;
+}

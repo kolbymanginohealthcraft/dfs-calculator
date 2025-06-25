@@ -1,0 +1,56 @@
+.topPanel {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1rem 2rem;
+  background: #e5f4fc;
+  border-bottom: 1px solid #ccc;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.summaryBlock {
+  min-width: 250px;
+  flex: 1;
+  font-size: 0.85rem;
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.summaryDetails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 0.5rem 0 0.5rem 0;
+  border-top: 1px solid #cce0ec;
+  margin-top: 0.5rem;
+}
+
+.summaryCol {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.summaryName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0c436a;
+  margin: 0;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem 1rem;
+}
+
+.summaryItem {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
