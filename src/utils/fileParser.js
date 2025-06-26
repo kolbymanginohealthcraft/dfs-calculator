@@ -1,5 +1,5 @@
 import mdsItemLookup from "../data/mds_item_lookup.json";
-import { GG_ITEMS } from "./ggItems";
+import { GG_ITEMS } from "./calculations";
 import { parseXml } from "./xmlParser"; // already used in your code
 
 export function handleFileUpload(file, setFileName, setParsedValues, setGroupedSections, setModeledValues, setStartScores) {

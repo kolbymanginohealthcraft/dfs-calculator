@@ -1,3 +1,52 @@
+export const scoreMap = {
+  "01": 1, "02": 2, "03": 3, "04": 4, "05": 5, "06": 6,
+  "07": 1, "08": 1, "10": 1, "88": 1, "^": 1,
+};
+
+export const GG_ITEMS = [
+  { id: "GG0130A", label: "Eating", domain: "selfCare" },
+  { id: "GG0130B", label: "Oral hygiene", domain: "selfCare" },
+  { id: "GG0130C", label: "Toileting hygiene", domain: "selfCare" },
+  { id: "GG0130E", label: "Shower/bathe self", domain: "selfCare" },
+  { id: "GG0130F", label: "Upper body dressing", domain: "selfCare" },
+  { id: "GG0130G", label: "Lower body dressing", domain: "selfCare" },
+  { id: "GG0130H", label: "Put on/take off footwear", domain: "selfCare" },
+  { id: "GG0170A", label: "Roll left and right", domain: "mobility" },
+  { id: "GG0170B", label: "Sit to lying", domain: "mobility" },
+  { id: "GG0170C", label: "Lying to sitting on bed side", domain: "mobility" },
+  { id: "GG0170D", label: "Sit to stand", domain: "mobility" },
+  { id: "GG0170E", label: "Chair/bed-to-chair transfer", domain: "mobility" },
+  { id: "GG0170F", label: "Toilet transfer", domain: "mobility" },
+  { id: "GG0170G", label: "Car transfer", domain: "mobility" },
+  { id: "GG0170I", label: "Walk 10 feet", domain: "mobility" },
+  { id: "GG0170J", label: "Walk 50 feet with two turns", domain: "mobility" },
+  { id: "GG0170K", label: "Walk 150 feet", domain: "mobility" },
+  { id: "GG0170L", label: "Walking 10 feet uneven surface", domain: "mobility" },
+  { id: "GG0170M", label: "1 step (curb)", domain: "mobility" },
+  { id: "GG0170N", label: "4 steps", domain: "mobility" },
+  { id: "GG0170O", label: "12 steps", domain: "mobility" },
+  { id: "GG0170P", label: "Picking up object", domain: "mobility" },
+  { id: "GG0170R", label: "Wheel 50 feet with two turns", domain: "mobility" },
+  { id: "GG0170S", label: "Wheel 150 feet", domain: "mobility" },
+];
+
+export const conditionMap = {
+  "01": "Stroke",
+  "02": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
+  "03": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
+  "04": "Non-Traumatic Spinal Cord Dysfunction",
+  "05": "Traumatic Spinal Cord Dysfunction",
+  "06": "Progressive Neurological Conditions",
+  "07": "Other Neurological Conditions",
+  "08": "Amputation",
+  "09": "Hip and Knee Replacements",
+  "10": "Fractures and Other Multiple Trauma",
+  "11": "Other Orthopedic Conditions",
+  "12": "Debility, Cardiorespiratory Conditions",
+  "13": "Medically Complex Conditions",
+};
+
+
 export function formatDOB(dobStr) {
   if (!dobStr || dobStr.length !== 8) return "Unknown";
   const year = dobStr.substring(0, 4);
@@ -122,5 +171,17 @@ export function calculateFunctionScore(values) {
     return sa + sb + sc + ma + mc + md + me + mf + mr + mr;
   } else {
     return sa + sb + sc + ma + mc + md + me + mf + mi + mj;
+  }
+}
+
+export function getContributingItemIds(values) {
+  const mobilityType = determineMobilityType(values);
+
+  const base = ["GG0130A", "GG0130B", "GG0130C", "GG0170A", "GG0170C", "GG0170D", "GG0170E", "GG0170F"];
+
+  if (mobilityType === "Wheel") {
+    return new Set([...base, "GG0170R"]);
+  } else {
+    return new Set([...base, "GG0170I", "GG0170J"]);
   }
 }

@@ -6,7 +6,6 @@ import {
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
-  LabelList,
 } from "recharts";
 import styles from "./SummaryChart.module.css";
 
@@ -18,56 +17,57 @@ function SummaryChart({ start, modeled }) {
 
   const data = [
     {
-      name: "", // no y-axis label
+      name: "",
       Start: start,
       Gain: gain,
       Total: total,
     },
   ];
 
-  const CustomLegend = ({ startVal, gainVal }) => (
-    <div className={styles.chartLegend}>
-      <div className={styles.legendItem}>
-        <span className={styles.legendSwatch} style={{ background: "#007cbb" }} />
-        <span>Start ({startVal})</span>
-      </div>
-      <div className={styles.legendItem}>
-        <span className={styles.legendSwatch} style={{ background: "#7fbc42" }} />
-        <span>Gain ({gainVal})</span>
-      </div>
-    </div>
-  );
-
   return (
     <div className={styles.chartWrapper}>
-      <div className={styles.chartContainer}>
-        <div className={styles.chartHeaderRow}>
-  <h3 className={styles.chartTitle}>📊 DFS Summary</h3>
-  <div className={styles.inlineLegend}>
-    <div className={styles.legendItem}>
-      <span className={styles.legendSwatch} style={{ background: "#007cbb" }} />
-      <span>Start ({start})</span>
-    </div>
-    <div className={styles.legendItem}>
-      <span className={styles.legendSwatch} style={{ background: "#7fbc42" }} />
-      <span>Gain ({gain})</span>
-    </div>
-  </div>
-</div>
+      <div className={styles.chartContent}>
+        <div className={styles.verticalLegend}>
+          <div className={styles.legendItem}>
+            <span
+              className={styles.legendSwatch}
+              style={{ background: "#007cbb" }}
+            />
+            <span>Start ({start})</span>
+          </div>
+          <div className={styles.legendItem}>
+            <span
+              className={styles.legendSwatch}
+              style={{ background: "#7fbc42" }}
+            />
+            <span>Gain ({gain})</span>
+          </div>
+          <div className={`${styles.legendItem} ${styles.legendItemTotal}`}>
+            <span>Total: {total}</span>
+            <span
+              className={`${styles.outcomeEmoji} ${
+                outcome === "WIN" ? styles.outcomeWin : styles.outcomeLoss
+              }`}
+            >
+              {outcome === "WIN" ? "✅" : "❌"}
+            </span>
+          </div>
+        </div>
 
         <div className={styles.chartArea}>
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="100%" height={90}>
             <BarChart
               layout="vertical"
               data={data}
-              margin={{ top: 15, right: 20, left: 10, bottom: 5 }}
+              margin={{ top: 18, right: 8, left: 5, bottom: 0 }}
             >
               <YAxis dataKey="name" type="category" hide />
               <XAxis
                 type="number"
-                domain={[0, Math.max(expected, modeled) + 10]}
+                domain={[0, 60]}
+                tick={{ fontSize: 10 }}
               />
-              <Tooltip />
+              {/* <Tooltip /> */}
               <ReferenceLine
                 x={expected}
                 stroke="#3db3e3"
@@ -80,26 +80,10 @@ function SummaryChart({ start, modeled }) {
                 }}
               />
               <Bar dataKey="Start" stackId="a" fill="#007cbb" name="Start" />
-              <Bar dataKey="Gain" stackId="a" fill="#7fbc42" name="Gain">
-                <LabelList
-                  dataKey="Total"
-                  position="right"
-                  formatter={(val) => `Total: ${val}`}
-                  style={{ fontSize: 11, fontWeight: "bold", fill: "#333" }}
-                />
-              </Bar>
+              <Bar dataKey="Gain" stackId="a" fill="#7fbc42" name="Gain" />
             </BarChart>
           </ResponsiveContainer>
         </div>
-        {/* <CustomLegend startVal={start} gainVal={gain} /> */}
-      </div>
-
-      <div
-        className={`${styles.outcomeIcon} ${
-          outcome === "WIN" ? styles.outcomeWin : styles.outcomeLoss
-        }`}
-      >
-        {outcome === "WIN" ? "✅" : "❌"}
       </div>
     </div>
   );

@@ -1,6 +1,12 @@
 import React from "react";
 import styles from "./ModelEndScore.module.css";
-import { GG_ITEMS, scoreMap } from "../utils/ggItems";
+import { GG_ITEMS, scoreMap } from "../utils/calculations";
+import SummaryChart from "./SummaryChart";
+import {
+  calculateFunctionScore,
+  getContributingItemIds,
+  ANA,
+} from "../utils/calculations";
 
 const ModelEndScore = ({
   modeledValues,
@@ -11,6 +17,9 @@ const ModelEndScore = ({
   setModeledValues,
   hasFile,
 }) => {
+  const startTotal = calculateFunctionScore(startScores);
+  const contributingIds = getContributingItemIds(modeledValues);
+
   return (
     <div className={styles.rightPanel}>
       <div className={styles.sticky}>
@@ -23,9 +32,10 @@ const ModelEndScore = ({
             Reset All
           </button>
         </div>
+
         {hasFile && (
-          <div className={styles.scoreBox}>
-            📈 Modeled Total: <strong>{modeledTotal}</strong>
+          <div className={styles.chartBox}>
+            <SummaryChart start={startTotal} modeled={modeledTotal} />
           </div>
         )}
       </div>
@@ -39,8 +49,9 @@ const ModelEndScore = ({
                 {subtotal(domain)}
               </h3>
               {GG_ITEMS.filter((i) => i.domain === domain).map(({ id, label }) => {
-                const modeled = scoreMap[modeledValues[id]] || 0;
-                const start = scoreMap[startScores[id]] || 0;
+                const modeled = modeledValues[id] in scoreMap ? scoreMap[modeledValues[id]] : 0;
+                const rawStart = startScores[id];
+                const start = rawStart in scoreMap ? scoreMap[rawStart] : 0;
                 const delta = modeled - start;
 
                 const rowClasses = [
@@ -51,13 +62,16 @@ const ModelEndScore = ({
                   .filter(Boolean)
                   .join(" ");
 
-                // Remove trailing number if present (e.g., GG0130A1 → GG0130A)
                 const cleanId = id.replace(/[0-9]$/, "");
+                const isContributing = contributingIds.has(cleanId);
 
                 return (
                   <div key={id} className={rowClasses}>
                     <label title={id}>
                       {label} <span className={styles.itemId}>[{cleanId}]</span>
+                      {isContributing && (
+                        <span className={styles.contributingIcon}>✅</span>
+                      )}
                       {delta !== 0 && (
                         <span
                           className={`${styles.delta} ${
@@ -75,7 +89,10 @@ const ModelEndScore = ({
                       <span className={styles.tickValue}>{modeled}</span>
                       <button onClick={() => handleTick(id, 1)}>+</button>
                     </div>
-                    <span className={styles.startScore}>Start: {start}</span>
+                    <span className={styles.startScore}>
+                      Start:{" "}
+                      {ANA.has(rawStart) ? "ANA" : start}
+                    </span>
                   </div>
                 );
               })}

@@ -14,7 +14,6 @@ const SummarySection = ({
   facilityName,
   facilityAddress,
   fileName,
-  conditionCode,
   conditionCategory,
   mobilityType,
   hasFile,
@@ -23,18 +22,28 @@ const SummarySection = ({
     return (
       <div className={styles.summaryBlock}>
         <h2 className={styles.summaryName}>👤 Patient Summary</h2>
-        <p className={styles.placeholder}>Upload a file to see patient details.</p>
+        <p className={styles.placeholder}>
+          Upload a file to see patient details.
+        </p>
       </div>
     );
   }
 
   return (
     <div className={styles.summaryBlock}>
-      <h2 className={styles.summaryName}>
-        👤 {firstName || "Unknown"} {lastName || ""}, {formatDOB(dob) || "Unknown"}{" "}
-        {age ? `(Age: ${age})` : ""}
-      </h2>
-      <p className={styles.fileInfo}>📎 File: {fileName || "Unknown file"}</p>
+      <div className={styles.headerBlock}>
+        <h2 className={styles.summaryName}>
+          👤 {firstName || "Unknown"} {lastName || ""}
+          {dob && (
+            <span>
+              {" "}
+              (age: {age}, DOB {formatDOB(dob)})
+            </span>
+          )}
+        </h2>
+
+        <p className={styles.fileInfo}>File Uploaded: {fileName || "Unknown file"}</p>
+      </div>
 
       <div className={styles.summaryDetails}>
         <div className={styles.summaryCol}>
@@ -50,7 +59,8 @@ const SummarySection = ({
         <div className={styles.summaryCol}>
           <h3 className={styles.sectionHeading}>🏥 Facility Info</h3>
           <div className={styles.summaryItem}>
-            <strong>Name:</strong> {facilityName || `CCN: ${facility || "Unknown"}`}
+            <strong>Name:</strong>{" "}
+            {facilityName || `CCN: ${facility || "Unknown"}`}
           </div>
           <div className={styles.summaryItem}>
             <strong>Address:</strong> {facilityAddress || "Unknown"}

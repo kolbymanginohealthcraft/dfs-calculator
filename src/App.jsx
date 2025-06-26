@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { scoreMap, GG_ITEMS, conditionMap } from "./utils/ggItems";
+import { scoreMap, GG_ITEMS, conditionMap } from "./utils/calculations";
 import {
   extractPatientSummary,
   determineMobilityType,
@@ -9,6 +9,7 @@ import { fetchFacilityInfo } from "./utils/facilityLookup";
 import { handleFileUpload } from "./utils/fileParser";
 import html2pdf from "html2pdf.js";
 
+import Navbar from "./components/Navbar"; // add at the top
 import IntroPanel from "./components/IntroPanel";
 import SummarySection from "./components/SummarySection";
 import MdsSnapshot from "./components/MdsSnapshot";
@@ -103,46 +104,60 @@ function App() {
 
   return (
     <div className="app-container">
-      <header className="navbar">
-        <h1>Discharge Function Score Modeler</h1>
-      </header>
+      <Navbar />
+
 
       <IntroPanel onDrop={onDrop} onExport={handleExport} hasFile={hasFile} />
 
-      <div className="topPanel">
-        <SummarySection
-          firstName={firstName}
-          lastName={lastName}
-          dob={dob}
-          age={age}
-          admitDate={admitDate}
-          ardDate={ardDate}
-          ardGapDays={ardGapDays}
-          facility={facility}
-          facilityName={facilityName}
-          facilityAddress={facilityAddress}
-          fileName={fileName}
-          conditionCode={conditionCode}
-          conditionCategory={conditionCategory}
-          mobilityType={mobilityType}
-          startScore={startTotal}
-          modeledScore={modeledTotal}
-          hasFile={hasFile}
-        />
-      </div>
+      <div className="mainContent">
+        <div className="mainLeft">
+          <div className="summaryContainer">
+            <div className="summaryInner">
+              <SummarySection
+                firstName={firstName}
+                lastName={lastName}
+                dob={dob}
+                age={age}
+                admitDate={admitDate}
+                ardDate={ardDate}
+                ardGapDays={ardGapDays}
+                facility={facility}
+                facilityName={facilityName}
+                facilityAddress={facilityAddress}
+                fileName={fileName}
+                conditionCode={conditionCode}
+                conditionCategory={conditionCategory}
+                mobilityType={mobilityType}
+                startScore={startTotal}
+                modeledScore={modeledTotal}
+                hasFile={hasFile}
+              />
+            </div>
+          </div>
+          <div className="summarySeparator" />
 
-      <div className="layout">
-        <MdsSnapshot groupedSections={groupedSections} />
-        <Covariates hasFile={hasFile} />
-        <ModelEndScore
-          modeledValues={modeledValues}
-          startScores={startScores}
-          subtotal={subtotal}
-          modeledTotal={modeledTotal}
-          handleTick={handleTick}
-          setModeledValues={setModeledValues}
-          hasFile={hasFile}
-        />
+
+          <div className="snapshotCovariateRow">
+            <div className="snapshotPanel scrollableContent">
+              <MdsSnapshot groupedSections={groupedSections} />
+            </div>
+            <div className="covariatesPanel scrollableContent">
+              <Covariates hasFile={hasFile} />
+            </div>
+          </div>
+        </div>
+
+        <div className="mainRight scrollableContent">
+          <ModelEndScore
+            modeledValues={modeledValues}
+            startScores={startScores}
+            subtotal={subtotal}
+            modeledTotal={modeledTotal}
+            handleTick={handleTick}
+            setModeledValues={setModeledValues}
+            hasFile={hasFile}
+          />
+        </div>
       </div>
 
       <div style={{ display: "none" }}>
