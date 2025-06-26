@@ -1,6 +1,5 @@
 import React from "react";
 import { formatDOB } from "../utils/calculations";
-// import SummaryChart from "./SummaryChart";
 import styles from "./SummarySection.module.css";
 
 const SummarySection = ({
@@ -18,19 +17,13 @@ const SummarySection = ({
   conditionCode,
   conditionCategory,
   mobilityType,
-  startScore,
-  modeledScore,
   hasFile,
 }) => {
-  const displayValue = (value, fallback = "Not available") =>
-    value ? value : fallback;
-
   if (!hasFile) {
     return (
       <div className={styles.summaryBlock}>
-        <p className={styles.placeholderText}>
-          💡 Patient summary details will appear here once an MDS XML file is uploaded.
-        </p>
+        <h2 className={styles.summaryName}>👤 Patient Summary</h2>
+        <p className={styles.placeholder}>Upload a file to see patient details.</p>
       </div>
     );
   }
@@ -38,65 +31,42 @@ const SummarySection = ({
   return (
     <div className={styles.summaryBlock}>
       <h2 className={styles.summaryName}>
-        👤 {displayValue(firstName, "First name missing")}{" "}
-        {lastName || ""}, {formatDOB(dob) || "DOB not available"}{" "}
+        👤 {firstName || "Unknown"} {lastName || ""}, {formatDOB(dob) || "Unknown"}{" "}
         {age ? `(Age: ${age})` : ""}
       </h2>
+      <p className={styles.fileInfo}>📎 File: {fileName || "Unknown file"}</p>
 
       <div className={styles.summaryDetails}>
-        <div className={styles.sectionGroup}>
+        <div className={styles.summaryCol}>
           <h3 className={styles.sectionHeading}>📋 Patient Characteristics</h3>
-          <div
-            className={styles.summaryItem}
-            title={`I0020 = ${conditionCode || "?"}`}
-          >
-            <strong>Primary Condition:</strong>{" "}
-            {displayValue(conditionCategory, "Not specified")}
+          <div className={styles.summaryItem}>
+            <strong>Primary Condition:</strong> {conditionCategory || "Unknown"}
           </div>
           <div className={styles.summaryItem}>
-            <strong>Mobility Type:</strong>{" "}
-            {displayValue(mobilityType, "Not assessed")}
+            <strong>Mobility Type:</strong> {mobilityType || "Unknown"}
           </div>
         </div>
 
-        <div className={styles.sectionGroup}>
+        <div className={styles.summaryCol}>
           <h3 className={styles.sectionHeading}>🏥 Facility Info</h3>
           <div className={styles.summaryItem}>
-            <strong>Name:</strong>{" "}
-            {facilityName
-              ? facilityName
-              : facility
-              ? `CCN: ${facility}`
-              : "Not available"}
+            <strong>Name:</strong> {facilityName || `CCN: ${facility || "Unknown"}`}
           </div>
           <div className={styles.summaryItem}>
-            <strong>Address:</strong>{" "}
-            {displayValue(facilityAddress, "Not available")}
+            <strong>Address:</strong> {facilityAddress || "Unknown"}
           </div>
         </div>
 
-        <div className={styles.sectionGroup}>
+        <div className={styles.summaryCol}>
           <h3 className={styles.sectionHeading}>📆 Episode Timeline</h3>
           <div className={styles.summaryItem}>
-            <strong>Admit Date:</strong>{" "}
-            {formatDOB(admitDate) || "Not available"}
+            <strong>Admit Date:</strong> {formatDOB(admitDate) || "Unknown"}
           </div>
           <div className={styles.summaryItem}>
-            <strong>ARD:</strong> {formatDOB(ardDate) || "Not available"}{" "}
+            <strong>ARD:</strong> {formatDOB(ardDate) || "Unknown"}{" "}
             {ardGapDays != null ? `(day ${ardGapDays})` : ""}
           </div>
         </div>
-
-        <div className={styles.sectionGroup}>
-          <h3 className={styles.sectionHeading}>📎 File Info</h3>
-          <div className={styles.summaryItem}>
-            <strong>File:</strong> {fileName}
-          </div>
-        </div>
-
-        {/* <div className={styles.chartSection}>
-          <SummaryChart start={startScore} modeled={modeledScore} />
-        </div> */}
       </div>
     </div>
   );

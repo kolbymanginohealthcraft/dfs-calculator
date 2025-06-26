@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import styles from "./IntroPanel.module.css";
 
-const IntroPanel = ({ onDrop, onExport, hasFile }) => {
+const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
   const [dragActive, setDragActive] = useState(false);
 
   const { getRootProps, getInputProps, open } = useDropzone({
@@ -69,6 +69,9 @@ const IntroPanel = ({ onDrop, onExport, hasFile }) => {
           <div className={styles.dropzone} {...getRootProps()} onClick={open}>
             <input {...getInputProps()} />
             <p>Click or drag XML here</p>
+            {hasFile && fileName && (
+              <div className={styles.fileName}>📂 {fileName}</div>
+            )}
           </div>
           <button
             className={styles.exportBtn}
