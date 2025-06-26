@@ -1,13 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MdsSnapshot.module.css";
 
 export default function MdsSnapshot({ groupedSections }) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
+
+  // Filter groupedSections based on search
+  const filtered = Object.entries(groupedSections)
+    .map(([section, items]) => {
+      const filteredItems = items.filter(
+        ({ id, label }) =>
+          id.toLowerCase().includes(searchTerm) ||
+          label.toLowerCase().includes(searchTerm)
+      );
+      return [section, filteredItems];
+    })
+    .filter(([, items]) => items.length > 0);
+
   return (
     <div className={styles.leftPanel}>
       <div className={styles.sticky}>
-        <h2>📋 MDS Snapshot</h2>
+        <div className={styles.headerRow}>
+          <h2>📋 MDS Snapshot</h2>
+          <input
+            type="text"
+            placeholder="Search ID or label"
+            className={styles.searchInput}
+            onChange={handleSearchChange}
+            value={searchTerm}
+          />
+        </div>
         <div className={styles.navButtons}>
-          {Object.keys(groupedSections)
+          {filtered
+            .map(([section]) => section)
             .sort()
             .map((section) => (
               <a
@@ -20,9 +46,10 @@ export default function MdsSnapshot({ groupedSections }) {
             ))}
         </div>
       </div>
+
       <div className={styles.scrollArea}>
-        {Object.entries(groupedSections)
-          .sort()
+        {filtered
+          .sort(([a], [b]) => a.localeCompare(b))
           .map(([section, items]) => (
             <div
               key={section}

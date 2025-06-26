@@ -1,19 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
-import { useDropzone } from "react-dropzone";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { scoreMap, GG_ITEMS, conditionMap } from "./utils/ggItems";
 import {
   extractPatientSummary,
   determineMobilityType,
+  calculateFunctionScore,
 } from "./utils/calculations";
 import { fetchFacilityInfo } from "./utils/facilityLookup";
 import SummaryChart from "./components/SummaryChart";
 import "./index.css";
-import mdsItemLookup from "./data/mds_item_lookup.json";
 import { handleFileUpload } from "./utils/fileParser";
 import IntroPanel from "./components/IntroPanel";
 import SummarySection from "./components/SummarySection";
 import MdsSnapshot from "./components/MdsSnapshot";
 import ModelEndScore from "./components/ModelEndScore";
+import Covariates from "./components/Covariates";
+import ExportView from "./components/ExportView";
+import html2pdf from "html2pdf.js";
 
 function App() {
   const [parsedValues, setParsedValues] = useState({});
@@ -24,6 +26,7 @@ function App() {
   const [facilityName, setFacilityName] = useState("");
   const [facilityAddress, setFacilityAddress] = useState("");
 
+  const exportRef = useRef();
   const ardDate = parsedValues["A2300"];
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -55,19 +58,8 @@ function App() {
       0
     );
 
-  const modeledTotal = GG_ITEMS.reduce(
-    (sum, i) => sum + (scoreMap[modeledValues[i.id]] || 0),
-    0
-  );
-  const startTotal = GG_ITEMS.reduce(
-    (sum, i) => sum + (scoreMap[startScores[i.id]] || 0),
-    0
-  );
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: { "text/xml": [".xml"] },
-  });
+  const startTotal = calculateFunctionScore(startScores);
+  const modeledTotal = calculateFunctionScore(modeledValues);
 
   const {
     firstName,
@@ -81,7 +73,6 @@ function App() {
   } = extractPatientSummary(parsedValues, ardDate);
 
   const mobilityType = determineMobilityType(parsedValues);
-
   const conditionCode = parsedValues["I0020"];
   const conditionCategory = conditionMap[conditionCode] || "Unknown";
 
@@ -93,17 +84,32 @@ function App() {
     );
   }, [parsedValues]);
 
+  const handleExport = () => {
+    if (!fileName) return;
+    html2pdf()
+      .set({
+        margin: 0.5,
+        filename: `dfs-report-${fileName.replace(".xml", "")}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      })
+      .from(exportRef.current)
+      .save();
+  };
+
   return (
     <div className="app-container">
-
-      {/* Navbar */}
       <header className="navbar">
         <h1>Discharge Function Score Modeler</h1>
       </header>
-      <IntroPanel onDrop={onDrop} />
 
+      <IntroPanel
+        onDrop={onDrop}
+        onExport={handleExport}
+        hasFile={!!fileName}
+      />
 
-      {/* Summary section */}
       <div className="topPanel">
         <SummarySection
           firstName={firstName}
@@ -115,33 +121,21 @@ function App() {
           ardGapDays={ardGapDays}
           facility={facility}
           facilityName={facilityName}
+          facilityAddress={facilityAddress}
           fileName={fileName}
           conditionCode={conditionCode}
           conditionCategory={conditionCategory}
           mobilityType={mobilityType}
+          startScore={startTotal}
+          modeledScore={modeledTotal}
         />
-
-        <SummaryChart start={startTotal} modeled={modeledTotal} />
+        {/* <SummaryChart start={startTotal} modeled={modeledTotal} /> */}
       </div>
 
-      {/* Main content area */}
       <div className="layout">
-        {/* Left panel */}
         <MdsSnapshot groupedSections={groupedSections} />
+        <Covariates hasFile={!!fileName} />
 
-        {/* Middle panel */}
-        <div className="middlePanel">
-          <div className="sticky">
-            <h2>📊 Covariates</h2>
-            <p>
-              Coming soon: logic that explains how patient characteristics
-              adjust the expected score.
-            </p>
-          </div>
-          <div className="scrollArea">{/* Future: Covariate factors */}</div>
-        </div>
-
-        {/* Right panel */}
         <ModelEndScore
           modeledValues={modeledValues}
           startScores={startScores}
@@ -149,8 +143,33 @@ function App() {
           modeledTotal={modeledTotal}
           handleTick={handleTick}
           setModeledValues={setModeledValues}
-          hasFile={!!fileName} // ✅ add this line
+          hasFile={!!fileName}
         />
+      </div>
+
+      <div style={{ display: "none" }}>
+        <div ref={exportRef}>
+          <ExportView
+            patient={{
+              name: `${firstName} ${lastName}`,
+              facility: facilityName,
+              dob,
+              ard: ardDate,
+            }}
+            scores={{
+              Start: startTotal,
+              Modeled: modeledTotal,
+              Expected: 16.4,
+            }}
+            covariates={[
+              { name: "Comatose", value: -2.243 },
+              { name: "Dialysis", value: -0.541 },
+              { name: "Male", value: 0.043 },
+              { name: "Hispanic", value: -0.215 },
+              { name: "Pain interference", value: -0.121 },
+            ]}
+          />
+        </div>
       </div>
     </div>
   );

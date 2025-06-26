@@ -96,3 +96,31 @@ export function determineMobilityType(parsedValues) {
     ? "Wheel"
     : "Walk";
 }
+
+export function calculateFunctionScore(values) {
+  const safe = (key) => {
+    const v = values[key];
+    return valid.has(v) ? parseInt(v, 10) : 1;
+  };
+
+  const sa = safe("GG0130A");
+  const sb = safe("GG0130B");
+  const sc = safe("GG0130C");
+
+  const ma = safe("GG0170A");
+  const mc = safe("GG0170C");
+  const md = safe("GG0170D");
+  const me = safe("GG0170E");
+  const mf = safe("GG0170F");
+  const mi = safe("GG0170I");
+  const mj = safe("GG0170J");
+  const mr = safe("GG0170R");
+
+  const mobilityType = determineMobilityType(values);
+
+  if (mobilityType === "Wheel") {
+    return sa + sb + sc + ma + mc + md + me + mf + mr + mr;
+  } else {
+    return sa + sb + sc + ma + mc + md + me + mf + mi + mj;
+  }
+}

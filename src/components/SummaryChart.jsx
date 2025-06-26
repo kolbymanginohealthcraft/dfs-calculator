@@ -8,6 +8,7 @@ import {
   ReferenceLine,
   LabelList,
 } from "recharts";
+import styles from "./SummaryChart.module.css";
 
 function SummaryChart({ start, modeled }) {
   const gain = Math.max(modeled - start, 0);
@@ -17,7 +18,7 @@ function SummaryChart({ start, modeled }) {
 
   const data = [
     {
-      name: "Score",
+      name: "", // no y-axis label
       Start: start,
       Gain: gain,
       Total: total,
@@ -25,59 +26,43 @@ function SummaryChart({ start, modeled }) {
   ];
 
   const CustomLegend = ({ startVal, gainVal }) => (
-    <div
-      style={{
-        display: "flex",
-        gap: "1rem",
-        fontSize: "0.9rem",
-        marginTop: 8,
-        justifyContent: "center",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span
-          style={{
-            width: 12,
-            height: 12,
-            background: "#007cbb",
-            display: "inline-block",
-          }}
-        />
+    <div className={styles.chartLegend}>
+      <div className={styles.legendItem}>
+        <span className={styles.legendSwatch} style={{ background: "#007cbb" }} />
         <span>Start ({startVal})</span>
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-        <span
-          style={{
-            width: 12,
-            height: 12,
-            background: "#7fbc42",
-            display: "inline-block",
-          }}
-        />
+      <div className={styles.legendItem}>
+        <span className={styles.legendSwatch} style={{ background: "#7fbc42" }} />
         <span>Gain ({gainVal})</span>
       </div>
     </div>
   );
 
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        maxWidth: 700,
-      }}
-    >
-      <div style={{ flex: 1 }}>
-        <div style={{ width: "100%", height: 100 }}>
+    <div className={styles.chartWrapper}>
+      <div className={styles.chartContainer}>
+        <div className={styles.chartHeaderRow}>
+  <h3 className={styles.chartTitle}>📊 DFS Summary</h3>
+  <div className={styles.inlineLegend}>
+    <div className={styles.legendItem}>
+      <span className={styles.legendSwatch} style={{ background: "#007cbb" }} />
+      <span>Start ({start})</span>
+    </div>
+    <div className={styles.legendItem}>
+      <span className={styles.legendSwatch} style={{ background: "#7fbc42" }} />
+      <span>Gain ({gain})</span>
+    </div>
+  </div>
+</div>
+
+        <div className={styles.chartArea}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               layout="vertical"
               data={data}
-              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              margin={{ top: 15, right: 20, left: 10, bottom: 5 }}
             >
-              <YAxis dataKey="name" type="category" />
+              <YAxis dataKey="name" type="category" hide />
               <XAxis
                 type="number"
                 domain={[0, Math.max(expected, modeled) + 10]}
@@ -91,7 +76,7 @@ function SummaryChart({ start, modeled }) {
                   value: `Expected (${expected})`,
                   position: "top",
                   fill: "#3db3e3",
-                  fontSize: 12,
+                  fontSize: 11,
                 }}
               />
               <Bar dataKey="Start" stackId="a" fill="#007cbb" name="Start" />
@@ -100,25 +85,21 @@ function SummaryChart({ start, modeled }) {
                   dataKey="Total"
                   position="right"
                   formatter={(val) => `Total: ${val}`}
-                  style={{ fontSize: 12, fontWeight: "bold", fill: "#333" }}
+                  style={{ fontSize: 11, fontWeight: "bold", fill: "#333" }}
                 />
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         </div>
-        <CustomLegend startVal={start} gainVal={gain} />
+        {/* <CustomLegend startVal={start} gainVal={gain} /> */}
       </div>
 
-      <div style={{ marginLeft: "1rem", fontSize: "2rem" }}>
-        {outcome === "WIN" ? (
-          <span role="img" aria-label="win" style={{ color: "#7fbc42" }}>
-            ✅
-          </span>
-        ) : (
-          <span role="img" aria-label="loss" style={{ color: "#d64550" }}>
-            ❌
-          </span>
-        )}
+      <div
+        className={`${styles.outcomeIcon} ${
+          outcome === "WIN" ? styles.outcomeWin : styles.outcomeLoss
+        }`}
+      >
+        {outcome === "WIN" ? "✅" : "❌"}
       </div>
     </div>
   );

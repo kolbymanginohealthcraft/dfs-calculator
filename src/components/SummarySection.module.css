@@ -1,7 +1,7 @@
 .topPanel {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center; /* ✅ center-aligns chart and summary vertically */
   padding: 1rem 2rem;
   background: #e5f4fc;
   border-bottom: 1px solid #ccc;
@@ -16,17 +16,17 @@
   line-height: 1.2;
   display: flex;
   flex-direction: column;
+  height: 100%; /* ✅ allow it to define height for alignment */
   gap: 0.5rem;
 }
 
 .summaryDetails {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  padding: 0.5rem 0 0.5rem 0;
-  border-top: 1px solid #cce0ec;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem 2rem;
   margin-top: 0.5rem;
 }
+
 
 .summaryCol {
   flex: 1;
@@ -53,4 +53,14 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.sectionGroup {
+  margin-bottom: 0.8rem;
+}
+
+.sectionHeading {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #265947;
+  font-size: 1.05rem;
 }

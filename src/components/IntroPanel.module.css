@@ -25,3 +25,56 @@
   font-size: 0.9rem;
   color: #333;
 }
+
+.actionsGroup {
+  display: flex;
+  align-items: stretch; /* ✅ Ensures height match */
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.exportBtn {
+  font-size: 0.85rem;
+  background: #e1f0f5;
+  border: 1px solid #007cbb;
+  color: #007cbb;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  white-space: nowrap;
+}
+
+.exportBtn:hover {
+  background: #d4e7f2;
+}
+
+/* ✅ Re-add drag overlay styling */
+.dragOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(61, 179, 227, 0.2);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.dragOverlayMessage {
+  font-size: 1.5rem;
+  color: #0c436a;
+  background: #ffffffcc;
+  border: 2px dashed #3db3e3;
+  padding: 2rem;
+  border-radius: 10px;
+  font-weight: bold;
+  pointer-events: none;
+}

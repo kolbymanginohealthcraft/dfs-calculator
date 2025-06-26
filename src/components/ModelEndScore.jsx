@@ -51,10 +51,13 @@ const ModelEndScore = ({
                   .filter(Boolean)
                   .join(" ");
 
+                // Remove trailing number if present (e.g., GG0130A1 → GG0130A)
+                const cleanId = id.replace(/[0-9]$/, "");
+
                 return (
                   <div key={id} className={rowClasses}>
                     <label title={id}>
-                      {label}
+                      {label} <span className={styles.itemId}>[{cleanId}]</span>
                       {delta !== 0 && (
                         <span
                           className={`${styles.delta} ${

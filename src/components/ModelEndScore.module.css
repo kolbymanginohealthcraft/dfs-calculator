@@ -139,3 +139,9 @@
 .negative {
   color: #c62828;
 }
+
+.itemId {
+  color: #999;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
