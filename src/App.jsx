@@ -6,16 +6,17 @@ import {
   calculateFunctionScore,
 } from "./utils/calculations";
 import { fetchFacilityInfo } from "./utils/facilityLookup";
-import SummaryChart from "./components/SummaryChart";
-import "./index.css";
 import { handleFileUpload } from "./utils/fileParser";
+import html2pdf from "html2pdf.js";
+
 import IntroPanel from "./components/IntroPanel";
 import SummarySection from "./components/SummarySection";
 import MdsSnapshot from "./components/MdsSnapshot";
 import ModelEndScore from "./components/ModelEndScore";
 import Covariates from "./components/Covariates";
 import ExportView from "./components/ExportView";
-import html2pdf from "html2pdf.js";
+
+import "./index.css";
 
 function App() {
   const [parsedValues, setParsedValues] = useState({});
@@ -98,17 +99,15 @@ function App() {
       .save();
   };
 
+  const hasFile = !!fileName;
+
   return (
     <div className="app-container">
       <header className="navbar">
         <h1>Discharge Function Score Modeler</h1>
       </header>
 
-      <IntroPanel
-        onDrop={onDrop}
-        onExport={handleExport}
-        hasFile={!!fileName}
-      />
+      <IntroPanel onDrop={onDrop} onExport={handleExport} hasFile={hasFile} />
 
       <div className="topPanel">
         <SummarySection
@@ -128,14 +127,13 @@ function App() {
           mobilityType={mobilityType}
           startScore={startTotal}
           modeledScore={modeledTotal}
+          hasFile={hasFile}
         />
-        {/* <SummaryChart start={startTotal} modeled={modeledTotal} /> */}
       </div>
 
       <div className="layout">
         <MdsSnapshot groupedSections={groupedSections} />
-        <Covariates hasFile={!!fileName} />
-
+        <Covariates hasFile={hasFile} />
         <ModelEndScore
           modeledValues={modeledValues}
           startScores={startScores}
@@ -143,7 +141,7 @@ function App() {
           modeledTotal={modeledTotal}
           handleTick={handleTick}
           setModeledValues={setModeledValues}
-          hasFile={!!fileName}
+          hasFile={hasFile}
         />
       </div>
 
