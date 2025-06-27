@@ -1,6 +1,6 @@
 .introPanel {
   padding: 1rem 2rem;
-  background: #FCF0D3;
+  background: #FFF9E6;
   border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
@@ -77,5 +77,25 @@
   border-radius: 10px;
   font-weight: bold;
   pointer-events: none;
+}
+
+
+.noFile {
+  background: #eaf9ff;
+  border-color: #007cbb;
+  box-shadow: 0 0 0 2px #b3e4ff;
+  animation: pulseBorder 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseBorder {
+  0% {
+    box-shadow: 0 0 0 2px #b3e4ff;
+  }
+  50% {
+    box-shadow: 0 0 0 4px #007cbb;
+  }
+  100% {
+    box-shadow: 0 0 0 2px #b3e4ff;
+  }
 }
 

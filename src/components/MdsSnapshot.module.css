@@ -7,7 +7,6 @@
   padding-left: 1rem;
   padding-right: 1rem;
   min-width: 0;
-  
 }
 
 .sticky {
@@ -27,13 +26,16 @@
 }
 
 .sectionLink {
-  padding: 0.3rem 0.6rem;
+  all: unset;
+  padding: 0.2rem 0.5rem;     /* smaller padding */
   background: #d6f0de;
   border: 1px solid #7fbc42;
   border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.75rem;
+  font-size: 0.7rem;          /* slightly smaller font */
   color: #0c436a;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .sectionLink:hover {
@@ -45,6 +47,7 @@
   overflow-y: auto;
   min-height: 0;
   padding-right: 0.5rem;
+  border-top: 3px solid rgba(12, 67, 106, 0.2);
 }
 
 .mdsSection {
@@ -80,4 +83,49 @@ th, td {
   border: 1px solid #ccc;
   border-radius: 4px;
   max-width: 180px;
+  width: 100%;
+  padding-right: 2rem; /* make room for ✕ */
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 180px;
+}
+
+.clearButton {
+  position: absolute;
+  right: 6px;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #999;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.clearButton:hover {
+  color: #333;
+}
+
+.valueCode {
+  font-weight: 600;
+  color: #0c436a;
+  white-space: nowrap;
+}
+
+.valueDescription {
+  font-style: italic;
+  color: #555;
+  font-size: .75rem;
+}
+
+.highlightedRow {
+  background-color: #e5f7f7;
 }

@@ -263,7 +263,7 @@ export function getFunctionCovariates(
 
   // 1. Intercept and Entry terms
   covariates["Model Intercept"] = 1;
-  covariates["Entry"] = 1;
+  // covariates["Entry"] = 1;
 
   // 2. Admission Function score + squared
   const startScore = calculateFunctionScore(startScores);
@@ -404,16 +404,16 @@ export function getFunctionCovariates(
     covariates[
       "Prior Functioning, Indoor Mobility (Ambulation): Dependent"
     ] = 1;
-    covariates[
-      "Prior Functioning, Indoor Mobility (Ambulation): Dependent, Some Help"
-    ] = 1;
+    // covariates[
+    //   "Prior Functioning, Indoor Mobility (Ambulation): Dependent, Some Help"
+    // ] = 1;
   } else if (pfMobility === "2") {
     covariates[
       "Prior Functioning, Indoor Mobility (Ambulation): Some Help"
     ] = 1;
-    covariates[
-      "Prior Functioning, Indoor Mobility (Ambulation): Dependent, Some Help"
-    ] = 1;
+    // covariates[
+    //   "Prior Functioning, Indoor Mobility (Ambulation): Dependent, Some Help"
+    // ] = 1;
   }
 
   // 14. Prior Functioning: Stairs

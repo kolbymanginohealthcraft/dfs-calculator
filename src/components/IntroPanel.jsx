@@ -66,7 +66,11 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
 
       <section className={styles.introPanel}>
         <div className={styles.actionsGroup}>
-          <div className={styles.dropzone} {...getRootProps()} onClick={open}>
+          <div
+            className={`${styles.dropzone} ${!hasFile ? styles.noFile : ""}`}
+            {...getRootProps()}
+            onClick={open}
+          >
             <input {...getInputProps()} />
             <p>Click or drag XML here</p>
             {hasFile && fileName && (
@@ -83,7 +87,9 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
         </div>
         <div className={styles.description}>
           <p>
-            This calculator estimates a patient's expected Discharge Function Score (DFS) as well as allows you to model the interim or hypothetical end score. Upload an XML file to get started.
+            This calculator estimates a patient's expected Discharge Function
+            Score (DFS) as well as allows you to model the interim or
+            hypothetical end score. Upload an XML file to get started.
           </p>
         </div>
       </section>

@@ -8,10 +8,16 @@
   height: 100%;
 }
 
+.headerBlock {
+  background-color: #1DADBE;
+  border-radius: 6px;
+}
+
 .headerRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   padding: 0.5rem;
 }
 
@@ -21,16 +27,24 @@
   color: #ffffff;
   margin: 0;
   padding: 0.3rem 0;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.inlineDetails {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: #F1EAD6;
+  margin-left: 0.5rem;
 }
 
 .fileInfo {
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: #e0f7fa;
   white-space: nowrap;
   margin: 0;
 }
-
-
 
 .placeholder {
   font-style: italic;
@@ -42,11 +56,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem 2rem;
-  /* border-top: 1px solid #ccc; */
-  padding-top: 0.5rem;   /* ⬅️ up from 0.2rem */
-  margin-top: 0.5rem;    /* ⬅️ up from 0.25rem */
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
 }
-
 
 .summaryCol {
   display: flex;
@@ -55,21 +67,15 @@
 }
 
 .sectionHeading {
-  font-weight: 600;
-  margin: 0 0 0.4rem 0;  /* bottom spacing only */
+  font-weight: bold;
+  /* text-decoration: underline; */
+  margin: 0 0 0.2rem 0;
   color: #265947;
   font-size: 1.05rem;
 }
-
 
 .summaryItem {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
-}
-
-.headerBlock {
-  background-color: #1DADBE; /* Bold coral-red from your palette */
-  border-radius: 6px;
-  /* margin-bottom: 1rem; */
 }

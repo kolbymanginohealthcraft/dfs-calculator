@@ -2,84 +2,143 @@ import React, { useState } from "react";
 import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 
-export default function MdsSnapshot({ groupedSections, descriptions }) {
+export default function MdsSnapshot({ groupedSections, descriptions, selectedItems = [] }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const icd10Descriptions = useICD10Lookup(); // ✅ Load from hook
+  const icd10Descriptions = useICD10Lookup();
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
+  const clearSearch = () => setSearchTerm("");
+
+  const highlightMatch = (text) => {
+    if (!searchTerm || typeof text !== "string") return text;
+    const regex = new RegExp(`(${searchTerm})`, "ig");
+    const parts = text.split(regex);
+    return parts.map((part, i) =>
+      part.toLowerCase() === searchTerm.toLowerCase() ? (
+        <mark key={i}>{part}</mark>
+      ) : (
+        part
+      )
+    );
+  };
 
   const getDescription = (id, value) => {
-  const key = `${id}|${value}`;
-  const labelDesc = descriptions?.[key] || "";
+    const key = `${id}|${value}`;
+    const labelDesc = descriptions?.[key] || "";
 
-  const isDiagnosisCode = /^I0020B$|^I8000[A-J]$/.test(id);
-  const isTrulyBlank = value === "^";
+    const isDiagnosisCode = /^I0020B$|^I8000[A-J]$/.test(id);
+    const isTrulyBlank = value === "^";
 
-  const cleanedValue = value?.replace(/\^|\./g, "").toUpperCase() || "";
-  const icdDesc =
-    isDiagnosisCode && !isTrulyBlank
-      ? icd10Descriptions?.[cleanedValue] || null
-      : null;
+    const cleanedValue = value?.replace(/\^|\./g, "").toUpperCase() || "";
+    const icdDesc =
+      isDiagnosisCode && !isTrulyBlank
+        ? icd10Descriptions?.[cleanedValue] || null
+        : null;
 
-  // Strip carets for display but keep dots
-  const displayValue = isDiagnosisCode && !isTrulyBlank
-    ? value.replace(/\^/g, "")
-    : value;
+    const displayValue =
+      isDiagnosisCode && !isTrulyBlank ? value.replace(/\^/g, "") : value;
 
-  if (isDiagnosisCode) {
-    console.log("🔍 ICD Lookup:", {
-      id,
-      raw: value,
-      cleaned: cleanedValue,
-      display: displayValue,
-      result: icdDesc,
-    });
-  }
+    if (labelDesc) {
+      return (
+        <>
+          <span className={styles.valueCode}>{highlightMatch(displayValue)}</span>:{" "}
+          <span className={styles.valueDescription}>{highlightMatch(labelDesc)}</span>
+        </>
+      );
+    }
 
-  if (labelDesc) return `${displayValue}: ${labelDesc}`;
-  if (icdDesc) return `${displayValue}: ${icdDesc}`;
-  if (isDiagnosisCode && !isTrulyBlank) return `${displayValue}: Diagnosis not found`;
+    if (icdDesc) {
+      return (
+        <>
+          <span className={styles.valueCode}>{highlightMatch(displayValue)}</span>:{" "}
+          <span className={styles.valueDescription}>{highlightMatch(icdDesc)}</span>
+        </>
+      );
+    }
 
-  return displayValue || "";
-};
+    if (isDiagnosisCode && !isTrulyBlank) {
+      return (
+        <>
+          <span className={styles.valueCode}>{highlightMatch(displayValue)}</span>:{" "}
+          <span className={styles.valueDescription}>Diagnosis not found</span>
+        </>
+      );
+    }
 
+    return highlightMatch(displayValue || "");
+  };
 
   const filtered = Object.entries(groupedSections)
-    .map(([section, items]) => {
-      const filteredItems = items.filter(
-        ({ id, label }) =>
-          id.toLowerCase().includes(searchTerm) ||
-          label.toLowerCase().includes(searchTerm)
-      );
-      return [section, filteredItems];
+    .map(([sectionKey, group]) => {
+      const { fullName, items } = group;
+
+      const filteredItems = items.filter(({ id, label, value }) => {
+        const search = searchTerm.toLowerCase();
+        const rawValue = value?.toString().toLowerCase() || "";
+
+        const key = `${id}|${value}`;
+        const labelDesc = descriptions?.[key]?.toLowerCase() || "";
+
+        const isDiagnosisCode = /^I0020B$|^I8000[A-J]$/.test(id);
+        const cleanedValue = value?.replace(/\^|\./g, "").toUpperCase();
+        const icdDesc = isDiagnosisCode
+          ? icd10Descriptions?.[cleanedValue]?.toLowerCase() || ""
+          : "";
+
+        const matchesSearch =
+          id.toLowerCase().includes(search) ||
+          label.toLowerCase().includes(search) ||
+          rawValue.includes(search) ||
+          labelDesc.includes(search) ||
+          icdDesc.includes(search);
+
+        const matchesHighlight =
+          selectedItems.length === 0 || selectedItems.includes(id);
+
+        return matchesSearch && matchesHighlight;
+      });
+
+      return [sectionKey, fullName, filteredItems];
     })
-    .filter(([, items]) => items.length > 0);
+    .filter(([, , items]) => items.length > 0);
 
   return (
     <div className={styles.leftPanel}>
       <div className={styles.sticky}>
         <div className={styles.headerRow}>
           <h2>📋 MDS Values</h2>
-          <input
-            type="text"
-            placeholder="Search ID or label"
-            className={styles.searchInput}
-            onChange={handleSearchChange}
-            value={searchTerm}
-          />
+          <div className={styles.searchWrapper}>
+            <input
+              type="text"
+              placeholder="Search MDS values..."
+              className={styles.searchInput}
+              onChange={handleSearchChange}
+              value={searchTerm}
+            />
+            {searchTerm && (
+              <button className={styles.clearButton} onClick={clearSearch}>
+                ✕
+              </button>
+            )}
+          </div>
         </div>
+
         <div className={styles.navButtons}>
           {filtered
-            .map(([section]) => section)
+            .map(([sectionKey]) => sectionKey)
             .sort()
-            .map((section) => (
-              <a
-                key={section}
-                href={`#section-${section}`}
+            .map((sectionKey) => (
+              <button
+                key={sectionKey}
+                type="button"
                 className={styles.sectionLink}
+                onClick={() => {
+                  const el = document.getElementById(`section-${sectionKey}`);
+                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                }}
               >
-                {section}
-              </a>
+                {sectionKey}
+              </button>
             ))}
         </div>
       </div>
@@ -87,13 +146,13 @@ export default function MdsSnapshot({ groupedSections, descriptions }) {
       <div className={styles.scrollArea}>
         {filtered
           .sort(([a], [b]) => a.localeCompare(b))
-          .map(([section, items]) => (
+          .map(([sectionKey, fullName, items]) => (
             <div
-              key={section}
+              key={sectionKey}
               className={styles.mdsSection}
-              id={`section-${section}`}
+              id={`section-${sectionKey}`}
             >
-              <h3>{section}</h3>
+              <h3>{fullName}</h3>
               <table>
                 <thead>
                   <tr>
@@ -104,9 +163,14 @@ export default function MdsSnapshot({ groupedSections, descriptions }) {
                 </thead>
                 <tbody>
                   {items.map(({ id, label, value }) => (
-                    <tr key={id}>
-                      <td>{id}</td>
-                      <td>{label}</td>
+                    <tr
+                      key={id}
+                      className={
+                        selectedItems.includes(id) ? styles.highlightedRow : undefined
+                      }
+                    >
+                      <td>{highlightMatch(id)}</td>
+                      <td>{highlightMatch(label)}</td>
                       <td>{getDescription(id, value)}</td>
                     </tr>
                   ))}

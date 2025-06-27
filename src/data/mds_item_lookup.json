@@ -5102,7 +5102,7 @@
   "GG0130A1": {
     "itm_shrt_label": "Eating (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_189": {
     "itm_shrt_label": "Item filler: replaces old GG0130A2",
@@ -5112,12 +5112,12 @@
   "GG0130A3": {
     "itm_shrt_label": "Eating (Dischg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130B1": {
     "itm_shrt_label": "Oral hygiene (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_190": {
     "itm_shrt_label": "Item filler: replaces old GG0130B2",
@@ -5127,12 +5127,12 @@
   "GG0130B3": {
     "itm_shrt_label": "Oral hygiene (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130C1": {
     "itm_shrt_label": "Toileting hygiene (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_191": {
     "itm_shrt_label": "Item filler: replaces old GG0130C2",
@@ -5142,12 +5142,12 @@
   "GG0130C3": {
     "itm_shrt_label": "Toileting hygiene (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170B1": {
     "itm_shrt_label": "Sit to lying (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_197": {
     "itm_shrt_label": "Item filler: replaces old GG0170B2",
@@ -5157,12 +5157,12 @@
   "GG0170B3": {
     "itm_shrt_label": "Sit to lying (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170C1": {
     "itm_shrt_label": "Lying to sitting on bed side (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_198": {
     "itm_shrt_label": "Item filler: replaces old GG0170C2",
@@ -5172,12 +5172,12 @@
   "GG0170C3": {
     "itm_shrt_label": "Lying to sitting on bed side (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170D1": {
     "itm_shrt_label": "Sit to stand (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_199": {
     "itm_shrt_label": "Item filler: replaces old GG0170D2",
@@ -5187,12 +5187,12 @@
   "GG0170D3": {
     "itm_shrt_label": "Sit to stand (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170E1": {
     "itm_shrt_label": "Chair/bed-to-chair transfer (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_200": {
     "itm_shrt_label": "Item filler: replaces old GG0170E2",
@@ -5202,12 +5202,12 @@
   "GG0170E3": {
     "itm_shrt_label": "Chair/bed-to-chair transfer (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170F1": {
     "itm_shrt_label": "Toilet transfer (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_201": {
     "itm_shrt_label": "Item filler: replaces old GG0170F2",
@@ -5217,7 +5217,7 @@
   "GG0170F3": {
     "itm_shrt_label": "Toilet transfer (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_031": {
     "itm_shrt_label": "Item filler: replaces old GG0170H1",
@@ -5232,7 +5232,7 @@
   "GG0170J1": {
     "itm_shrt_label": "Walk 50 feet with two turns (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_204": {
     "itm_shrt_label": "Item filler: replaces old GG0170J2",
@@ -5242,12 +5242,12 @@
   "GG0170J3": {
     "itm_shrt_label": "Walk 50 feet with two turns (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170K1": {
     "itm_shrt_label": "Walk 150 feet (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_205": {
     "itm_shrt_label": "Item filler: replaces old GG0170K2",
@@ -5257,22 +5257,22 @@
   "GG0170K3": {
     "itm_shrt_label": "Walk 150 feet (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170Q1": {
     "itm_shrt_label": "Use wheelchair and/or scooter (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170Q3": {
     "itm_shrt_label": "Use wheelchair and/or scooter (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170R1": {
     "itm_shrt_label": "Wheel 50 feet with two turns (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_211": {
     "itm_shrt_label": "Item filler: replaces old GG0170R2",
@@ -5282,22 +5282,22 @@
   "GG0170R3": {
     "itm_shrt_label": "Wheel 50 feet with two turns (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170RR1": {
     "itm_shrt_label": "Type of wheelchair or scooter (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170RR3": {
     "itm_shrt_label": "Type of wheelchair or scooter (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170S1": {
     "itm_shrt_label": "Wheel 150 feet (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_212": {
     "itm_shrt_label": "Item filler: replaces old GG0170S2",
@@ -5307,17 +5307,17 @@
   "GG0170S3": {
     "itm_shrt_label": "Wheel 150 feet (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170SS1": {
     "itm_shrt_label": "Type of wheelchair or scooter (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170SS3": {
     "itm_shrt_label": "Type of wheelchair or scooter (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "X0600H": {
     "itm_shrt_label": "Correction: SNF PPS Part A Discharge (End of Stay)",
@@ -5642,57 +5642,57 @@
   "GG0100A": {
     "itm_shrt_label": "Prior Functioning - Self Care",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0100B": {
     "itm_shrt_label": "Prior Functioning - Indoor Mobility (Ambulation)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0100C": {
     "itm_shrt_label": "Prior Functioning - Stairs",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0100D": {
     "itm_shrt_label": "Prior Functioning - Functional Cognition",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0110A": {
     "itm_shrt_label": "Prior Device Use - Manual wheelchair",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0110B": {
     "itm_shrt_label": "Prior Device Use - Mtrzd wheelchair and/or scooter",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0110C": {
     "itm_shrt_label": "Prior Device Use - Mechanical lift",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0110D": {
     "itm_shrt_label": "Prior Device Use - Walker",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0110E": {
     "itm_shrt_label": "Prior Device Use - Orthotics/Prosthetics",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0110Z": {
     "itm_shrt_label": "Prior Device Use - None of the above",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130E1": {
     "itm_shrt_label": "Shower/bathe self (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_192": {
     "itm_shrt_label": "Item filler: replaces old GG0130E2",
@@ -5702,12 +5702,12 @@
   "GG0130E3": {
     "itm_shrt_label": "Shower/bathe self (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130F1": {
     "itm_shrt_label": "Upper body dressing (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_193": {
     "itm_shrt_label": "Item filler: replaces old GG0130F2",
@@ -5717,12 +5717,12 @@
   "GG0130F3": {
     "itm_shrt_label": "Upper body dressing (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130G1": {
     "itm_shrt_label": "Lower body dressing (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_194": {
     "itm_shrt_label": "Item filler: replaces old GG0130G2",
@@ -5732,12 +5732,12 @@
   "GG0130G3": {
     "itm_shrt_label": "Lower body dressing (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130H1": {
     "itm_shrt_label": "Put on/take off footwear (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_195": {
     "itm_shrt_label": "Item filler: replaces old GG0130H2",
@@ -5747,12 +5747,12 @@
   "GG0130H3": {
     "itm_shrt_label": "Put on/take off footwear (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170A1": {
     "itm_shrt_label": "Roll left and right (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_196": {
     "itm_shrt_label": "Item filler: replaces old GG0170A2",
@@ -5762,12 +5762,12 @@
   "GG0170A3": {
     "itm_shrt_label": "Roll left and right (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170G1": {
     "itm_shrt_label": "Car transfer (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_202": {
     "itm_shrt_label": "Item filler: replaces old GG0170G2",
@@ -5777,12 +5777,12 @@
   "GG0170G3": {
     "itm_shrt_label": "Car transfer (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170I1": {
     "itm_shrt_label": "Walk 10 feet (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_203": {
     "itm_shrt_label": "Item filler: replaces old GG0170I2",
@@ -5792,12 +5792,12 @@
   "GG0170I3": {
     "itm_shrt_label": "Walk 10 feet (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170L1": {
     "itm_shrt_label": "Walking 10 feet uneven surf (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_206": {
     "itm_shrt_label": "Item filler: replaces old GG0170L2",
@@ -5807,12 +5807,12 @@
   "GG0170L3": {
     "itm_shrt_label": "Walking 10 feet uneven surf (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170M1": {
     "itm_shrt_label": "1 step (curb) (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_207": {
     "itm_shrt_label": "Item filler: replaces old GG0170M2",
@@ -5822,12 +5822,12 @@
   "GG0170M3": {
     "itm_shrt_label": "1 step (curb) (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170N1": {
     "itm_shrt_label": "4 steps (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_208": {
     "itm_shrt_label": "Item filler: replaces old GG0170N2",
@@ -5837,12 +5837,12 @@
   "GG0170N3": {
     "itm_shrt_label": "4 steps (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170O1": {
     "itm_shrt_label": "12 steps (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_209": {
     "itm_shrt_label": "Item filler: replaces old GG0170O2",
@@ -5852,12 +5852,12 @@
   "GG0170O3": {
     "itm_shrt_label": "12 steps (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170P1": {
     "itm_shrt_label": "Picking up object (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_210": {
     "itm_shrt_label": "Item filler: replaces old GG0170P2",
@@ -5867,7 +5867,7 @@
   "GG0170P3": {
     "itm_shrt_label": "Picking up object (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "I0020": {
     "itm_shrt_label": "Primary Medical Condition Category",
@@ -5907,52 +5907,52 @@
   "GG0130A5": {
     "itm_shrt_label": "Eating (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130B5": {
     "itm_shrt_label": "Oral hygiene (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130C5": {
     "itm_shrt_label": "Toileting hygiene (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170B5": {
     "itm_shrt_label": "Sit to lying (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170C5": {
     "itm_shrt_label": "Lying to sitting on bed side (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170D5": {
     "itm_shrt_label": "Sit to stand (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170E5": {
     "itm_shrt_label": "Chair/bed-to-chair transfer (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170F5": {
     "itm_shrt_label": "Toilet transfer (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170J5": {
     "itm_shrt_label": "Walk 50 feet with two turns (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170K5": {
     "itm_shrt_label": "Walk 150 feet (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "I0020B": {
     "itm_shrt_label": "Primary Medical Condition ICD",
@@ -6212,7 +6212,7 @@
   "GG0170I5": {
     "itm_shrt_label": "Walk 10 feet (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "ITEM_FILLER_054": {
     "itm_shrt_label": "Item filler: replaces old O0450B",
@@ -6567,57 +6567,57 @@
   "GG0115A": {
     "itm_shrt_label": "Functional limits - Upper extremity",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0115B": {
     "itm_shrt_label": "Functional limits - Lower extremity",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0120A": {
     "itm_shrt_label": "Mobility Device - Cane/Crutch",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0120B": {
     "itm_shrt_label": "Mobility Device - Walker",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0120C": {
     "itm_shrt_label": "Mobility Device - Wheelchair (manual or electric)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0120D": {
     "itm_shrt_label": "Mobility Device - Limb prosthesis",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0120Z": {
     "itm_shrt_label": "Mobility Device - None of the Above",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130I1": {
     "itm_shrt_label": "Personal Hygiene (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130I3": {
     "itm_shrt_label": "Personal Hygiene (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170FF1": {
     "itm_shrt_label": "Tub/Showr Transfer (Start of Stay Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170FF3": {
     "itm_shrt_label": "Tub/Showr Transfer (Dschg Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "J0410": {
     "itm_shrt_label": "Pain Frequency",
@@ -6687,7 +6687,7 @@
   "GG0130I5": {
     "itm_shrt_label": "Personal Hygiene (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "K0520C3": {
     "itm_shrt_label": "Nutritional Approaches (7-day): Mech Alt Diet",
@@ -6707,7 +6707,7 @@
   "GG0170FF5": {
     "itm_shrt_label": "Tub/Showr Transfer (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "K0520D3": {
     "itm_shrt_label": "Nutritional Approaches (7-day): Therapeutic",
@@ -7292,52 +7292,52 @@
   "GG0130E5": {
     "itm_shrt_label": "Shower/bathe self (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130F5": {
     "itm_shrt_label": "Upper body dressing (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130G5": {
     "itm_shrt_label": "Lower body dressing (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0130H5": {
     "itm_shrt_label": "Put on/take off footwear (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170A5": {
     "itm_shrt_label": "Roll left and right (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170Q5": {
     "itm_shrt_label": "Use wheelchair and/or scooter (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170R5": {
     "itm_shrt_label": "Wheel 50 feet with two turns (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170RR5": {
     "itm_shrt_label": "Type of wheelchair or scooter (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170S5": {
     "itm_shrt_label": "Wheel 150 feet (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "GG0170SS5": {
     "itm_shrt_label": "Type of wheelchair or scooter (Interim Perf)",
     "itm_sect_label": "GG",
-    "sect_name": "GG"
+    "sect_name": "Section GG: Functional Abilities and Goals"
   },
   "S6060A": {
     "itm_shrt_label": "Resident In Strict Isolation",

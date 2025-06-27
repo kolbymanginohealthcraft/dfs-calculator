@@ -9,10 +9,10 @@ import {
 import { fetchFacilityInfo } from "./utils/facilityLookup";
 import { handleFileUpload } from "./utils/fileParser";
 import { functionMultipliers } from "./utils/functionMultipliers";
+// import { covariateRelatedItems } from "./utils/covariateRelatedItems";
 import { useICD10Lookup } from "./utils/useICD10Lookup";
 import useValueDescriptions from "./utils/useValueDescriptions";
 import html2pdf from "html2pdf.js";
-
 
 import Navbar from "./components/Navbar";
 import IntroPanel from "./components/IntroPanel";
@@ -32,6 +32,7 @@ function App() {
   const [fileName, setFileName] = useState("");
   const [facilityName, setFacilityName] = useState("");
   const [facilityAddress, setFacilityAddress] = useState("");
+  const [selectedItems, setSelectedItems] = useState([]);
   const icd10Descriptions = useICD10Lookup();
   const exportRef = useRef();
 
@@ -123,17 +124,21 @@ function App() {
       ) || {}
     : {};
 
-  if (hasFile) {
-    console.log("🧪 Covariates", covariates);
-    console.log("🧮 Multipliers", functionMultipliers);
-    console.log("🧠 Expected Score:", weightedScore);
-    console.log("ICD List:", icdList);
-  }
+  const handleCovariateClick = (itemsArray) => {
+    // If the clicked items match what's already selected, clear them
+    const isSameSelection =
+      itemsArray.length === selectedItems.length &&
+      itemsArray.every((item) => selectedItems.includes(item));
+
+    const newSelection = isSameSelection ? [] : itemsArray;
+
+    console.log("[App.jsx] Setting selectedItems to:", newSelection);
+    setSelectedItems(newSelection);
+  };
 
   return (
     <div className="app-container">
       <Navbar />
-
       <IntroPanel onDrop={onDrop} onExport={handleExport} hasFile={hasFile} />
 
       <div className="mainContent">
@@ -169,6 +174,7 @@ function App() {
                 groupedSections={groupedSections}
                 descriptions={descriptions}
                 icd10Descriptions={icd10Descriptions}
+                selectedItems={selectedItems}
               />
             </div>
             <div className="covariatesPanel scrollableContent">
@@ -176,6 +182,7 @@ function App() {
                 hasFile={hasFile}
                 covariates={covariates}
                 multipliers={functionMultipliers}
+                onCovariateClick={handleCovariateClick}
               />
             </div>
           </div>
@@ -201,18 +208,23 @@ function App() {
           <ExportView
             patient={{
               name: `${firstName} ${lastName}`,
-              facility: facilityName,
               dob,
+              age,
+              admitDate,
               ard: ardDate,
+              dischargeDate,
+              facility: facilityName,
+              address: facilityAddress,
             }}
             scores={{
-              Start: startTotal,
-              Modeled: modeledTotal,
-              Expected: weightedScore,
+              start: startTotal,
+              expected: weightedScore,
+              modeled: modeledTotal,
             }}
-            covariates={Object.entries(covariates).map(([key, value]) => ({
-              name: key,
-              value: +(value * (functionMultipliers[key] ?? 0)).toFixed(3),
+            covariates={Object.entries(covariates).map(([name, value]) => ({
+              name,
+              value,
+              multiplier: functionMultipliers[name],
             }))}
           />
         </div>

@@ -21,7 +21,6 @@ const SummarySection = ({
   if (!hasFile) {
     return (
       <div className={styles.summaryBlock}>
-        <h2 className={styles.summaryName}>👤 Patient Summary</h2>
         <p className={styles.placeholder}>
           Upload a file to see patient details.
         </p>
@@ -36,9 +35,8 @@ const SummarySection = ({
           <h2 className={styles.summaryName}>
             👤 {firstName || "Unknown"} {lastName || ""}
             {dob && (
-              <span>
-                {" "}
-                (age: {age}, DOB {formatDOB(dob)})
+              <span className={styles.inlineDetails}>
+                {" "} (age: {age}, DOB {formatDOB(dob)})
               </span>
             )}
           </h2>

@@ -2,7 +2,14 @@ import mdsItemLookup from "../data/mds_item_lookup.json";
 import { GG_ITEMS } from "./calculations";
 import { parseXml } from "./xmlParser"; // already used in your code
 
-export function handleFileUpload(file, setFileName, setParsedValues, setGroupedSections, setModeledValues, setStartScores) {
+export function handleFileUpload(
+  file,
+  setFileName,
+  setParsedValues,
+  setGroupedSections,
+  setModeledValues,
+  setStartScores
+) {
   setFileName(file.name);
 
   file.text().then((text) => {
@@ -14,9 +21,18 @@ export function handleFileUpload(file, setFileName, setParsedValues, setGroupedS
       const item = mdsItemLookup[key];
       if (!item) return;
 
-      const section = item.itm_sect_label || "Other";
-      if (!grouped[section]) grouped[section] = [];
-      grouped[section].push({
+      const sectLabel = item.itm_sect_label || "Other";
+      const fullName = item.sect_name || sectLabel;
+
+      if (!grouped[sectLabel]) {
+        grouped[sectLabel] = {
+          label: sectLabel,
+          fullName,
+          items: [],
+        };
+      }
+
+      grouped[sectLabel].items.push({
         id: key,
         label: item.itm_shrt_label,
         value: val,

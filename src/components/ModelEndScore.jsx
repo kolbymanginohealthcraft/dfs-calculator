@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./ModelEndScore.module.css";
 import {
   GG_ITEMS,
@@ -17,22 +17,36 @@ const ModelEndScore = ({
   setModeledValues,
   hasFile,
   parsedValues,
-  weightedScore, // ✅ passed in from App.jsx
+  weightedScore,
 }) => {
+  const [filterContributing, setFilterContributing] = useState(false);
   const startTotal = calculateFunctionScore(startScores);
   const contributingIds = getContributingItemIds(modeledValues);
+
+  const toggleFilter = () => {
+    setFilterContributing((prev) => !prev);
+  };
 
   return (
     <div className={styles.rightPanel}>
       <div className={styles.sticky}>
         <div className={styles.modelHeader}>
           <h2>🛠️ Model End Score</h2>
-          <button
-            className={styles.resetBtn}
-            onClick={() => setModeledValues({ ...startScores })}
-          >
-            Reset All
-          </button>
+          <div className={styles.buttonRow}>
+            <button
+              className={styles.resetBtn}
+              onClick={() => setModeledValues({ ...startScores })}
+            >
+              Reset All
+            </button>
+            <button
+              className={styles.filterBtn}
+              onClick={toggleFilter}
+              aria-pressed={filterContributing}
+            >
+              {filterContributing ? "Show All Items" : "Show Only Contributing"}
+            </button>
+          </div>
         </div>
 
         {hasFile && (
@@ -40,7 +54,7 @@ const ModelEndScore = ({
             <SummaryChart
               start={startTotal}
               modeled={modeledTotal}
-              expected={weightedScore} // ✅ use correct prop
+              expected={weightedScore}
             />
           </div>
         )}
@@ -48,14 +62,40 @@ const ModelEndScore = ({
 
       <div className={styles.scrollArea}>
         {hasFile &&
-          ["selfCare", "mobility"].map((domain) => (
-            <div className={styles.scoreSubsection} key={domain}>
-              <h3>
-                {domain === "selfCare" ? "🧼 Self-Care" : "🧍 Mobility"} —
-                Subtotal: {subtotal(domain)}
-              </h3>
-              {GG_ITEMS.filter((i) => i.domain === domain).map(
-                ({ id, label }) => {
+          ["selfCare", "mobility"].map((domain) => {
+            const domainItems = GG_ITEMS.filter((i) => i.domain === domain);
+            const filteredItems = filterContributing
+              ? domainItems.filter(({ id }) =>
+                  contributingIds.has(id.replace(/[0-9]$/, ""))
+                )
+              : domainItems;
+
+            const contributingSubtotal = domainItems.reduce((sum, { id }) => {
+              const baseId = id.replace(/[0-9]$/, "");
+              if (!contributingIds.has(baseId)) return sum;
+              const modeled = modeledValues[id];
+              return modeled in scoreMap ? sum + scoreMap[modeled] : sum;
+            }, 0);
+
+            return (
+              <div className={styles.scoreSubsection} key={domain}>
+                <div className={styles.subsectionHeader}>
+                  <div className={styles.sectionHeader}>
+                    <h3>
+                      {domain === "selfCare" ? "🧼 Self-Care" : "🧍 Mobility"}
+                    </h3>
+
+                  </div>
+
+                  <div className={styles.contributeSummary}>
+                    <span className={styles.contributingDot} />
+                    <span className={styles.contributeLabel}>
+                      Item contributes to function score
+                    </span>
+                  </div>
+                </div>
+
+                {filteredItems.map(({ id, label }) => {
                   const modeled =
                     modeledValues[id] in scoreMap
                       ? scoreMap[modeledValues[id]]
@@ -77,12 +117,15 @@ const ModelEndScore = ({
 
                   return (
                     <div key={id} className={rowClasses}>
+                      <span className={styles.contributeSlot}>
+                        {isContributing && (
+                          <span className={styles.contributingDot}></span>
+                        )}
+                      </span>
+
                       <label title={id}>
                         {label}{" "}
                         <span className={styles.itemId}>[{cleanId}]</span>
-                        {isContributing && (
-                          <span className={styles.contributingIcon}>✅</span>
-                        )}
                         {delta !== 0 && (
                           <span
                             className={`${styles.delta} ${
@@ -105,10 +148,10 @@ const ModelEndScore = ({
                       </span>
                     </div>
                   );
-                }
-              )}
-            </div>
-          ))}
+                })}
+              </div>
+            );
+          })}
       </div>
     </div>
   );
