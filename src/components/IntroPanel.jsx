@@ -83,10 +83,7 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
         </div>
         <div className={styles.description}>
           <p>
-            This calculator estimates a patient's expected and modeled Discharge
-            Function Score (DFS) using MDS Section GG values. Upload an XML file
-            to explore self-care and mobility performance, adjust outcomes with
-            tick controls, and review covariates that affect expected scoring.
+            This calculator estimates a patient's expected Discharge Function Score (DFS) as well as allows you to model the interim or hypothetical end score. Upload an XML file to get started.
           </p>
         </div>
       </section>

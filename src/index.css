@@ -70,16 +70,6 @@ html {
   box-sizing: border-box;
 }
 
-/* Remove centering and max-width */
-.summaryInner {
-  width: 100%;
-}
-
-/* Add top padding to patient name */
-.summaryInner h2 {
-  padding-top: 0.5rem;
-}
-
 
 /* MDS + Covariates row */
 .snapshotCovariateRow {

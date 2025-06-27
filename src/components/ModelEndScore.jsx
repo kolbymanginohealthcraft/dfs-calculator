@@ -1,12 +1,12 @@
 import React from "react";
 import styles from "./ModelEndScore.module.css";
-import { GG_ITEMS, scoreMap } from "../utils/calculations";
-import SummaryChart from "./SummaryChart";
 import {
+  GG_ITEMS,
+  scoreMap,
   calculateFunctionScore,
   getContributingItemIds,
-  ANA,
 } from "../utils/calculations";
+import SummaryChart from "./SummaryChart";
 
 const ModelEndScore = ({
   modeledValues,
@@ -16,6 +16,8 @@ const ModelEndScore = ({
   handleTick,
   setModeledValues,
   hasFile,
+  parsedValues,
+  weightedScore, // ✅ passed in from App.jsx
 }) => {
   const startTotal = calculateFunctionScore(startScores);
   const contributingIds = getContributingItemIds(modeledValues);
@@ -35,7 +37,11 @@ const ModelEndScore = ({
 
         {hasFile && (
           <div className={styles.chartBox}>
-            <SummaryChart start={startTotal} modeled={modeledTotal} />
+            <SummaryChart
+              start={startTotal}
+              modeled={modeledTotal}
+              expected={weightedScore} // ✅ use correct prop
+            />
           </div>
         )}
       </div>
@@ -45,57 +51,62 @@ const ModelEndScore = ({
           ["selfCare", "mobility"].map((domain) => (
             <div className={styles.scoreSubsection} key={domain}>
               <h3>
-                {domain === "selfCare" ? "🧼 Self-Care" : "🧍 Mobility"} — Subtotal:{" "}
-                {subtotal(domain)}
+                {domain === "selfCare" ? "🧼 Self-Care" : "🧍 Mobility"} —
+                Subtotal: {subtotal(domain)}
               </h3>
-              {GG_ITEMS.filter((i) => i.domain === domain).map(({ id, label }) => {
-                const modeled = modeledValues[id] in scoreMap ? scoreMap[modeledValues[id]] : 0;
-                const rawStart = startScores[id];
-                const start = rawStart in scoreMap ? scoreMap[rawStart] : 0;
-                const delta = modeled - start;
+              {GG_ITEMS.filter((i) => i.domain === domain).map(
+                ({ id, label }) => {
+                  const modeled =
+                    modeledValues[id] in scoreMap
+                      ? scoreMap[modeledValues[id]]
+                      : 0;
+                  const rawStart = startScores[id];
+                  const start = rawStart in scoreMap ? scoreMap[rawStart] : 0;
+                  const delta = modeled - start;
 
-                const rowClasses = [
-                  styles.tickRow,
-                  modeled > start ? styles.gain : "",
-                  modeled < start ? styles.loss : "",
-                ]
-                  .filter(Boolean)
-                  .join(" ");
+                  const rowClasses = [
+                    styles.tickRow,
+                    modeled > start ? styles.gain : "",
+                    modeled < start ? styles.loss : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ");
 
-                const cleanId = id.replace(/[0-9]$/, "");
-                const isContributing = contributingIds.has(cleanId);
+                  const cleanId = id.replace(/[0-9]$/, "");
+                  const isContributing = contributingIds.has(cleanId);
 
-                return (
-                  <div key={id} className={rowClasses}>
-                    <label title={id}>
-                      {label} <span className={styles.itemId}>[{cleanId}]</span>
-                      {isContributing && (
-                        <span className={styles.contributingIcon}>✅</span>
-                      )}
-                      {delta !== 0 && (
-                        <span
-                          className={`${styles.delta} ${
-                            delta > 0 ? styles.positive : styles.negative
-                          }`}
-                        >
-                          ({delta > 0 ? "+" : ""}
-                          {delta})
-                        </span>
-                      )}
-                    </label>
+                  return (
+                    <div key={id} className={rowClasses}>
+                      <label title={id}>
+                        {label}{" "}
+                        <span className={styles.itemId}>[{cleanId}]</span>
+                        {isContributing && (
+                          <span className={styles.contributingIcon}>✅</span>
+                        )}
+                        {delta !== 0 && (
+                          <span
+                            className={`${styles.delta} ${
+                              delta > 0 ? styles.positive : styles.negative
+                            }`}
+                          >
+                            ({delta > 0 ? "+" : ""}
+                            {delta})
+                          </span>
+                        )}
+                      </label>
 
-                    <div className={styles.tickControls}>
-                      <button onClick={() => handleTick(id, -1)}>-</button>
-                      <span className={styles.tickValue}>{modeled}</span>
-                      <button onClick={() => handleTick(id, 1)}>+</button>
+                      <div className={styles.tickControls}>
+                        <button onClick={() => handleTick(id, -1)}>-</button>
+                        <span className={styles.tickValue}>{modeled}</span>
+                        <button onClick={() => handleTick(id, 1)}>+</button>
+                      </div>
+                      <span className={styles.startScore}>
+                        Start: {startScores[id] === "^" ? "ANA" : start}
+                      </span>
                     </div>
-                    <span className={styles.startScore}>
-                      Start:{" "}
-                      {ANA.has(rawStart) ? "ANA" : start}
-                    </span>
-                  </div>
-                );
-              })}
+                  );
+                }
+              )}
             </div>
           ))}
       </div>

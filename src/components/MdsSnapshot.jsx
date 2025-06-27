@@ -1,12 +1,49 @@
 import React, { useState } from "react";
 import styles from "./MdsSnapshot.module.css";
+import { useICD10Lookup } from "../utils/useICD10Lookup";
 
-export default function MdsSnapshot({ groupedSections }) {
+export default function MdsSnapshot({ groupedSections, descriptions }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const icd10Descriptions = useICD10Lookup(); // ✅ Load from hook
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
 
-  // Filter groupedSections based on search
+  const getDescription = (id, value) => {
+  const key = `${id}|${value}`;
+  const labelDesc = descriptions?.[key] || "";
+
+  const isDiagnosisCode = /^I0020B$|^I8000[A-J]$/.test(id);
+  const isTrulyBlank = value === "^";
+
+  const cleanedValue = value?.replace(/\^|\./g, "").toUpperCase() || "";
+  const icdDesc =
+    isDiagnosisCode && !isTrulyBlank
+      ? icd10Descriptions?.[cleanedValue] || null
+      : null;
+
+  // Strip carets for display but keep dots
+  const displayValue = isDiagnosisCode && !isTrulyBlank
+    ? value.replace(/\^/g, "")
+    : value;
+
+  if (isDiagnosisCode) {
+    console.log("🔍 ICD Lookup:", {
+      id,
+      raw: value,
+      cleaned: cleanedValue,
+      display: displayValue,
+      result: icdDesc,
+    });
+  }
+
+  if (labelDesc) return `${displayValue}: ${labelDesc}`;
+  if (icdDesc) return `${displayValue}: ${icdDesc}`;
+  if (isDiagnosisCode && !isTrulyBlank) return `${displayValue}: Diagnosis not found`;
+
+  return displayValue || "";
+};
+
+
   const filtered = Object.entries(groupedSections)
     .map(([section, items]) => {
       const filteredItems = items.filter(
@@ -22,7 +59,7 @@ export default function MdsSnapshot({ groupedSections }) {
     <div className={styles.leftPanel}>
       <div className={styles.sticky}>
         <div className={styles.headerRow}>
-          <h2>📋 MDS Snapshot</h2>
+          <h2>📋 MDS Values</h2>
           <input
             type="text"
             placeholder="Search ID or label"
@@ -70,7 +107,7 @@ export default function MdsSnapshot({ groupedSections }) {
                     <tr key={id}>
                       <td>{id}</td>
                       <td>{label}</td>
-                      <td>{value}</td>
+                      <td>{getDescription(id, value)}</td>
                     </tr>
                   ))}
                 </tbody>

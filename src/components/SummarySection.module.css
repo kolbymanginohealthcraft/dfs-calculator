@@ -6,21 +6,30 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  gap: 0.3rem;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
 }
 
 .summaryName {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #ffffff; /* Bright white for contrast on teal */
-  margin: 0.5rem;
+  color: #ffffff;
+  margin: 0;
+  padding: 0.3rem 0;
 }
 
 .fileInfo {
   font-size: 0.7rem;
-  color: #e0f7fa; /* Light aqua for subtle visibility on teal */
-  margin: 0.5rem;
+  color: #e0f7fa;
+  white-space: nowrap;
+  margin: 0;
 }
+
 
 
 .placeholder {

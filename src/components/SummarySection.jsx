@@ -32,17 +32,18 @@ const SummarySection = ({
   return (
     <div className={styles.summaryBlock}>
       <div className={styles.headerBlock}>
-        <h2 className={styles.summaryName}>
-          👤 {firstName || "Unknown"} {lastName || ""}
-          {dob && (
-            <span>
-              {" "}
-              (age: {age}, DOB {formatDOB(dob)})
-            </span>
-          )}
-        </h2>
-
-        <p className={styles.fileInfo}>File Uploaded: {fileName || "Unknown file"}</p>
+        <div className={styles.headerRow}>
+          <h2 className={styles.summaryName}>
+            👤 {firstName || "Unknown"} {lastName || ""}
+            {dob && (
+              <span>
+                {" "}
+                (age: {age}, DOB {formatDOB(dob)})
+              </span>
+            )}
+          </h2>
+          <p className={styles.fileInfo}>📂 {fileName || "Unknown file"}</p>
+        </div>
       </div>
 
       <div className={styles.summaryDetails}>

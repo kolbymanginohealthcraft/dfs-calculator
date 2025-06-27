@@ -4,12 +4,17 @@ import {
   extractPatientSummary,
   determineMobilityType,
   calculateFunctionScore,
+  getFunctionCovariates,
 } from "./utils/calculations";
 import { fetchFacilityInfo } from "./utils/facilityLookup";
 import { handleFileUpload } from "./utils/fileParser";
+import { functionMultipliers } from "./utils/functionMultipliers";
+import { useICD10Lookup } from "./utils/useICD10Lookup";
+import useValueDescriptions from "./utils/useValueDescriptions";
 import html2pdf from "html2pdf.js";
 
-import Navbar from "./components/Navbar"; // add at the top
+
+import Navbar from "./components/Navbar";
 import IntroPanel from "./components/IntroPanel";
 import SummarySection from "./components/SummarySection";
 import MdsSnapshot from "./components/MdsSnapshot";
@@ -27,8 +32,10 @@ function App() {
   const [fileName, setFileName] = useState("");
   const [facilityName, setFacilityName] = useState("");
   const [facilityAddress, setFacilityAddress] = useState("");
-
+  const icd10Descriptions = useICD10Lookup();
   const exportRef = useRef();
+
+  const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -102,10 +109,30 @@ function App() {
 
   const hasFile = !!fileName;
 
+  const icdList = Object.entries(parsedValues)
+    .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+    .map(([_, value]) => value)
+    .filter(Boolean);
+
+  const { covariates = {}, weightedScore = 0 } = hasFile
+    ? getFunctionCovariates(
+        parsedValues,
+        extractPatientSummary(parsedValues, ardDate),
+        icdList,
+        startScores
+      ) || {}
+    : {};
+
+  if (hasFile) {
+    console.log("🧪 Covariates", covariates);
+    console.log("🧮 Multipliers", functionMultipliers);
+    console.log("🧠 Expected Score:", weightedScore);
+    console.log("ICD List:", icdList);
+  }
+
   return (
     <div className="app-container">
       <Navbar />
-
 
       <IntroPanel onDrop={onDrop} onExport={handleExport} hasFile={hasFile} />
 
@@ -136,13 +163,20 @@ function App() {
           </div>
           <div className="summarySeparator" />
 
-
           <div className="snapshotCovariateRow">
             <div className="snapshotPanel scrollableContent">
-              <MdsSnapshot groupedSections={groupedSections} />
+              <MdsSnapshot
+                groupedSections={groupedSections}
+                descriptions={descriptions}
+                icd10Descriptions={icd10Descriptions}
+              />
             </div>
             <div className="covariatesPanel scrollableContent">
-              <Covariates hasFile={hasFile} />
+              <Covariates
+                hasFile={hasFile}
+                covariates={covariates}
+                multipliers={functionMultipliers}
+              />
             </div>
           </div>
         </div>
@@ -156,6 +190,8 @@ function App() {
             handleTick={handleTick}
             setModeledValues={setModeledValues}
             hasFile={hasFile}
+            parsedValues={parsedValues}
+            weightedScore={weightedScore}
           />
         </div>
       </div>
@@ -172,15 +208,12 @@ function App() {
             scores={{
               Start: startTotal,
               Modeled: modeledTotal,
-              Expected: 16.4,
+              Expected: weightedScore,
             }}
-            covariates={[
-              { name: "Comatose", value: -2.243 },
-              { name: "Dialysis", value: -0.541 },
-              { name: "Male", value: 0.043 },
-              { name: "Hispanic", value: -0.215 },
-              { name: "Pain interference", value: -0.121 },
-            ]}
+            covariates={Object.entries(covariates).map(([key, value]) => ({
+              name: key,
+              value: +(value * (functionMultipliers[key] ?? 0)).toFixed(3),
+            }))}
           />
         </div>
       </div>

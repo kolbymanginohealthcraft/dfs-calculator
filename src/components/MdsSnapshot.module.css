@@ -1,5 +1,5 @@
 .leftPanel {
-  background: #f4f9fc;
+  background: #e8f6f9;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -7,6 +7,7 @@
   padding-left: 1rem;
   padding-right: 1rem;
   min-width: 0;
+  
 }
 
 .sticky {
