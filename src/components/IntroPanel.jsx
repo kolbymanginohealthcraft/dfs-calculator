@@ -4,6 +4,7 @@ import styles from "./IntroPanel.module.css";
 
 const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
   const [dragActive, setDragActive] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
@@ -17,30 +18,26 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
 
     const handleDragEnter = (e) => {
       e.preventDefault();
-      e.stopPropagation();
       dragCounter++;
       setDragActive(true);
     };
 
     const handleDragLeave = (e) => {
       e.preventDefault();
-      e.stopPropagation();
       dragCounter--;
       if (dragCounter === 0) setDragActive(false);
     };
 
     const handleDrop = (e) => {
       e.preventDefault();
-      e.stopPropagation();
-      setDragActive(false);
       dragCounter = 0;
+      setDragActive(false);
       const files = Array.from(e.dataTransfer.files || []);
       if (files.length > 0) onDrop(files);
     };
 
     const preventDefaults = (e) => {
       e.preventDefault();
-      e.stopPropagation();
     };
 
     window.addEventListener("dragenter", handleDragEnter);
@@ -64,35 +61,76 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
         </div>
       )}
 
-      <section className={styles.introPanel}>
-        <div className={styles.actionsGroup}>
-          <div
-            className={`${styles.dropzone} ${!hasFile ? styles.noFile : ""}`}
-            {...getRootProps()}
-            onClick={open}
-          >
-            <input {...getInputProps()} />
-            <p>Click or drag XML here</p>
-            {hasFile && fileName && (
-              <div className={styles.fileName}>📂 {fileName}</div>
-            )}
+      <div className={styles.ribbonWrapper}>
+        {collapsed ? (
+          <div className={styles.ribbonCollapsed}>
+            <button
+              className={styles.caretToggle}
+              onClick={() => setCollapsed(false)}
+              aria-label="Show intro panel"
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </button>
           </div>
-          <button
-            className={styles.exportBtn}
-            onClick={onExport}
-            disabled={!hasFile}
-          >
-            📄 Export to PDF
-          </button>
-        </div>
-        <div className={styles.description}>
-          <p>
-            This calculator estimates a patient's expected Discharge Function
-            Score (DFS) as well as allows you to model the interim or
-            hypothetical end score. Upload an XML file to get started.
-          </p>
-        </div>
-      </section>
+        ) : (
+          <section className={styles.introPanel}>
+            <div className={styles.actionsGroup}>
+              <div
+                className={`${styles.dropzone} ${
+                  !hasFile ? styles.noFile : ""
+                }`}
+                {...getRootProps()}
+                onClick={open}
+              >
+                <input {...getInputProps()} />
+                <p>Click or drag XML here</p>
+                {hasFile && fileName && (
+                  <div className={styles.fileName}>📂 {fileName}</div>
+                )}
+              </div>
+              <button
+                className={styles.exportBtn}
+                onClick={onExport}
+                disabled={!hasFile}
+              >
+                📄 Export to PDF
+              </button>
+            </div>
+            <div className={styles.description}>
+              <p>
+                This calculator estimates a patient's expected Discharge
+                Function Score (DFS) as well as allows you to model the interim
+                or hypothetical end score. Upload an XML file to get started.
+              </p>
+            </div>
+            <button
+              className={styles.caretToggle}
+              onClick={() => setCollapsed(true)}
+              aria-label="Hide intro panel"
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <polyline points="18 15 12 9 6 15" />
+              </svg>
+            </button>
+          </section>
+        )}
+      </div>
     </>
   );
 };

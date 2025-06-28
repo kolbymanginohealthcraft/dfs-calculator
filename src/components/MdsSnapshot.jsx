@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 
-export default function MdsSnapshot({ groupedSections, descriptions, selectedItems = [] }) {
+export default function MdsSnapshot({
+  groupedSections,
+  descriptions,
+  selectedItems = [],
+}) {
   const [searchTerm, setSearchTerm] = useState("");
   const icd10Descriptions = useICD10Lookup();
 
@@ -41,8 +45,13 @@ export default function MdsSnapshot({ groupedSections, descriptions, selectedIte
     if (labelDesc) {
       return (
         <>
-          <span className={styles.valueCode}>{highlightMatch(displayValue)}</span>:{" "}
-          <span className={styles.valueDescription}>{highlightMatch(labelDesc)}</span>
+          <span className={styles.valueCode}>
+            {highlightMatch(displayValue)}
+          </span>
+          :{" "}
+          <span className={styles.valueDescription}>
+            {highlightMatch(labelDesc)}
+          </span>
         </>
       );
     }
@@ -50,8 +59,13 @@ export default function MdsSnapshot({ groupedSections, descriptions, selectedIte
     if (icdDesc) {
       return (
         <>
-          <span className={styles.valueCode}>{highlightMatch(displayValue)}</span>:{" "}
-          <span className={styles.valueDescription}>{highlightMatch(icdDesc)}</span>
+          <span className={styles.valueCode}>
+            {highlightMatch(displayValue)}
+          </span>
+          :{" "}
+          <span className={styles.valueDescription}>
+            {highlightMatch(icdDesc)}
+          </span>
         </>
       );
     }
@@ -59,8 +73,10 @@ export default function MdsSnapshot({ groupedSections, descriptions, selectedIte
     if (isDiagnosisCode && !isTrulyBlank) {
       return (
         <>
-          <span className={styles.valueCode}>{highlightMatch(displayValue)}</span>:{" "}
-          <span className={styles.valueDescription}>Diagnosis not found</span>
+          <span className={styles.valueCode}>
+            {highlightMatch(displayValue)}
+          </span>
+          : <span className={styles.valueDescription}>Diagnosis not found</span>
         </>
       );
     }
@@ -126,7 +142,11 @@ export default function MdsSnapshot({ groupedSections, descriptions, selectedIte
         <div className={styles.navButtons}>
           {filtered
             .map(([sectionKey]) => sectionKey)
-            .sort()
+            .sort((a, b) => {
+              if (a.toLowerCase() === "control") return 1;
+              if (b.toLowerCase() === "control") return -1;
+              return a.localeCompare(b);
+            })
             .map((sectionKey) => (
               <button
                 key={sectionKey}
@@ -134,7 +154,8 @@ export default function MdsSnapshot({ groupedSections, descriptions, selectedIte
                 className={styles.sectionLink}
                 onClick={() => {
                   const el = document.getElementById(`section-${sectionKey}`);
-                  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+                  if (el)
+                    el.scrollIntoView({ behavior: "smooth", block: "start" });
                 }}
               >
                 {sectionKey}
@@ -145,7 +166,11 @@ export default function MdsSnapshot({ groupedSections, descriptions, selectedIte
 
       <div className={styles.scrollArea}>
         {filtered
-          .sort(([a], [b]) => a.localeCompare(b))
+          .sort(([a], [b]) => {
+            if (a.toLowerCase() === "control") return 1;
+            if (b.toLowerCase() === "control") return -1;
+            return a.localeCompare(b);
+          })
           .map(([sectionKey, fullName, items]) => (
             <div
               key={sectionKey}
@@ -166,7 +191,9 @@ export default function MdsSnapshot({ groupedSections, descriptions, selectedIte
                     <tr
                       key={id}
                       className={
-                        selectedItems.includes(id) ? styles.highlightedRow : undefined
+                        selectedItems.includes(id)
+                          ? styles.highlightedRow
+                          : undefined
                       }
                     >
                       <td>{highlightMatch(id)}</td>

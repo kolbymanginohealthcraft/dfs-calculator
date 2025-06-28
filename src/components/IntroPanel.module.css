@@ -99,3 +99,64 @@
   }
 }
 
+.introWrapper {
+  position: relative;
+}
+
+.caretToggle {
+  position: absolute;
+  bottom: 2px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: #666;
+  cursor: pointer;
+  padding: 0.1rem;
+}
+
+.caretToggle:hover {
+  color: #000;
+}
+
+.collapsed .introPanel {
+  display: none;
+}
+
+.ribbonWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.ribbonCollapsed {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background: #fff9e6;
+  border-bottom: 1px solid #ccc;
+  padding: 0.2rem 1.5rem;
+  height: 1.5rem;
+}
+
+.caretToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #0c436a;
+  padding: 0.2rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background-color 0.2s, transform 0.2s;
+  border-radius: 50%;
+}
+
+.caretToggle:hover {
+  color: #007cbb;
+  background-color: rgba(0, 124, 187, 0.1);
+  transform: scale(1.1);
+}
+
+.caretToggle svg {
+  display: block;
+}

@@ -9,8 +9,9 @@
 }
 
 .headerBlock {
-  background-color: #1DADBE;
-  border-radius: 6px;
+  /* background-color: #1DADBE; */
+  border-bottom: #0C436A 2px solid;
+  /* border-radius: 6px; */
 }
 
 .headerRow {
@@ -22,9 +23,9 @@
 }
 
 .summaryName {
-  font-size: 1.2rem;
+  font-size: 1.rem;
   font-weight: bold;
-  color: #ffffff;
+  /* color: #ffffff; */
   margin: 0;
   padding: 0.3rem 0;
   display: inline-flex;
@@ -35,15 +36,15 @@
 .inlineDetails {
   font-size: 0.85rem;
   font-weight: normal;
-  color: #F1EAD6;
+  /* color: #F1EAD6; */
   margin-left: 0.5rem;
 }
 
 .fileInfo {
   font-size: 0.9rem;
-  color: #e0f7fa;
+  /* color: #e0f7fa; */
   white-space: nowrap;
-  margin: 0;
+  /* margin: 0; */
 }
 
 .placeholder {
@@ -70,8 +71,8 @@
   font-weight: bold;
   /* text-decoration: underline; */
   margin: 0 0 0.2rem 0;
-  color: #265947;
-  font-size: 1.05rem;
+  color: #0C436A;
+  font-size: 1rem;
 }
 
 .summaryItem {
@@ -79,3 +80,4 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
+
