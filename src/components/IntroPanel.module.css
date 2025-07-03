@@ -28,7 +28,7 @@
 
 .actionsGroup {
   display: flex;
-  align-items: stretch; /* ✅ Ensures height match */
+  align-items: stretch; /* ✅ Ensures height will match */
   gap: 1rem;
   flex-shrink: 0;
 }
