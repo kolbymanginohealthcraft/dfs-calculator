@@ -5,7 +5,7 @@
   background-color: #0c436a;
   color: white;
   padding: 0.5rem 1rem;
-  height: 56px; /* Fixed height */
+  height: 56px; /* Fixed the height */
   min-height: 56px; /* Prevents shrinking */
   overflow: hidden;
   box-sizing: border-box;
