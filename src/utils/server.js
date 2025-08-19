@@ -9,16 +9,45 @@ const PORT = 3001;
 
 app.use(cors());
 
-const CMS_CSV_URL =
-  "https://data.cms.gov/provider-data/sites/default/files/resources/c64002fc083c1b993f24ab2f737b5034_1749765912/NH_ProviderInfo_Jun2025.csv";
+// CMS Provider Information dataset code
+const CMS_DATASET_CODE = "4pq5-n9py";
+
+// Function to dynamically get the current CMS CSV URL
+async function getCurrentCMSUrl() {
+  try {
+    const apiUrl = `https://data.cms.gov/provider-data/api/1/metastore/schemas/dataset/items/${CMS_DATASET_CODE}`;
+    const response = await fetch(apiUrl);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch CMS API: ${response.status} ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    
+    // Extract the download URL from the distribution array
+    if (data.distribution && data.distribution.length > 0) {
+      const downloadUrl = data.distribution[0].downloadURL;
+      console.log(`✅ Retrieved current CMS URL: ${downloadUrl}`);
+      return downloadUrl;
+    } else {
+      throw new Error("No distribution URL found in CMS API response");
+    }
+  } catch (error) {
+    console.error("❌ Error fetching CMS URL:", error);
+    throw error;
+  }
+}
 
 app.get("/api/facility-name/:ccn", async (req, res) => {
   const { ccn } = req.params;
   const results = [];
 
   try {
+    // Get the current CMS URL dynamically
+    const currentCMSUrl = await getCurrentCMSUrl();
+    
     https
-      .get(CMS_CSV_URL, (csvRes) => {
+      .get(currentCMSUrl, (csvRes) => {
         csvRes
           .pipe(csvParser())
           .on("data", (row) => {
