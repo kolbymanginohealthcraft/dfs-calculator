@@ -6,6 +6,7 @@ export default function MdsSnapshot({
   groupedSections,
   descriptions,
   selectedItems = [],
+  isRedacted = false,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const icd10Descriptions = useICD10Lookup();
@@ -27,6 +28,16 @@ export default function MdsSnapshot({
   };
 
   const getDescription = (id, value) => {
+    // Redact patient names and sensitive identifiers when isRedacted is true
+    if (isRedacted && (id === "A0500A" || id === "A0500B" || id === "A0500C" || id === "A0500D" || 
+        id === "A0600A" || id === "A0600B" || id === "A0700" || id === "A1300A" ||
+        id === "X0200A" || id === "X0200C")) {
+      if (id === "A0600A") {
+        return "***-**-****"; // SSN format
+      }
+      return "REDACTED";
+    }
+
     const key = `${id}|${value}`;
     const labelDesc = descriptions?.[key] || "";
 

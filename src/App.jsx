@@ -33,6 +33,7 @@ function App() {
   const [facilityName, setFacilityName] = useState("");
   const [facilityAddress, setFacilityAddress] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
+  const [isRedacted, setIsRedacted] = useState(true);
   const icd10Descriptions = useICD10Lookup();
   const exportRef = useRef();
 
@@ -136,6 +137,10 @@ function App() {
     setSelectedItems(newSelection);
   };
 
+  const toggleRedaction = () => {
+    setIsRedacted(!isRedacted);
+  };
+
   return (
     <div className="app-container">
       <Navbar />
@@ -163,6 +168,8 @@ function App() {
                 startScore={startTotal}
                 modeledScore={modeledTotal}
                 hasFile={hasFile}
+                isRedacted={isRedacted}
+                onToggleRedaction={toggleRedaction}
               />
             </div>
           </div>
@@ -175,6 +182,7 @@ function App() {
                 descriptions={descriptions}
                 icd10Descriptions={icd10Descriptions}
                 selectedItems={selectedItems}
+                isRedacted={isRedacted}
               />
             </div>
             <div className="covariatesPanel scrollableContent">
@@ -207,7 +215,7 @@ function App() {
         <div ref={exportRef}>
           <ExportView
             patient={{
-              name: `${firstName} ${lastName}`,
+              name: isRedacted ? "REDACTED REDACTED" : `${firstName} ${lastName}`,
               dob,
               age,
               admitDate,

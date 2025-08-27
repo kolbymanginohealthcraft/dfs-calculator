@@ -17,6 +17,8 @@ const SummarySection = ({
   conditionCategory,
   mobilityType,
   hasFile,
+  isRedacted,
+  onToggleRedaction,
 }) => {
   if (!hasFile) {
     return (
@@ -28,19 +30,31 @@ const SummarySection = ({
     );
   }
 
+  const displayFirstName = isRedacted ? "REDACTED" : (firstName || "Unknown");
+  const displayLastName = isRedacted ? "REDACTED" : (lastName || "");
+
   return (
     <div className={styles.summaryBlock}>
       <div className={styles.headerBlock}>
         <div className={styles.headerRow}>
           <h2 className={styles.summaryName}>
-            👤 {firstName || "Unknown"} {lastName || ""}
+            👤 {displayFirstName} {displayLastName}
             {dob && (
               <span className={styles.inlineDetails}>
                 {" "} (age: {age}, DOB {formatDOB(dob)})
               </span>
             )}
           </h2>
-          <p className={styles.fileInfo}>📂 {fileName || "Unknown file"}</p>
+          <div className={styles.headerControls}>
+            <button 
+              onClick={onToggleRedaction}
+              className={styles.redactionToggle}
+              title={isRedacted ? "Show patient names" : "Hide patient names"}
+            >
+              {isRedacted ? "👁️ Show Names" : "🚫 Hide Names"}
+            </button>
+            <p className={styles.fileInfo}>📂 {fileName || "Unknown file"}</p>
+          </div>
         </div>
       </div>
 
