@@ -7,6 +7,7 @@ import {
   getContributingItemIds,
 } from "../utils/calculations";
 import SummaryChart from "./SummaryChart";
+import { Wrench, BarChart3, Target, HandHeart, User, Settings } from "lucide-react";
 
 const ModelEndScore = ({
   modeledValues,
@@ -31,7 +32,7 @@ const ModelEndScore = ({
     <div className={styles.rightPanel}>
       <div className={styles.sticky}>
         <div className={styles.modelHeader}>
-          <h2>🛠️ Model End Score</h2>
+          <h2><Settings size={20} /> Model End Score</h2>
           <div className={styles.buttonRow}>
             <button
               className={styles.resetBtn}
@@ -50,13 +51,38 @@ const ModelEndScore = ({
         </div>
 
         {hasFile && (
-          <div className={styles.chartBox}>
-            <SummaryChart
-              start={startTotal}
-              modeled={modeledTotal}
-              expected={weightedScore}
-            />
-          </div>
+          <>
+            <div className={styles.scoreSummaryBox}>
+              <div className={styles.summaryRow}>
+                <div className={styles.summaryItem}>
+                  <div className={styles.summaryLabel}>
+                    <BarChart3 size={16} />
+                    Start Score
+                  </div>
+                  <div className={styles.summaryValue}>{startTotal}</div>
+                </div>
+                <div className={styles.summaryDivider}></div>
+                <div className={styles.summaryItem}>
+                  <div className={styles.summaryLabel}>
+                    <Target size={16} />
+                    Expected Score
+                  </div>
+                  <div className={styles.summaryValue}>
+                    {weightedScore !== undefined && !isNaN(weightedScore) 
+                      ? Number(weightedScore).toFixed(2) 
+                      : "—"}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.chartBox}>
+              <SummaryChart
+                start={startTotal}
+                modeled={modeledTotal}
+                expected={weightedScore}
+              />
+            </div>
+          </>
         )}
       </div>
 
@@ -81,9 +107,9 @@ const ModelEndScore = ({
               <div className={styles.scoreSubsection} key={domain}>
                 <div className={styles.subsectionHeader}>
                   <div className={styles.sectionHeader}>
-                    <h3>
-                      {domain === "selfCare" ? "🧼 Self-Care" : "🧍 Mobility"}
-                    </h3>
+                                         <h3>
+                       {domain === "selfCare" ? "Self-Care" : "Mobility"}
+                     </h3>
 
                   </div>
 

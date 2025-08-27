@@ -1,0 +1,5346 @@
+itm_id,val_id,val_txt
+C0400C,1,"Yes, after cueing (""a piece of furniture"")"
+C0400C,0,No - could not recall
+C0400C,-,Not assessed/no information
+C0400C,^,Blank (skip pattern)
+C0500,00,Minimum value
+C0500,15,Maximum value
+C0500,99,Unable to complete interview
+C0500,-,Not assessed/no information
+C0500,^,Blank (skip pattern)
+C0600,0,No (resident was able to complete Brief Interview for Mental Status)
+C0600,1,Yes (resident was unable to complete Brief Interview for Mental Status)
+C0600,-,Not assessed/no information
+C0600,^,Blank (skip pattern)
+C0700,0,Memory OK
+C0700,1,Memory problem
+C0700,-,Not assessed/no information
+C0700,^,Blank (skip pattern)
+C0800,0,Memory OK
+C0800,1,Memory problem
+C0800,-,Not assessed/no information
+C0800,^,Blank (skip pattern)
+C0900A,0,Not checked (No)
+C0900A,1,Checked (Yes)
+C0900A,-,Not assessed/no information
+C0900A,^,Blank (skip pattern)
+C0900B,0,Not checked (No)
+C0900B,1,Checked (Yes)
+C0900B,-,Not assessed/no information
+C0900B,^,Blank (skip pattern)
+C0900C,0,Not checked (No)
+C0900C,1,Checked (Yes)
+C0900C,-,Not assessed/no information
+C0900C,^,Blank (skip pattern)
+C0900D,0,Not checked (No)
+C0900D,1,Checked (Yes)
+C0900D,-,Not assessed/no information
+C0900D,^,Blank (skip pattern)
+C0900Z,0,Not checked (No)
+C0900Z,1,Checked (Yes)
+C0900Z,-,Not assessed/no information
+C0900Z,^,Blank (skip pattern)
+C1000,0,Independent-decisions consistent/reasonable
+C1000,1,Modified independence-some difficulty in new situations only
+C1000,2,Moderately impaired-decisions poor; cues/supervision required
+C1000,3,Severely impaired-never/rarely made decisions
+C1000,-,Not assessed/no information
+C1000,^,Blank (skip pattern)
+D0100,0,No (resident is rarely/never understood)
+D0100,1,Yes
+D0100,-,Not assessed/no information
+D0100,^,Blank (skip pattern)
+D0500A1,0,No (enter 0 in column 2)
+D0500A1,1,Yes (enter 0-3 in column 2)
+D0500A1,-,Not assessed/no information
+D0500A1,^,Blank (skip pattern)
+D0500A2,0,Never or 1 day
+D0500A2,1,2-6 days (several days)
+D0500A2,2,7-11 days (half or more of the days)
+D0500A2,3,12-14 days (nearly every day)
+D0500A2,-,Not assessed/no information
+D0500A2,^,Blank (skip pattern)
+D0500B1,0,No (enter 0 in column 2)
+D0500B1,1,Yes (enter 0-3 in column 2)
+D0500B1,-,Not assessed/no information
+D0500B1,^,Blank (skip pattern)
+D0500B2,0,Never or 1 day
+D0500B2,1,2-6 days (several days)
+D0500B2,2,7-11 days (half or more of the days)
+D0500B2,3,12-14 days (nearly every day)
+D0500B2,-,Not assessed/no information
+D0500B2,^,Blank (skip pattern)
+D0500C1,0,No (enter 0 in column 2)
+D0500C1,1,Yes (enter 0-3 in column 2)
+D0500C1,-,Not assessed/no information
+D0500C1,^,Blank (skip pattern)
+D0500C2,0,Never or 1 day
+D0500C2,1,2-6 days (several days)
+D0500C2,2,7-11 days (half or more of the days)
+D0500C2,3,12-14 days (nearly every day)
+D0500C2,-,Not assessed/no information
+D0500C2,^,Blank (skip pattern)
+D0500D1,0,No (enter 0 in column 2)
+D0500D1,1,Yes (enter 0-3 in column 2)
+D0500D1,-,Not assessed/no information
+D0500D1,^,Blank (skip pattern)
+D0500D2,0,Never or 1 day
+D0500D2,1,2-6 days (several days)
+D0500D2,2,7-11 days (half or more of the days)
+D0500D2,3,12-14 days (nearly every day)
+D0500D2,-,Not assessed/no information
+D0500D2,^,Blank (skip pattern)
+D0500E1,0,No (enter 0 in column 2)
+D0500E1,1,Yes (enter 0-3 in column 2)
+D0500E1,-,Not assessed/no information
+D0500E1,^,Blank (skip pattern)
+D0500E2,0,Never or 1 day
+D0500E2,1,2-6 days (several days)
+D0500E2,2,7-11 days (half or more of the days)
+D0500E2,3,12-14 days (nearly every day)
+D0500E2,-,Not assessed/no information
+D0500E2,^,Blank (skip pattern)
+D0500F1,0,No (enter 0 in column 2)
+D0500F1,1,Yes (enter 0-3 in column 2)
+D0500F1,-,Not assessed/no information
+D0500F1,^,Blank (skip pattern)
+D0500F2,0,Never or 1 day
+D0500F2,1,2-6 days (several days)
+D0500F2,2,7-11 days (half or more of the days)
+D0500F2,3,12-14 days (nearly every day)
+D0500F2,-,Not assessed/no information
+D0500F2,^,Blank (skip pattern)
+D0500G1,0,No (enter 0 in column 2)
+D0500G1,1,Yes (enter 0-3 in column 2)
+D0500G1,-,Not assessed/no information
+D0500G1,^,Blank (skip pattern)
+D0500G2,0,Never or 1 day
+D0500G2,1,2-6 days (several days)
+D0500G2,2,7-11 days (half or more of the days)
+D0500G2,3,12-14 days (nearly every day)
+D0500G2,-,Not assessed/no information
+D0500G2,^,Blank (skip pattern)
+D0500H1,0,No (enter 0 in column 2)
+D0500H1,1,Yes (enter 0-3 in column 2)
+D0500H1,-,Not assessed/no information
+D0500H1,^,Blank (skip pattern)
+D0500H2,0,Never or 1 day
+D0500H2,1,2-6 days (several days)
+D0500H2,2,7-11 days (half or more of the days)
+D0500H2,3,12-14 days (nearly every day)
+D0500H2,-,Not assessed/no information
+D0500H2,^,Blank (skip pattern)
+D0500I1,0,No (enter 0 in column 2)
+D0500I1,1,Yes (enter 0-3 in column 2)
+D0500I1,-,Not assessed/no information
+D0500I1,^,Blank (skip pattern)
+D0500I2,0,Never or 1 day
+D0500I2,1,2-6 days (several days)
+D0500I2,2,7-11 days (half or more of the days)
+D0500I2,3,12-14 days (nearly every day)
+D0500I2,-,Not assessed/no information
+D0500I2,^,Blank (skip pattern)
+D0500J1,0,No (enter 0 in column 2)
+D0500J1,1,Yes (enter 0-3 in column 2)
+D0500J1,-,Not assessed/no information
+D0500J1,^,Blank (skip pattern)
+D0500J2,0,Never or 1 day
+D0500J2,1,2-6 days (several days)
+D0500J2,2,7-11 days (half or more of the days)
+D0500J2,3,12-14 days (nearly every day)
+D0500J2,-,Not assessed/no information
+D0500J2,^,Blank (skip pattern)
+D0600,00,Minimum value
+D0600,30,Maximum value
+D0600,-,Not assessed/no information
+D0600,^,Blank (skip pattern)
+E0100A,0,Not checked (No)
+E0100A,1,Checked (Yes)
+E0100A,-,Not assessed/no information
+E0100A,^,Blank (skip pattern)
+E0100B,0,Not checked (No)
+E0100B,1,Checked (Yes)
+E0100B,-,Not assessed/no information
+E0100B,^,Blank (skip pattern)
+E0100Z,0,Not checked (No)
+E0100Z,1,Checked (Yes)
+ASMT_SYS_CD,MDS,MDS assessment system
+ITM_SBST_CD,NC,Nursing home comprehensive assessment
+ITM_SET_VRSN_CD,1.00,Initial version of MDS 3.0 item set
+SPEC_VRSN_CD,1.00,Initial version of data specifications (effective 10/01/2010)
+PRODN_TEST_CD,P,Production submission
+STATE_CD,AL,Alabama
+FAC_ID,Text,Facility/provider submission ID
+SFTWR_VNDR_ID,Text,Software vendor federal employer tax identification number
+SFTWR_VNDR_EMAIL_ADR,Text,Software vendor email address
+SFTWR_PROD_NAME,Text,Name of software product used to produce submission file
+SFTWR_PROD_VRSN_CD,Text,Version number of software product used to produce submission file
+FAC_DOC_ID,Text,Facility document ID
+A0100A,Text,National Provider Identifier
+A0100A,^,Blank (not available or unknown)
+A0100B,Text,CMS Certification Number (CCN)
+A0100B,^,Blank (not available or unknown)
+A0100C,Text,State Provider Number
+A0100C,^,Blank (not available or unknown)
+A0200,1,Nursing home (SNF/NF)
+A0200,2,Swing bed
+A0500A,Text,Resident first name
+A0500B,Text,Resident middle initial
+A0500B,^,Blank (not available or unknown)
+A0500C,Text,Resident last name
+A0500D,Text,Resident name suffix
+A0500D,^,Blank (not available or unknown)
+A0600A,Text,Resident social security number
+A0600A,^,Blank (not available or unknown)
+A0600B,Text,Resident Medicare number
+A0600B,^,Blank (not available or unknown)
+A0700,Text,Resident Medicaid number
+A0700,+,"Enter ""+"" if Medicaid application is pending"
+A0700,N,"Enter ""N"" if not a Medicaid recipient"
+A0700,^,Blank (not available or unknown)
+A0900,YYYYMMDD,Resident birthdate
+A0900,YYYYMM,Resident birthdate (if day of month is unknown)
+A0900,YYYY,Resident birthdate (if month and day unknown)
+A1200,1,Never married
+A1200,2,Married
+A1200,3,Widowed
+A1200,4,Separated
+A1200,5,Divorced
+A1200,-,Not assessed/no information
+A1300A,Text,Facility medical record number
+A1300A,^,Blank (not available or unknown)
+A1300B,Text,Resident room number
+A1300B,^,Blank (not available or unknown)
+A1300C,Text,Name by which resident prefers to be addressed
+A1300C,^,Blank (not available or unknown)
+A1300D,Text,"Lifetime occupation(s) - put ""/"" between two occupations"
+A1300D,^,Blank (not available or unknown)
+A0310A,01,Admission assessment (required by day 14)
+A0310A,02,Quarterly review assessment
+A0310A,03,Annual assessment
+A0310A,04,Significant change in status assessment
+A0310A,05,Significant correction to prior comprehensive assessment
+A0310A,06,Significant correction to prior quarterly assessment
+A0310A,99,None of the above
+A0310B,01,5-day scheduled assessment
+A0310B,99,None of the above
+A0410,3,Unit is Medicare and/or Medicaid certified.
+A0410,2,Unit is not Medicare nor Medicaid certified but MDS data is required by the State.
+A2400A,0,No
+A2400A,1,Yes
+A2400B,YYYYMMDD,Start date of most recent Medicare stay
+A2400B,^,Blank (skip pattern)
+A2400C,YYYYMMDD,End Date of Most recent Medicare Stay
+A2400C,--------,Medicare stay is ongoing
+A2400C,^,Blank (skip pattern)
+A1500,0,No
+A1500,1,Yes
+A1500,9,Not a Medicaid certified unit
+A1500,-,Not assessed/no information
+A1600,YYYYMMDD,Entry Date (date of this admission/entry or reentry into the facility)
+A1700,1,Admission
+A1700,2,Reentry
+A2000,YYYYMMDD,Discharge date
+A2200,YYYYMMDD,Previous assessment reference date for significant correction
+A2200,^,Blank (skip pattern)
+A2300,YYYYMMDD,Assessment reference date
+B0100,0,No
+B0100,1,Yes
+B0100,-,Not assessed/no information
+B0200,0,"Adequate-no difficulty in normal conversation, social interaction, listening to TV"
+B0200,1,"Minimal difficulty-difficulty in some environments (e.g.,when person speaks softly or setting is noisy)"
+B0200,2,Moderate difficulty-speaker has to increase volume and speak distinctly
+B0200,3,Highly impaired-absence of useful hearing
+B0200,-,Not assessed/no information
+B0200,^,Blank (skip pattern)
+B0300,0,No
+B0300,1,Yes
+B0300,-,Not assessed/no information
+B0300,^,Blank (skip pattern)
+B0600,0,Clear speech-distinct intelligible words
+B0600,1,Unclear speech-slurred or mumbled words
+B0600,2,No speech-absence of spoken words
+B0600,-,Not assessed/no information
+B0600,^,Blank (skip pattern)
+B0700,0,Understood
+B0700,1,Usually understood-difficulty communicating some words or finishing thoughts but is able if prompted or given time
+B0700,2,Sometimes understood-ability is limited to making concrete requests
+B0700,3,Rarely/never understood
+B0700,-,Not assessed/no information
+B0700,^,Blank (skip pattern)
+B0800,0,Understands-clear comprehension
+B0800,1,Usually understands-misses some part/intent of message but comprehends most conversation
+B0800,2,"Sometimes understands-responds adequately to simple, direct communication only"
+B0800,3,Rarely/never understands
+B0800,-,Not assessed/no information
+B0800,^,Blank (skip pattern)
+B1000,0,"Adequate-sees fine detail, such as regular print in newspapers/books"
+B1000,1,"Impaired-sees large print, but not regular print in newspapers/books"
+B1000,2,Moderately impaired-limited vision; not able to see newspaper headlines but can identify objects
+B1000,3,"Highly impaired-object identification in question, but eyes appear to follow objects"
+B1000,4,"Severely impaired-no vision or sees only light, colors or shapes; eyes do not appear to follow objects"
+B1000,-,Not assessed/no information
+B1000,^,Blank (skip pattern)
+B1200,0,No
+B1200,1,Yes
+B1200,-,Not assessed/no information
+B1200,^,Blank (skip pattern)
+C0100,0,No (resident is rarely/never understood)
+C0100,1,Yes
+C0100,-,Not assessed/no information
+C0100,^,Blank (skip pattern)
+C0200,0,None
+C0200,1,One
+C0200,2,Two
+C0200,3,Three
+C0200,-,Not assessed/no information
+C0200,^,Blank (skip pattern)
+C0300A,3,Correct
+C0300A,2,Missed by 1 year
+C0300A,1,Missed by 2-5 years
+C0300A,0,Missed by > 5 years or no answer
+C0300A,-,Not assessed/no information
+C0300A,^,Blank (skip pattern)
+C0300B,2,Accurate within 5 days
+C0300B,1,Missed by 6 days to 1 month
+C0300B,0,Missed by > 1 month or no answer
+C0300B,-,Not assessed/no information
+C0300B,^,Blank (skip pattern)
+C0300C,1,Correct
+C0300C,0,Incorrect or no answer
+C0300C,-,Not assessed/no information
+C0300C,^,Blank (skip pattern)
+C0400A,2,"Yes, no cue required"
+C0400A,1,"Yes, after cueing (""something to wear"")"
+C0400A,0,No - could not recall
+C0400A,-,Not assessed/no information
+C0400A,^,Blank (skip pattern)
+C0400B,2,"Yes, no cue required"
+C0400B,1,"Yes, after cueing (""a color"")"
+C0400B,0,No - could not recall
+C0400B,-,Not assessed/no information
+C0400B,^,Blank (skip pattern)
+C0400C,2,"Yes, no cue required"
+E0100Z,-,Not assessed/no information
+E0100Z,^,Blank (skip pattern)
+E0200A,0,Behavior not exhibited
+E0200A,1,Behavior of this type occurred 1 to 3 days
+E0200A,2,"Behavior of this type occurred 4 to 6 days, but less than daily"
+E0200A,3,Behavior of this type occurred daily
+E0200A,-,Not assessed/no information
+E0200A,^,Blank (skip pattern)
+E0200B,0,Behavior not exhibited
+E0200B,1,Behavior of this type occurred 1 to 3 days
+E0200B,2,"Behavior of this type occurred 4 to 6 days, but less than daily"
+E0200B,3,Behavior of this type occurred daily
+E0200B,-,Not assessed/no information
+E0200B,^,Blank (skip pattern)
+E0200C,0,Behavior not exhibited
+E0200C,1,Behavior of this type occurred 1 to 3 days
+E0200C,2,"Behavior of this type occurred 4 to 6 days, but less than daily"
+E0200C,3,Behavior of this type occurred daily
+E0200C,-,Not assessed/no information
+E0200C,^,Blank (skip pattern)
+E0300,0,No
+E0300,1,Yes
+E0300,-,Not assessed/no information
+E0300,^,Blank (skip pattern)
+E0500A,0,No
+E0500A,1,Yes
+E0500A,-,Not assessed/no information
+E0500A,^,Blank (skip pattern)
+E0500B,0,No
+E0500B,1,Yes
+E0500B,-,Not assessed/no information
+E0500B,^,Blank (skip pattern)
+E0500C,0,No
+E0500C,1,Yes
+E0500C,-,Not assessed/no information
+E0500C,^,Blank (skip pattern)
+E0600A,0,No
+E0600A,1,Yes
+E0600A,-,Not assessed/no information
+E0600A,^,Blank (skip pattern)
+E0600B,0,No
+E0600B,1,Yes
+E0600B,-,Not assessed/no information
+E0600B,^,Blank (skip pattern)
+E0600C,0,No
+E0600C,1,Yes
+E0600C,-,Not assessed/no information
+E0600C,^,Blank (skip pattern)
+E0800,0,Behavior not exhibited
+E0800,1,Behavior of this type occurred 1 to 3 days
+E0800,2,"Behavior of this type occurred 4 to 6 days, but less than daily"
+E0800,3,Behavior of this type occurred daily
+E0800,-,Not assessed/no information
+E0800,^,Blank (skip pattern)
+E0900,0,Behavior not exhibited
+E0900,1,Behavior of this type occurred 1 to 3 days
+E0900,2,"Behavior of this type occurred 4 to 6 days, but less than daily"
+E0900,3,Behavior of this type occurred daily
+E0900,-,Not assessed/no information
+E0900,^,Blank (skip pattern)
+E1000A,0,No
+E1000A,1,Yes
+E1000A,-,Not assessed/no information
+E1000A,^,Blank (skip pattern)
+E1000B,0,No
+E1000B,1,Yes
+E1000B,-,Not assessed/no information
+E1000B,^,Blank (skip pattern)
+E1100,0,Same
+E1100,1,Improved
+E1100,2,Worse
+E1100,3,N/A because no prior MDS assessment
+E1100,-,Not assessed/no information
+E1100,^,Blank (skip pattern)
+F0300,0,No (resident is rarely/never understood and family/significant other not available)
+F0300,1,Yes
+F0300,-,Not assessed/no information
+F0300,^,Blank (skip pattern)
+F0400A,1,Very important
+F0400A,2,Somewhat important
+F0400A,3,Not very important
+F0400A,4,Not important at all
+F0400A,-,Not assessed/no information
+F0400A,^,Blank (skip pattern)
+F0600,1,Resident
+F0600,2,Family or significant other (close friend or other representative)
+F0600,9,"Interview could not be completed by resident or family/significant other (""No response"" to 3 or more items)"
+F0600,-,Not assessed/no information
+F0600,^,Blank (skip pattern)
+F0700,0,No (because Interview for Daily and Activity Preferences (F0400 and F0500) was completed by resident or family/significant other)
+F0700,1,Yes (because 3 or more items in Interview for Daily and Activity Preferences (F0400 and F0500) were not completed by resident or family/significant other)
+F0700,-,Not assessed/no information
+F0700,^,Blank (skip pattern)
+F0800A,0,Not checked (No)
+F0800A,1,Checked (Yes)
+F0800A,-,Not assessed/no information
+F0800A,^,Blank (skip pattern)
+F0800B,0,Not checked (No)
+F0800B,1,Checked (Yes)
+F0800B,-,Not assessed/no information
+F0800B,^,Blank (skip pattern)
+F0800C,0,Not checked (No)
+F0800C,1,Checked (Yes)
+F0800C,-,Not assessed/no information
+F0800C,^,Blank (skip pattern)
+F0800D,0,Not checked (No)
+F0800D,1,Checked (Yes)
+F0800D,-,Not assessed/no information
+F0800D,^,Blank (skip pattern)
+F0800E,0,Not checked (No)
+F0800E,1,Checked (Yes)
+F0800E,-,Not assessed/no information
+F0800E,^,Blank (skip pattern)
+F0800F,0,Not checked (No)
+F0800F,1,Checked (Yes)
+F0800F,-,Not assessed/no information
+F0800F,^,Blank (skip pattern)
+F0800G,0,Not checked (No)
+F0800G,1,Checked (Yes)
+F0800G,-,Not assessed/no information
+F0800G,^,Blank (skip pattern)
+F0800H,0,Not checked (No)
+F0800H,1,Checked (Yes)
+F0800H,-,Not assessed/no information
+F0800H,^,Blank (skip pattern)
+F0800I,0,Not checked (No)
+F0800I,1,Checked (Yes)
+F0800I,-,Not assessed/no information
+F0800I,^,Blank (skip pattern)
+F0800J,0,Not checked (No)
+F0800J,1,Checked (Yes)
+F0800J,-,Not assessed/no information
+F0800J,^,Blank (skip pattern)
+F0800K,0,Not checked (No)
+F0800K,1,Checked (Yes)
+F0800K,-,Not assessed/no information
+F0800K,^,Blank (skip pattern)
+F0800L,0,Not checked (No)
+F0800L,1,Checked (Yes)
+F0800L,-,Not assessed/no information
+F0800L,^,Blank (skip pattern)
+F0800M,0,Not checked (No)
+F0800M,1,Checked (Yes)
+F0800M,-,Not assessed/no information
+F0800M,^,Blank (skip pattern)
+F0800N,0,Not checked (No)
+F0800N,1,Checked (Yes)
+F0800N,-,Not assessed/no information
+F0800N,^,Blank (skip pattern)
+F0800O,0,Not checked (No)
+F0800O,1,Checked (Yes)
+F0800O,-,Not assessed/no information
+F0800O,^,Blank (skip pattern)
+F0800P,0,Not checked (No)
+F0800P,1,Checked (Yes)
+F0800P,-,Not assessed/no information
+F0800P,^,Blank (skip pattern)
+F0800Q,0,Not checked (No)
+F0800Q,1,Checked (Yes)
+F0800Q,-,Not assessed/no information
+F0800Q,^,Blank (skip pattern)
+F0800R,0,Not checked (No)
+F0800R,1,Checked (Yes)
+F0800R,-,Not assessed/no information
+F0800R,^,Blank (skip pattern)
+F0800S,0,Not checked (No)
+F0800S,1,Checked (Yes)
+F0800S,-,Not assessed/no information
+F0800S,^,Blank (skip pattern)
+F0800T,0,Not checked (No)
+F0800T,1,Checked (Yes)
+F0800T,-,Not assessed/no information
+F0800T,^,Blank (skip pattern)
+F0800Z,0,Not checked (No)
+F0800Z,1,Checked (Yes)
+F0800Z,-,Not assessed/no information
+F0800Z,^,Blank (skip pattern)
+H0100A,0,Not checked (No)
+H0100A,1,Checked (Yes)
+H0100A,-,Not assessed/no information
+H0100B,0,Not checked (No)
+H0100B,1,Checked (Yes)
+H0100B,-,Not assessed/no information
+H0100C,0,Not checked (No)
+H0100C,1,Checked (Yes)
+H0100C,-,Not assessed/no information
+H0100D,0,Not checked (No)
+H0100D,1,Checked (Yes)
+H0100D,-,Not assessed/no information
+H0100Z,0,Not checked (No)
+H0100Z,1,Checked (Yes)
+H0100Z,-,Not assessed/no information
+H0200A,0,No
+H0200A,1,Yes
+H0200A,9,Unable to determine
+H0200A,-,Not assessed/no information
+H0200B,0,No improvement
+H0200B,1,Decreased wetness
+H0200B,2,Completely dry (continent)
+H0200B,9,Unable to determine or trial in progress
+H0200B,-,Not assessed/no information
+H0200B,^,Blank (skip pattern)
+H0200C,0,No
+H0200C,1,Yes
+H0200C,-,Not assessed/no information
+H0200C,^,Blank (skip pattern)
+H0300,0,Always continent
+H0300,1,Occasionally incontinent (less than 7 episodes of incontinence)
+H0300,2,"Frequently incontinent (7 or more episodes of urinary incontinence, but at least one episode of continent voiding)"
+H0300,3,Always incontinent (no episodes of continent voiding)
+H0300,9,"Not rated, resident had a catheter (indwelling, condom), urinary ostomy, or no urine output for entire 7 days"
+H0300,-,Not assessed/no information
+H0400,0,Always continent
+H0400,1,Occasionally incontinent (one episode of bowel incontinence)
+H0400,2,"Frequently incontinent (2 or more episodes of bowel incontinence, but at least one continent bowel movement)"
+H0400,3,Always incontinent (no episodes of continent bowel movements)
+H0400,9,"Not rated, resident had an ostomy or did not have a bowel movement for the entire 7 days"
+H0400,-,Not assessed/no information
+H0500,0,No
+H0500,1,Yes
+H0500,-,Not assessed/no information
+H0600,0,No
+H0600,1,Yes
+H0600,-,Not assessed/no information
+I0100,0,Not checked (No)
+I0100,1,Checked (Yes)
+I0100,-,Not assessed/no information
+I0200,0,Not checked (No)
+I0200,1,Checked (Yes)
+I0200,-,Not assessed/no information
+I0300,0,Not checked (No)
+I0300,1,Checked (Yes)
+I0300,-,Not assessed/no information
+I0400,0,Not checked (No)
+I0400,1,Checked (Yes)
+I0400,-,Not assessed/no information
+I0500,0,Not checked (No)
+I0500,1,Checked (Yes)
+I0500,-,Not assessed/no information
+I0600,0,Not checked (No)
+I0600,1,Checked (Yes)
+I0600,-,Not assessed/no information
+I0700,0,Not checked (No)
+I0700,1,Checked (Yes)
+I0700,-,Not assessed/no information
+I0900,0,Not checked (No)
+I0900,1,Checked (Yes)
+I0900,-,Not assessed/no information
+I1100,0,Not checked (No)
+I1100,1,Checked (Yes)
+I1100,-,Not assessed/no information
+I1200,0,Not checked (No)
+I1200,1,Checked (Yes)
+I1200,-,Not assessed/no information
+I1300,0,Not checked (No)
+I1300,1,Checked (Yes)
+I1300,-,Not assessed/no information
+I1400,0,Not checked (No)
+I1400,1,Checked (Yes)
+I1400,-,Not assessed/no information
+I1500,0,Not checked (No)
+I1500,1,Checked (Yes)
+I1500,-,Not assessed/no information
+I1700,0,Not checked (No)
+I1700,1,Checked (Yes)
+I1700,-,Not assessed/no information
+I2000,0,Not checked (No)
+I2000,1,Checked (Yes)
+I2000,-,Not assessed/no information
+I2100,0,Not checked (No)
+I2100,1,Checked (Yes)
+I2100,-,Not assessed/no information
+I2200,0,Not checked (No)
+I2200,1,Checked (Yes)
+I2200,-,Not assessed/no information
+I2300,0,Not checked (No)
+I2300,1,Checked (Yes)
+I2300,-,Not assessed/no information
+I2400,0,Not checked (No)
+I2400,1,Checked (Yes)
+I2400,-,Not assessed/no information
+I2900,0,Not checked (No)
+I2900,1,Checked (Yes)
+I2900,-,Not assessed/no information
+I3100,0,Not checked (No)
+I3100,1,Checked (Yes)
+I3100,-,Not assessed/no information
+I3200,0,Not checked (No)
+I3200,1,Checked (Yes)
+I3200,-,Not assessed/no information
+I3300,0,Not checked (No)
+I3300,1,Checked (Yes)
+I3300,-,Not assessed/no information
+I3400,0,Not checked (No)
+I3400,1,Checked (Yes)
+I3400,-,Not assessed/no information
+I3700,0,Not checked (No)
+I3700,1,Checked (Yes)
+I3700,-,Not assessed/no information
+I3800,0,Not checked (No)
+I3800,1,Checked (Yes)
+I3800,-,Not assessed/no information
+I3900,0,Not checked (No)
+I3900,1,Checked (Yes)
+I3900,-,Not assessed/no information
+I4000,0,Not checked (No)
+I4000,1,Checked (Yes)
+I4000,-,Not assessed/no information
+I4200,0,Not checked (No)
+I4200,1,Checked (Yes)
+I4200,-,Not assessed/no information
+I4300,0,Not checked (No)
+I4300,1,Checked (Yes)
+I4300,-,Not assessed/no information
+I4400,0,Not checked (No)
+I4400,1,Checked (Yes)
+I4400,-,Not assessed/no information
+I4500,0,Not checked (No)
+I4500,1,Checked (Yes)
+I4500,-,Not assessed/no information
+I4800,0,Not checked (No)
+I4800,1,Checked (Yes)
+I4800,-,Not assessed/no information
+I4900,0,Not checked (No)
+I4900,1,Checked (Yes)
+I4900,-,Not assessed/no information
+I5000,0,Not checked (No)
+I5000,1,Checked (Yes)
+I5000,-,Not assessed/no information
+I5100,0,Not checked (No)
+I5100,1,Checked (Yes)
+I5100,-,Not assessed/no information
+I5200,0,Not checked (No)
+I5200,1,Checked (Yes)
+I5200,-,Not assessed/no information
+I5300,0,Not checked (No)
+I5300,1,Checked (Yes)
+I5300,-,Not assessed/no information
+I5400,0,Not checked (No)
+I5400,1,Checked (Yes)
+I5400,-,Not assessed/no information
+I5500,0,Not checked (No)
+I5500,1,Checked (Yes)
+I5500,-,Not assessed/no information
+I5600,0,Not checked (No)
+I5600,1,Checked (Yes)
+I5600,-,Not assessed/no information
+I5700,0,Not checked (No)
+I5700,1,Checked (Yes)
+I5700,-,Not assessed/no information
+I5800,0,Not checked (No)
+I5800,1,Checked (Yes)
+I5800,-,Not assessed/no information
+I5900,0,Not checked (No)
+I5900,1,Checked (Yes)
+I5900,-,Not assessed/no information
+I6000,0,Not checked (No)
+I6000,1,Checked (Yes)
+I6000,-,Not assessed/no information
+I6100,0,Not checked (No)
+I6100,1,Checked (Yes)
+I6100,-,Not assessed/no information
+I6200,0,Not checked (No)
+I6200,1,Checked (Yes)
+I6200,-,Not assessed/no information
+I6500,0,Not checked (No)
+I6500,1,Checked (Yes)
+I6500,-,Not assessed/no information
+I7900,0,Not checked (No)
+I7900,1,Checked (Yes)
+I7900,-,Not assessed/no information
+I8000A,ICD-10,ICD-10 code
+I8000A,^,Blank (no diagnosis code)
+I8000B,ICD-10,ICD-10 code
+I8000B,^,Blank (no diagnosis code)
+I8000C,ICD-10,ICD-10 code
+I8000C,^,Blank (no diagnosis code)
+I8000D,ICD-10,ICD-10 code
+I8000D,^,Blank (no diagnosis code)
+I8000E,ICD-10,ICD-10 code
+I8000E,^,Blank (no diagnosis code)
+I8000F,ICD-10,ICD-10 code
+I8000F,^,Blank (no diagnosis code)
+J0100A,0,No
+J0100A,1,Yes
+J0100A,-,Not assessed/no information
+J0100B,0,No
+J0100B,1,Yes
+J0100B,-,Not assessed/no information
+J0100C,0,No
+J0100C,1,Yes
+J0100C,-,Not assessed/no information
+J0200,0,No (resident rarely/never understood)
+J0200,1,Yes
+J0200,-,Not assessed/no information
+J0200,^,Blank (skip pattern)
+J0300,0,No
+J0300,1,Yes
+J0300,9,Unable to answer
+J0300,-,Not assessed/no information
+J0300,^,Blank (skip pattern)
+J0600A,00,Minimum value
+J0600A,10,Maximum value
+J0600A,99,Unable to answer
+J0600A,-,Not assessed/no information
+J0600A,^,Blank (skip pattern)
+J0600B,1,Mild
+J0600B,2,Moderate
+J0600B,3,Severe
+J0600B,4,"Very severe, horrible"
+J0600B,9,Unable to answer
+J0600B,-,Not assessed/no information
+J0600B,^,Blank (skip pattern)
+J0800A,0,Not checked (No)
+J0800A,1,Checked (Yes)
+J0800A,-,Not assessed/no information
+J0800A,^,Blank (skip pattern)
+J0800B,0,Not checked (No)
+J0800B,1,Checked (Yes)
+J0800B,-,Not assessed/no information
+J0800B,^,Blank (skip pattern)
+J0800C,0,Not checked (No)
+J0800C,1,Checked (Yes)
+J0800C,-,Not assessed/no information
+J0800C,^,Blank (skip pattern)
+J0800D,0,Not checked (No)
+J0800D,1,Checked (Yes)
+J0800D,-,Not assessed/no information
+J0800D,^,Blank (skip pattern)
+J0800Z,0,Not checked (No)
+J0800Z,1,Checked (Yes)
+J0800Z,-,Not assessed/no information
+J0800Z,^,Blank (skip pattern)
+J1100A,0,Not checked (No)
+J1100A,1,Checked (Yes)
+J1100A,-,Not assessed/no information
+J1100B,0,Not checked (No)
+J1100B,1,Checked (Yes)
+J1100B,-,Not assessed/no information
+J1100C,0,Not checked (No)
+J1100C,1,Checked (Yes)
+J1100C,-,Not assessed/no information
+J1100Z,0,Not checked (No)
+J1100Z,1,Checked (Yes)
+J1100Z,-,Not assessed/no information
+J1300,0,No
+J1300,1,Yes
+J1300,-,Not assessed/no information
+J1400,0,No
+J1400,1,Yes
+J1400,-,Not assessed/no information
+J1550A,0,Not checked (No)
+J1550A,1,Checked (Yes)
+J1550A,-,Not assessed/no information
+J1550B,0,Not checked (No)
+J1550B,1,Checked (Yes)
+J1550B,-,Not assessed/no information
+J1550C,0,Not checked (No)
+J1550C,1,Checked (Yes)
+J1550C,-,Not assessed/no information
+J1550D,0,Not checked (No)
+J1550D,1,Checked (Yes)
+J1550D,-,Not assessed/no information
+J1550Z,0,Not checked (No)
+J1550Z,1,Checked (Yes)
+J1550Z,-,Not assessed/no information
+J1700A,0,No
+J1700A,1,Yes
+J1700A,9,Unable to determine
+J1700A,-,Not assessed/no information
+J1700A,^,Blank (skip pattern)
+J1700B,0,No
+J1700B,1,Yes
+J1700B,9,Unable to determine
+J1700B,-,Not assessed/no information
+J1700B,^,Blank (skip pattern)
+J1700C,0,No
+J1700C,1,Yes
+J1700C,9,Unable to determine
+J1700C,-,Not assessed/no information
+J1700C,^,Blank (skip pattern)
+J1800,0,No
+J1800,1,Yes
+J1800,-,Not assessed/no information
+J1900A,0,None
+J1900A,1,One
+J1900A,2,Two or more
+J1900A,-,Not assessed/no information
+J1900A,^,Blank (skip pattern)
+J1900B,0,None
+J1900B,1,One
+J1900B,2,Two or more
+J1900B,-,Not assessed/no information
+J1900B,^,Blank (skip pattern)
+J1900C,0,None
+J1900C,1,One
+J1900C,2,Two or more
+J1900C,-,Not assessed/no information
+J1900C,^,Blank (skip pattern)
+K0100A,0,Not checked (No)
+K0100A,1,Checked (Yes)
+K0100A,-,Not assessed/no information
+K0100B,0,Not checked (No)
+K0100B,1,Checked (Yes)
+K0100B,-,Not assessed/no information
+K0100C,0,Not checked (No)
+K0100C,1,Checked (Yes)
+K0100C,-,Not assessed/no information
+K0100D,0,Not checked (No)
+K0100D,1,Checked (Yes)
+K0100D,-,Not assessed/no information
+K0100Z,0,Not checked (No)
+K0100Z,1,Checked (Yes)
+K0100Z,-,Not assessed/no information
+K0200A,00,Minimum value
+K0200A,99,Maximum value
+K0200A,-,Not assessed/no information
+K0200B,000,Minimum value
+K0200B,999,Maximum value
+K0200B,-,Not assessed/no information
+K0300,0,No or unknown
+K0300,1,"Yes, on physician-prescribed weight-loss regimen"
+K0300,2,"Yes, not on physician-prescribed weight-loss regimen"
+K0300,-,Not assessed/no information
+L0200A,0,Not checked (No)
+L0200A,1,Checked (Yes)
+L0200A,-,Not assessed/no information
+L0200B,0,Not checked (No)
+L0200B,1,Checked (Yes)
+L0200B,-,Not assessed/no information
+L0200C,0,Not checked (No)
+L0200C,1,Checked (Yes)
+L0200C,-,Not assessed/no information
+L0200D,0,Not checked (No)
+L0200D,1,Checked (Yes)
+L0200D,-,Not assessed/no information
+L0200E,0,Not checked (No)
+L0200E,1,Checked (Yes)
+L0200E,-,Not assessed/no information
+L0200F,0,Not checked (No)
+L0200F,1,Checked (Yes)
+L0200F,-,Not assessed/no information
+L0200Z,0,Not checked (No)
+L0200Z,1,Checked (Yes)
+L0200Z,-,Not assessed/no information
+M0100A,0,Not checked (No)
+M0100A,1,Checked (Yes)
+M0100A,-,Not assessed/no information
+M0150,0,No
+M0150,1,Yes
+M0150,-,Not assessed/no information
+M0210,0,No
+M0210,1,Yes
+M0210,-,Not assessed/no information
+M0300A,0,Minimum value
+M0300A,9,Maximum value
+M0300A,-,Not assessed/no information
+M0300B1,0,Minimum value
+M0300B1,9,Maximum value
+M0300B1,-,Not assessed/no information
+M0300B2,0,Minimum value
+M0300B2,9,Maximum value
+M0300B2,-,Not assessed/no information
+M0300C1,0,Minimum value
+M0300C1,9,Maximum value
+M0300C1,-,Not assessed/no information
+M0300C2,0,Minimum value
+M0300C2,9,Maximum value
+M0300C2,-,Not assessed/no information
+M0300D1,0,Minimum value
+M0300D1,9,Maximum value
+M0300D1,-,Not assessed/no information
+M0300D2,0,Minimum value
+M0300D2,9,Maximum value
+M0300D2,-,Not assessed/no information
+M0300E1,0,Minimum value
+M0300E1,9,Maximum value
+M0300E1,-,Not assessed/no information
+M0300E2,0,Minimum value
+M0300E2,9,Maximum value
+M0300E2,-,Not assessed/no information
+M0300F1,0,Minimum value
+M0300F1,9,Maximum value
+M0300F1,-,Not assessed/no information
+M0300F2,0,Minimum value
+M0300F2,9,Maximum value
+M0300F2,-,Not assessed/no information
+M0300G1,0,Minimum value
+M0300G1,9,Maximum value
+M0300G1,-,Not assessed/no information
+M0300G2,0,Minimum value
+M0300G2,9,Maximum value
+M0300G2,-,Not assessed/no information
+M1040A,0,Not checked (No)
+M1040A,1,Checked (Yes)
+M1040A,-,Not assessed/no information
+M1040B,0,Not checked (No)
+M1040B,1,Checked (Yes)
+M1040B,-,Not assessed/no information
+M1040C,0,Not checked (No)
+M1040C,1,Checked (Yes)
+M1040C,-,Not assessed/no information
+M1040E,0,Not checked (No)
+M1040E,1,Checked (Yes)
+M1040E,-,Not assessed/no information
+M1040F,0,Not checked (No)
+M1040F,1,Checked (Yes)
+M1040F,-,Not assessed/no information
+M1040Z,0,Not checked (No)
+M1040Z,1,Checked (Yes)
+M1040Z,-,Not assessed/no information
+M1030,0,Minimum value
+M1030,9,Maximum value
+M1030,-,Not assessed/no information
+M1200A,0,Not checked (No)
+M1200A,1,Checked (Yes)
+M1200A,-,Not assessed/no information
+M1200B,0,Not checked (No)
+M1200B,1,Checked (Yes)
+M1200B,-,Not assessed/no information
+M1200C,0,Not checked (No)
+M1200C,1,Checked (Yes)
+M1200C,-,Not assessed/no information
+M1200D,0,Not checked (No)
+M1200D,1,Checked (Yes)
+M1200D,-,Not assessed/no information
+M1200E,0,Not checked (No)
+M1200E,1,Checked (Yes)
+M1200E,-,Not assessed/no information
+M1200F,0,Not checked (No)
+M1200F,1,Checked (Yes)
+M1200F,-,Not assessed/no information
+M1200G,0,Not checked (No)
+M1200G,1,Checked (Yes)
+M1200G,-,Not assessed/no information
+M1200H,0,Not checked (No)
+M1200H,1,Checked (Yes)
+M1200H,-,Not assessed/no information
+M1200I,0,Not checked (No)
+M1200I,1,Checked (Yes)
+M1200I,-,Not assessed/no information
+M1200Z,0,Not checked (No)
+M1200Z,1,Checked (Yes)
+M1200Z,-,Not assessed/no information
+N0300,0,Minimum value
+N0300,7,Maximum value
+N0300,-,Not assessed/no information
+O0250A,0,No
+O0250A,1,Yes
+O0250A,-,Not assessed/no information
+O0250C,1,Resident not in this facility during this year's influenza vaccination season
+O0250C,2,Received outside of this facility
+O0250C,3,Not eligible - medical contraindication
+O0250C,4,Offered and declined
+O0250C,5,Not offered
+O0250C,6,Inability to obtain influenza vaccine due to a declared shortage
+O0250C,9,None of the above
+O0250C,-,Not assessed/no information
+O0250C,^,Blank (skip pattern)
+O0300A,0,No
+O0300A,1,Yes
+O0300A,-,Not assessed/no information
+O0300B,1,Not eligible - medical contraindication
+O0300B,2,Offered and declined
+O0300B,3,Not offered
+O0300B,-,Not assessed/no information
+O0300B,^,Blank (skip pattern)
+O0400D2,0,Minimum value
+O0400D2,7,Maximum value
+O0400D2,-,Not assessed/no information
+O0400D2,^,Blank (skip pattern)
+O0500A,0,Minimum value
+O0500A,7,Maximum value
+O0500A,-,Not assessed/no information
+O0500B,0,Minimum value
+O0500B,7,Maximum value
+O0500B,-,Not assessed/no information
+O0500C,0,Minimum value
+O0500C,7,Maximum value
+O0500C,-,Not assessed/no information
+O0500D,0,Minimum value
+O0500D,7,Maximum value
+O0500D,-,Not assessed/no information
+O0500E,0,Minimum value
+O0500E,7,Maximum value
+O0500E,-,Not assessed/no information
+O0500F,0,Minimum value
+O0500F,7,Maximum value
+O0500F,-,Not assessed/no information
+O0500G,0,Minimum value
+O0500G,7,Maximum value
+O0500G,-,Not assessed/no information
+O0500H,0,Minimum value
+O0500H,7,Maximum value
+O0500H,-,Not assessed/no information
+O0500I,0,Minimum value
+O0500I,7,Maximum value
+O0500I,-,Not assessed/no information
+O0500J,0,Minimum value
+O0500J,7,Maximum value
+O0500J,-,Not assessed/no information
+P0100A,0,Not used
+P0100A,1,Used less than daily
+P0100A,2,Used daily
+P0100A,-,Not assessed/no information
+P0100B,0,Not used
+P0100B,1,Used less than daily
+P0100B,2,Used daily
+P0100B,-,Not assessed/no information
+P0100C,0,Not used
+P0100C,1,Used less than daily
+P0100C,2,Used daily
+P0100C,-,Not assessed/no information
+P0100D,0,Not used
+P0100D,1,Used less than daily
+P0100D,2,Used daily
+P0100D,-,Not assessed/no information
+P0100E,0,Not used
+P0100E,1,Used less than daily
+P0100E,2,Used daily
+P0100E,-,Not assessed/no information
+P0100F,0,Not used
+P0100F,1,Used less than daily
+P0100F,2,Used daily
+P0100F,-,Not assessed/no information
+P0100G,0,Not used
+P0100G,1,Used less than daily
+P0100G,2,Used daily
+P0100G,-,Not assessed/no information
+P0100H,0,Not used
+P0100H,1,Used less than daily
+P0100H,2,Used daily
+P0100H,-,Not assessed/no information
+Z0100A,Text,Medicare Part A HIPPS code
+Z0100A,^,Blank (not available or unknown)
+Z0200A,Text,State Case Mix Group
+Z0200A,^,Blank (not available or unknown)
+Z0500B,YYYYMMDD,Signature date
+M0100B,0,Not checked (No)
+M0100B,1,Checked (Yes)
+M0100B,-,Not assessed/no information
+M0100C,0,Not checked (No)
+M0100C,1,Checked (Yes)
+M0100C,-,Not assessed/no information
+M0100Z,0,Not checked (No)
+M0100Z,1,Checked (Yes)
+M0100Z,-,Not assessed/no information
+A0310E,0,No
+A0310E,1,Yes
+Z0100B,Text,Valid HIPPS version code
+Z0100B,^,Blank (not available or unknown)
+Z0200B,Text,Valid case mix version code
+Z0200B,^,Blank (not available or unknown)
+M1040D,0,Not checked (No)
+M1040D,1,Checked (Yes)
+M1040D,-,Not assessed/no information
+I0800,0,Not checked (No)
+I0800,1,Checked (Yes)
+I0800,-,Not assessed/no information
+I8000G,ICD-10,ICD-10 code
+I8000G,^,Blank (no diagnosis code)
+I8000H,ICD-10,ICD-10 code
+I8000H,^,Blank (no diagnosis code)
+I8000I,ICD-10,ICD-10 code
+I8000I,^,Blank (no diagnosis code)
+I8000J,ICD-10,ICD-10 code
+I8000J,^,Blank (no diagnosis code)
+M0300B1,^,Blank (skip pattern)
+M0300B2,^,Blank (skip pattern)
+M0300C1,^,Blank (skip pattern)
+M0300C2,^,Blank (skip pattern)
+M0300D1,^,Blank (skip pattern)
+M0300D2,^,Blank (skip pattern)
+M0300E1,^,Blank (skip pattern)
+M0300E2,^,Blank (skip pattern)
+M0300F1,^,Blank (skip pattern)
+M0300F2,^,Blank (skip pattern)
+M0300G1,^,Blank (skip pattern)
+M0300G2,^,Blank (skip pattern)
+A1550A,0,Not checked (No)
+A1550A,1,Checked (Yes)
+A1550A,-,Not assessed/no information
+A1550B,0,Not checked (No)
+A1550B,1,Checked (Yes)
+A1550B,-,Not assessed/no information
+A1550C,0,Not checked (No)
+A1550C,1,Checked (Yes)
+A1550C,-,Not assessed/no information
+A1550D,0,Not checked (No)
+A1550D,1,Checked (Yes)
+A1550D,-,Not assessed/no information
+A1550E,0,Not checked (No)
+A1550E,1,Checked (Yes)
+A1550E,-,Not assessed/no information
+A1550Z,0,Not checked (No)
+A1550Z,1,Checked (Yes)
+A1550Z,-,Not assessed/no information
+SFTWR_VNDR_NAME,Text,Software vendor company name
+FAC_DOC_ID,^,Blank (not available or unknown)
+SFTWR_PROD_VRSN_CD,^,Blank (not available or unknown)
+SFTWR_PROD_NAME,^,Blank (not available or unknown)
+SFTWR_VNDR_EMAIL_ADR,^,Blank (not available or unknown)
+SFTWR_VNDR_NAME,^,Blank (not available or unknown)
+SFTWR_VNDR_ID,^,Blank (not available or unknown)
+STATE_CD,AK,Alaska
+STATE_CD,AZ,Arizona
+STATE_CD,AR,Arkansas
+STATE_CD,CA,California
+STATE_CD,CO,Colorado
+STATE_CD,CT,Connecticut
+STATE_CD,DE,Delaware
+STATE_CD,DC,District of Columbia
+STATE_CD,FL,Florida
+STATE_CD,GA,Georgia
+STATE_CD,HI,Hawaii
+STATE_CD,ID,Idaho
+STATE_CD,IL,Illinois
+STATE_CD,IN,Indiana
+STATE_CD,IA,Iowa
+STATE_CD,KS,Kansas
+STATE_CD,KY,Kentucky
+STATE_CD,LA,Louisiana
+STATE_CD,ME,Maine
+STATE_CD,MD,Maryland
+STATE_CD,MA,Massachusetts
+STATE_CD,MI,Michigan
+STATE_CD,MN,Minnesota
+STATE_CD,MS,Mississippi
+STATE_CD,MO,Missouri
+STATE_CD,MT,Montana
+STATE_CD,NE,Nebraska
+STATE_CD,NV,Nevada
+STATE_CD,NH,New Hampshire
+STATE_CD,NJ,New Jersey
+STATE_CD,NM,New Mexico
+STATE_CD,NY,New York
+STATE_CD,NC,North Carolina
+STATE_CD,ND,North Dakota
+STATE_CD,OH,Ohio
+STATE_CD,OK,Oklahoma
+STATE_CD,OR,Oregon
+STATE_CD,PA,Pennsylvania
+STATE_CD,PR,Puerto Rico
+STATE_CD,RI,Rhode Island
+STATE_CD,SC,South Carolina
+STATE_CD,SD,South Dakota
+STATE_CD,TN,Tennessee
+STATE_CD,TX,Texas
+STATE_CD,UT,Utah
+STATE_CD,VT,Vermont
+STATE_CD,VA,Virginia
+STATE_CD,VI,Virgin Islands
+STATE_CD,WA,Washington
+STATE_CD,WV,West Virginia
+STATE_CD,WI,Wisconsin
+STATE_CD,WY,Wyoming
+A0410,1,Unit is not Medicare nor Medicaid certified and MDS data is not required by the State.
+A0310F,01,Entry tracking record
+A0310F,10,Discharge assessment - return not anticipated
+V0100A,01,Admission assessment (required by day 14)
+V0100A,02,Quarterly review assessment
+V0100A,03,Annual assessment
+V0100A,04,Significant change in status assessment
+V0100A,05,Significant correction to prior comprehensive assessment
+V0100A,06,Significant correction to prior quarterly assessment
+V0100A,99,None of the above
+V0100B,01,5-day scheduled assessment
+V0100C,YYYYMMDD,Prior assessment reference date (A2300 value from prior assessment)
+V0100D,00,Minimum value
+V0100D,15,Maximum value
+V0100D,99,Unable to complete interview
+V0100D,-,Not assessed/no information
+V0100D,^,Blank (skip pattern)
+V0100E,00,Minimum value
+V0100E,27,Maximum value
+V0100E,99,Unable to complete interview
+V0100E,-,Not assessed/no information
+V0100E,^,Blank (skip pattern)
+V0100F,00,Minimum value
+V0100F,30,Maximum value
+V0100F,-,Not assessed/no information
+V0100F,^,Blank (skip pattern)
+V0200A01A,0,Not checked (No)
+V0200A01A,1,Checked (Yes)
+V0200A01B,0,Not checked (No)
+V0200A01B,1,Checked (Yes)
+V0200A01B,-,Not assessed/no information
+V0200A02A,0,Not checked (No)
+V0200A02A,1,Checked (Yes)
+V0200A02B,0,Not checked (No)
+V0200A02B,1,Checked (Yes)
+V0200A02B,-,Not assessed/no information
+V0200A03A,0,Not checked (No)
+V0200A03A,1,Checked (Yes)
+V0200A03B,0,Not checked (No)
+V0200A03B,1,Checked (Yes)
+V0200A03B,-,Not assessed/no information
+V0200A04A,0,Not checked (No)
+V0200A04A,1,Checked (Yes)
+V0200A04B,0,Not checked (No)
+V0200A04B,1,Checked (Yes)
+V0200A04B,-,Not assessed/no information
+V0200A05A,0,Not checked (No)
+V0200A05A,1,Checked (Yes)
+V0200A05B,0,Not checked (No)
+V0200A05B,1,Checked (Yes)
+V0200A05B,-,Not assessed/no information
+V0200A06A,0,Not checked (No)
+V0200A06A,1,Checked (Yes)
+V0200A06B,0,Not checked (No)
+V0200A06B,1,Checked (Yes)
+V0200A06B,-,Not assessed/no information
+V0200A07A,0,Not checked (No)
+V0200A07A,1,Checked (Yes)
+V0200A07B,0,Not checked (No)
+V0200A07B,1,Checked (Yes)
+V0200A07B,-,Not assessed/no information
+V0200A08A,0,Not checked (No)
+V0200A08A,1,Checked (Yes)
+V0200A08B,0,Not checked (No)
+V0200A08B,1,Checked (Yes)
+V0200A08B,-,Not assessed/no information
+V0200A09A,0,Not checked (No)
+V0200A09A,1,Checked (Yes)
+V0200A09B,0,Not checked (No)
+V0200A09B,1,Checked (Yes)
+V0200A09B,-,Not assessed/no information
+V0200A10A,0,Not checked (No)
+V0200A10A,1,Checked (Yes)
+V0200A10B,0,Not checked (No)
+V0200A10B,1,Checked (Yes)
+V0200A10B,-,Not assessed/no information
+V0200A11A,0,Not checked (No)
+V0200A11A,1,Checked (Yes)
+V0200A11B,0,Not checked (No)
+V0200A11B,1,Checked (Yes)
+V0200A11B,-,Not assessed/no information
+V0200A12B,0,Not checked (No)
+V0200A12B,1,Checked (Yes)
+V0200A12B,-,Not assessed/no information
+V0200A13A,0,Not checked (No)
+V0200A13A,1,Checked (Yes)
+V0200A13B,0,Not checked (No)
+V0200A13B,1,Checked (Yes)
+V0200A13B,-,Not assessed/no information
+V0200A14A,0,Not checked (No)
+V0200A14A,1,Checked (Yes)
+V0200A14B,0,Not checked (No)
+V0200A14B,1,Checked (Yes)
+V0200A14B,-,Not assessed/no information
+V0200A15A,0,Not checked (No)
+V0200A15A,1,Checked (Yes)
+V0200A15B,0,Not checked (No)
+V0200A15B,1,Checked (Yes)
+V0200A15B,-,Not assessed/no information
+V0200A16A,0,Not checked (No)
+V0200A16A,1,Checked (Yes)
+V0200A16B,0,Not checked (No)
+V0200A16B,1,Checked (Yes)
+V0200A16B,-,Not assessed/no information
+V0200A17A,0,Not checked (No)
+V0200A17A,1,Checked (Yes)
+V0200A17B,0,Not checked (No)
+V0200A17B,1,Checked (Yes)
+V0200A17B,-,Not assessed/no information
+V0200A18A,0,Not checked (No)
+V0200A18A,1,Checked (Yes)
+V0200A18B,0,Not checked (No)
+V0200A18B,1,Checked (Yes)
+V0200A18B,-,Not assessed/no information
+V0200A19A,0,Not checked (No)
+V0200A19A,1,Checked (Yes)
+V0200A19B,0,Not checked (No)
+V0200A19B,1,Checked (Yes)
+V0200A19B,-,Not assessed/no information
+V0200A20A,0,Not checked (No)
+V0200A20A,1,Checked (Yes)
+V0200A20B,0,Not checked (No)
+V0200A20B,1,Checked (Yes)
+V0200A20B,-,Not assessed/no information
+V0100A,^,Blank (skip pattern)
+V0100B,^,Blank (skip pattern)
+V0100C,^,Blank (skip pattern)
+V0200B2,YYYYMMDD,RN coordinator for RAP assessment process: Date signed
+V0200C2,YYYYMMDD,Person completing care planning decision: date signed
+X0200A,Text,Resident first name
+X0200A,^,"Blank (skip pattern, not available, or unknown)"
+X0200C,Text,Resident last name
+X0200C,^,Blank (skip pattern)
+X0400,YYYYMMDD,Resident birthdate
+X0400,YYYYMM,Resident birthdate (if day of month is unknown)
+X0400,YYYY,Resident birthdate (if month and day unknown)
+X0400,^,Blank (skip pattern)
+X0500,Text,Resident social security number
+X0500,^,"Blank (skip pattern, not available, or unknown)"
+X0600A,01,Admission assessment (required by day 14)
+X0600A,02,Quarterly review assessment
+X0600A,03,Annual assessment
+X0600A,04,Significant change in status assessment
+X0600A,05,Significant correction to prior comprehensive assessment
+X0600A,06,Significant correction to prior quarterly assessment
+X0600A,99,None of the above
+X0600B,01,5-day scheduled assessment
+X0600A,^,Blank (skip pattern)
+X0600B,^,Blank (skip pattern)
+X0700A,YYYYMMDD,Assessment reference date
+X0700A,^,Blank (skip pattern)
+X0700B,YYYYMMDD,Discharge date
+X0700B,^,Blank (skip pattern)
+X0700C,YYYYMMDD,Entry date
+X0700C,^,Blank (skip pattern)
+X0800,01,Minimum value
+X0800,99,Maximum value
+X0800,^,Blank (skip pattern)
+X0900A,0,Not checked (No)
+X0900A,1,Checked (Yes)
+X0900A,^,Blank (skip pattern)
+X0900B,0,Not checked (No)
+X0900B,1,Checked (Yes)
+X0900B,^,Blank (skip pattern)
+X0900C,0,Not checked (No)
+X0900C,1,Checked (Yes)
+X0900C,^,Blank (skip pattern)
+X0900D,0,Not checked (No)
+X0900D,1,Checked (Yes)
+X0900D,^,Blank (skip pattern)
+X0900Z,0,Not checked (No)
+X0900Z,1,Checked (Yes)
+X0900Z,^,Blank (skip pattern)
+X1050A,0,Not checked (No)
+X1050A,1,Checked (Yes)
+X1050A,^,Blank (skip pattern)
+X1050Z,0,Not checked (No)
+X1050Z,1,Checked (Yes)
+X1050Z,^,Blank (skip pattern)
+X1100A,Text,Attesting individual's first name
+X1100A,^,Blank (skip pattern)
+X1100B,Text,Attesting individual's last name
+X1100B,^,Blank (skip pattern)
+X1100E,YYYYMMDD,Attestation date
+X1100E,^,Blank (skip pattern)
+L0200G,0,Not checked (No)
+L0200G,1,Checked (Yes)
+L0200G,-,Not assessed/no information
+I2500,0,Not checked (No)
+I2500,1,Checked (Yes)
+I2500,-,Not assessed/no information
+J0850,1,Indicators of pain or possible pain observed 1 to 2 days
+J0850,2,Indicators of pain or possible pain observed 3 to 4 days
+J0850,-,Not assessed/no information
+J0850,^,Blank (skip pattern)
+M0300A,^,Blank (skip pattern)
+N0350A,0,Minimum value
+N0350A,7,Maximum value
+N0350A,-,Not assessed/no information
+N0350B,0,Minimum value
+N0350B,7,Maximum value
+N0350B,-,Not assessed/no information
+I5250,0,Not checked (No)
+I5350,0,Not checked (No)
+I5950,0,Not checked (No)
+I5250,1,Checked (Yes)
+I5350,1,Checked (Yes)
+I5950,1,Checked (Yes)
+I5250,-,Not assessed/no information
+I5350,-,Not assessed/no information
+I5950,-,Not assessed/no information
+I1550,0,Not checked (No)
+I1650,0,Not checked (No)
+I1550,1,Checked (Yes)
+I1650,1,Checked (Yes)
+I1550,-,Not assessed/no information
+I1650,-,Not assessed/no information
+O0250B,YYYYMMDD,Date vaccine received
+O0250B,-,Not assessed/no information
+O0250B,^,Blank (skip pattern)
+N0350A,^,Blank (skip pattern)
+N0350B,^,Blank (skip pattern)
+V0200A12A,0,Not checked (No)
+V0200A12A,1,Checked (Yes)
+X0600B,99,None of the above
+Q0400A,0,No
+Q0400A,1,Yes
+Q0400A,-,Not assessed/no information
+Q0500B,0,No
+Q0500B,1,Yes
+Q0500B,9,Unknown or uncertain
+Q0500B,-,Not assessed/no information
+Q0500B,^,Blank (skip pattern)
+J0700,0,No (J0400=1 thru 4)
+J0700,1,Yes (J0200=0 or J0300=9 or J0400=9)
+ITM_SBST_CD,NQ,Nursing home quarterly assessment
+ITM_SBST_CD,NP,Nursing home PPS assessment
+ITM_SBST_CD,ND,Nursing home discharge assessment
+ITM_SBST_CD,NT,Nursing home tracking record (entry/death record)
+ITM_SBST_CD,SP,Swing bed PPS assessment
+ITM_SBST_CD,SD,Swing bed discharge assessment
+ITM_SBST_CD,ST,Swing bed tracking record (entry/death record)
+J0700,-,Not assessed/no information
+J0700,^,Blank (skip pattern)
+J0850,3,Indicators of possible pain observed daily
+A0310F,11,Discharge assessment - return anticipated
+A0310F,12,Death in facility tracking record
+A0310F,99,None of the above
+F0400A,5,"Important, but can't do or no choice"
+F0400A,9,No response or non-responsive
+F0400B,1,Very important
+F0400B,2,Somewhat important
+F0400B,3,Not very important
+F0400B,4,Not important at all
+F0400B,5,"Important, but can't do or no choice"
+F0400B,9,No response or non-responsive
+F0400B,-,Not assessed/no information
+F0400B,^,Blank (skip pattern)
+F0400C,1,Very important
+F0400C,2,Somewhat important
+F0400C,3,Not very important
+F0400C,4,Not important at all
+F0400C,5,"Important, but can't do or no choice"
+F0400C,9,No response or non-responsive
+F0400C,-,Not assessed/no information
+F0400C,^,Blank (skip pattern)
+F0400D,1,Very important
+F0400D,2,Somewhat important
+F0400D,3,Not very important
+F0400D,4,Not important at all
+F0400D,5,"Important, but can't do or no choice"
+F0400D,9,No response or non-responsive
+F0400D,-,Not assessed/no information
+F0400D,^,Blank (skip pattern)
+F0400E,1,Very important
+F0400E,2,Somewhat important
+F0400E,3,Not very important
+F0400E,4,Not important at all
+F0400E,5,"Important, but can't do or no choice"
+F0400E,9,No response or non-responsive
+F0400E,-,Not assessed/no information
+F0400E,^,Blank (skip pattern)
+F0400F,1,Very important
+F0400F,2,Somewhat important
+F0400F,3,Not very important
+F0400F,4,Not important at all
+F0400F,5,"Important, but can't do or no choice"
+F0400F,9,No response or non-responsive
+F0400F,-,Not assessed/no information
+F0400F,^,Blank (skip pattern)
+F0400G,1,Very important
+F0400G,2,Somewhat important
+F0400G,3,Not very important
+F0400G,4,Not important at all
+F0400G,5,"Important, but can't do or no choice"
+F0400G,9,No response or non-responsive
+F0400G,-,Not assessed/no information
+F0400G,^,Blank (skip pattern)
+F0400H,1,Very important
+F0400H,2,Somewhat important
+F0400H,3,Not very important
+F0400H,4,Not important at all
+F0400H,5,"Important, but can't do or no choice"
+F0400H,9,No response or non-responsive
+F0400H,-,Not assessed/no information
+F0400H,^,Blank (skip pattern)
+F0500A,1,Very important
+F0500A,2,Somewhat important
+F0500A,3,Not very important
+F0500A,4,Not important at all
+F0500A,5,"Important, but can't do or no choice"
+F0500A,9,No response or non-responsive
+F0500A,-,Not assessed/no information
+F0500A,^,Blank (skip pattern)
+F0500B,1,Very important
+F0500B,2,Somewhat important
+F0500B,3,Not very important
+F0500B,4,Not important at all
+F0500B,5,"Important, but can't do or no choice"
+F0500B,9,No response or non-responsive
+F0500B,-,Not assessed/no information
+F0500B,^,Blank (skip pattern)
+F0500C,1,Very important
+F0500C,2,Somewhat important
+F0500C,3,Not very important
+F0500C,4,Not important at all
+F0500C,5,"Important, but can't do or no choice"
+F0500C,9,No response or non-responsive
+F0500C,-,Not assessed/no information
+F0500C,^,Blank (skip pattern)
+F0500D,1,Very important
+F0500D,2,Somewhat important
+F0500D,3,Not very important
+F0500D,4,Not important at all
+F0500D,5,"Important, but can't do or no choice"
+F0500D,9,No response or non-responsive
+F0500D,-,Not assessed/no information
+F0500D,^,Blank (skip pattern)
+F0500E,1,Very important
+F0500E,2,Somewhat important
+F0500E,3,Not very important
+F0500E,4,Not important at all
+F0500E,5,"Important, but can't do or no choice"
+F0500E,9,No response or non-responsive
+F0500E,-,Not assessed/no information
+F0500E,^,Blank (skip pattern)
+F0500F,1,Very important
+F0500F,2,Somewhat important
+F0500F,3,Not very important
+F0500F,4,Not important at all
+F0500F,5,"Important, but can't do or no choice"
+F0500F,9,No response or non-responsive
+F0500F,-,Not assessed/no information
+F0500F,^,Blank (skip pattern)
+F0500G,1,Very important
+F0500G,2,Somewhat important
+F0500G,3,Not very important
+F0500G,4,Not important at all
+F0500G,5,"Important, but can't do or no choice"
+F0500G,9,No response or non-responsive
+F0500G,-,Not assessed/no information
+F0500G,^,Blank (skip pattern)
+F0500H,1,Very important
+F0500H,2,Somewhat important
+F0500H,3,Not very important
+F0500H,4,Not important at all
+F0500H,5,"Important, but can't do or no choice"
+F0500H,9,No response or non-responsive
+F0500H,-,Not assessed/no information
+F0500H,^,Blank (skip pattern)
+I6300,0,Not checked (No)
+I6300,1,Checked (Yes)
+I6300,-,Not assessed/no information
+V0100B,99,None of the above
+X0600F,01,Entry tracking record
+X0600F,10,Discharge assessment-return not anticipated
+X0600F,11,Discharge assessment-return anticipated
+X0600F,12,Death in facility tracking
+,,
+X0600F,99,None of the above
+X0600F,^,Blank (skip pattern)
+Z0250A,Text,Alternate State Case Mix Group
+Z0250A,^,Blank (not available or unknown)
+Z0250B,Text,Valid version code
+Z0250B,^,Blank (not available or unknown)
+A1500,^,Blank (skip pattern)
+A1550A,^,Blank (skip pattern)
+A1550B,^,Blank (skip pattern)
+A1550C,^,Blank (skip pattern)
+A1550D,^,Blank (skip pattern)
+A1550E,^,Blank (skip pattern)
+A1550Z,^,Blank (skip pattern)
+A2000,^,Blank (skip pattern)
+ITM_SBST_CD,XX,Inactivation record (nursing home or swing bed)
+X0150,1,Nursing home (SNF/NF)
+X0150,2,Swing bed
+DATA_END_INDICATOR,%,Percent sign
+CR,ASCII 013,Carriage return character (ASCII 013)
+LF,ASCII 010,Line feed character (ASCII 010)
+S1100A,0,Not checked (No)
+S1100A,1,Checked (Yes)
+S1100B,0,Not checked (No)
+S1100B,1,Checked (Yes)
+S1100C,0,Not checked (No)
+S1100C,1,Checked (Yes)
+S1100D,0,Not checked (No)
+S1100D,1,Checked (Yes)
+S1100E,0,Not checked (No)
+S1100E,1,Checked (Yes)
+S1100F,0,Not checked (No)
+S1100F,1,Checked (Yes)
+S1100G,0,Not checked (No)
+S1100G,1,Checked (Yes)
+S1100H,0,Not checked (No)
+S1100H,1,Checked (Yes)
+S1100I,0,Not checked (No)
+S1100I,1,Checked (Yes)
+S1100Z,0,Not checked (No)
+S1100Z,1,Checked (Yes)
+S0101,1,Community with no home care
+S0101,2,Community with Medicare certified home health agency care
+S0101,3,Community with other home care
+S0102,1,Chronic and Convalescent Nursing Home (CCNH)
+S0102,2,Rest Home with Nursing Supervision (RHNS)
+S0102,^,Blank (skip pattern)
+S0111,0,No
+S0111,1,Yes
+S0111,2,In other facility
+S0115,2,"In a dwelling the resident and/or spouse owns (i.e., homestead property)"
+S0115,3,Other / Unknown living arrangement
+S0122,AL,Alabama
+S0122,AK,Alaska
+S0122,AZ,Arizona
+S0122,AR,Arkansas
+S0122,CA,California
+S0122,CO,Colorado
+S0122,CT,Connecticut
+S0122,DE,Delaware
+S0122,DC,District of Columbia
+S0122,FL,Florida
+S0122,GA,Georgia
+S0122,HI,Hawaii
+S0122,ID,Idaho
+S0122,IL,Illinois
+S0122,IN,Indiana
+S0122,IA,Iowa
+S0122,KS,Kansas
+S0122,KY,Kentucky
+S0122,LA,Louisiana
+S0122,ME,Maine
+S0122,MD,Maryland
+S0122,MA,Massachusetts
+S0122,MI,Michigan
+S0122,MN,Minnesota
+S0122,MS,Mississippi
+S0122,MO,Missouri
+S0122,MT,Montana
+S0122,NE,Nebraska
+S0122,NV,Nevada
+S0122,NH,New Hampshire
+S0122,NJ,New Jersey
+S0122,NM,New Mexico
+S0122,NY,New York
+S0122,NC,North Carolina
+S0122,ND,North Dakota
+S0122,OH,Ohio
+S0122,OK,Oklahoma
+S0122,OR,Oregon
+S0122,PA,Pennsylvania
+S0122,PR,Puerto Rico
+S0122,RI,Rhode Island
+S0122,SC,South Carolina
+S0122,SD,South Dakota
+S0122,TN,Tennessee
+S0122,TX,Texas
+S0122,UT,Utah
+S0122,VT,Vermont
+S0122,VA,Virginia
+S0122,VI,Virgin Islands
+S0122,WA,Washington
+S0122,WV,West Virginia
+S0122,WI,Wisconsin
+S0122,WY,Wyoming
+S0130,1,No Schooling
+S0130,2,8th grade/less
+S0130,3,Some high school
+S0130,4,High school graduate/GED
+S0130,5,Technical or trade school
+S0130,6,Some college/Associate's degree
+S0130,7,Bachelor's degree
+S0130,8,Graduate degree
+S0140,Text,Physician License Number
+S0141,Text,Physician Last Name
+S0150,Text,State Resident Identifier
+S0180,1,Community with no home care
+S0180,2,Community with Medicare certified home health agency care
+S0180,3,Community with other home care
+S0500,01,ISN
+S0500,02,SNF
+S0500,03,ICF-1
+S0500,04,ICF-2
+S0500,05,ICF-3
+S0500,06,ICF-4
+S0500,07,DD 1A
+S0500,08,DD 1B
+S0500,09,DD 2
+S0500,10,DD 3
+S0500,11,Traumatic Brain Injury
+S0500,12,Ventilator Dependent
+S0501,1,Chronic and Convalescent Nursing Home (CCNH)
+S0501,2,Rest Home with Nursing Supervision (RHNS)
+S0510,0,No
+S0510,1,Yes
+S0510,9,N/A - PASRR not indicated
+S0511,YYYYMMDD,PASRR Complete Date
+S0512,0,No
+S0512,1,Yes
+S0512,9,N/A
+S0520,01,Significant change in functional status
+S0520,02,Deterioration in cognitive status
+S0520,03,Change in the availability/status of primary caregivers
+S0520,04,Difficulty arranging or paying for needed in-home care or support
+S0520,05,Failed to succeed in residential care home
+S0520,06,Short term rehabilitation or skilled care
+S0520,99,None of the Above
+S1000,0,No
+S1000,1,Yes
+S1001,0,No
+S1001,1,Yes
+S1100F1,Text,Name of first MDRO
+S1100F2,Text,Name of second MDRO
+S2000,0,No
+S2000,1,Yes
+S2000,2,Limited
+S2001,0,No
+S2001,1,Yes
+S2001,2,Limited
+S2010,0,No
+S2010,1,Yes
+S2011,0,No
+S2011,1,Yes
+S2015,0,No
+S2015,1,Yes
+S2016,0,No
+S2016,1,Yes
+S2040,0,Program not provided in last 7 days
+S2040,1,Program provided 1 - 3 days in last 7 days
+S2040,2,Program provided 4 - 6 days in last 7 days
+S2040,3,Program provided daily in last 7 days
+S2050,0,No
+S2050,1,At least one day a week
+S2050,2,At least two days a week
+S2050,3,At least three days a week
+S2050,4,At least four days a week
+S2050,5,Five or more days a week
+S3100A,0,None
+S3100A,1,Right
+S3100A,2,Left
+S3100A,3,Both sides
+S3100B,0,None
+S3100B,1,Right
+S3100B,2,Left
+S3100B,3,Both sides
+S3100C,0,None
+S3100C,1,Right
+S3100C,2,Left
+S3100C,3,Both sides
+S3100D,0,None
+S3100D,1,Right
+S3100D,2,Left
+S3100D,3,Both sides
+S3100E,0,None
+S3100E,1,Right
+S3100E,2,Left
+S3100E,3,Both sides
+S3100F,0,None
+S3100F,1,Right
+S3100F,2,Left
+S3100F,3,Both sides
+S3100G,0,None
+S3100G,1,Right
+S3100G,2,Left
+S3100G,3,Both sides
+S3100H,0,None
+S3100H,1,Right
+S3100H,2,Left
+S3100H,3,Both sides
+S3100Z,0,None
+S3100Z,1,Right
+S3100Z,2,Left
+S3100Z,3,Both sides
+S3200A,1,Right
+S3200A,2,Left
+S3200A,3,Ambidextrous
+S3200A,9,Unable to determine
+S3200B,1,Full
+S3200B,2,Limited
+S3200B,3,None
+S4000A,0,Never
+S4000A,1,Attempt more than 1 year ago
+S4000A,2,Attempt in the last year
+S4000A,3,Attempt in the last 7 days
+S4000A,4,Attempt within last 3 days
+S4000B,0,No
+S4000B,1,Yes
+S4000C,0,No
+S4000C,1,Yes
+S4000D,0,No
+S4000D,1,Yes
+S4010A,0,Minimum value
+S4010A,3,Maximum value
+S4010B,0,Minimum value
+S4010B,3,Maximum value
+S4010C,0,Minimum value
+S4010C,3,Maximum value
+S4010D,0,Minimum value
+S4010D,3,Maximum value
+S4010E,0,Minimum value
+S4010E,3,Maximum value
+S4500,0,None
+S4500,1,One
+S4500,2,Two to four
+S4500,3,Five or more
+S4510A,0,Never or more than one year ago
+S4510A,1,Within the last year
+S4510A,2,Within the last 3 months
+S4510A,3,Within the last month
+S4510A,4,Within the last 7 days
+S4510A,5,Within the last 3 days
+S4510B,0,Never or more than one year ago
+S4510B,1,Within the last year
+S4510B,2,Within the last 3 months
+S4510B,3,Within the last month
+S4510B,4,Within the last 7 days
+S4510B,5,Within the last 3 days
+S4510C,0,Never or more than one year ago
+S4510C,1,Within the last year
+S4510C,2,Within the last 3 months
+S4510C,3,Within the last month
+S4510C,4,Within the last 7 days
+S4510C,5,Within the last 3 days
+S4510D,0,Never or more than one year ago
+S4510D,1,Within the last year
+S4510D,2,Within the last 3 months
+S4510D,3,Within the last month
+S4510D,4,Within the last 7 days
+S4510D,5,Within the last 3 days
+S4510E,0,Never or more than one year ago
+S4510E,1,Within the last year
+S4510E,2,Within the last 3 months
+S4510E,3,Within the last month
+S4510E,4,Within the last 7 days
+S4510E,5,Within the last 3 days
+S4510F,0,Never or more than one year ago
+S4510F,1,Within the last year
+S4510F,2,Within the last 3 months
+S4510F,3,Within the last month
+S4510F,4,Within the last 7 days
+S4510F,5,Within the last 3 days
+S5000,0,Minimum value
+S5000,9,Maximum value
+S5005,0,None
+S5005,1,Inhouse
+S5005,2,Other
+S5005,3,Both
+S5010A1,01,Spine - Left
+S5010A1,02,Spine - Right
+S5010A1,03,Spine - Center
+S5010A1,04,Coccyx - Left
+S5010A1,05,Coccyx - Right
+S5010A1,06,Coccyx - Center
+S5010A1,07,Sacrum - Left
+S5010A1,08,Sacrum - Right
+S5010A1,09,Sacrum - Center
+S5010A1,10,Buttock - Left
+S5010A1,11,Buttock - Right
+S5010A1,12,Buttock - Center
+S5010A1,13,Trochanter - Left
+S5010A1,14,Trochanter - Right
+S5010A1,15,Trochanter - Center
+S5010A1,16,Ischium - Left
+S5010A1,17,Ischium - Right
+S5010A1,18,Ischium - Center
+S5010A1,19,Knee - Left
+S5010A1,20,Knee - Right
+S5010A1,21,Knee - Center
+S5010A1,22,Ankle - Left
+S5010A1,23,Ankle - Right
+S5010A1,24,Ankle - Center
+S5010A1,25,Heel - Left
+S5010A1,26,Heel - Right
+S5010A1,27,Heel - Center
+S5010A1,28,Foot - Left
+S5010A1,29,Foot - Right
+S5010A1,30,Foot - Center
+S5010A1,99,Other
+S5010A2,0,No change
+S5010A2,1,Decreased depth
+S5010A2,2,Decreased area
+S5010A2,3,Decreased depth and area
+S5010A2,4,Increased depth
+S5010A2,5,Increased area
+S5010A2,6,Increased depth and area
+S5010A2,7,"Decreased depth, increased area"
+S5010A2,8,"Increased depth, decreased area"
+S5010B1,01,Spine - Left
+S5010B1,02,Spine - Right
+S5010B1,03,Spine - Center
+S5010B1,04,Coccyx - Left
+S5010B1,05,Coccyx - Right
+S5010B1,06,Coccyx - Center
+S5010B1,07,Sacrum - Left
+S5010B1,08,Sacrum - Right
+S5010B1,09,Sacrum - Center
+S5010B1,10,Buttock - Left
+S5010B1,11,Buttock - Right
+S5010B1,12,Buttock - Center
+S5010B1,13,Trochanter - Left
+S5010B1,14,Trochanter - Right
+S5010B1,15,Trochanter - Center
+S5010B1,16,Ischium - Left
+S5010B1,17,Ischium - Right
+S5010B1,18,Ischium - Center
+S5010B1,19,Knee - Left
+S5010B1,20,Knee - Right
+S5010B1,21,Knee - Center
+S5010B1,22,Ankle - Left
+S5010B1,23,Ankle - Right
+S5010B1,24,Ankle - Center
+S5010B1,25,Heel - Left
+S5010B1,26,Heel - Right
+S5010B1,27,Heel - Center
+S5010B1,28,Foot - Left
+S5010B1,29,Foot - Right
+S5010B1,30,Foot - Center
+S5010B1,99,Other
+S5010B2,0,No change
+S5010B2,1,Decreased depth
+S5010B2,2,Decreased area
+S5010B2,3,Decreased depth and area
+S5010B2,4,Increased depth
+S5010B2,5,Increased area
+S5010B2,6,Increased depth and area
+S5010B2,7,"Decreased depth, increased area"
+S5010B2,8,"Increased depth, decreased area"
+S5010C1,01,Spine - Left
+S5010C1,02,Spine - Right
+S5010C1,03,Spine - Center
+S5010C1,04,Coccyx - Left
+S5010C1,05,Coccyx - Right
+S5010C1,06,Coccyx - Center
+S5010C1,07,Sacrum - Left
+S5010C1,08,Sacrum - Right
+S5010C1,09,Sacrum - Center
+S5010C1,10,Buttock - Left
+S5010C1,11,Buttock - Right
+S5010C1,12,Buttock - Center
+S5010C1,13,Trochanter - Left
+S5010C1,14,Trochanter - Right
+S5010C1,15,Trochanter - Center
+S5010C1,16,Ischium - Left
+S5010C1,17,Ischium - Right
+S5010C1,18,Ischium - Center
+S5010C1,19,Knee - Left
+S5010C1,20,Knee - Right
+S5010C1,21,Knee - Center
+S5010C1,22,Ankle - Left
+S5010C1,23,Ankle - Right
+S5010C1,24,Ankle - Center
+S5010C1,25,Heel - Left
+S5010C1,26,Heel - Right
+S5010C1,27,Heel - Center
+S5010C1,28,Foot - Left
+S5010C1,29,Foot - Right
+S5010C1,30,Foot - Center
+S5010C1,99,Other
+S5010C2,0,No change
+S5010C2,1,Decreased depth
+S5010C2,2,Decreased area
+S5010C2,3,Decreased depth and area
+S5010C2,4,Increased depth
+S5010C2,5,Increased area
+S5010C2,6,Increased depth and area
+S5010C2,7,"Decreased depth, increased area"
+S5010C2,8,"Increased depth, decreased area"
+S5010D1,01,Spine - Left
+S5010D1,02,Spine - Right
+S5010D1,03,Spine - Center
+S5010D1,04,Coccyx - Left
+S5010D1,05,Coccyx - Right
+S5010D1,06,Coccyx - Center
+S5010D1,07,Sacrum - Left
+S5010D1,08,Sacrum - Right
+S5010D1,09,Sacrum - Center
+S5010D1,10,Buttock - Left
+S5010D1,11,Buttock - Right
+S5010D1,12,Buttock - Center
+S5010D1,13,Trochanter - Left
+S5010D1,14,Trochanter - Right
+S5010D1,15,Trochanter - Center
+S5010D1,16,Ischium - Left
+S5010D1,17,Ischium - Right
+S5010D1,18,Ischium - Center
+S5010D1,19,Knee - Left
+S5010D1,20,Knee - Right
+S5010D1,21,Knee - Center
+S5010D1,22,Ankle - Left
+S5010D1,23,Ankle - Right
+S5010D1,24,Ankle - Center
+S5010D1,25,Heel - Left
+S5010D1,26,Heel - Right
+S5010D1,27,Heel - Center
+S5010D1,28,Foot - Left
+S5010D1,29,Foot - Right
+S5010D1,30,Foot - Center
+S5010D1,99,Other
+S5010D2,0,No change
+S5010D2,1,Decreased depth
+S5010D2,2,Decreased area
+S5010D2,3,Decreased depth and area
+S5010D2,4,Increased depth
+S5010D2,5,Increased area
+S5010D2,6,Increased depth and area
+S5010D2,7,"Decreased depth, increased area"
+S5010D2,8,"Increase depth, decreased area"
+S5010E1,01,Spine - Left
+S5010E1,02,Spine - Right
+S5010E1,03,Spine - Center
+S5010E1,04,Coccyx - Left
+S5010E1,05,Coccyx - Right
+S5010E1,06,Coccyx - Center
+S5010E1,07,Sacrum - Left
+S5010E1,08,Sacrum - Right
+S5010E1,09,Sacrum - Center
+S5010E1,10,Buttock - Left
+S5010E1,11,Buttock - Right
+S5010E1,12,Buttock - Center
+S5010E1,13,Trochanter - Left
+S5010E1,14,Trochanter - Right
+S5010E1,15,Trochanter - Center
+S5010E1,16,Ischium - Left
+S5010E1,17,Ischium - Right
+S5010E1,18,Ischium - Center
+S5010E1,19,Knee - Left
+S5010E1,20,Knee - Right
+S5010E1,21,Knee - Center
+S5010E1,22,Ankle - Left
+S5010E1,23,Ankle - Right
+S5010E1,24,Ankle - Center
+S5010E1,25,Heel - Left
+S5010E1,26,Heel - Right
+S5010E1,27,Heel - Center
+S5010E1,28,Foot - Left
+S5010E1,29,Foot - Right
+S5010E1,30,Foot - Center
+S5010E1,99,Other
+S5010E2,0,No change
+S5010E2,1,Decreased depth
+S5010E2,2,Decreased area
+S5010E2,3,Decreased depth and area
+S5010E2,4,Increased depth
+S5010E2,5,Increased area
+S5010E2,6,Increased depth and area
+S5010E2,7,"Decreased depth, increased area"
+S5010E2,8,"Increased depth, decreased area"
+S5010F1,01,Spine - Left
+S5010F1,02,Spine - Right
+S5010F1,03,Spine - Center
+S5010F1,04,Coccyx - Left
+S5010F1,05,Coccyx - Right
+S5010F1,06,Coccyx - Center
+S5010F1,07,Sacrum - Left
+S5010F1,08,Sacrum - Right
+S5010F1,09,Sacrum - Center
+S5010F1,10,Buttock - Left
+S5010F1,11,Buttock - Right
+S5010F1,12,Buttock - Center
+S5010F1,13,Trochanter - Left
+S5010F1,14,Trochanter - Right
+S5010F1,15,Trochanter - Center
+S5010F1,16,Ischium - Left
+S5010F1,17,Ischium - Right
+S5010F1,18,Ischium - Center
+S5010F1,19,Knee - Left
+S5010F1,20,Knee - Right
+S5010F1,21,Knee - Center
+S5010F1,22,Ankle - Left
+S5010F1,23,Ankle - Right
+S5010F1,24,Ankle - Center
+S5010F1,25,Heel - Left
+S5010F1,26,Heel - Right
+S5010F1,27,Heel - Center
+S5010F1,28,Foot - Left
+S5010F1,29,Foot - Right
+S5010F1,30,Foot - Center
+S5010F1,99,Other
+S5010F2,0,No change
+S5010F2,1,Decreased depth
+S5010F2,2,Decreased area
+S5010F2,3,Decreased depth and area
+S5010F2,4,Increased depth
+S5010F2,5,Increased area
+S5010F2,6,Increased depth and area
+S5010F2,7,"Decreased depth, increased area"
+S5010F2,8,"Increased depth, decreased area"
+S5010G1,01,Spine - Left
+S5010G1,02,Spine - Right
+S5010G1,03,Spine - Center
+S5010G1,04,Coccyx - Left
+S5010G1,05,Coccyx - Right
+S5010G1,06,Coccyx - Center
+S5010G1,07,Sacrum - Left
+S5010G1,08,Sacrum - Right
+S5010G1,09,Sacrum - Center
+S5010G1,10,Buttock - Left
+S5010G1,11,Buttock - Right
+S5010G1,12,Buttock - Center
+S5010G1,13,Trochanter - Left
+S5010G1,14,Trochanter - Right
+S5010G1,15,Trochanter - Center
+S5010G1,16,Ischium - Left
+S5010G1,17,Ischium - Right
+S5010G1,18,Ischium - Center
+S5010G1,19,Knee - Left
+S5010G1,20,Knee - Right
+S5010G1,21,Knee - Center
+S5010G1,22,Ankle - Left
+S5010G1,23,Ankle - Right
+S5010G1,24,Ankle - Center
+S5010G1,25,Heel - Left
+S5010G1,26,Heel - Right
+S5010G1,27,Heel - Center
+S5010G1,28,Foot - Left
+S5010G1,29,Foot - Right
+S5010G1,30,Foot - Center
+S5010G1,99,Other
+S5010G2,0,No change
+S5010G2,1,Decreased depth
+S5010G2,2,Decreased area
+S5010G2,3,Decreased depth and area
+S5010G2,4,Increased depth
+S5010G2,5,Increased area
+S5010G2,6,Increased depth and area
+S5010G2,7,"Decreased depth, increased area"
+S5010G2,8,"Increased depth, decreased area"
+S5010H1,01,Spine - Left
+S5010H1,02,Spine - Right
+S5010H1,03,Spine - Center
+S5010H1,04,Coccyx - Left
+S5010H1,05,Coccyx - Right
+S5010H1,06,Coccyx - Center
+S5010H1,07,Sacrum - Left
+S5010H1,08,Sacrum - Right
+S5010H1,09,Sacrum - Center
+S5010H1,10,Buttock - Left
+S5010H1,11,Buttock - Right
+S5010H1,12,Buttock - Center
+S5010H1,13,Trochanter - Left
+S5010H1,14,Trochanter - Right
+S5010H1,15,Trochanter - Center
+S5010H1,16,Ischium - Left
+S5010H1,17,Ischium - Right
+S5010H1,18,Ischium - Center
+S5010H1,19,Knee - Left
+S5010H1,20,Knee - Right
+S5010H1,21,Knee - Center
+S5010H1,22,Ankle - Left
+S5010H1,23,Ankle - Right
+S5010H1,24,Ankle - Center
+S5010H1,25,Heel - Left
+S5010H1,26,Heel - Right
+S5010H1,27,Heel - Center
+S5010H1,28,Foot - Left
+S5010H1,29,Foot - Right
+S5010H1,30,Foot - Center
+S5010H1,99,Other
+S5010H2,0,No change
+S5010H2,1,Decreased depth
+S5010H2,2,Decreased area
+S5010H2,3,Decreased depth and area
+S5010H2,4,Increased depth
+S5010H2,5,Increased area
+S5010H2,6,Increased depth and area
+S5010H2,7,"Decreased depth, increased area"
+S5010H2,8,"Increased depth, decreased area"
+S5010I1,01,Spine - Left
+S5010I1,02,Spine - Right
+S5010I1,03,Spine - Center
+S5010I1,04,Coccyx - Left
+S5010I1,05,Coccyx - Right
+S5010I1,06,Coccyx - Center
+S5010I1,07,Sacrum - Left
+S5010I1,08,Sacrum - Right
+S5010I1,09,Sacrum - Center
+S5010I1,10,Buttock - Left
+S5010I1,11,Buttock - Right
+S5010I1,12,Buttock - Center
+S5010I1,13,Trochanter - Left
+S5010I1,14,Trochanter - Right
+S5010I1,15,Trochanter - Center
+S5010I1,16,Ischium - Left
+S5010I1,17,Ischium - Right
+S5010I1,18,Ischium - Center
+S5010I1,19,Knee - Left
+S5010I1,20,Knee - Right
+S5010I1,21,Knee - Center
+S5010I1,22,Ankle - Left
+S5010I1,23,Ankle - Right
+S5010I1,24,Ankle - Center
+S5010I1,25,Heel - Left
+S5010I1,26,Heel - Right
+S5010I1,27,Heel - Center
+S5010I1,28,Foot - Left
+S5010I1,29,Foot - Right
+S5010I1,30,Foot - Center
+S5010I1,99,Other
+S5010I2,0,No change
+S5010I2,1,Decreased depth
+S5010I2,2,Decreased area
+S5010I2,3,Decreased depth and area
+S5010I2,4,Increased depth
+S5010I2,5,Increased area
+S5010I2,6,Increased depth and area
+S5010I2,7,"Decreased depth, increased area"
+S5010I2,8,"Increased depth, decreased area"
+S6000,0,No
+S6000,1,Yes
+S6005,0,No
+S6005,1,Yes
+S6010,0,No
+S6010,1,Yes
+S6050,0,No
+S6050,1,Yes
+S6051A,0,Not checked (No)
+S6051A,1,Checked (Yes)
+S6051B,0,Not checked (No)
+S6051B,1,Checked (Yes)
+S6051C,0,Not checked (No)
+S6051C,1,Checked (Yes)
+S6051D,0,Not checked (No)
+S6051D,1,Checked (Yes)
+S6100A,0,Not checked (No)
+S6100A,1,Checked (Yes)
+S6100B,0,Not checked (No)
+S6100B,1,Checked (Yes)
+S6100C,0,Not checked (No)
+S6100C,1,Checked (Yes)
+S6100D,0,Not checked (No)
+S6100D,1,Checked (Yes)
+S6100E,0,Not checked (No)
+S6100E,1,Checked (Yes)
+S6100F1,Text,Other Vaccination 1 Name
+S6100F2,Text,Other Vaccination 2 Name
+S6100F3,Text,Other Vaccination 3 Name
+S6100Z,0,Not checked (No)
+S6100Z,1,Checked (Yes)
+S6200,0,Minimum value
+S6200,90,Maximum value
+S6210,0,Minimum value
+S6210,999,Maximum value
+S6220,0,No
+S6220,1,Yes
+S8000A1,0,Not checked (No)
+S8000A1,1,Checked (Yes)
+S8000A2,0,Not checked (No)
+S8000A2,1,Checked (Yes)
+S8000A3,0,Not checked (No)
+S8000A3,1,Checked (Yes)
+S8000B1,0,Not checked (No)
+S8000B1,1,Checked (Yes)
+S8000B2,0,Not checked (No)
+S8000B2,1,Checked (Yes)
+S8000B3,0,Not checked (No)
+S8000B3,1,Checked (Yes)
+S8000C1,0,Not checked (No)
+S8000C1,1,Checked (Yes)
+S8000C2,0,Not checked (No)
+S8000C2,1,Checked (Yes)
+S8000C3,0,Not checked (No)
+S8000C3,1,Checked (Yes)
+S8000D1,0,Not checked (No)
+S8000D1,1,Checked (Yes)
+S8000D3,0,Not checked (No)
+S8000D3,1,Checked (Yes)
+S8000E1,0,Not checked (No)
+S8000E1,1,Checked (Yes)
+S8000E2,0,Not checked (No)
+S8000E2,1,Checked (Yes)
+S8000E3,0,Not checked (No)
+S8000E3,1,Checked (Yes)
+S8000Z,0,Not checked (No)
+S8000Z,1,Checked (Yes)
+S8000D2,0,Not checked (No)
+S8000D2,1,Checked (Yes)
+S8010A1,0,Not checked (No)
+S8010A1,1,Checked (Yes)
+S8010A2,0,Not checked (No)
+S8010A2,1,Checked (Yes)
+S8010A3,0,Not checked (No)
+S8010A3,1,Checked (Yes)
+S8010B1,0,Not checked (No)
+S8010B1,1,Checked (Yes)
+S8010B2,0,Not checked (No)
+S8010B2,1,Checked (Yes)
+S8010B3,0,Not checked (No)
+S8010B3,1,Checked (Yes)
+S8010C1,0,Not checked (No)
+S8010C1,1,Checked (Yes)
+S8010C2,0,Not checked (No)
+S8010C2,1,Checked (Yes)
+S8010C3,0,Not checked (No)
+S8010C3,1,Checked (Yes)
+S8010D1,0,Not checked (No)
+S8010D1,1,Checked (Yes)
+S8010D2,0,Not checked (No)
+S8010D2,1,Checked (Yes)
+S8010D3,0,Not checked (No)
+S8010D3,1,Checked (Yes)
+S8010F1,0,Not checked (No)
+S8010F1,1,Checked (Yes)
+S8010F2,0,Not checked (No)
+S8010F2,1,Checked (Yes)
+S8010F3,0,Not checked (No)
+S8010F3,1,Checked (Yes)
+S8010G1,0,Not checked (No)
+S8010G1,1,Checked (Yes)
+S8010G2,0,Not checked (No)
+S8010G2,1,Checked (Yes)
+S8010G3,0,Not checked (No)
+S8010G3,1,Checked (Yes)
+S8010H1,0,Not checked (No)
+S8010H1,1,Checked (Yes)
+S8010H2,0,Not checked (No)
+S8010H2,1,Checked (Yes)
+S8010H3,0,Not checked (No)
+S8010H3,1,Checked (Yes)
+S8010I1,0,Not checked (No)
+S8010I1,1,Checked (Yes)
+S8010I2,0,Not checked (No)
+S8010I2,1,Checked (Yes)
+S8010I3,0,Not checked (No)
+S8010I3,1,Checked (Yes)
+S8010Z,0,Not checked (No)
+S8010Z,1,Checked (Yes)
+S8020A1,0,Not checked (No)
+S8020A1,1,Checked (Yes)
+S8020A2,0,Not checked (No)
+S8020A2,1,Checked (Yes)
+S8020A3,0,Not checked (No)
+S8020A3,1,Checked (Yes)
+S8020B1,0,Not checked (No)
+S8020B1,1,Checked (Yes)
+S8020B2,0,Not checked (No)
+S8020B2,1,Checked (Yes)
+S8020B3,0,Not checked (No)
+S8020B3,1,Checked (Yes)
+S8020C1,0,Not checked (No)
+S8020C1,1,Checked (Yes)
+S8020C2,0,Not checked (No)
+S8020C2,1,Checked (Yes)
+S8020C3,0,Not checked (No)
+S8020C3,1,Checked (Yes)
+S8030A1,0,Not checked (No)
+S8030A1,1,Checked (Yes)
+S8030A2,0,Not checked (No)
+S8030A2,1,Checked (Yes)
+S8030A3,0,Not checked (No)
+S8030A3,1,Checked (Yes)
+S8030B1,0,Not checked (No)
+S8030B1,1,Checked (Yes)
+S8030B2,0,Not checked (No)
+S8030B2,1,Checked (Yes)
+S8030B3,0,Not checked (No)
+S8030B3,1,Checked (Yes)
+S8030C,0,Not checked (No)
+S8030C,1,Checked (Yes)
+S8030Z,0,Not checked (No)
+S8030Z,1,Checked (Yes)
+S8020Z,0,Not checked (No)
+S8020Z,1,Checked (Yes)
+S8040A1,0,Not checked (No)
+S8040A1,1,Checked (Yes)
+S8040A2,0,Not checked (No)
+S8040A2,1,Checked (Yes)
+S8040A3,0,Not checked (No)
+S8040A3,1,Checked (Yes)
+S8040B1,0,Not checked (No)
+S8040B1,1,Checked (Yes)
+S8040B2,0,Not checked (No)
+S8040B2,1,Checked (Yes)
+S8040B3,0,Not checked (No)
+S8040B3,1,Checked (Yes)
+S8040C1,0,Not checked (No)
+S8040C1,1,Checked (Yes)
+S8040C2,0,Not checked (No)
+S8040C2,1,Checked (Yes)
+S8040C3,0,Not checked (No)
+S8040C3,1,Checked (Yes)
+S8040D1,0,Not checked (No)
+S8040D1,1,Checked (Yes)
+S8040D2,0,Not checked (No)
+S8040D2,1,Checked (Yes)
+S8040D3,0,Not checked (No)
+S8040D3,1,Checked (Yes)
+S8040Z,0,Not checked (No)
+S8040Z,1,Checked (Yes)
+S8050A1,0,Not checked (No)
+S8050A1,1,Checked (Yes)
+S8050A2,0,Not checked (No)
+S8050A2,1,Checked (Yes)
+S8050A3,0,Not checked (No)
+S8050A3,1,Checked (Yes)
+S8050D,Text,Other Payor Name 3
+S8099,0,Not checked (No)
+S8099,1,Checked (Yes)
+S8050B,Text,Other Payor Name 1
+S8050C,Text,Other Payor Name 2
+S8500,YYYYMMDD,Medicaid Coverage Begin Date
+S8510A,00,Minimum value
+S8510A,99,Maximum value
+S8510B,00,Minimum value
+S8510B,99,Maximum value
+S8512A,00,Minimum value
+S8512A,99,Maximum value
+S8512B,00,Minimum value
+S8512B,99,Maximum value
+S8520A,H,Hospital
+S8520A,T,Therapeutic
+S8520A,D,Deletion Request
+S8520B,YYYYMMDD,Leave Days for Medicaid Begin Date Type 1
+S8520C,YYYYMMDD,Leave Days for Medicaid End Date Type 1
+S8521A,H,Hospital
+S8521A,T,Therapeutic
+S8521A,D,Deletion Request
+S8521B,YYYYMMDD,Leave Days for Medicaid Begin Date Type 2
+S8521C,YYYYMMDD,Leave Days for Medicaid End Date Type 2
+S9000,0,No
+S9000,1,Yes
+S9001,0,No
+S9001,1,Yes
+S9002A,0,Not checked (No)
+S9002A,1,Checked (Yes)
+S9002B,0,Not checked (No)
+S9002B,1,Checked (Yes)
+S9002C,0,Not checked (No)
+S9002C,1,Checked (Yes)
+S9002D,0,Not checked (No)
+S9002D,1,Checked (Yes)
+S9002E,0,Not checked (No)
+S9002E,1,Checked (Yes)
+S9002F,0,Not checked (No)
+S9002F,1,Checked (Yes)
+S9002G,0,Not checked (No)
+S9002G,1,Checked (Yes)
+S9002H,0,Not checked (No)
+S9002H,1,Checked (Yes)
+S9002I,0,Not checked (No)
+S9002I,1,Checked (Yes)
+S9003,0,No
+S9003,1,Yes
+S9020,Text,FL FRAES Number
+S9040A,0,No
+S9040A,1,Yes
+S9040B,1,Attempt resuscitation/CPR
+S9040B,2,Do not attempt resuscitation/DNR
+S9040B,9,Not completed
+S9040C,1,Comfort measures only is checked
+S9040C,2,Limited additional interventions is the only box checked
+S9040C,3,"Limited additional interventions AND ""Transfer to hospital only if comfort needs cannot be met in current location"" are BOTH checked"
+S9040C,4,Full Treatment is checked
+S9040C,9,Not completed
+S9040D,1,"No artificial means of nutrition, including feeding tubes"
+S9040D,2,Trial period of artificial nutrition including feeding tubes
+S9040D,3,Long term artificial nutrition including feeding tubes
+S9040D,9,Not completed
+S9040E,0,No
+S9040E,1,Yes
+S9040F,0,No
+S9040F,1,Yes - Patient or Legally Recognized Decisionmaker
+S9040G,1,Patient
+S9040G,2,Legally Recognized Decisionmaker
+S9040G,9,Not completed
+S9060,1,AIDS Scatter Beds
+S9060,2,Traumatic Brain Injury (TBI) Extended Care
+S9060,9,None of the Above
+S9080A,0,No
+S9080A,1,Yes
+S9080B,YYYYMMDD,PA Medical Assistance Case Mix Date
+S9080C,Text,PA Medical Assistance Case Mix ACCESS Card Number
+S9080D,YYYYMMDD,PA Medical Assistance Case Mix NF Effective Date
+S9080E,0,No
+S9080E,1,Yes
+S9100A,1,Virginia Medicaid per diem
+S9100A,2,Virginia Commonwealth Coordinated Care (CCC) Plus
+S9100A,3,Other reimbursement source
+S9100B,1,Virginia Medicaid per diem
+S9100B,2,Virginia Medicaid Specialized Care per diem
+S9100B,3,Managed Care Organization reimbursement
+S9100B,4,Other reimbursement source
+S9120,0,No
+S9120,1,Yes
+S9100C,YYYYMMDD,Valid date
+S0120,Text,Prior Residence ZIP Code
+S0123,Text,Prior Residence County
+S0125,Text,Prior Residence Town Code
+S8010E1,0,Not checked (No)
+S8010E1,1,Checked (Yes)
+S8010E2,0,Not checked (No)
+S8010E2,1,Checked (Yes)
+S8010E3,0,Not checked (No)
+S8010E3,1,Checked (Yes)
+S0511,^,Blank (skip pattern)
+ASSESSMENT_ID,Text,Assessment internal ID
+ORIGINAL_ASSESSMENT_ID,Text,Original assessment ID
+RESIDENT_INTERNAL_ID,Text,Resident internal ID
+TARGET_DATE,YYYYMMDD,Target date
+FACILITY_PROVIDER_INTERNAL_ID,Text,Facility/provider internal ID
+SUBMISSION_ID,Text,Submission ID
+SUBMISSION_DATE,YYYYMMDD,Submission date
+SUBMISSION_COMPLETE_DATE,YYYYMMDD,Submission processing completion date
+SUBMITTING_USER_ID,Text,Submitter user ID
+RESIDENT_MATCH_CRITERIA,Text,Resident matching criteria
+RESIDENT_AGE,000,Minimum value
+RESIDENT_AGE,999,Maximum value
+BIRTHDATE_SUBMIT_CODE,D,Year and month only (day was set to default value)
+BIRTHDATE_SUBMIT_CODE,M,Year only (month and day were set to default values)
+BIRTHDATE_SUBMIT_CODE,S,Full date submitted
+CBSA_URBAN_RURAL_CODE,R,Rural
+CBSA_URBAN_RURAL_CODE,U,Urban
+STATE_EXTRACT_FILE_ID,Text,State extract file identifier
+RECALCULATED_Z0100A,Text,Calculated Medicare Part A: HIPPS code
+RECALCULATED_Z0100B,Text,Calculated Medicare Part A: Version Code
+RECALCULATED_Z0200A,Text,Calculated State case mix: Group
+CMI_VALUE_FOR_RECALC_Z0200A,Text,CMI value returned for State Group
+CMI_SET_FOR_RECALC_Z0200A,Text,Set Code used for State Group
+RECALCULATED_Z0200B,Text,Calculated State case mix: Version code
+RECALCULATED_Z0250A,Text,Calculated State case mix: Alternative group
+CMI_VALUE_FOR_RECALC_Z0250A,Text,Alternate CMI value returned for State Group
+CMI_SET_FOR_RECALC_Z0250A,Text,Alternate Set Code used for State Group
+RECALCULATED_Z0250B,Text,Calculated State case mix: Alternative version code
+MEDICARE_RUG4_HIER_GRP,Text,RUG IV Medicare hierarchical group
+MEDICARE_RUG4_HIER_VERSION,Text,RUG IV Medicare hierarchical version
+MEDICARE_RUG3_IDX_MAX_GRP,Text,RUG III Medicare index max group
+MEDICARE_RUG3_IDX_MAX_VERSION,Text,RUG III Medicare index max version
+MEDICARE_RUG3_IDX_MAX_CMI_VAL,Text,RUG III Medicare index max case mix index
+MEDICARE_RUG3_IDX_MAX_CMI_SET,Text,RUG III Medicare index max case mix index set
+MEDICARE_RUG3_HIER_GRP,Text,RUG III Medicare hierarchical group
+MEDICARE_RUG3_HIER_VERSION,Text,RUG III Medicare hierarchical version
+CALCULATED_ITEMS_FILLER1,Text,Filler
+X0150,^,Blank (skip pattern)
+SPEC_VRSN_CD,1.01,First update to data specifications (effective 04/01/2011)
+S0120,-,Not assessed/no information
+S0123,-,Not assessed/no information
+S0150,^,Blank (skip pattern)
+S0501,^,Blank (skip pattern)
+S8020C3,^,Blank (skip pattern)
+S8500,-,Not assessed/no information
+S8500,^,Blank (skip pattern)
+S9080C,^,Blank (skip pattern)
+S9080D,^,Blank (skip pattern)
+S9120,^,Blank (skip pattern)
+S0160,01,Discrete AIDS Unit
+S0160,02,Ventilator Dependent Unit
+S0160,03,Traumatic Brain Injury (TBI) Unit
+S0160,04,Behavioral Intervention Unit
+S0160,05,Behavioral Intervention Step-Down Unit
+S0160,06,Pediatric Specialty Unit / Facility
+S0160,07,AIDS Scatter Beds
+S0160,08,Traumatic Brain Injury (TBI) Extended Care
+S0160,99,None of the Above
+S0170A,0,Not checked (No)
+S0170A,1,Checked (Yes)
+S0170B,0,Not checked (No)
+S0170B,1,Checked (Yes)
+S0170C,0,Not checked (No)
+S0170C,1,Checked (Yes)
+S0170D,0,Not checked (No)
+S0170D,1,Checked (Yes)
+S0170E,0,Not checked (No)
+S0170E,1,Checked (Yes)
+S0170F,0,Not checked (No)
+S0170F,1,Checked (Yes)
+S0170G,0,Not checked (No)
+S0170G,1,Checked (Yes)
+S0170H,0,Not checked (No)
+S0170H,1,Checked (Yes)
+S0170Z,0,Not checked (No)
+S0170Z,1,Checked (Yes)
+S0171A,0,No
+S0171A,1,Yes
+S0171B,0,No
+S0171B,1,Yes
+S0172A,0,No
+S0172A,1,Yes
+S0172B,0,Not checked (No)
+S0172B,1,Checked (Yes)
+S0172B,^,Blank (skip pattern)
+S0172C,0,Not checked (No)
+S0172C,1,Checked (Yes)
+S0172C,^,Blank (skip pattern)
+S0172D,0,Not checked (No)
+S0172D,1,Checked (Yes)
+S0172D,^,Blank (skip pattern)
+S0172E,0,Not checked (No)
+S0172E,1,Checked (Yes)
+S0172E,^,Blank (skip pattern)
+S0172F,0,Not checked (No)
+S0172F,1,Checked (Yes)
+S0172F,^,Blank (skip pattern)
+S0172G,0,Not checked (No)
+S0172G,1,Checked (Yes)
+S0172G,^,Blank (skip pattern)
+S0172H,0,No
+S0172H,1,Yes
+S0172H,^,Blank (skip pattern)
+S0183,0,No
+S0183,1,Yes
+S8010F,1,Medicaid managed care per diem
+S8010F,2,Medicaid per diem (not managed care)
+S8010F,^,Blank (skip pattern)
+S8010G,1,In-state Medicaid
+S8010G,2,Out-of-state Medicaid
+S8010G,^,Blank (skip pattern)
+S8055,1,Medicare
+S8055,2,Medicaid
+S8055,3,Medicaid Pending
+S8055,9,None of the above
+S9040H,1,Advance directive available and reviewed
+S9040H,2,Advance directive not available
+S9040H,3,No advance directive
+S9040H,9,Not completed
+S0101,^,Blank (skip pattern)
+S0180,^,Blank (skip pattern)
+S0115,5,In the same nursing home
+S0115,6,In another nursing home
+S0115,7,With family or friends
+S5010A1,^,Blank (skip pattern)
+S5010A2,^,Blank (skip pattern)
+S5010B1,^,Blank (skip pattern)
+S5010B2,^,Blank (skip pattern)
+S5010C1,^,Blank (skip pattern)
+S5010C2,^,Blank (skip pattern)
+S5010D1,^,Blank (skip pattern)
+S5010D2,^,Blank (skip pattern)
+S5010E1,^,Blank (skip pattern)
+S5010E2,^,Blank (skip pattern)
+S5010F1,^,Blank (skip pattern)
+S5010F2,^,Blank (skip pattern)
+S5010G1,^,Blank (skip pattern)
+S5010G2,^,Blank (skip pattern)
+S5010H1,^,Blank (skip pattern)
+S5010H2,^,Blank (skip pattern)
+S5010I1,^,Blank (skip pattern)
+S5010I2,^,Blank (skip pattern)
+SPEC_VRSN_CD,1.02,Second update to data specifications (effective 10/01/2011)
+S8520C,-,Not assessed/no information
+A0050,1,Add new record
+A0050,2,Modify existing record
+A0050,3,Inactivate existing record
+A0310G,1,Planned
+A0310G,2,Unplanned
+A1510A,0,Not checked (No)
+A1510A,1,Checked (Yes)
+A1510A,-,Not assessed/no information
+A1510A,^,Blank (skip pattern)
+A1510B,0,Not checked (No)
+A1510B,1,Checked (Yes)
+A1510B,-,Not assessed/no information
+A1510B,^,Blank (skip pattern)
+A1510C,0,Not checked (No)
+A1510C,1,Checked (Yes)
+A1510C,-,Not assessed/no information
+A1510C,^,Blank (skip pattern)
+K0310,0,No or unknown
+K0310,1,"Yes, on physician-prescribed weight-gain regimen"
+K0310,2,"Yes, not on physician-prescribed weight-gain regimen"
+K0310,-,Not assessed/no information
+M1040G,0,Not checked (No)
+M1040G,1,Checked (Yes)
+M1040G,-,Not assessed/no information
+M1040H,0,Not checked (No)
+M1040H,1,Checked (Yes)
+M1040H,-,Not assessed/no information
+Q0490,0,No
+Q0490,1,Yes
+Q0490,-,Not assessed/no information
+Q0550A,0,No
+Q0550A,1,Yes
+Q0550A,8,Information not available
+Q0550A,-,Not assessed/no information
+Q0490,^,Blank (skip pattern)
+Q0550A,^,Blank (skip pattern)
+ITM_SET_VRSN_CD,1.10,First update to MDS 3.0 item set (effective 04/01/2012)
+SPEC_VRSN_CD,1.10,Third update to data specifications (effective 04/01/2012)
+A0310G,^,Blank (skip pattern)
+S0173,0,No
+S0173,1,Yes
+S0173,9,Not applicable
+S0172A,9,Not applicable
+S8010H1,^,Blank (skip pattern)
+SPEC_VRSN_CD,1.11,Fourth update to data specifications (effective 10/01/2012)
+SPEC_VRSN_CD,1.12,Fifth update to data specifications (effective 05/19/2013)
+K0710A2,-,Not assessed/no information
+K0710A2,^,Blank (skip pattern)
+K0710A2,1,25% or less
+K0710A2,2,26-50%
+K0710A2,3,51% or more
+K0710A3,-,Not assessed/no information
+K0710A3,^,Blank (skip pattern)
+K0710A3,1,25% or less
+K0710A3,2,26-50%
+K0710A3,3,51% or more
+K0710B2,-,Not assessed/no information
+K0710B2,^,Blank (skip pattern)
+K0710B2,1,500 cc/day or less
+K0710B2,2,501 cc/day or more
+K0710B3,-,Not assessed/no information
+K0710B3,^,Blank (skip pattern)
+K0710B3,1,500 cc/day or less
+K0710B3,2,501 cc/day or more
+SPEC_VRSN_CD,1.13,Sixth update to data specifications (effective 10/01/2013)
+ITM_SET_VRSN_CD,1.11,Second update to MDS 3.0 item set (effective 10/01/2013)
+S0130,-,Not assessed/no information
+S0600A,0,Not checked (No)
+S0600A,1,Checked (Yes)
+S0600A,-,Not assessed/no information
+S0600B,-,Not assessed/no information
+S0600B,0,Not checked (No)
+S0600B,1,Checked (Yes)
+S0600C,-,Not assessed/no information
+S0600C,0,Not checked (No)
+S0600C,1,Checked (Yes)
+S0600D,-,Not assessed/no information
+S0600D,0,Not checked (No)
+S0600D,1,Checked (Yes)
+S0600E,-,Not assessed/no information
+S0600E,0,Not checked (No)
+S0600E,1,Checked (Yes)
+S0600Z,-,Not assessed/no information
+S0600Z,0,Not checked (No)
+S0600Z,1,Checked (Yes)
+S0161A,-,Not assessed/no information
+S0161A,0,Not checked (No)
+S0161A,1,Checked (Yes)
+S0161B,-,Not assessed/no information
+S0161B,0,Not checked (No)
+S0161B,1,Checked (Yes)
+S0161C,-,Not assessed/no information
+S0161C,0,Not checked (No)
+S0161C,1,Checked (Yes)
+S0161D,-,Not assessed/no information
+S0161D,0,Not checked (No)
+S0161D,1,Checked (Yes)
+S0161Z,-,Not assessed/no information
+S0161Z,0,Not checked (No)
+S0161Z,1,Checked (Yes)
+S6230,0,No
+S6230,1,Yes
+S6232,0,No
+S6232,1,Yes
+S6232,^,Blank (skip pattern)
+S6234,0,No
+S6234,1,Yes
+S6234,^,Blank (skip pattern)
+S6236,0,No
+S6236,1,Yes
+S6236,^,Blank (skip pattern)
+S2060B,0,Not checked (No)
+S2060B,1,Checked (Yes)
+S2060A,0,Not checked (No)
+S2060A,1,Checked (Yes)
+S2060C,0,Not checked (No)
+S2060C,1,Checked (Yes)
+S2060D,0,Not checked (No)
+S2060D,1,Checked (Yes)
+S2060E,0,Not checked (No)
+S2060E,1,Checked (Yes)
+S2060Z,0,Not checked (No)
+S2060Z,1,Checked (Yes)
+S1200A,1,Primary
+S1200A,2,Secondary
+S1200A,3,Neither primary or secondary
+S1200B,1,Primary
+S1200B,2,Secondary
+S1200B,3,Neither primary or secondary
+S1200C,1,Primary
+S1200C,2,Secondary
+S1200C,3,Neither primary or secondary
+S1200D,1,Primary
+S1200D,2,Secondary
+S1200D,3,Neither primary or secondary
+S1200E,1,Primary
+S1200E,2,Secondary
+S1200E,3,Neither primary or secondary
+S1200F,1,Primary
+S1200F,2,Secondary
+S1200F,3,Neither primary or secondary
+S1200G,1,Primary
+S1200G,2,Secondary
+S1200G,3,Neither primary or secondary
+S1200H,1,Primary
+S1200H,2,Secondary
+S1200H,3,Neither primary or secondary
+S1200I,1,Primary
+S1200I,2,Secondary
+S1200I,3,Neither primary or secondary
+A1900,YYYYMMDD,Admission date
+C_CCN_NUM,Text,Calculated facility CMS certification number (CCN)
+ITM_SET_VRSN_CD,1.12,Third update to MDS 3.0 item set (effective 10/01/2014)
+SPEC_VRSN_CD,1.14,Seventh update to data specifications (effective 10/01/2014)
+S0165A,0,Not checked (No)
+S0165A,1,Checked (Yes)
+S0165B,0,Not checked (No)
+S0165B,1,Checked (Yes)
+S0165C,0,Not checked (No)
+S0165C,1,Checked (Yes)
+S0165D,0,Not checked (No)
+S0165D,1,Checked (Yes)
+S0165E,0,Not checked (No)
+S0165E,1,Checked (Yes)
+S0165Z,0,Not checked (No)
+S0165Z,1,Checked (Yes)
+S0174,0,No
+S0174,1,Yes
+S0175,0,No
+S0175,1,Yes
+S0513,0,"Screen was sent to the NF; no diagnosis, suspected diagnosis or need for specialized services"
+S0513,1,"Screen was sent for determination of need for Levell II screen due to diagnosis, suspected diagnosis or need for specialized services related to mental illness, intellectual disability, or other related condition."
+S0513,-,Not assessed/no information
+S0513,^,Blank (skip pattern)
+S1100J,0,Not checked (No)
+S1100J,1,Checked (Yes)
+S3300,0,No
+S3300,1,Yes
+S3300,-,Not assessed/no information
+S3305A,0,Not checked (No)
+S3305A,1,Checked (Yes)
+S3305A,-,Not assessed/no information
+S3305A,^,Blank (skip pattern)
+S3305B,0,Not checked (No)
+S3305B,1,Checked (Yes)
+S3305B,-,Not assessed/no information
+S3305B,^,Blank (skip pattern)
+S3305C,0,Not checked (No)
+S3305C,1,Checked (Yes)
+S3305C,-,Not assessed/no information
+S3305C,^,Blank (skip pattern)
+S3305D,0,Not checked (No)
+S3305D,1,Checked (Yes)
+S3305D,-,Not assessed/no information
+S3305D,^,Blank (skip pattern)
+S3305E,0,Not checked (No)
+S3305E,1,Checked (Yes)
+S3305E,-,Not assessed/no information
+S3305E,^,Blank (skip pattern)
+S3305Y,0,Not checked (No)
+S3305Y,1,Checked (Yes)
+S3305Y,-,Not assessed/no information
+S3305Y,^,Blank (skip pattern)
+S6020A,0,Not checked (No)
+S6020A,1,Checked (Yes)
+S6020A,-,Not assessed/no information
+S6020A,^,Blank (skip pattern)
+S6020B,0,Not checked (No)
+S6020B,1,Checked (Yes)
+S6020B,-,Not assessed/no information
+S6020B,^,Blank (skip pattern)
+S6020C,0,Not checked (No)
+S6020C,1,Checked (Yes)
+S6020C,-,Not assessed/no information
+S6020C,^,Blank (skip pattern)
+S6020D,0,Not checked (No)
+S6020D,1,Checked (Yes)
+S6020D,-,Not assessed/no information
+S6020D,^,Blank (skip pattern)
+S6020Y,0,Not checked (No)
+S6020Y,1,Checked (Yes)
+S6020Y,-,Not assessed/no information
+S6020Y,^,Blank (skip pattern)
+S6020Z,0,Not checked (No)
+S6020Z,1,Checked (Yes)
+S6020Z,-,Not assessed/no information
+S6020Z,^,Blank (skip pattern)
+S6022A,0,Minimum value
+S6022A,7,Maximum value
+S6022A,-,Not assessed/no information
+S6022A,^,Blank (skip pattern)
+S6022B,0,Minimum value
+S6022B,7,Maximum value
+S6022B,-,Not assessed/no information
+S6022B,^,Blank (skip pattern)
+S6022C,0,Minimum value
+S6022C,7,Maximum value
+S6022C,-,Not assessed/no information
+S6022C,^,Blank (skip pattern)
+S6023A,0,Minimum value
+S6023A,7,Maximum value
+S6023A,-,Not assessed/no information
+S6023A,^,Blank (skip pattern)
+S6023B,0,Minimum value
+S6023B,7,Maximum value
+S6023B,-,Not assessed/no information
+S6023B,^,Blank (skip pattern)
+S6023C,0,Minimum value
+S6023C,7,Maximum value
+S6023C,-,Not assessed/no information
+S6023C,^,Blank (skip pattern)
+S6024A,0,Minimum value
+S6024A,7,Maximum value
+S6024A,-,Not assessed/no information
+S6024A,^,Blank (skip pattern)
+S6024B,0,Minimum value
+S6024B,7,Maximum value
+S6024B,-,Not assessed/no information
+S6024B,^,Blank (skip pattern)
+S6024C,0,Minimum value
+S6024C,7,Maximum value
+S6024C,-,Not assessed/no information
+S6024C,^,Blank (skip pattern)
+S6205,0,Minimum value
+S6205,9,Maximum value
+S7000,1,Routine dental care since last assessment
+S7000,2,Emergent dental care since last assessment
+S7000,9,None of the above
+S9040C1,1,"""Full Treatment"" is the only box checked."
+S9040C1,2,"""Full Treatment"" AND ""Trial Period of Full Treatment"" are both checked."
+S9040C1,3,"""Selective Treatment"" or ""Limited Additional Interventions"" is the only box checked."
+S9040C1,4,"""Selective Treatment"" or ""Limited Additional Interventions"" AND ""Transfer to hospital only if comfort needs cannot be met in current location"" are checked."
+S9040C1,5,"""Comfort-Focused Treatment"" or ""Comfort Measures Only"""
+S9040C1,9,Not completed
+S9040D1,1,"Long-term artificial nutrition, including feeding tubes"
+S9040D1,2,"Trial period of artificial nutrition, including feeding tubes"
+S9040D1,3,"No artificial means of nutrition, including feeding"
+S9040D1,9,Not completed
+S9140,0,No
+S9140,1,Yes
+S8055,4,Medicaid Managed Care
+S8055,5,Managed Long Term Care
+SPEC_VRSN_CD,1.15,Eighth update to data specifications (effective 10/01/2015)
+S1100F1,-,Not assessed/no information
+S1100F1,^,Blank (skip pattern)
+S1100F2,-,Not assessed/no information
+S1100F2,^,Blank (skip pattern)
+S6051A,-,Not assessed/no information
+S6051B,^,Blank (skip pattern)
+S6051C,-,Not assessed/no information
+S6051D,^,Blank (skip pattern)
+ITM_SET_VRSN_CD,1.13,Fourth update to MDS 3.0 item set (effective 10/01/2015)
+ITM_SBST_CD,NPE,Nursing home PPS Part A Discharge (End of Stay)
+ITM_SET_VRSN_CD,1.14,Fifth update to MDS 3.0 item set (effective 10/01/2016)
+SPEC_VRSN_CD,2.00,Ninth update to data specifications (effective 10/01/2016)
+A0310H,0,No
+A0310H,1,Yes
+C1310A,0,No
+C1310A,1,Yes
+C1310B,0,Behavior not present
+C1310B,1,"Behavior continuously present, does not fluctuate"
+C1310B,2,"Behavior present, fluctuates (comes and goes, changes in severity)"
+C1310B,^,Blank (skip pattern)
+C1310C,0,Behavior not present
+C1310C,1,"Behavior continuously present, does not fluctuate"
+C1310C,2,"Behavior present, fluctuates (comes and goes, changes in severity)"
+C1310C,^,Blank (skip pattern)
+C1310D,0,Behavior not present
+C1310D,1,"Behavior continuously present, does not fluctuate"
+C1310D,2,"Behavior present, fluctuates (comes and goes, changes in severity)"
+C1310D,^,Blank (skip pattern)
+GG0130A1,06,Independent
+GG0130A1,05,Setup or clean-up assistance
+GG0130A1,04,Supervision or touching assistance
+GG0130A1,03,Partial/moderate assistance
+GG0130A1,02,Substantial/maximal assistance
+GG0130A1,01,Dependent
+GG0130A1,07,Resident refused
+GG0130A1,09,Not applicable
+GG0130A1,88,Not attempted due to medical condition or safety concerns
+GG0130A1,-,Not assessed/no information
+GG0130A3,06,Independent
+GG0130A3,05,Setup or clean-up assistance
+GG0130A3,04,Supervision or touching assistance
+GG0130A3,03,Partial/moderate assistance
+GG0130A3,02,Substantial/maximal assistance
+GG0130A3,01,Dependent
+GG0130A3,07,Resident refused
+GG0130A3,09,Not applicable
+GG0130A3,88,Not attempted due to medical condition or safety concerns
+GG0130A3,-,Not assessed/no information
+GG0130B1,06,Independent
+GG0130B1,05,Setup or clean-up assistance
+GG0130B1,04,Supervision or touching assistance
+GG0130B1,03,Partial/moderate assistance
+GG0130B1,02,Substantial/maximal assistance
+GG0130B1,01,Dependent
+GG0130B1,07,Resident refused
+GG0130B1,09,Not applicable
+GG0130B1,88,Not attempted due to medical condition or safety concerns
+GG0130B1,-,Not assessed/no information
+GG0130B3,06,Independent
+GG0130B3,05,Setup or clean-up assistance
+GG0130B3,04,Supervision or touching assistance
+GG0130B3,03,Partial/moderate assistance
+GG0130B3,02,Substantial/maximal assistance
+GG0130B3,01,Dependent
+GG0130B3,07,Resident refused
+GG0130B3,09,Not applicable
+GG0130B3,88,Not attempted due to medical condition or safety concerns
+GG0130B3,-,Not assessed/no information
+GG0130C1,06,Independent
+GG0130C1,05,Setup or clean-up assistance
+GG0130C1,04,Supervision or touching assistance
+GG0130C1,03,Partial/moderate assistance
+GG0130C1,02,Substantial/maximal assistance
+GG0130C1,01,Dependent
+GG0130C1,07,Resident refused
+GG0130C1,09,Not applicable
+GG0130C1,88,Not attempted due to medical condition or safety concerns
+GG0130C1,-,Not assessed/no information
+GG0130C3,06,Independent
+GG0130C3,05,Setup or clean-up assistance
+GG0130C3,04,Supervision or touching assistance
+GG0130C3,03,Partial/moderate assistance
+GG0130C3,02,Substantial/maximal assistance
+GG0130C3,01,Dependent
+GG0130C3,07,Resident refused
+GG0130C3,09,Not applicable
+GG0130C3,88,Not attempted due to medical condition or safety concerns
+GG0130C3,-,Not assessed/no information
+GG0170B1,06,Independent
+GG0170B1,05,Setup or clean-up assistance
+GG0170B1,04,Supervision or touching assistance
+GG0170B1,03,Partial/moderate assistance
+GG0170B1,02,Substantial/maximal assistance
+GG0170B1,01,Dependent
+GG0170B1,07,Resident refused
+GG0170B1,09,Not applicable
+GG0170B1,88,Not attempted due to medical condition or safety concerns
+GG0170B1,-,Not assessed/no information
+GG0170B3,06,Independent
+GG0170B3,05,Setup or clean-up assistance
+GG0170B3,04,Supervision or touching assistance
+GG0170B3,03,Partial/moderate assistance
+GG0170B3,02,Substantial/maximal assistance
+GG0170B3,01,Dependent
+GG0170B3,07,Resident refused
+GG0170B3,09,Not applicable
+GG0170B3,88,Not attempted due to medical condition or safety concerns
+GG0170B3,-,Not assessed/no information
+GG0170C1,06,Independent
+GG0170C1,05,Setup or clean-up assistance
+GG0170C1,04,Supervision or touching assistance
+GG0170C1,03,Partial/moderate assistance
+GG0170C1,02,Substantial/maximal assistance
+GG0170C1,01,Dependent
+GG0170C1,07,Resident refused
+GG0170C1,09,Not applicable
+GG0170C1,88,Not attempted due to medical condition or safety concerns
+GG0170C1,-,Not assessed/no information
+GG0170C3,06,Independent
+GG0170C3,05,Setup or clean-up assistance
+GG0170C3,04,Supervision or touching assistance
+GG0170C3,03,Partial/moderate assistance
+GG0170C3,02,Substantial/maximal assistance
+GG0170C3,01,Dependent
+GG0170C3,07,Resident refused
+GG0170C3,09,Not applicable
+GG0170C3,88,Not attempted due to medical condition or safety concerns
+GG0170C3,-,Not assessed/no information
+GG0170D1,06,Independent
+GG0170D1,05,Setup or clean-up assistance
+GG0170D1,04,Supervision or touching assistance
+GG0170D1,03,Partial/moderate assistance
+GG0170D1,02,Substantial/maximal assistance
+GG0170D1,01,Dependent
+GG0170D1,07,Resident refused
+GG0170D1,09,Not applicable
+GG0170D1,88,Not attempted due to medical condition or safety concerns
+GG0170D1,-,Not assessed/no information
+GG0170D3,06,Independent
+GG0170D3,05,Setup or clean-up assistance
+GG0170D3,04,Supervision or touching assistance
+GG0170D3,03,Partial/moderate assistance
+GG0170D3,02,Substantial/maximal assistance
+GG0170D3,01,Dependent
+GG0170D3,07,Resident refused
+GG0170D3,09,Not applicable
+GG0170D3,88,Not attempted due to medical condition or safety concerns
+GG0170D3,-,Not assessed/no information
+GG0170E1,06,Independent
+GG0170E1,05,Setup or clean-up assistance
+GG0170E1,04,Supervision or touching assistance
+GG0170E1,03,Partial/moderate assistance
+GG0170E1,02,Substantial/maximal assistance
+GG0170E1,01,Dependent
+GG0170E1,07,Resident refused
+GG0170E1,09,Not applicable
+GG0170E1,88,Not attempted due to medical condition or safety concerns
+GG0170E1,-,Not assessed/no information
+GG0170E3,06,Independent
+GG0170E3,05,Setup or clean-up assistance
+GG0170E3,04,Supervision or touching assistance
+GG0170E3,03,Partial/moderate assistance
+GG0170E3,02,Substantial/maximal assistance
+GG0170E3,01,Dependent
+GG0170E3,07,Resident refused
+GG0170E3,09,Not applicable
+GG0170E3,88,Not attempted due to medical condition or safety concerns
+GG0170E3,-,Not assessed/no information
+GG0170F1,06,Independent
+GG0170F1,05,Setup or clean-up assistance
+GG0170F1,04,Supervision or touching assistance
+GG0170F1,03,Partial/moderate assistance
+GG0170F1,02,Substantial/maximal assistance
+GG0170F1,01,Dependent
+GG0170F1,07,Resident refused
+GG0170F1,09,Not applicable
+GG0170F1,88,Not attempted due to medical condition or safety concerns
+GG0170F1,-,Not assessed/no information
+GG0170F3,06,Independent
+GG0170F3,05,Setup or clean-up assistance
+GG0170F3,04,Supervision or touching assistance
+GG0170F3,03,Partial/moderate assistance
+GG0170F3,02,Substantial/maximal assistance
+GG0170F3,01,Dependent
+GG0170F3,07,Resident refused
+GG0170F3,09,Not applicable
+GG0170F3,88,Not attempted due to medical condition or safety concerns
+GG0170F3,-,Not assessed/no information
+GG0170J1,06,Independent
+GG0170J1,05,Setup or clean-up assistance
+GG0170J1,04,Supervision or touching assistance
+GG0170J1,03,Partial/moderate assistance
+GG0170J1,02,Substantial/maximal assistance
+GG0170J1,01,Dependent
+GG0170J1,07,Resident refused
+GG0170J1,09,Not applicable
+GG0170J1,88,Not attempted due to medical condition or safety concerns
+GG0170J1,-,Not assessed/no information
+GG0170J3,06,Independent
+GG0170J3,05,Setup or clean-up assistance
+GG0170J3,04,Supervision or touching assistance
+GG0170J3,03,Partial/moderate assistance
+GG0170J3,02,Substantial/maximal assistance
+GG0170J3,01,Dependent
+GG0170J3,07,Resident refused
+GG0170J3,09,Not applicable
+GG0170J3,88,Not attempted due to medical condition or safety concerns
+GG0170J3,-,Not assessed/no information
+GG0170K1,06,Independent
+GG0170K1,05,Setup or clean-up assistance
+GG0170K1,04,Supervision or touching assistance
+GG0170K1,03,Partial/moderate assistance
+GG0170K1,02,Substantial/maximal assistance
+GG0170K1,01,Dependent
+GG0170K1,07,Resident refused
+GG0170K1,09,Not applicable
+GG0170K1,88,Not attempted due to medical condition or safety concerns
+GG0170K1,-,Not assessed/no information
+GG0170K3,06,Independent
+GG0170K3,05,Setup or clean-up assistance
+GG0170K3,04,Supervision or touching assistance
+GG0170K3,03,Partial/moderate assistance
+GG0170K3,02,Substantial/maximal assistance
+GG0170K3,01,Dependent
+GG0170K3,07,Resident refused
+GG0170K3,09,Not applicable
+GG0170K3,88,Not attempted due to medical condition or safety concerns
+GG0170K3,-,Not assessed/no information
+GG0170Q1,0,No
+GG0170Q1,1,Yes
+GG0170Q3,0,No
+GG0170Q3,1,Yes
+GG0170R1,06,Independent
+GG0170R1,05,Setup or clean-up assistance
+GG0170R1,04,Supervision or touching assistance
+GG0170R1,03,Partial/moderate assistance
+GG0170R1,02,Substantial/maximal assistance
+GG0170R1,01,Dependent
+GG0170R1,07,Resident refused
+GG0170R1,09,Not applicable
+GG0170R1,88,Not attempted due to medical condition or safety concerns
+GG0170R1,-,Not assessed/no information
+GG0170R3,06,Independent
+GG0170R3,05,Setup or clean-up assistance
+GG0170R3,04,Supervision or touching assistance
+GG0170R3,03,Partial/moderate assistance
+GG0170R3,02,Substantial/maximal assistance
+GG0170R3,01,Dependent
+GG0170R3,07,Resident refused
+GG0170R3,09,Not applicable
+GG0170R3,88,Not attempted due to medical condition or safety concerns
+GG0170R3,-,Not assessed/no information
+GG0170RR1,1,Manual
+GG0170RR1,2,Motorized
+GG0170RR3,1,Manual
+GG0170RR3,2,Motorized
+GG0170S1,06,Independent
+GG0170S1,05,Setup or clean-up assistance
+GG0170S1,04,Supervision or touching assistance
+GG0170S1,03,Partial/moderate assistance
+GG0170S1,02,Substantial/maximal assistance
+GG0170S1,01,Dependent
+GG0170S1,07,Resident refused
+GG0170S1,09,Not applicable
+GG0170S1,88,Not attempted due to medical condition or safety concerns
+GG0170S1,-,Not assessed/no information
+GG0170S3,06,Independent
+GG0170S3,05,Setup or clean-up assistance
+GG0170S3,04,Supervision or touching assistance
+GG0170S3,03,Partial/moderate assistance
+GG0170S3,02,Substantial/maximal assistance
+GG0170S3,01,Dependent
+GG0170S3,07,Resident refused
+GG0170S3,09,Not applicable
+GG0170S3,88,Not attempted due to medical condition or safety concerns
+GG0170S3,-,Not assessed/no information
+GG0170SS1,1,Manual
+GG0170SS1,2,Motorized
+GG0170SS3,1,Manual
+GG0170SS3,2,Motorized
+GG0170SS3,^,Blank (skip pattern)
+GG0170SS1,^,Blank (skip pattern)
+GG0170S3,^,Blank (skip pattern)
+GG0170S1,^,Blank (skip pattern)
+GG0170RR3,^,Blank (skip pattern)
+GG0170RR1,^,Blank (skip pattern)
+GG0170R3,^,Blank (skip pattern)
+GG0170R1,^,Blank (skip pattern)
+GG0170Q3,^,Blank (skip pattern)
+GG0170Q1,^,Blank (skip pattern)
+GG0170K3,^,Blank (skip pattern)
+GG0170K1,^,Blank (skip pattern)
+GG0170J3,^,Blank (skip pattern)
+GG0170J1,^,Blank (skip pattern)
+GG0170F3,^,Blank (skip pattern)
+GG0170F1,^,Blank (skip pattern)
+GG0170E3,^,Blank (skip pattern)
+GG0170E1,^,Blank (skip pattern)
+GG0170D3,^,Blank (skip pattern)
+GG0170D1,^,Blank (skip pattern)
+GG0170C3,^,Blank (skip pattern)
+GG0170C1,^,Blank (skip pattern)
+GG0170B3,^,Blank (skip pattern)
+GG0170B1,^,Blank (skip pattern)
+GG0130C3,^,Blank (skip pattern)
+GG0130C1,^,Blank (skip pattern)
+GG0130B3,^,Blank (skip pattern)
+GG0130B1,^,Blank (skip pattern)
+GG0130A3,^,Blank (skip pattern)
+GG0130A1,^,Blank (skip pattern)
+X0600H,0,No
+X0600H,1,Yes
+S9100C,^,Blank (not available or unknown)
+GG0170Q1,-,Not assessed/no information
+GG0170Q3,-,Not assessed/no information
+GG0170RR1,-,Not assessed/no information
+GG0170RR3,-,Not assessed/no information
+GG0170SS1,-,Not assessed/no information
+GG0170SS3,-,Not assessed/no information
+S0509,0,No
+S0509,1,Yes
+S0509,9,N/A - PASRR not indicated
+S6201,00,Minimum value
+S6201,99,Maximum value
+S6211,000,Minimum value
+S6211,999,Maximum value
+S1002,0,No
+S1002,1,Yes
+S1003,0,No
+S1003,1,Yes
+S3310A,0,Not checked (No)
+S3310A,1,Checked (Yes)
+S3310B,0,Not checked (No)
+S3310B,1,Checked (Yes)
+S3310C,0,Not checked (No)
+S3310C,1,Checked (Yes)
+S3310D,0,Not checked (No)
+S3310D,1,Checked (Yes)
+S3310Y,0,Not checked (No)
+S3310Y,1,Checked (Yes)
+S3310Z,0,Not checked (No)
+S3310Z,1,Checked (Yes)
+S3315A,0,Not checked (No)
+S3315A,1,Checked (Yes)
+S3315B,0,Not checked (No)
+S3315B,1,Checked (Yes)
+S3315C,0,Not checked (No)
+S3315C,1,Checked (Yes)
+S3315D,0,Not checked (No)
+S3315D,1,Checked (Yes)
+S3315Y,0,Not checked (No)
+S3315Y,1,Checked (Yes)
+S3315Z,0,Not checked (No)
+S3315Z,1,Checked (Yes)
+S1150,0,No
+S1150,1,Yes
+S1004,0,No
+S1004,1,Yes
+S6052,0,No
+S6052,1,Yes
+S6053A,YYYYMMDD,Valid date
+S6053A,^,Blank (skip pattern)
+S6053B,YYYYMMDD,Valid date
+S6053B,-,Not assessed/no information
+C1310A,-,Not assessed/no information
+C1310A,^,Blank (skip pattern)
+C1310B,-,Not assessed/no information
+C1310C,-,Not assessed/no information
+C1310D,-,Not assessed/no information
+X0600H,^,Blank (skip pattern)
+ITM_SET_VRSN_CD,1.15,Sixth update to MDS 3.0 item set (effective 10/01/2017)
+SPEC_VRSN_CD,2.01,Tenth update to data specifications (effective 10/01/2017)
+N0450A,0,No - Antipsychotics were not received
+N0450A,1,Yes - Antipsychotics were received on a routine basis only
+N0450A,2,Yes - Antipsychotics were received on a PRN basis only
+N0450A,3,Yes - Antipsychotics were received on a routine and PRN basis
+N0450B,0,No
+N0450B,1,Yes
+N0450B,^,Blank (skip pattern)
+N0450C,YYYYMMDD,Valid date
+N0450C,^,Blank (skip pattern)
+N0450D,0,No
+N0450D,1,Yes
+N0450D,^,Blank (skip pattern)
+N0450E,YYYYMMDD,Valid date
+N0450E,^,Blank (skip pattern)
+P0200A,0,Not used
+P0200A,1,Used less than daily
+P0200A,2,Used daily
+P0200A,-,Not assessed/no information
+P0200B,0,Not used
+P0200B,1,Used less than daily
+P0200B,2,Used daily
+P0200B,-,Not assessed/no information
+P0200C,0,Not used
+P0200C,1,Used less than daily
+P0200C,2,Used daily
+P0200C,-,Not assessed/no information
+P0200D,0,Not used
+P0200D,1,Used less than daily
+P0200D,2,Used daily
+P0200D,-,Not assessed/no information
+P0200E,0,Not used
+P0200E,1,Used less than daily
+P0200E,2,Used daily
+P0200E,-,Not assessed/no information
+P0200F,0,Not used
+P0200F,1,Used less than daily
+P0200F,2,Used daily
+P0200F,-,Not assessed/no information
+S9085A,0,No
+S9085A,1,Yes
+S9085B,YYYYMMDD,Valid date
+S9085B,^,Blank (skip pattern) when S9085A=0
+S9085C,01,Minimum value
+S9085C,20,Maximum value
+S9085C,^,Blank (skip pattern) when S9085A=0
+S9085D,Text,Valid CHC member ID
+S9085D,^,Blank (skip pattern) when S9085A=0
+S0113,01,Resident lived alone without services
+S0113,02,Resident lived alone with services
+S0113,03,Resident lived with caregiver in the home who is able to assist with daily medical and custodial needs
+S0113,04,Resident lived in congregate situation
+S0113,99,None of the above
+S0113,^,Blank (skip pattern) when A0310A<> 01
+S0114,0,No
+S0114,1,Yes
+S0114,^,Blank (skip pattern) when A0310A=99 and A0310F<>10
+S0521,01,Significant change in functional status
+S0521,02,Deterioration in cognitive status
+S0521,03,Change in the availability/status of primary caregivers
+S0521,04,Difficulty arranging or paying for needed in-home care or support
+S0521,05,Failed to succeed in residential care home
+S0521,06,Short term rehabilitation or skilled care
+S0521,99,None of the above
+S0521,^,Blank (skip pattern) when A0310A <> 01
+S0514,0,No - Level 2 determination completed
+S0514,1,Yes
+S0514,9,N/A - PASRR not indicated
+S0515,YYYYMMDD,Valid date
+S0515,^,Blank (not available or unknown)
+S6500,0,No
+S6500,1,Yes
+S6500,-,Not assessed/no information
+S0185,0,No
+S0185,1,Yes
+S0185,-,Not assessed/no information
+S0160,09,Neurodegenerative
+S8015,00000000,Minimum value
+S8015,99999999,Maximum value
+S8015,-,Not enrolled in any plan
+S0153,Text,Valid resident identifier
+S0505,1,Nursing Facility (NF)
+S0505,2,Skilled/Specialized Nursing Facility
+S0505,^,Blank (not available or unknown)
+S1210A,0,Not checked (No)
+S1210A,1,Checked (Yes)
+S1210B,0,Not checked (No)
+S1210B,1,Checked (Yes)
+S1210C,0,Not checked (No)
+S1210C,1,Checked (Yes)
+S1210D,0,Not checked (No)
+S1210D,1,Checked (Yes)
+S1210E,0,Not checked (No)
+S1210E,1,Checked (Yes)
+S1210F,0,Not checked (No)
+S1210F,1,Checked (Yes)
+S1210G,0,Not checked (No)
+S1210G,1,Checked (Yes)
+S1210H,0,Not checked (No)
+S1210H,1,Checked (Yes)
+S1210I,0,Not checked (No)
+S1210I,1,Checked (Yes)
+S1210Z,0,Not checked (No)
+S1210Z,1,Checked (Yes)
+S6202,0,Minimum value
+S6202,90,Maximum value
+S6212,0,Minimum value
+S6212,90,Maximum value
+HICN_MBI_IND,Text,Calculated HICN MBI Indicator
+SSNRI_TRNSLTN_HICN_TXT,Text,SSNRI Translation HICN Text
+SSNRI_TRNSLTN_MBI_TXT,Text,SSNRI Translation MBI Text
+GG0100A,3,Independent
+GG0100A,2,Needed Some Help
+GG0100A,1,Dependent
+GG0100A,8,Unknown
+GG0100A,9,Not Applicable
+GG0100A,-,Not assessed/no information
+GG0100B,3,Independent
+GG0100B,2,Needed Some Help
+GG0100B,1,Dependent
+GG0100B,8,Unknown
+GG0100B,9,Not Applicable
+GG0100B,-,Not assessed/no information
+GG0100C,3,Independent
+GG0100C,2,Needed Some Help
+GG0100C,1,Dependent
+GG0100C,8,Unknown
+GG0100C,9,Not Applicable
+GG0100C,-,Not assessed/no information
+GG0100D,3,Independent
+GG0100D,2,Needed Some Help
+GG0100D,1,Dependent
+GG0100D,8,Unknown
+GG0100D,9,Not Applicable
+GG0100D,-,Not assessed/no information
+GG0110A,0,Not checked (No)
+GG0110A,1,Checked (Yes)
+GG0110A,-,Not assessed/no information
+GG0110B,0,Not checked (No)
+GG0110B,1,Checked (Yes)
+GG0110B,-,Not assessed/no information
+GG0110C,0,Not checked (No)
+GG0110C,1,Checked (Yes)
+GG0110C,-,Not assessed/no information
+GG0110D,0,Not checked (No)
+GG0110D,1,Checked (Yes)
+GG0110D,-,Not assessed/no information
+GG0110E,0,Not checked (No)
+GG0110E,1,Checked (Yes)
+GG0110E,-,Not assessed/no information
+GG0110Z,0,Not checked (No)
+GG0110Z,1,Checked (Yes)
+GG0110Z,-,Not assessed/no information
+ITM_SET_VRSN_CD,1.16,Seventh update to MDS 3.0 item set (effective 10/01/2018)
+SPEC_VRSN_CD,2.02,Eleventh update to data specifications (effective 10/01/2018)
+GG0130A1,10,Not attempted due to environmental limitations
+GG0130A3,10,Not attempted due to environmental limitations
+GG0130B1,10,Not attempted due to environmental limitations
+GG0130B3,10,Not attempted due to environmental limitations
+GG0130C1,10,Not attempted due to environmental limitations
+GG0130C3,10,Not attempted due to environmental limitations
+GG0130E1,06,Independent
+GG0130E1,05,Setup or clean-up assistance
+GG0130E1,04,Supervision or touching assistance
+GG0130E1,03,Partial/moderate assistance
+GG0130E1,02,Substantial/maximal assistance
+GG0130E1,01,Dependent
+GG0130E1,07,Resident refused
+GG0130E1,09,Not applicable
+GG0130E1,10,Not attempted due to environmental limitations
+GG0130E1,88,Not attempted due to medical condition or safety concerns
+GG0130E1,-,Not assessed/no information
+GG0130E1,^,Blank (skip pattern)
+GG0130E3,06,Independent
+GG0130E3,05,Setup or clean-up assistance
+GG0130E3,04,Supervision or touching assistance
+GG0130E3,03,Partial/moderate assistance
+GG0130E3,02,Substantial/maximal assistance
+GG0130E3,01,Dependent
+GG0130E3,07,Resident refused
+GG0130E3,09,Not applicable
+GG0130E3,10,Not attempted due to environmental limitations
+GG0130E3,88,Not attempted due to medical condition or safety concerns
+GG0130E3,-,Not assessed/no information
+GG0130E3,^,Blank (skip pattern)
+GG0130F1,06,Independent
+GG0130F1,05,Setup or clean-up assistance
+GG0130F1,04,Supervision or touching assistance
+GG0130F1,03,Partial/moderate assistance
+GG0130F1,02,Substantial/maximal assistance
+GG0130F1,01,Dependent
+GG0130F1,07,Resident refused
+GG0130F1,09,Not applicable
+GG0130F1,10,Not attempted due to environmental limitations
+GG0130F1,88,Not attempted due to medical condition or safety concerns
+GG0130F1,-,Not assessed/no information
+GG0130F1,^,Blank (skip pattern)
+GG0130F3,06,Independent
+GG0130F3,05,Setup or clean-up assistance
+GG0130F3,04,Supervision or touching assistance
+GG0130F3,03,Partial/moderate assistance
+GG0130F3,02,Substantial/maximal assistance
+GG0130F3,01,Dependent
+GG0130F3,07,Resident refused
+GG0130F3,09,Not applicable
+GG0130F3,10,Not attempted due to environmental limitations
+GG0130F3,88,Not attempted due to medical condition or safety concerns
+GG0130F3,-,Not assessed/no information
+GG0130F3,^,Blank (skip pattern)
+GG0130G1,06,Independent
+GG0130G1,05,Setup or clean-up assistance
+GG0130G1,04,Supervision or touching assistance
+GG0130G1,03,Partial/moderate assistance
+GG0130G1,02,Substantial/maximal assistance
+GG0130G1,01,Dependent
+GG0130G1,07,Resident refused
+GG0130G1,09,Not applicable
+GG0130G1,10,Not attempted due to environmental limitations
+GG0130G1,88,Not attempted due to medical condition or safety concerns
+GG0130G1,-,Not assessed/no information
+GG0130G1,^,Blank (skip pattern)
+GG0130G3,06,Independent
+GG0130G3,05,Setup or clean-up assistance
+GG0130G3,04,Supervision or touching assistance
+GG0130G3,03,Partial/moderate assistance
+GG0130G3,02,Substantial/maximal assistance
+GG0130G3,01,Dependent
+GG0130G3,07,Resident refused
+GG0130G3,09,Not applicable
+GG0130G3,10,Not attempted due to environmental limitations
+GG0130G3,88,Not attempted due to medical condition or safety concerns
+GG0130G3,-,Not assessed/no information
+GG0130G3,^,Blank (skip pattern)
+GG0130H1,06,Independent
+GG0130H1,05,Setup or clean-up assistance
+GG0130H1,04,Supervision or touching assistance
+GG0130H1,03,Partial/moderate assistance
+GG0130H1,02,Substantial/maximal assistance
+GG0130H1,01,Dependent
+GG0130H1,07,Resident refused
+GG0130H1,09,Not applicable
+GG0130H1,10,Not attempted due to environmental limitations
+GG0130H1,88,Not attempted due to medical condition or safety concerns
+GG0130H1,-,Not assessed/no information
+GG0130H1,^,Blank (skip pattern)
+GG0130H3,06,Independent
+GG0130H3,05,Setup or clean-up assistance
+GG0130H3,04,Supervision or touching assistance
+GG0130H3,03,Partial/moderate assistance
+GG0130H3,02,Substantial/maximal assistance
+GG0130H3,01,Dependent
+GG0130H3,07,Resident refused
+GG0130H3,09,Not applicable
+GG0130H3,10,Not attempted due to environmental limitations
+GG0130H3,88,Not attempted due to medical condition or safety concerns
+GG0130H3,-,Not assessed/no information
+GG0130H3,^,Blank (skip pattern)
+GG0170B1,10,Not attempted due to environmental limitations
+GG0170B3,10,Not attempted due to environmental limitations
+GG0170C1,10,Not attempted due to environmental limitations
+GG0170C3,10,Not attempted due to environmental limitations
+GG0170D1,10,Not attempted due to environmental limitations
+GG0170D3,10,Not attempted due to environmental limitations
+GG0170E1,10,Not attempted due to environmental limitations
+GG0170E3,10,Not attempted due to environmental limitations
+GG0170F1,10,Not attempted due to environmental limitations
+GG0170F3,10,Not attempted due to environmental limitations
+GG0170J1,10,Not attempted due to environmental limitations
+GG0170J3,10,Not attempted due to environmental limitations
+GG0170K1,10,Not attempted due to environmental limitations
+GG0170K3,10,Not attempted due to environmental limitations
+GG0170R1,10,Not attempted due to environmental limitations
+GG0170R3,10,Not attempted due to environmental limitations
+GG0170S1,10,Not attempted due to environmental limitations
+GG0170S3,10,Not attempted due to environmental limitations
+GG0170A1,06,Independent
+GG0170A1,05,Setup or clean-up assistance
+GG0170A1,04,Supervision or touching assistance
+GG0170A1,03,Partial/moderate assistance
+GG0170A1,02,Substantial/maximal assistance
+GG0170A1,01,Dependent
+GG0170A1,07,Resident refused
+GG0170A1,09,Not applicable
+GG0170A1,10,Not attempted due to environmental limitations
+GG0170A1,88,Not attempted due to medical condition or safety concerns
+GG0170A1,-,Not assessed/no information
+GG0170A1,^,Blank (skip pattern)
+GG0170A3,06,Independent
+GG0170A3,05,Setup or clean-up assistance
+GG0170A3,04,Supervision or touching assistance
+GG0170A3,03,Partial/moderate assistance
+GG0170A3,02,Substantial/maximal assistance
+GG0170A3,01,Dependent
+GG0170A3,07,Resident refused
+GG0170A3,09,Not applicable
+GG0170A3,10,Not attempted due to environmental limitations
+GG0170A3,88,Not attempted due to medical condition or safety concerns
+GG0170A3,-,Not assessed/no information
+GG0170A3,^,Blank (skip pattern)
+GG0170G1,06,Independent
+GG0170G1,05,Setup or clean-up assistance
+GG0170G1,04,Supervision or touching assistance
+GG0170G1,03,Partial/moderate assistance
+GG0170G1,02,Substantial/maximal assistance
+GG0170G1,01,Dependent
+GG0170G1,07,Resident refused
+GG0170G1,09,Not applicable
+GG0170G1,10,Not attempted due to environmental limitations
+GG0170G1,88,Not attempted due to medical condition or safety concerns
+GG0170G1,-,Not assessed/no information
+GG0170G1,^,Blank (skip pattern)
+GG0170G3,06,Independent
+GG0170G3,05,Setup or clean-up assistance
+GG0170G3,04,Supervision or touching assistance
+GG0170G3,03,Partial/moderate assistance
+GG0170G3,02,Substantial/maximal assistance
+GG0170G3,01,Dependent
+GG0170G3,07,Resident refused
+GG0170G3,09,Not applicable
+GG0170G3,10,Not attempted due to environmental limitations
+GG0170G3,88,Not attempted due to medical condition or safety concerns
+GG0170G3,-,Not assessed/no information
+GG0170G3,^,Blank (skip pattern)
+GG0170I1,06,Independent
+GG0170I1,05,Setup or clean-up assistance
+GG0170I1,04,Supervision or touching assistance
+GG0170I1,03,Partial/moderate assistance
+GG0170I1,02,Substantial/maximal assistance
+GG0170I1,01,Dependent
+GG0170I1,07,Resident refused
+GG0170I1,09,Not applicable
+GG0170I1,10,Not attempted due to environmental limitations
+GG0170I1,88,Not attempted due to medical condition or safety concerns
+GG0170I1,-,Not assessed/no information
+GG0170I1,^,Blank (skip pattern)
+GG0170I3,06,Independent
+GG0170I3,05,Setup or clean-up assistance
+GG0170I3,04,Supervision or touching assistance
+GG0170I3,03,Partial/moderate assistance
+GG0170I3,02,Substantial/maximal assistance
+GG0170I3,01,Dependent
+GG0170I3,07,Resident refused
+GG0170I3,09,Not applicable
+GG0170I3,10,Not attempted due to environmental limitations
+GG0170I3,88,Not attempted due to medical condition or safety concerns
+GG0170I3,-,Not assessed/no information
+GG0170I3,^,Blank (skip pattern)
+GG0170L1,06,Independent
+GG0170L1,05,Setup or clean-up assistance
+GG0170L1,04,Supervision or touching assistance
+GG0170L1,03,Partial/moderate assistance
+GG0170L1,02,Substantial/maximal assistance
+GG0170L1,01,Dependent
+GG0170L1,07,Resident refused
+GG0170L1,09,Not applicable
+GG0170L1,10,Not attempted due to environmental limitations
+GG0170L1,88,Not attempted due to medical condition or safety concerns
+GG0170L1,-,Not assessed/no information
+GG0170L1,^,Blank (skip pattern)
+GG0170L3,06,Independent
+GG0170L3,05,Setup or clean-up assistance
+GG0170L3,04,Supervision or touching assistance
+GG0170L3,03,Partial/moderate assistance
+GG0170L3,02,Substantial/maximal assistance
+GG0170L3,01,Dependent
+GG0170L3,07,Resident refused
+GG0170L3,09,Not applicable
+GG0170L3,10,Not attempted due to environmental limitations
+GG0170L3,88,Not attempted due to medical condition or safety concerns
+GG0170L3,-,Not assessed/no information
+GG0170L3,^,Blank (skip pattern)
+GG0170M1,06,Independent
+GG0170M1,05,Setup or clean-up assistance
+GG0170M1,04,Supervision or touching assistance
+GG0170M1,03,Partial/moderate assistance
+GG0170M1,02,Substantial/maximal assistance
+GG0170M1,01,Dependent
+GG0170M1,07,Resident refused
+GG0170M1,09,Not applicable
+GG0170M1,10,Not attempted due to environmental limitations
+GG0170M1,88,Not attempted due to medical condition or safety concerns
+GG0170M1,-,Not assessed/no information
+GG0170M1,^,Blank (skip pattern)
+GG0170M3,06,Independent
+GG0170M3,05,Setup or clean-up assistance
+GG0170M3,04,Supervision or touching assistance
+GG0170M3,03,Partial/moderate assistance
+GG0170M3,02,Substantial/maximal assistance
+GG0170M3,01,Dependent
+GG0170M3,07,Resident refused
+GG0170M3,09,Not applicable
+GG0170M3,10,Not attempted due to environmental limitations
+GG0170M3,88,Not attempted due to medical condition or safety concerns
+GG0170M3,-,Not assessed/no information
+GG0170M3,^,Blank (skip pattern)
+GG0170N1,06,Independent
+GG0170N1,05,Setup or clean-up assistance
+GG0170N1,04,Supervision or touching assistance
+GG0170N1,03,Partial/moderate assistance
+GG0170N1,02,Substantial/maximal assistance
+GG0170N1,01,Dependent
+GG0170N1,07,Resident refused
+GG0170N1,09,Not applicable
+GG0170N1,10,Not attempted due to environmental limitations
+GG0170N1,88,Not attempted due to medical condition or safety concerns
+GG0170N1,-,Not assessed/no information
+GG0170N1,^,Blank (skip pattern)
+GG0170N3,06,Independent
+GG0170N3,05,Setup or clean-up assistance
+GG0170N3,04,Supervision or touching assistance
+GG0170N3,03,Partial/moderate assistance
+GG0170N3,02,Substantial/maximal assistance
+GG0170N3,01,Dependent
+GG0170N3,07,Resident refused
+GG0170N3,09,Not applicable
+GG0170N3,10,Not attempted due to environmental limitations
+GG0170N3,88,Not attempted due to medical condition or safety concerns
+GG0170N3,-,Not assessed/no information
+GG0170N3,^,Blank (skip pattern)
+GG0170O1,06,Independent
+GG0170O1,05,Setup or clean-up assistance
+GG0170O1,04,Supervision or touching assistance
+GG0170O1,03,Partial/moderate assistance
+GG0170O1,02,Substantial/maximal assistance
+GG0170O1,01,Dependent
+GG0170O1,07,Resident refused
+GG0170O1,09,Not applicable
+GG0170O1,10,Not attempted due to environmental limitations
+GG0170O1,88,Not attempted due to medical condition or safety concerns
+GG0170O1,-,Not assessed/no information
+GG0170O1,^,Blank (skip pattern)
+GG0170O3,06,Independent
+GG0170O3,05,Setup or clean-up assistance
+GG0170O3,04,Supervision or touching assistance
+GG0170O3,03,Partial/moderate assistance
+GG0170O3,02,Substantial/maximal assistance
+GG0170O3,01,Dependent
+GG0170O3,07,Resident refused
+GG0170O3,09,Not applicable
+GG0170O3,10,Not attempted due to environmental limitations
+GG0170O3,88,Not attempted due to medical condition or safety concerns
+GG0170O3,-,Not assessed/no information
+GG0170O3,^,Blank (skip pattern)
+GG0170P1,06,Independent
+GG0170P1,05,Setup or clean-up assistance
+GG0170P1,04,Supervision or touching assistance
+GG0170P1,03,Partial/moderate assistance
+GG0170P1,02,Substantial/maximal assistance
+GG0170P1,01,Dependent
+GG0170P1,07,Resident refused
+GG0170P1,09,Not applicable
+GG0170P1,10,Not attempted due to environmental limitations
+GG0170P1,88,Not attempted due to medical condition or safety concerns
+GG0170P1,-,Not assessed/no information
+GG0170P1,^,Blank (skip pattern)
+GG0170P3,06,Independent
+GG0170P3,05,Setup or clean-up assistance
+GG0170P3,04,Supervision or touching assistance
+GG0170P3,03,Partial/moderate assistance
+GG0170P3,02,Substantial/maximal assistance
+GG0170P3,01,Dependent
+GG0170P3,07,Resident refused
+GG0170P3,09,Not applicable
+GG0170P3,10,Not attempted due to environmental limitations
+GG0170P3,88,Not attempted due to medical condition or safety concerns
+GG0170P3,-,Not assessed/no information
+GG0170P3,^,Blank (skip pattern)
+I0020,01,Stroke
+I0020,02,Non-Traumatic Brain Dysfunction
+I0020,03,Traumatic Brain Dysfunction
+I0020,04,Non-Traumatic Spinal Cord Dysfunction
+I0020,05,Traumatic Spinal Cord Dysfunction
+I0020,06,Progressive Neurological Conditions
+I0020,07,Other Neurological Conditions
+I0020,08,Amputation
+I0020,09,Hip and Knee Replacement
+I0020,10,Fractures and Other Multiple Trauma
+I0020,11,Other Orthopedic Conditions
+I0020,12,"Debility, Cardiorespiratory Conditions"
+I0020,13,Medically Complex Conditions
+I0020,^,Blank (skip pattern)
+J2000,0,No
+J2000,1,Yes
+J2000,8,Unknown
+N2001,0,No - No issues found during review
+N2001,1,Yes - Issues found during review
+N2001,9,NA - Resident is not taking any medications
+N2001,-,Not assessed/no information
+N2003,0,No
+N2003,1,Yes
+N2003,-,Not assessed/no information
+N2003,^,Blank (skip pattern)
+N2005,0,No
+N2005,1,Yes
+N2005,9,NA - There were no potentially clinically significant medication issues identified since admission or patient is not taking any medications
+N2005,-,Not assessed/no information
+GG0100A,^,Blank (skip pattern)
+GG0100B,^,Blank (skip pattern)
+GG0100C,^,Blank (skip pattern)
+GG0100D,^,Blank (skip pattern)
+GG0110A,^,Blank (skip pattern)
+GG0110B,^,Blank (skip pattern)
+GG0110C,^,Blank (skip pattern)
+GG0110D,^,Blank (skip pattern)
+GG0110E,^,Blank (skip pattern)
+GG0110Z,^,Blank (skip pattern)
+J2000,^,Blank (skip pattern)
+N2001,^,Blank (skip pattern)
+N2005,^,Blank (skip pattern)
+ITM_SET_VRSN_CD,1.17,Eighth update to MDS 3.0 item set (effective 10/01/2019)
+SPEC_VRSN_CD,3.00,Twelfth update to data specifications (effective 10/01/2019)
+A0310G1,0,No
+A0310G1,1,Yes
+GG0130A5,06,Independent
+GG0130A5,05,Setup or clean-up assistance
+GG0130A5,04,Supervision or touching assistance
+GG0130A5,03,Partial/moderate assistance
+GG0130A5,02,Substantial/maximal assistance
+GG0130A5,01,Dependent
+GG0130A5,07,Resident refused
+GG0130A5,09,Not applicable
+GG0130A5,10,Not attempted due to environmental limitations
+GG0130A5,88,Not attempted due to medical condition or safety concerns
+GG0130A5,-,Not assessed/no information
+GG0130B5,06,Independent
+GG0130B5,05,Setup or clean-up assistance
+GG0130B5,04,Supervision or touching assistance
+GG0130B5,03,Partial/moderate assistance
+GG0130B5,02,Substantial/maximal assistance
+GG0130B5,01,Dependent
+GG0130B5,07,Resident refused
+GG0130B5,09,Not applicable
+GG0130B5,10,Not attempted due to environmental limitations
+GG0130B5,88,Not attempted due to medical condition or safety concerns
+GG0130B5,-,Not assessed/no information
+GG0130C5,06,Independent
+GG0130C5,05,Setup or clean-up assistance
+GG0130C5,04,Supervision or touching assistance
+GG0130C5,03,Partial/moderate assistance
+GG0130C5,02,Substantial/maximal assistance
+GG0130C5,01,Dependent
+GG0130C5,07,Resident refused
+GG0130C5,09,Not applicable
+GG0130C5,10,Not attempted due to environmental limitations
+GG0130C5,88,Not attempted due to medical condition or safety concerns
+GG0130C5,-,Not assessed/no information
+GG0170B5,06,Independent
+GG0170B5,05,Setup or clean-up assistance
+GG0170B5,04,Supervision or touching assistance
+GG0170B5,03,Partial/moderate assistance
+GG0170B5,02,Substantial/maximal assistance
+GG0170B5,01,Dependent
+GG0170B5,07,Resident refused
+GG0170B5,09,Not applicable
+GG0170B5,10,Not attempted due to environmental limitations
+GG0170B5,88,Not attempted due to medical condition or safety concerns
+GG0170D5,06,Independent
+GG0170D5,05,Setup or clean-up assistance
+GG0170D5,04,Supervision or touching assistance
+GG0170D5,03,Partial/moderate assistance
+GG0170D5,02,Substantial/maximal assistance
+GG0170D5,01,Dependent
+GG0170D5,07,Resident refused
+GG0170D5,09,Not applicable
+GG0170D5,10,Not attempted due to environmental limitations
+GG0170D5,88,Not attempted due to medical condition or safety concerns
+GG0170E5,06,Independent
+GG0170E5,05,Setup or clean-up assistance
+GG0170E5,04,Supervision or touching assistance
+GG0170E5,03,Partial/moderate assistance
+GG0170E5,02,Substantial/maximal assistance
+GG0170E5,01,Dependent
+GG0170E5,07,Resident refused
+GG0170E5,09,Not applicable
+GG0170E5,10,Not attempted due to environmental limitations
+GG0170E5,88,Not attempted due to medical condition or safety concerns
+GG0170F5,06,Independent
+GG0170F5,05,Setup or clean-up assistance
+GG0170F5,04,Supervision or touching assistance
+GG0170F5,03,Partial/moderate assistance
+GG0170F5,02,Substantial/maximal assistance
+GG0170F5,01,Dependent
+GG0170F5,07,Resident refused
+GG0170F5,09,Not applicable
+GG0170F5,10,Not attempted due to environmental limitations
+GG0170F5,88,Not attempted due to medical condition or safety concerns
+GG0170J5,06,Independent
+GG0170J5,05,Setup or clean-up assistance
+GG0170J5,04,Supervision or touching assistance
+GG0170J5,03,Partial/moderate assistance
+GG0170J5,02,Substantial/maximal assistance
+GG0170J5,01,Dependent
+GG0170J5,07,Resident refused
+GG0170J5,09,Not applicable
+GG0170J5,10,Not attempted due to environmental limitations
+GG0170J5,88,Not attempted due to medical condition or safety concerns
+GG0170K5,06,Independent
+GG0170K5,05,Setup or clean-up assistance
+GG0170K5,04,Supervision or touching assistance
+GG0170K5,03,Partial/moderate assistance
+GG0170K5,02,Substantial/maximal assistance
+GG0170K5,01,Dependent
+GG0170K5,07,Resident refused
+GG0170K5,09,Not applicable
+GG0170K5,10,Not attempted due to environmental limitations
+GG0170K5,88,Not attempted due to medical condition or safety concerns
+I0020B,ICD-10,ICD-10 code
+I0020B,^,Blank (skip pattern)
+ITM_SBST_CD,IPA,Interim payment assessment
+ITM_SBST_CD,OSA,Other state assessment
+A0310B,08,IPA - Interim Payment Assessment
+X0600B,08,IPA - Interim Payment Assessment
+J2100,0,No
+J2100,1,Yes
+J2100,8,Unknown
+J2300,0,Not Checked (No)
+J2300,1,Checked (Yes)
+J2300,^,Blank (skip pattern)
+J2310,0,Not Checked (No)
+J2310,1,Checked (Yes)
+J2310,^,Blank (skip pattern)
+J2320,0,Not Checked (No)
+J2320,1,Checked (Yes)
+J2320,^,Blank (skip pattern)
+J2330,0,Not Checked (No)
+J2330,1,Checked (Yes)
+J2330,^,Blank (skip pattern)
+J2400,0,Not Checked (No)
+J2400,1,Checked (Yes)
+J2400,^,Blank (skip pattern)
+J2410,0,Not Checked (No)
+J2410,1,Checked (Yes)
+J2410,^,Blank (skip pattern)
+J2420,0,Not Checked (No)
+J2420,1,Checked (Yes)
+J2420,^,Blank (skip pattern)
+J2499,0,Not Checked (No)
+J2499,1,Checked (Yes)
+J2499,^,Blank (skip pattern)
+J2500,0,Not Checked (No)
+J2500,1,Checked (Yes)
+J2500,^,Blank (skip pattern)
+J2510,0,Not Checked (No)
+J2510,1,Checked (Yes)
+J2510,^,Blank (skip pattern)
+J2520,0,Not Checked (No)
+J2520,1,Checked (Yes)
+J2520,^,Blank (skip pattern)
+J2530,0,Not Checked (No)
+J2530,1,Checked (Yes)
+J2530,^,Blank (skip pattern)
+J2599,0,Not Checked (No)
+J2599,1,Checked (Yes)
+J2599,^,Blank (skip pattern)
+J2600,0,Not Checked (No)
+J2600,1,Checked (Yes)
+J2600,^,Blank (skip pattern)
+J2610,0,Not Checked (No)
+J2610,1,Checked (Yes)
+J2610,^,Blank (skip pattern)
+J2620,0,Not Checked (No)
+J2620,1,Checked (Yes)
+J2620,^,Blank (skip pattern)
+J2699,0,Not Checked (No)
+J2699,1,Checked (Yes)
+J2699,^,Blank (skip pattern)
+J2700,0,Not Checked (No)
+J2700,1,Checked (Yes)
+J2700,^,Blank (skip pattern)
+J2710,0,Not Checked (No)
+J2710,1,Checked (Yes)
+J2710,^,Blank (skip pattern)
+J2799,0,Not Checked (No)
+J2799,1,Checked (Yes)
+J2799,^,Blank (skip pattern)
+J2800,0,Not Checked (No)
+J2800,1,Checked (Yes)
+J2800,^,Blank (skip pattern)
+J2810,0,Not Checked (No)
+J2810,1,Checked (Yes)
+J2810,^,Blank (skip pattern)
+J2899,0,Not Checked (No)
+J2899,1,Checked (Yes)
+J2899,^,Blank (skip pattern)
+J2900,0,Not Checked (No)
+J2900,1,Checked (Yes)
+J2900,^,Blank (skip pattern)
+J2910,0,Not Checked (No)
+J2910,1,Checked (Yes)
+J2910,^,Blank (skip pattern)
+J2920,0,Not Checked (No)
+J2920,1,Checked (Yes)
+J2920,^,Blank (skip pattern)
+J2930,0,Not Checked (No)
+J2930,1,Checked (Yes)
+J2930,^,Blank (skip pattern)
+J2940,0,Not Checked (No)
+J2940,1,Checked (Yes)
+J2940,^,Blank (skip pattern)
+J5000,0,Not Checked (No)
+J5000,1,Checked (Yes)
+J5000,^,Blank (skip pattern)
+O0425A1,0000,Minimum value
+O0425A1,9999,Maximum value
+O0425A1,-,Not assessed/no information
+O0425A2,0000,Minimum value
+O0425A2,9999,Maximum value
+O0425A2,-,Not assessed/no information
+O0425A3,0000,Minimum value
+O0425A3,9999,Maximum value
+O0425A3,-,Not assessed/no information
+O0425A4,0000,Minimum value
+O0425A4,9999,Maximum value
+O0425A4,-,Not assessed/no information
+O0425A5,000,Minimum value
+O0425A5,999,Maximum value
+O0425A5,-,Not assessed/no information
+O0425B1,0000,Minimum value
+O0425B1,9999,Maximum value
+O0425B1,-,Not assessed/no information
+O0425B2,0000,Minimum value
+O0425B2,9999,Maximum value
+O0425B2,-,Not assessed/no information
+O0425B3,0000,Minimum value
+O0425B3,9999,Maximum value
+O0425B3,-,Not assessed/no information
+O0425B4,0000,Minimum value
+O0425B4,9999,Maximum value
+O0425B4,-,Not assessed/no information
+O0425B5,000,Minimum value
+O0425B5,999,Maximum value
+O0425B5,-,Not assessed/no information
+O0425C1,0000,Minimum value
+O0425C1,9999,Maximum value
+O0425C1,-,Not assessed/no information
+O0425C2,0000,Minimum value
+O0425C2,9999,Maximum value
+O0425C2,-,Not assessed/no information
+O0425C3,0000,Minimum value
+O0425C3,9999,Maximum value
+O0425C3,-,Not assessed/no information
+O0425C4,0000,Minimum value
+O0425C4,9999,Maximum value
+O0425C4,-,Not assessed/no information
+O0425C5,000,Minimum value
+O0425C5,999,Maximum value
+O0425C5,-,Not assessed/no information
+O0430,000,Minimum value
+O0430,999,Maximum value
+O0430,-,Not assessed/no information
+Z0200C,0,No
+Z0200C,1,Yes
+V0100B,08,IPA - Interim Payment Assessment
+GG0170C5,06,Independent
+GG0170C5,05,Setup or clean-up assistance
+GG0170C5,04,Supervision or touching assistance
+GG0170C5,03,Partial/moderate assistance
+GG0170C5,02,Substantial/maximal assistance
+GG0170C5,01,Dependent
+GG0170C5,07,Resident refused
+GG0170C5,09,Not applicable
+GG0170C5,10,Not attempted due to environmental limitations
+GG0170C5,88,Not attempted due to medical condition or safety concerns
+J2100,^,Blank (skip pattern)
+GG0170I5,06,Independent
+GG0170I5,05,Setup or clean-up assistance
+GG0170I5,04,Supervision or touching assistance
+GG0170I5,03,Partial/moderate assistance
+GG0170I5,02,Substantial/maximal assistance
+GG0170I5,01,Dependent
+GG0170I5,07,Resident refused
+GG0170I5,09,Not applicable
+GG0170I5,10,Not attempted due to environmental limitations
+GG0170I5,88,Not attempted due to medical condition or safety concerns
+A0310G1,^,Blank (skip pattern)
+GG0170J5,^,Blank (skip pattern)
+GG0170K5,^,Blank (skip pattern)
+GG0170B5,-,Not assessed/no information
+GG0170C5,-,Not assessed/no information
+GG0170D5,-,Not assessed/no information
+GG0170E5,-,Not assessed/no information
+GG0170F5,-,Not assessed/no information
+GG0170I5,-,Not assessed/no information
+GG0170J5,-,Not assessed/no information
+GG0170K5,-,Not assessed/no information
+O0425A1,^,Blank (skip pattern)
+O0425A2,^,Blank (skip pattern)
+O0425A3,^,Blank (skip pattern)
+O0425A4,^,Blank (skip pattern)
+O0425A5,^,Blank (skip pattern)
+O0425B1,^,Blank (skip pattern)
+O0425B2,^,Blank (skip pattern)
+O0425B3,^,Blank (skip pattern)
+O0425B4,^,Blank (skip pattern)
+O0425B5,^,Blank (skip pattern)
+O0425C1,^,Blank (skip pattern)
+O0425C2,^,Blank (skip pattern)
+O0425C3,^,Blank (skip pattern)
+O0425C4,^,Blank (skip pattern)
+O0425C5,^,Blank (skip pattern)
+O0430,^,Blank (skip pattern)
+S9040G,5,Both Patient and Legally Recognized Decisionmaker
+S9040F,2,Both Patient and Legally Recognized Decisionmaker
+STATE_PDPM_OBRA_CD,0,"No, do not perform PDPM calculations for OBRAs"
+STATE_PDPM_OBRA_CD,1,"Yes, perform PDPM calculations for OBRAs"
+A1005A,0,Not checked (No)
+A1005A,1,Checked (Yes)
+A1005B,0,Not checked (No)
+A1005B,1,Checked (Yes)
+A1005C,0,Not checked (No)
+A1005C,1,Checked (Yes)
+A1005D,0,Not checked (No)
+A1005D,1,Checked (Yes)
+A1005E,0,Not checked (No)
+A1005E,1,Checked (Yes)
+A1005X,0,Not checked (No)
+A1005X,1,Checked (Yes)
+A1005Y,0,Not checked (No)
+A1005Y,1,Checked (Yes)
+A1010A,0,Not checked (No)
+A1010A,1,Checked (Yes)
+A1010B,0,Not checked (No)
+A1010B,1,Checked (Yes)
+A1010C,0,Not checked (No)
+A1010C,1,Checked (Yes)
+A1010D,0,Not checked (No)
+A1010D,1,Checked (Yes)
+A1010E,0,Not checked (No)
+A1010E,1,Checked (Yes)
+A1010F,0,Not checked (No)
+A1010F,1,Checked (Yes)
+A1010G,0,Not checked (No)
+A1010G,1,Checked (Yes)
+A1010H,0,Not checked (No)
+A1010H,1,Checked (Yes)
+A1010I,0,Not checked (No)
+A1010I,1,Checked (Yes)
+A1010J,0,Not checked (No)
+A1010J,1,Checked (Yes)
+A1010K,0,Not checked (No)
+A1010K,1,Checked (Yes)
+A1010L,0,Not checked (No)
+A1010L,1,Checked (Yes)
+A1010M,0,Not checked (No)
+A1010M,1,Checked (Yes)
+A1010N,0,Not checked (No)
+A1010N,1,Checked (Yes)
+A1010X,0,Not checked (No)
+A1010X,1,Checked (Yes)
+A1010Y,0,Not checked (No)
+A1010Y,1,Checked (Yes)
+A1010Z,0,Not checked (No)
+A1010Z,1,Checked (Yes)
+A1110A,Text,Specify preferred language
+A1110A,-,Not assessed/no information
+A1110B,0,No
+A1110B,1,Yes
+A1110B,9,Unable to determine
+A1805,01,"Home/Community (e.g., private home/apt., board/care, assisted living, group home, transitional living, other residential care arrangements)"
+A1805,02,Nursing Home (long-term care facility)
+A1805,03,"Skilled Nursing Facility (SNF, swing bed)"
+A1805,04,"Short-Term General Hospital (acute hospital, IPPS)"
+A1805,05,Long-Term Care Hospital (LTCH)
+A1805,06,"Inpatient Rehabilitation Facility (IRF, free standing facility or unit)"
+A1805,07,Inpatient Psychiatric Facility (psychiatric hospital or unit)
+A1805,08,Intermediate Care Facility (ID/DD facility)
+A1805,09,Hospice (home/non-institutional)
+A1805,10,Hospice (institutional facility)
+A1805,11,Critical Access Hospital (CAH)
+A1805,12,Home under care of organized home health service organization
+A1805,99,Not Listed
+A2105,01,"Home/Community (e.g., private home/apt., board/care, assisted living, group home, transitional living, other residential care arrangements)"
+A2105,02,Nursing Home (long-term care facility)
+A2105,03,"Skilled Nursing Facility (SNF, swing bed)"
+A2105,04,"Short-Term General Hospital (acute hospital, IPPS)"
+A2105,05,Long-Term Care Hospital (LTCH)
+A2105,06,"Inpatient Rehabilitation Facility (IRF, free standing facility or unit)"
+A2105,07,Inpatient Psychiatric Facility (psychiatric hospital or unit)
+A2105,08,Intermediate Care Facility (ID/DD facility)
+A2105,09,Hospice (home/non-institutional)
+A2105,10,Hospice (institutional facility)
+A2105,11,Critical Access Hospital (CAH)
+A2105,12,Home under care of organized home health service organization
+A2105,13,Deceased
+A2121,0,No - Current reconciled medication list not provided to the subsequent provider
+A2121,1,Yes - Current reconciled medication list provided to the subsequent provider
+A2122A,0,Not checked (No)
+A2122A,1,Checked (Yes)
+A2122A,^,Blank (skip pattern)
+A2122B,0,Not checked (No)
+A2122B,1,Checked (Yes)
+A2122B,^,Blank (skip pattern)
+A2122C,0,Not checked (No)
+A2122C,1,Checked (Yes)
+A2122C,^,Blank (skip pattern)
+A2122D,0,Not checked (No)
+A2122D,1,Checked (Yes)
+A2122D,^,Blank (skip pattern)
+A2122E,0,Not checked (No)
+A2122E,1,Checked (Yes)
+A2122E,^,Blank (skip pattern)
+A2123,0,"No - Current reconciled medication list not provided to the patient, family and/or caregiver"
+A2123,1,"Yes - Current reconciled medication list provided to the patient, family and/or caregiver"
+A2124A,0,Not checked (No)
+A2124A,1,Checked (Yes)
+A2124A,^,Blank (skip pattern)
+A2124B,0,Not checked (No)
+A2124B,1,Checked (Yes)
+A2124B,^,Blank (skip pattern)
+A2124C,0,Not checked (No)
+A2124C,1,Checked (Yes)
+A2124C,^,Blank (skip pattern)
+A2124D,0,Not checked (No)
+A2124D,1,Checked (Yes)
+A2124D,^,Blank (skip pattern)
+A2124E,0,Not checked (No)
+A2124E,1,Checked (Yes)
+A2124E,^,Blank (skip pattern)
+B1300,0,Never
+B1300,1,Rarely
+B1300,2,Sometimes
+B1300,3,Often
+B1300,4,Always
+B1300,7,Resident declines to respond
+B1300,8,Resident unable to respond
+B1300,^,Blank (skip pattern)
+D0160,00,Minimum Value
+D0160,27,Maximum Value
+D0160,99,Unable to complete the interview
+D0160,^,Blank (skip pattern)
+D0150A1,0,No
+D0150A1,1,Yes
+D0150A1,9,No response
+D0150A1,-,Not assessed/no information
+D0150A1,^,Blank (skip pattern)
+D0150B1,0,No
+D0150B1,1,Yes
+D0150B1,9,No response
+D0150B1,-,Not assessed/no information
+D0150B1,^,Blank (skip pattern)
+D0150A2,0,Never or 1 day
+D0150A2,1,2-6 days (several days)
+D0150A2,2,7-11 days (half or more of the days)
+D0150A2,3,12-14 days (nearly every day)
+D0150A2,^,Blank (skip pattern)
+D0150B2,0,Never or 1 day
+D0150B2,1,2-6 days (several days)
+D0150B2,2,7-11 days (half or more of the days)
+D0150B2,3,12-14 days (nearly every day)
+D0150B2,^,Blank (skip pattern)
+D0150C1,0,No
+D0150C1,1,Yes
+D0150C1,9,No response
+D0150C1,-,Not assessed/no information
+D0150C1,^,Blank (skip pattern)
+D0150D1,0,No
+D0150D1,1,Yes
+D0150D1,9,No response
+D0150D1,-,Not assessed/no information
+D0150D1,^,Blank (skip pattern)
+D0150E1,0,No
+D0150E1,1,Yes
+D0150E1,9,No response
+D0150E1,-,Not assessed/no information
+D0150E1,^,Blank (skip pattern)
+D0150F1,0,No
+D0150F1,1,Yes
+D0150F1,9,No response
+D0150F1,-,Not assessed/no information
+D0150F1,^,Blank (skip pattern)
+D0150G1,0,No
+D0150G1,1,Yes
+D0150G1,9,No response
+D0150G1,-,Not assessed/no information
+D0150G1,^,Blank (skip pattern)
+D0150H1,0,No
+D0150H1,1,Yes
+D0150H1,9,No response
+D0150H1,-,Not assessed/no information
+D0150H1,^,Blank (skip pattern)
+D0150I1,0,No
+D0150I1,1,Yes
+D0150I1,9,No response
+D0150I1,-,Not assessed/no information
+D0150I1,^,Blank (skip pattern)
+D0150C2,0,Never or 1 day
+D0150C2,1,2-6 days (several days)
+D0150C2,2,7-11 days (half or more of the days)
+D0150C2,3,12-14 days (nearly every day)
+D0150C2,^,Blank (skip pattern)
+D0150D2,0,Never or 1 day
+D0150D2,1,2-6 days (several days)
+D0150D2,2,7-11 days (half or more of the days)
+D0150D2,3,12-14 days (nearly every day)
+D0150D2,^,Blank (skip pattern)
+D0150E2,0,Never or 1 day
+D0150E2,1,2-6 days (several days)
+D0150E2,2,7-11 days (half or more of the days)
+D0150E2,3,12-14 days (nearly every day)
+D0150E2,^,Blank (skip pattern)
+D0150F2,0,Never or 1 day
+D0150F2,1,2-6 days (several days)
+D0150F2,2,7-11 days (half or more of the days)
+D0150F2,3,12-14 days (nearly every day)
+D0150F2,^,Blank (skip pattern)
+D0150G2,0,Never or 1 day
+D0150G2,1,2-6 days (several days)
+D0150G2,2,7-11 days (half or more of the days)
+D0150G2,3,12-14 days (nearly every day)
+D0150G2,^,Blank (skip pattern)
+D0150H2,0,Never or 1 day
+D0150H2,1,2-6 days (several days)
+D0150H2,2,7-11 days (half or more of the days)
+D0150H2,3,12-14 days (nearly every day)
+D0150H2,^,Blank (skip pattern)
+D0150I2,0,Never or 1 day
+D0150I2,1,2-6 days (several days)
+D0150I2,2,7-11 days (half or more of the days)
+D0150I2,3,12-14 days (nearly every day)
+D0150I2,^,Blank (skip pattern)
+D0700,0,Never
+D0700,1,Rarely
+D0700,2,Sometimes
+D0700,3,Often
+D0700,4,Always
+D0700,7,Resident declines to respond
+D0700,8,Resident unable to respond
+D0700,^,Blank (skip pattern)
+GG0115A,0,No impairment
+GG0115A,1,Impairment on one side
+GG0115A,2,Impairment on both sides
+GG0115B,0,No impairment
+GG0115B,1,Impairment on one side
+GG0115B,2,Impairment on both sides
+GG0120A,0,Not checked (No)
+GG0120A,1,Checked (Yes)
+GG0120B,0,Not checked (No)
+GG0120B,1,Checked (Yes)
+GG0120C,0,Not checked (No)
+GG0120C,1,Checked (Yes)
+GG0120D,0,Not checked (No)
+GG0120D,1,Checked (Yes)
+GG0120Z,0,Not checked (No)
+GG0120Z,1,Checked (Yes)
+GG0130I1,06,Independent
+GG0130I1,05,Setup or clean-up assistance
+GG0130I1,04,Supervision or touching assistance
+GG0130I1,03,Partial/moderate assistance
+GG0130I1,02,Substantial/maximal assistance
+GG0130I1,01,Dependent
+GG0130I1,07,Resident refused
+GG0130I1,09,Not applicable
+GG0130I1,10,Not attempted due to environmental limitations
+GG0130I1,88,Not attempted due to medical condition or safety concerns
+GG0130I1,-,Not assessed/no information
+GG0130I1,^,Blank (skip pattern)
+GG0130I3,06,Independent
+GG0130I3,05,Setup or clean-up assistance
+GG0130I3,04,Supervision or touching assistance
+GG0130I3,03,Partial/moderate assistance
+GG0130I3,02,Substantial/maximal assistance
+GG0130I3,01,Dependent
+GG0130I3,07,Resident refused
+GG0130I3,09,Not applicable
+GG0130I3,10,Not attempted due to environmental limitations
+GG0130I3,88,Not attempted due to medical condition or safety concerns
+GG0130I3,-,Not assessed/no information
+GG0130I3,^,Blank (skip pattern)
+GG0170FF1,06,Independent
+GG0170FF1,05,Setup or clean-up assistance
+GG0170FF1,04,Supervision or touching assistance
+GG0170FF1,03,Partial/moderate assistance
+GG0170FF1,02,Substantial/maximal assistance
+GG0170FF1,01,Dependent
+GG0170FF1,07,Resident refused
+GG0170FF1,09,Not applicable
+GG0170FF1,10,Not attempted due to environmental limitations
+GG0170FF1,88,Not attempted due to medical condition or safety concerns
+GG0170FF1,-,Not assessed/no information
+GG0170FF1,^,Blank (skip pattern)
+GG0170FF3,06,Independent
+GG0170FF3,05,Setup or clean-up assistance
+GG0170FF3,04,Supervision or touching assistance
+GG0170FF3,03,Partial/moderate assistance
+GG0170FF3,02,Substantial/maximal assistance
+GG0170FF3,01,Dependent
+GG0170FF3,07,Resident refused
+GG0170FF3,09,Not applicable
+GG0170FF3,10,Not attempted due to environmental limitations
+GG0170FF3,88,Not attempted due to medical condition or safety concerns
+GG0170FF3,-,Not assessed/no information
+GG0170FF3,^,Blank (skip pattern)
+J0410,1,Rarely or not at all
+J0410,2,Occasionally
+J0410,3,Frequently
+J0410,4,Almost constantly
+J0410,9,Unable to answer
+J0510,1,Rarely or not at all
+J0510,2,Occasionally
+J0510,3,Frequently
+J0510,4,Almost Constantly
+J0510,8,Unable to answer
+J0520,0,Does not apply - I have not received rehabilitation therapy in the past 5 days
+J0520,1,Rarely or not at all
+J0520,2,Occasionally
+J0520,3,Frequently
+J0520,4,Almost Constantly
+J0520,8,Unable to answer
+J0520,^,Blank (skip pattern)
+J0530,1,Rarely or not at all
+J0530,2,Occasionally
+J0530,3,Frequently
+J0530,4,Almost Constantly
+J0530,8,Unable to answer
+J0530,^,Blank (skip pattern)
+K0520A1,0,Not checked (No)
+K0520A1,1,Checked (Yes)
+K0520A1,-,Not assessed/no information
+K0520A2,0,Not checked (No)
+K0520A2,1,Checked (Yes)
+K0520A2,-,Not assessed/no information
+K0520A3,0,Not checked (No)
+K0520A3,1,Checked (Yes)
+K0520A3,-,Not assessed/no information
+K0520A4,0,Not checked (No)
+K0520A4,1,Checked (Yes)
+K0520A4,-,Not assessed/no information
+K0520B1,0,Not checked (No)
+K0520B1,1,Checked (Yes)
+K0520B1,-,Not assessed/no information
+K0520B2,0,Not checked (No)
+K0520B2,1,Checked (Yes)
+K0520B2,-,Not assessed/no information
+K0520B3,0,Not checked (No)
+K0520B3,1,Checked (Yes)
+K0520B3,-,Not assessed/no information
+K0520B4,0,Not checked (No)
+K0520B4,1,Checked (Yes)
+K0520B4,-,Not assessed/no information
+K0520C1,0,Not checked (No)
+K0520C1,1,Checked (Yes)
+K0520C1,-,Not assessed/no information
+K0520C3,0,Not checked (No)
+K0520C3,1,Checked (Yes)
+K0520C3,-,Not assessed/no information
+K0520C4,0,Not checked (No)
+K0520C4,1,Checked (Yes)
+K0520C4,-,Not assessed/no information
+K0520D1,0,Not checked (No)
+K0520D1,1,Checked (Yes)
+K0520D1,-,Not assessed/no information
+K0520D3,0,Not checked (No)
+K0520D3,1,Checked (Yes)
+K0520D3,-,Not assessed/no information
+K0520D4,0,Not checked (No)
+K0520D4,1,Checked (Yes)
+K0520D4,-,Not assessed/no information
+K0520Z1,0,Not checked (No)
+K0520Z1,1,Checked (Yes)
+K0520Z1,-,Not assessed/no information
+K0520Z2,0,Not checked (No)
+K0520Z2,1,Checked (Yes)
+K0520Z2,-,Not assessed/no information
+K0520Z3,0,Not checked (No)
+K0520Z3,1,Checked (Yes)
+K0520Z3,-,Not assessed/no information
+K0520Z4,0,Not checked (No)
+K0520Z4,1,Checked (Yes)
+K0520Z4,-,Not assessed/no information
+N0415A1,0,Not checked (No)
+N0415A1,1,Checked (Yes)
+N0415A1,-,Not assessed/no information
+N0415A2,0,Not checked (No)
+N0415A2,1,Checked (Yes)
+N0415A2,-,Not assessed/no information
+N0415B1,0,Not checked (No)
+N0415B1,1,Checked (Yes)
+N0415B1,-,Not assessed/no information
+N0415B2,0,Not checked (No)
+N0415B2,1,Checked (Yes)
+N0415B2,-,Not assessed/no information
+N0415C1,0,Not checked (No)
+N0415C1,1,Checked (Yes)
+N0415C1,-,Not assessed/no information
+N0415C2,0,Not checked (No)
+N0415C2,1,Checked (Yes)
+N0415C2,-,Not assessed/no information
+N0415D1,0,Not checked (No)
+N0415D1,1,Checked (Yes)
+N0415D1,-,Not assessed/no information
+N0415D2,0,Not checked (No)
+N0415D2,1,Checked (Yes)
+N0415D2,-,Not assessed/no information
+N0415E1,0,Not checked (No)
+N0415E1,1,Checked (Yes)
+N0415E1,-,Not assessed/no information
+N0415E2,0,Not checked (No)
+N0415E2,1,Checked (Yes)
+N0415E2,-,Not assessed/no information
+N0415F1,0,Not checked (No)
+N0415F1,1,Checked (Yes)
+N0415F1,-,Not assessed/no information
+N0415F2,0,Not checked (No)
+N0415F2,1,Checked (Yes)
+N0415F2,-,Not assessed/no information
+N0415G1,0,Not checked (No)
+N0415G1,1,Checked (Yes)
+N0415G1,-,Not assessed/no information
+N0415G2,0,Not checked (No)
+N0415G2,1,Checked (Yes)
+N0415G2,-,Not assessed/no information
+N0415H1,0,Not checked (No)
+N0415H1,1,Checked (Yes)
+N0415H1,-,Not assessed/no information
+N0415H2,0,Not checked (No)
+N0415H2,1,Checked (Yes)
+N0415H2,-,Not assessed/no information
+N0415I1,0,Not checked (No)
+N0415I1,1,Checked (Yes)
+N0415I1,-,Not assessed/no information
+N0415I2,0,Not checked (No)
+N0415I2,1,Checked (Yes)
+N0415I2,-,Not assessed/no information
+N0415J1,0,Not checked (No)
+N0415J1,1,Checked (Yes)
+N0415J1,-,Not assessed/no information
+N0415J2,0,Not checked (No)
+N0415J2,1,Checked (Yes)
+N0415J2,-,Not assessed/no information
+N0415Z1,0,Not checked (No)
+N0415Z1,1,Checked (Yes)
+N0415Z1,-,Not assessed/no information
+O0110A1A,0,Not checked (No)
+O0110A1A,1,Checked (Yes)
+O0110A1A,-,Not assessed/no information
+O0110A1B,0,Not checked (No)
+O0110A1B,1,Checked (Yes)
+O0110A1B,-,Not assessed/no information
+O0110A1C,0,Not checked (No)
+O0110A1C,1,Checked (Yes)
+O0110A1C,-,Not assessed/no information
+O0110A2A,0,Not checked (No)
+O0110A2A,1,Checked (Yes)
+O0110A2A,-,Not assessed/no information
+O0110A2C,0,Not checked (No)
+O0110A2C,1,Checked (Yes)
+O0110A2C,-,Not assessed/no information
+O0110A3A,0,Not checked (No)
+O0110A3A,1,Checked (Yes)
+O0110A3A,-,Not assessed/no information
+O0110A3C,0,Not checked (No)
+O0110A3C,1,Checked (Yes)
+O0110A3C,-,Not assessed/no information
+O0110A10A,0,Not checked (No)
+O0110A10A,1,Checked (Yes)
+O0110A10A,-,Not assessed/no information
+O0110A10C,0,Not checked (No)
+O0110A10C,1,Checked (Yes)
+O0110A10C,-,Not assessed/no information
+O0110B1A,0,Not checked (No)
+O0110B1A,1,Checked (Yes)
+O0110B1A,-,Not assessed/no information
+O0110B1B,0,Not checked (No)
+O0110B1B,1,Checked (Yes)
+O0110B1B,-,Not assessed/no information
+O0110B1C,0,Not checked (No)
+O0110B1C,1,Checked (Yes)
+O0110B1C,-,Not assessed/no information
+O0110C1A,0,Not checked (No)
+O0110C1A,1,Checked (Yes)
+O0110C1A,-,Not assessed/no information
+O0110C1B,0,Not checked (No)
+O0110C1B,1,Checked (Yes)
+O0110C1B,-,Not assessed/no information
+O0110C1C,0,Not checked (No)
+O0110C1C,1,Checked (Yes)
+O0110C1C,-,Not assessed/no information
+O0110C2A,0,Not checked (No)
+O0110C2A,1,Checked (Yes)
+O0110C2A,-,Not assessed/no information
+O0110C2C,0,Not checked (No)
+O0110C2C,1,Checked (Yes)
+O0110C2C,-,Not assessed/no information
+O0110C3A,0,Not checked (No)
+O0110C3A,1,Checked (Yes)
+O0110C3A,-,Not assessed/no information
+O0110C3C,0,Not checked (No)
+O0110C3C,1,Checked (Yes)
+O0110C3C,-,Not assessed/no information
+O0110C4A,0,Not checked (No)
+O0110C4A,1,Checked (Yes)
+O0110C4A,-,Not assessed/no information
+O0110C4C,0,Not checked (No)
+O0110C4C,1,Checked (Yes)
+O0110C4C,-,Not assessed/no information
+O0110D1A,0,Not checked (No)
+O0110D1A,1,Checked (Yes)
+O0110D1A,-,Not assessed/no information
+O0110D1B,0,Not checked (No)
+O0110D1B,1,Checked (Yes)
+O0110D1B,-,Not assessed/no information
+O0110D1C,0,Not checked (No)
+O0110D1C,1,Checked (Yes)
+O0110D1C,-,Not assessed/no information
+O0110D2A,0,Not checked (No)
+O0110D2A,1,Checked (Yes)
+O0110D2A,-,Not assessed/no information
+O0110D2C,0,Not checked (No)
+O0110D2C,1,Checked (Yes)
+O0110D2C,-,Not assessed/no information
+O0110D3A,0,Not checked (No)
+O0110D3A,1,Checked (Yes)
+O0110D3A,-,Not assessed/no information
+O0110D3C,0,Not checked (No)
+O0110D3C,1,Checked (Yes)
+O0110D3C,-,Not assessed/no information
+O0110E1A,0,Not checked (No)
+O0110E1A,1,Checked (Yes)
+O0110E1A,-,Not assessed/no information
+O0110E1B,0,Not checked (No)
+O0110E1B,1,Checked (Yes)
+O0110E1B,-,Not assessed/no information
+O0110E1C,0,Not checked (No)
+O0110E1C,1,Checked (Yes)
+O0110E1C,-,Not assessed/no information
+O0110F1A,0,Not checked (No)
+O0110F1A,1,Checked (Yes)
+O0110F1A,-,Not assessed/no information
+O0110F1B,0,Not checked (No)
+O0110F1B,1,Checked (Yes)
+O0110F1B,-,Not assessed/no information
+O0110F1C,0,Not checked (No)
+O0110F1C,1,Checked (Yes)
+O0110F1C,-,Not assessed/no information
+O0110G1A,0,Not checked (No)
+O0110G1A,1,Checked (Yes)
+O0110G1A,-,Not assessed/no information
+O0110G1B,0,Not checked (No)
+O0110G1B,1,Checked (Yes)
+O0110G1B,-,Not assessed/no information
+O0110G1C,0,Not checked (No)
+O0110G1C,1,Checked (Yes)
+O0110G1C,-,Not assessed/no information
+O0110G2A,0,Not checked (No)
+O0110G2A,1,Checked (Yes)
+O0110G2A,-,Not assessed/no information
+O0110G2C,0,Not checked (No)
+O0110G2C,1,Checked (Yes)
+O0110G2C,-,Not assessed/no information
+O0110G3A,0,Not checked (No)
+O0110G3A,1,Checked (Yes)
+O0110G3A,-,Not assessed/no information
+O0110G3C,0,Not checked (No)
+O0110G3C,1,Checked (Yes)
+O0110G3C,-,Not assessed/no information
+O0110H1A,0,Not checked (No)
+O0110H1A,1,Checked (Yes)
+O0110H1A,-,Not assessed/no information
+O0110H1B,0,Not checked (No)
+O0110H1B,1,Checked (Yes)
+O0110H1B,-,Not assessed/no information
+O0110H1C,0,Not checked (No)
+O0110H1C,1,Checked (Yes)
+O0110H1C,-,Not assessed/no information
+O0110H2A,0,Not checked (No)
+O0110H2A,1,Checked (Yes)
+O0110H2A,-,Not assessed/no information
+O0110H2C,0,Not checked (No)
+O0110H2C,1,Checked (Yes)
+O0110H2C,-,Not assessed/no information
+O0110H3A,0,Not checked (No)
+O0110H3A,1,Checked (Yes)
+O0110H3A,-,Not assessed/no information
+O0110H3C,0,Not checked (No)
+O0110H3C,1,Checked (Yes)
+O0110H3C,-,Not assessed/no information
+O0110H4A,0,Not checked (No)
+O0110H4A,1,Checked (Yes)
+O0110H4A,-,Not assessed/no information
+O0110H4C,0,Not checked (No)
+O0110H4C,1,Checked (Yes)
+O0110H4C,-,Not assessed/no information
+O0110H10A,0,Not checked (No)
+O0110H10A,1,Checked (Yes)
+O0110H10A,-,Not assessed/no information
+O0110H10C,0,Not checked (No)
+O0110H10C,1,Checked (Yes)
+O0110H10C,-,Not assessed/no information
+O0110I1A,0,Not checked (No)
+O0110I1A,1,Checked (Yes)
+O0110I1A,-,Not assessed/no information
+O0110I1B,0,Not checked (No)
+O0110I1B,1,Checked (Yes)
+O0110I1B,-,Not assessed/no information
+O0110I1C,0,Not checked (No)
+O0110I1C,1,Checked (Yes)
+O0110I1C,-,Not assessed/no information
+O0110J1A,0,Not checked (No)
+O0110J1A,1,Checked (Yes)
+O0110J1A,-,Not assessed/no information
+O0110J1B,0,Not checked (No)
+O0110J1B,1,Checked (Yes)
+O0110J1B,-,Not assessed/no information
+O0110J1C,0,Not checked (No)
+O0110J1C,1,Checked (Yes)
+O0110J1C,-,Not assessed/no information
+O0110J2A,0,Not checked (No)
+O0110J2A,1,Checked (Yes)
+O0110J2A,-,Not assessed/no information
+O0110J2C,0,Not checked (No)
+O0110J2C,1,Checked (Yes)
+O0110J2C,-,Not assessed/no information
+O0110J3A,0,Not checked (No)
+O0110J3A,1,Checked (Yes)
+O0110J3A,-,Not assessed/no information
+O0110J3C,0,Not checked (No)
+O0110J3C,1,Checked (Yes)
+O0110J3C,-,Not assessed/no information
+O0110K1B,0,Not checked (No)
+O0110K1B,1,Checked (Yes)
+O0110K1B,-,Not assessed/no information
+O0110M1B,0,Not checked (No)
+O0110M1B,1,Checked (Yes)
+O0110M1B,-,Not assessed/no information
+O0110O1A,0,Not checked (No)
+O0110O1A,1,Checked (Yes)
+O0110O1A,-,Not assessed/no information
+O0110O1B,0,Not checked (No)
+O0110O1B,1,Checked (Yes)
+O0110O1B,-,Not assessed/no information
+O0110O1C,0,Not checked (No)
+O0110O1C,1,Checked (Yes)
+O0110O1C,-,Not assessed/no information
+O0110O2A,0,Not checked (No)
+O0110O2A,1,Checked (Yes)
+O0110O2A,-,Not assessed/no information
+O0110O2C,0,Not checked (No)
+O0110O2C,1,Checked (Yes)
+O0110O2C,-,Not assessed/no information
+O0110O3A,0,Not checked (No)
+O0110O3A,1,Checked (Yes)
+O0110O3A,-,Not assessed/no information
+O0110O3C,0,Not checked (No)
+O0110O3C,1,Checked (Yes)
+O0110O3C,-,Not assessed/no information
+O0110O4A,0,Not checked (No)
+O0110O4A,1,Checked (Yes)
+O0110O4A,-,Not assessed/no information
+O0110O4C,0,Not checked (No)
+O0110O4C,1,Checked (Yes)
+O0110O4C,-,Not assessed/no information
+O0110Z1A,0,Not checked (No)
+O0110Z1A,1,Checked (Yes)
+O0110Z1A,-,Not assessed/no information
+O0110Z1B,0,Not checked (No)
+O0110Z1B,1,Checked (Yes)
+O0110Z1B,-,Not assessed/no information
+O0110Z1C,0,Not checked (No)
+O0110Z1C,1,Checked (Yes)
+O0110Z1C,-,Not assessed/no information
+Q0110Z,0,Not checked (No)
+Q0110Z,1,Checked (Yes)
+Q0110E,0,Not checked (No)
+Q0110E,1,Checked (Yes)
+Q0110D,0,Not checked (No)
+Q0110D,1,Checked (Yes)
+Q0110A,0,Not checked (No)
+Q0110A,1,Checked (Yes)
+Q0110B,0,Not checked (No)
+Q0110B,1,Checked (Yes)
+Q0110C,0,Not checked (No)
+Q0110C,1,Checked (Yes)
+Q0310A,1,Discharge to the community
+Q0310A,2,Remain in this facility
+Q0310A,3,Discharge to another facility/institution
+Q0310A,9,Unknown or uncertain
+Q0310B,1,Resident
+Q0310B,2,Family
+Q0310B,3,Significant other
+Q0310B,4,Legal guardian
+Q0310B,5,Other legally authorized representative
+Q0310B,9,None of the above
+Q0310B,^,Blank (skip pattern)
+Q0500C,1,Resident
+Q0500C,2,Family
+Q0500C,3,Significant other
+Q0500C,4,Legal guardian
+Q0500C,5,Other legally authorized representative
+Q0500C,9,None of the above
+Q0550C,1,Resident
+Q0550C,2,Family
+Q0550C,3,Significant other
+Q0550C,4,Legal guardian
+Q0550C,5,Other legally authorized representative
+Q0550C,9,None of the above
+Q0610A,0,No
+Q0610A,1,Yes
+Q0620,1,LCA unknown
+Q0620,2,Referral previously made
+Q0620,3,Referral not wanted
+Q0620,4,Discharge date 3 or fewer months away
+Q0620,5,Discharge date more than 3 months away
+Q0620,^,Blank (skip pattern)
+ITM_SET_VRSN_CD,1.18,Ninth update to MDS 3.0 item set (effective 10/01/2023)
+SPEC_VRSN_CD,3.01,Thirteenth update to data specifications (effective 10/01/2023)
+A2121,^,Blank (skip pattern)
+A2123,^,Blank (skip pattern)
+N0415A2,^,Blank (skip pattern)
+N0415B2,^,Blank (skip pattern)
+N0415C2,^,Blank (skip pattern)
+N0415D2,^,Blank (skip pattern)
+N0415E2,^,Blank (skip pattern)
+N0415F2,^,Blank (skip pattern)
+N0415G2,^,Blank (skip pattern)
+N0415H2,^,Blank (skip pattern)
+N0415I2,^,Blank (skip pattern)
+N0415J2,^,Blank (skip pattern)
+Q0310A,^,Blank (skip pattern)
+Q0500C,-,Not assessed/no information
+Q0500C,^,Blank (skip pattern)
+Q0550C,-,Not assessed/no information
+Q0550C,^,Blank (skip pattern)
+J0410,^,Blank (skip pattern)
+J0510,^,Blank (skip pattern)
+J0410,-,Not assessed/no information
+J0510,-,Not assessed/no information
+J0520,-,Not assessed/no information
+J0530,-,Not assessed/no information
+A2105,99,Not Listed
+A2105,^,Blank (skip pattern)
+B1300,-,Not assessed/no information
+GG0115A,-,Not assessed/no information
+GG0115B,-,Not assessed/no information
+GG0120A,-,Not assessed/no information
+GG0120B,-,Not assessed/no information
+GG0120C,-,Not assessed/no information
+GG0120D,-,Not assessed/no information
+GG0120Z,-,Not assessed/no information
+A1110B,-,Not assessed/no information
+D0700,-,Not assessed/no information
+GG0130E5,06,Independent
+GG0130E5,05,Setup or clean-up assistance
+GG0130E5,04,Supervision or touching assistance
+GG0130E5,03,Partial/moderate assistance
+GG0130E5,02,Substantial/maximal assistance
+GG0130E5,01,Dependent
+GG0130E5,07,Resident refused
+GG0130E5,09,Not applicable
+GG0130E5,10,Not attempted due to environmental limitations
+GG0130E5,88,Not attempted due to medical condition or safety concerns
+GG0130E5,-,Not assessed/no information
+GG0130E5,^,Blank (skip pattern)
+GG0130F5,06,Independent
+GG0130F5,05,Setup or clean-up assistance
+GG0130F5,04,Supervision or touching assistance
+GG0130F5,03,Partial/moderate assistance
+GG0130F5,02,Substantial/maximal assistance
+GG0130F5,01,Dependent
+GG0130F5,07,Resident refused
+GG0130F5,09,Not applicable
+GG0130F5,10,Not attempted due to environmental limitations
+GG0130F5,88,Not attempted due to medical condition or safety concerns
+GG0130F5,-,Not assessed/no information
+GG0130F5,^,Blank (skip pattern)
+GG0130G5,06,Independent
+GG0130G5,05,Setup or clean-up assistance
+GG0130G5,04,Supervision or touching assistance
+GG0130G5,03,Partial/moderate assistance
+GG0130G5,02,Substantial/maximal assistance
+GG0130G5,01,Dependent
+GG0130G5,07,Resident refused
+GG0130G5,09,Not applicable
+GG0130G5,10,Not attempted due to environmental limitations
+GG0130G5,88,Not attempted due to medical condition or safety concerns
+GG0130G5,-,Not assessed/no information
+GG0130G5,^,Blank (skip pattern)
+GG0130H5,06,Independent
+GG0130H5,05,Setup or clean-up assistance
+GG0130H5,04,Supervision or touching assistance
+GG0130H5,03,Partial/moderate assistance
+GG0130H5,02,Substantial/maximal assistance
+GG0130H5,01,Dependent
+GG0130H5,07,Resident refused
+GG0130H5,09,Not applicable
+GG0130H5,10,Not attempted due to environmental limitations
+GG0130H5,88,Not attempted due to medical condition or safety concerns
+GG0130H5,-,Not assessed/no information
+GG0130H5,^,Blank (skip pattern)
+GG0130I5,06,Independent
+GG0130I5,05,Setup or clean-up assistance
+GG0130I5,04,Supervision or touching assistance
+GG0130I5,03,Partial/moderate assistance
+GG0130I5,02,Substantial/maximal assistance
+GG0130I5,01,Dependent
+GG0130I5,07,Resident refused
+GG0130I5,09,Not applicable
+GG0130I5,10,Not attempted due to environmental limitations
+GG0130I5,88,Not attempted due to medical condition or safety concerns
+GG0130I5,-,Not assessed/no information
+GG0130I5,^,Blank (skip pattern)
+GG0170A5,06,Independent
+GG0170A5,05,Setup or clean-up assistance
+GG0170A5,04,Supervision or touching assistance
+GG0170A5,03,Partial/moderate assistance
+GG0170A5,02,Substantial/maximal assistance
+GG0170A5,01,Dependent
+GG0170A5,07,Resident refused
+GG0170A5,09,Not applicable
+GG0170A5,10,Not attempted due to environmental limitations
+GG0170A5,88,Not attempted due to medical condition or safety concerns
+GG0170A5,-,Not assessed/no information
+GG0170A5,^,Blank (skip pattern)
+GG0170FF5,06,Independent
+GG0170FF5,05,Setup or clean-up assistance
+GG0170FF5,04,Supervision or touching assistance
+GG0170FF5,03,Partial/moderate assistance
+GG0170FF5,02,Substantial/maximal assistance
+GG0170FF5,01,Dependent
+GG0170FF5,07,Resident refused
+GG0170FF5,09,Not applicable
+GG0170FF5,10,Not attempted due to environmental limitations
+GG0170FF5,88,Not attempted due to medical condition or safety concerns
+GG0170FF5,-,Not assessed/no information
+GG0170FF5,^,Blank (skip pattern)
+GG0170Q5,0,No
+GG0170Q5,1,Yes
+GG0170Q5,-,Not assessed/no information
+GG0170Q5,^,Blank (skip pattern)
+GG0170R5,06,Independent
+GG0170R5,05,Setup or clean-up assistance
+GG0170R5,04,Supervision or touching assistance
+GG0170R5,03,Partial/moderate assistance
+GG0170R5,02,Substantial/maximal assistance
+GG0170R5,01,Dependent
+GG0170R5,07,Resident refused
+GG0170R5,09,Not applicable
+GG0170R5,10,Not attempted due to environmental limitations
+GG0170R5,88,Not attempted due to medical condition or safety concerns
+GG0170R5,-,Not assessed/no information
+GG0170R5,^,Blank (skip pattern)
+GG0170RR5,1,Manual
+GG0170RR5,2,Motorized
+GG0170RR5,-,Not assessed/no information
+GG0170RR5,^,Blank (skip pattern)
+GG0170S5,06,Independent
+GG0170S5,05,Setup or clean-up assistance
+GG0170S5,04,Supervision or touching assistance
+GG0170S5,03,Partial/moderate assistance
+GG0170S5,02,Substantial/maximal assistance
+GG0170S5,01,Dependent
+GG0170S5,07,Resident refused
+GG0170S5,09,Not applicable
+GG0170S5,10,Not attempted due to environmental limitations
+GG0170S5,88,Not attempted due to medical condition or safety concerns
+GG0170S5,-,Not assessed/no information
+GG0170S5,^,Blank (skip pattern)
+GG0170SS5,1,Manual
+GG0170SS5,2,Motorized
+GG0170SS5,-,Not assessed/no information
+GG0170SS5,^,Blank (skip pattern)
+Q0310A,-,Not assessed/no information
+Q0310B,-,Not assessed/no information
+S6060A,0,No
+S6060A,1,Yes
+S6060B,YYYYMMDD,Valid date
+S6060C,YYYYMMDD,Valid date
+S6060C,--------,Isolation is ongoing
+S7001,0,No
+S7001,1,Yes
+S7001,9,Unable to determine
+S7002,0,No
+S7002,1,Yes
+S7002,9,Unable to determine
+S0200A,1,Active Discharge in Process
+S0200A,2,Legal Reasons
+S0200A,3,Clinical Reasons
+S0200A,4,Behavioral Reasons
+S0200A,5,Other
+S0200B,Text,Reason for 'Other' response
+S0200B,^,Blank (skip pattern)
+S7500H,0,No
+S7500H,1,Yes
+S7500F,0,No
+S7500F,1,Yes
+S7500E,0,No
+S7500E,1,Yes
+S7500D,0,No
+S7500D,1,Yes
+S7500C,0,No
+S7500C,1,Yes
+S7500A,0,No
+S7500A,1,Yes
+S7500B,YYYYMMDD,Valid date
+S7500G,YYYYMMDD,Valid date
+S7500G,^,Blank (skip pattern)
+S7500B,^,Blank (skip pattern)
+S6300,0,No
+S6300,1,Methadone
+S6300,2,Buprenorphine
+S6300,3,Naltrexone
+S6300,9,"Yes, none of the above"
+S6301,0,No
+S6301,1,Yes
+S6302,1,At this facility
+S6302,2,By an outside provider
+S6303A,0,No (unchecked)
+S6303A,1,Yes (checked)
+S6303B,0,No (unchecked)
+S6303B,1,Yes (checked)
+S6303C,0,No (unchecked)
+S6303C,1,Yes (checked)
+S6303D,0,No (unchecked)
+S6303D,1,Yes (checked)
+S6304A,0,No (unchecked)
+S6304A,1,Yes (checked)
+S6304B,0,No (unchecked)
+S6304B,1,Yes (checked)
+S6304C,0,No (unchecked)
+S6304C,1,Yes (checked)
+S6304D,0,No (unchecked)
+S6304D,1,Yes (checked)
+S6304E,0,No (unchecked)
+S6304E,1,Yes (checked)
+S6304F,0,No (unchecked)
+S6304F,1,Yes (checked)
+S6304G,0,No (unchecked)
+S6304G,1,Yes (checked)
+S6304H,0,No (unchecked)
+S6304H,1,Yes (checked)
+S6304I,0,No (unchecked)
+S6304I,1,Yes (checked)
+S6305A,0,No
+S6305A,1,Yes
+S6305B,MMDDYYYY,Valid date
+S6301,9,Not applicable
+S6302,3,Both
+S6302,9,Not applicable
+S6305B,-,Not assessed/no information
+S6060B,^,Blank (skip pattern)
+S6060C,^,Blank (skip pattern)
+S0200A,^,Blank (skip pattern)
+S6303A,-,Not assessed/no information
+S6303B,-,Not assessed/no information
+S6303C,-,Not assessed/no information
+S6303D,-,Not assessed/no information
+S6304A,-,Not assessed/no information
+S6304B,-,Not assessed/no information
+S6304C,-,Not assessed/no information
+S6304D,-,Not assessed/no information
+S6304E,-,Not assessed/no information
+S6304F,-,Not assessed/no information
+S6304G,-,Not assessed/no information
+S6304H,-,Not assessed/no information
+S6304I,-,Not assessed/no information
+S6305A,-,Not assessed/no information
+S6305B,^,Blank (skip pattern)
+K0520A1,^,Blank (skip pattern)
+K0520A2,^,Blank (skip pattern)
+K0520A4,^,Blank (skip pattern)
+K0520B1,^,Blank (skip pattern)
+K0520B2,^,Blank (skip pattern)
+K0520B4,^,Blank (skip pattern)
+K0520C1,^,Blank (skip pattern)
+K0520C4,^,Blank (skip pattern)
+K0520D1,^,Blank (skip pattern)
+K0520D4,^,Blank (skip pattern)
+K0520Z1,^,Blank (skip pattern)
+K0520Z2,^,Blank (skip pattern)
+K0520Z4,^,Blank (skip pattern)
+O0110A1A,^,Blank (skip pattern)
+O0110A1C,^,Blank (skip pattern)
+O0110A2A,^,Blank (skip pattern)
+O0110A2C,^,Blank (skip pattern)
+O0110A3A,^,Blank (skip pattern)
+O0110A3C,^,Blank (skip pattern)
+O0110A10A,^,Blank (skip pattern)
+O0110A10C,^,Blank (skip pattern)
+O0110B1A,^,Blank (skip pattern)
+O0110B1C,^,Blank (skip pattern)
+O0110C1A,^,Blank (skip pattern)
+O0110C1C,^,Blank (skip pattern)
+O0110C2A,^,Blank (skip pattern)
+O0110C2C,^,Blank (skip pattern)
+O0110C3A,^,Blank (skip pattern)
+O0110C3C,^,Blank (skip pattern)
+O0110C4A,^,Blank (skip pattern)
+O0110C4C,^,Blank (skip pattern)
+O0110D1A,^,Blank (skip pattern)
+O0110D1C,^,Blank (skip pattern)
+O0110D2A,^,Blank (skip pattern)
+O0110D2C,^,Blank (skip pattern)
+O0110D3A,^,Blank (skip pattern)
+O0110D3C,^,Blank (skip pattern)
+O0110E1A,^,Blank (skip pattern)
+O0110E1C,^,Blank (skip pattern)
+O0110F1A,^,Blank (skip pattern)
+O0110F1C,^,Blank (skip pattern)
+O0110G1A,^,Blank (skip pattern)
+O0110G1C,^,Blank (skip pattern)
+O0110G2A,^,Blank (skip pattern)
+O0110G2C,^,Blank (skip pattern)
+O0110G3A,^,Blank (skip pattern)
+O0110G3C,^,Blank (skip pattern)
+O0110H1A,^,Blank (skip pattern)
+O0110H1C,^,Blank (skip pattern)
+O0110H2A,^,Blank (skip pattern)
+O0110H2C,^,Blank (skip pattern)
+O0110H3A,^,Blank (skip pattern)
+O0110H3C,^,Blank (skip pattern)
+O0110H4A,^,Blank (skip pattern)
+O0110H4C,^,Blank (skip pattern)
+O0110H10A,^,Blank (skip pattern)
+O0110H10C,^,Blank (skip pattern)
+O0110I1A,^,Blank (skip pattern)
+O0110I1C,^,Blank (skip pattern)
+O0110J1A,^,Blank (skip pattern)
+O0110J1C,^,Blank (skip pattern)
+O0110J2A,^,Blank (skip pattern)
+O0110J2C,^,Blank (skip pattern)
+O0110J3A,^,Blank (skip pattern)
+O0110J3C,^,Blank (skip pattern)
+O0110O1A,^,Blank (skip pattern)
+O0110O1C,^,Blank (skip pattern)
+O0110O2A,^,Blank (skip pattern)
+O0110O2C,^,Blank (skip pattern)
+O0110O3A,^,Blank (skip pattern)
+O0110O3C,^,Blank (skip pattern)
+O0110O4A,^,Blank (skip pattern)
+O0110O4C,^,Blank (skip pattern)
+O0110Z1A,^,Blank (skip pattern)
+O0110Z1C,^,Blank (skip pattern)
+D0160,-,Not assessed/no information
+GG0130A5,^,Blank (skip pattern)
+GG0130B5,^,Blank (skip pattern)
+GG0130C5,^,Blank (skip pattern)
+GG0170I5,^,Blank (skip pattern)
+GG0170F5,^,Blank (skip pattern)
+GG0170E5,^,Blank (skip pattern)
+GG0170D5,^,Blank (skip pattern)
+GG0170C5,^,Blank (skip pattern)
+GG0170B5,^,Blank (skip pattern)
+N0415K1,0,Not checked (No)
+N0415K1,1,Checked (Yes)
+N0415K1,-,Not assessed/no information
+N0415K2,0,Not checked (No)
+N0415K2,1,Checked (Yes)
+N0415K2,-,Not assessed/no information
+N0415K2,^,Blank (skip pattern)
+O0350,0,"No, patient is not up to date"
+O0350,1,"Yes, patient is up to date"
+ITM_SET_VRSN_CD,1.19,Tenth update to MDS 3.0 item set (effective 10/01/2024)
+SPEC_VRSN_CD,3.02,Fourteenth update to data specifications (effective 10/01/2024)
+O0350,-,Not assessed/no information
+S0195A,0,Not checked (No)
+S0195A,1,Checked (Yes)
+S0195A,^,Blank (skip pattern)
+S0195B,0,Not checked (No)
+S0195B,1,Checked (Yes)
+S0195B,^,Blank (skip pattern)
+S0195C,0,Not checked (No)
+S0195C,1,Checked (Yes)
+S0195C,^,Blank (skip pattern)
+S0195D,0,Not checked (No)
+S0195D,1,Checked (Yes)
+S0195D,^,Blank (skip pattern)
+S0195Y,0,Not checked (No)
+S0195Y,1,Checked (Yes)
+S0195Y,^,Blank (skip pattern)
+S0195Z,0,Not checked (No)
+S0195Z,1,Checked (Yes)
+S0195Z,^,Blank (skip pattern)
+S0509B,0,No
+S0509B,1,Yes
+S0509B,-,Not assessed/no information
+S0509B,^,Blank (skip pattern)
+S0509,-,Not assessed/no information
+S0511,-,Not assessed/no information
+S0535,0,No
+S0535,1,Yes
+S0535,-,Not assessed/no information
+S0535,^,Blank (skip pattern)
+S0540,0,No
+S0540,1,Yes
+S0540,-,Not assessed/no information
+S0540,^,Blank (skip pattern)
+S0545,YYYYMMDD,Date of most recent PASSRR Level II determination
+S0545,-,Not assessed/no information
+S0545,^,Blank (skip pattern)
+S0550,1,Approved for NF long-term placement
+S0550,2,Approved for NF short-term placement
+S0550,8,Denied
+S0550,9,Not subject to PASRR
+S0550,-,Not assessed/no information
+S0550,^,Blank (skip pattern)
+S0555,1,30 days or less
+S0555,2,31 days to 90 days
+S0555,3,91 days to 6 months
+S0555,-,Not assessed/no information
+S0555,^,Blank (skip pattern)
+S6299,0,No
+S6299,1,Yes
+S6299,9,Not assessed
+S6301A,0,Not checked (No)
+S6301A,1,Checked (Yes)
+S6301A,^,Blank (skip pattern)
+S6301B,0,Not checked (No)
+S6301B,1,Checked (Yes)
+S6301B,^,Blank (skip pattern)
+S6301C,0,Not checked (No)
+S6301C,1,Checked (Yes)
+S6301C,^,Blank (skip pattern)
+S6301Z,0,Not checked (No)
+S6301Z,1,Checked (Yes)
+S6301Z,^,Blank (skip pattern)
+S6303E,0,Not checked (No)
+S6303E,1,Checked (Yes)
+S6303E,-,Not assessed/no information
+S6303F,0,Not checked (No)
+S6303F,1,Checked (Yes)
+S6303F,-,Not assessed/no information
+S6303G,0,Not checked (No)
+S6303G,1,Checked (Yes)
+S6303G,-,Not assessed/no information
+S6303H,0,Not checked (No)
+S6303H,1,Checked (Yes)
+S6303H,-,Not assessed/no information
+S6304,0,No
+S6304,1,Yes
+S6304,9,Not applicable
+ITM_SET_VRSN_CD,1.20,Eleventh update to MDS 3.0 item set (effective 10/01/2025)
+SPEC_VRSN_CD,3.10,Fifteenth update to data specifications (effective 10/01/2025)
+O0390A,0,No (Unchecked)
+O0390A,1,Yes (Checked)
+O0390B,0,No (Unchecked)
+O0390B,1,Yes (Checked)
+O0390C,0,No (Unchecked)
+O0390C,1,Yes (Checked)
+O0390D,0,No (Unchecked)
+O0390D,1,Yes (Checked)
+O0390E,0,No (Unchecked)
+O0390E,1,Yes (Checked)
+O0390Z,0,No (Unchecked)
+O0390Z,1,Yes (Checked)
+S6303E,^,Blank (skip pattern)
+S6303F,^,Blank (skip pattern)
+S6303G,^,Blank (skip pattern)
+S6303H,^,Blank (skip pattern)
+S6305B,999999999,Not yet received
+A1255,0,Yes
+A1255,1,No
+A1255,7,Resident declines to respond
+A1255,8,Resident unable to respond
+A1255,^,Blank (skip pattern)
+A1255,-,Not assessed/no information
+D0150A2,-,Not assessed/no information
+D0150B2,-,Not assessed/no information
+D0150C2,-,Not assessed/no information
+D0150D2,-,Not assessed/no information
+D0150E2,-,Not assessed/no information
+D0150F2,-,Not assessed/no information
+D0150G2,-,Not assessed/no information
+D0150H2,-,Not assessed/no information
+D0150I2,-,Not assessed/no information
+O0390A,-,Not assessed/no information
+O0390B,-,Not assessed/no information
+O0390C,-,Not assessed/no information
+O0390D,-,Not assessed/no information
+O0390E,-,Not assessed/no information
+O0390Z,-,Not assessed/no information
+S0509,^,Blank (skip pattern)
+S1110A,0,No
+S1110A,1,Yes
+S1110A,-,Not assessed/no information
+S1110B,0,No
+S1110B,1,Yes
+S1110B,-,Not assessed/no information
+S1110C,0,No
+S1110C,1,Yes
+S1110C,-,Not assessed/no information
+S1120A1,YYYYMMDD,Valid date
+S1120A1,-,Not assessed/no information
+S1120A2,YYYYMMDD,Valid date
+S1120A1,^,Blank (skip pattern)
+S1120A2,-,Not assessed/no information
+S1120A2,^,Blank (skip pattern)
+S1120B,YYYYMMDD,Valid date
+S1120B,-,Not assessed/no information
+S1120B,^,Blank (skip pattern)
+S1120C,YYYYMMDD,Valid date
+S1120C,-,Not assessed/no information
+S1120C,^,Blank (skip pattern)
+S2070,0,None
+S2070,1,Individual
+S2070,2,Group
+S2070,3,Individual and Group
+S2200A,0,No
+S2200A,1,Yes
+S2200A,-,Not assessed/no information
+S2200B,0,No
+S2200B,1,Yes
+S2200B,-,Not assessed/no information
+S2200B,^,Blank (skip pattern)
+S2200C,YYYYMMDD,Valid date
+S2200C,-,Not assessed/no information
+S2200C,^,Blank (skip pattern)
+S2200D,YYYYMMDD,Valid date
+S2200D,-,Not assessed/no information
+S2200D,^,Blank (skip pattern)
+S2300A,0,No
+S2300A,1,Yes
+S2300A,-,Not assessed/no information
+S2300B,0,No
+S2300B,1,Yes
+S2300B,-,Not assessed/no information
+S2300B,^,Blank (skip pattern)
+S2300C,YYYYMMDD,Valid date
+S2300C,-,Not assessed/no information
+S2300C,^,Blank (skip pattern)
+S3320A,0,No
+S3320A,1,Yes
+S3320A,-,Not assessed/no information
+S3320B,YYYYMMDD,Valid date
+S3320B,-,Not assessed/no information
+S3320B,^,Blank (skip pattern)
+S3321A,0,No
+S3321A,1,Yes
+S3321A,-,Not assessed/no information
+S3321B,YYYYMMDD,Valid date
+S3321B,-,Not assessed/no information
+S3321B,^,Blank (skip pattern)
+S6001A,0,No
+S6001A,1,Yes
+S6001A,-,Not assessed/no information
+S6001B,0,No
+S6001B,1,Yes
+S6001B,-,Not assessed/no information
+S6002,0,No
+S6002,1,Yes
+S6002,-,Not assessed/no information
+S6051A,^,Blank (skip pattern)
+S6051C,^,Blank (skip pattern)
+S6053B,^,Blank (skip pattern)
+S0166,01,Dementia/Alzheimer Unit
+S0166,02,Behavioral Health Unit
+S0166,03,TBI Unit
+S0166,99,None of the above
+S0166,04,Ventilator Unit
+A0810,1,Male
+A0810,2,Female
+X0310,1,Male
+X0310,2,Female
+X0310,^,Blank (skip pattern)
+S1120A2,--------,Ongoing
+S1120B,--------,Ongoing
+S1120C,--------,Ongoing
+S2200D,--------,Ongoing
+S6053B,--------,Ongoing

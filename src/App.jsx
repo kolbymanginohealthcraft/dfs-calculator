@@ -221,8 +221,8 @@ function App() {
               admitDate,
               ard: ardDate,
               dischargeDate,
-              facility: facilityName,
-              address: facilityAddress,
+              facility: isRedacted ? "REDACTED" : facilityName,
+              address: isRedacted ? "REDACTED" : facilityAddress,
             }}
             scores={{
               start: startTotal,

@@ -70,6 +70,14 @@ export function formatDOB(dobStr) {
   return `${month}/${day}/${year}`;
 }
 
+export function formatDate(dateStr) {
+  if (!dateStr || dateStr.length !== 8) return dateStr;
+  const year = dateStr.substring(0, 4);
+  const month = dateStr.substring(4, 6);
+  const day = dateStr.substring(6, 8);
+  return `${month}/${day}/${year}`;
+}
+
 export function calculateAgeAtAdmission(dobStr, admitStr) {
   if (!dobStr || dobStr.length !== 8 || !admitStr || admitStr.length !== 8)
     return null;

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styles from "./Covariates.module.css";
+import { BarChart3 } from "lucide-react";
 import { functionMultipliers } from "../utils/functionMultipliers";
 import { covariateRelatedItems } from "../utils/covariateRelatedItems";
 
@@ -60,10 +61,10 @@ export default function Covariates({
   );
 
   return (
-    <div className={styles.middlePanel}>
+    <div className={styles.covariatesPanel}>
       <div className={styles.sticky}>
-        <div className={styles.headerRow}>
-          <h2>📊 Covariates</h2>
+        <div className={styles.covariatesHeader}>
+          <h2><BarChart3 className={styles.headerIcon} /> Covariates</h2>
           <div className={styles.searchWrapper}>
             <input
               type="text"
@@ -72,14 +73,6 @@ export default function Covariates({
               onChange={(e) => setSearchTerm(e.target.value)}
               className={styles.searchBar}
             />
-            {searchTerm && (
-              <button
-                className={styles.clearButton}
-                onClick={() => setSearchTerm("")}
-              >
-                ✕
-              </button>
-            )}
           </div>
         </div>
         {hasFile && (
@@ -90,7 +83,7 @@ export default function Covariates({
         )}
       </div>
 
-      <div className={styles.scrollArea}>
+       <div className={styles.scrollArea}>
         {hasFile ? (
           <table className={styles.covariateTable}>
             <thead>

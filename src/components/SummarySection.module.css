@@ -58,6 +58,14 @@
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.summaryName svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+  width: 1.8rem;
+  height: 1.8rem;
 }
 
 .inlineDetails {
@@ -68,10 +76,18 @@
 }
 
 .fileInfo {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   /* color: #e0f7fa; */
   white-space: nowrap;
   /* margin: 0; */
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.fileInfo svg {
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .placeholder {
@@ -100,11 +116,44 @@
   margin: 0 0 0.2rem 0;
   color: #0C436A;
   font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.sectionHeading svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .summaryItem {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.toggleButton {
+  background: #e1f0f5;
+  border: 1px solid #007cbb;
+  color: #007cbb;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+}
+
+.toggleButton:hover {
+  background: #d4e7f2;
 }
 

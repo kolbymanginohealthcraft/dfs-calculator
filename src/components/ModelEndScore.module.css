@@ -28,6 +28,18 @@
   gap: 1rem;
 }
 
+.modelHeader h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  /* margin: 0; */
+}
+
+.modelHeader h2 svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
 .resetBtn {
   background: #fcecec;
   border: 1px solid #d64550;
@@ -229,4 +241,91 @@
 .contributeLabel {
   font-weight: 500;
   /* margin-top: 0; */
+}
+
+.headerIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.summaryIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.domainIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.chartBox {
+  margin-bottom: 1rem;
+}
+
+.scoreSummaryBox {
+  background: #ffffff;
+  border: 1px solid #b5e2c1;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summaryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.summaryItem {
+  flex: 1;
+  text-align: center;
+}
+
+.summaryLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #007cbb;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.summaryValue {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0c436a;
+  font-family: 'Courier New', monospace;
+}
+
+.summaryDivider {
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(to bottom, transparent, #9fe4d9, transparent);
+}
+
+.expectedScoreBox {
+  background: linear-gradient(135deg, #007cbb 0%, #0c436a 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 124, 187, 0.3);
+  text-align: center;
+  border: 2px solid #9fe4d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }

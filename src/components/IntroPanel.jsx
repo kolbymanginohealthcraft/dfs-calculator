@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { FileText } from "lucide-react";
 import styles from "./IntroPanel.module.css";
 
 const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
@@ -57,7 +58,7 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
     <>
       {dragActive && (
         <div className={styles.dragOverlay}>
-          <div className={styles.dragOverlayMessage}>📄 Drop XML to upload</div>
+          <div className={styles.dragOverlayMessage}><FileText size={16} /> Drop XML to upload</div>
         </div>
       )}
 
@@ -94,7 +95,7 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
                 <input {...getInputProps()} />
                 <p>Click or drag XML here</p>
                 {hasFile && fileName && (
-                  <div className={styles.fileName}>📂 {fileName}</div>
+                  <div className={styles.fileName}><FileText size={16} /> {fileName}</div>
                 )}
               </div>
               <button
@@ -102,7 +103,7 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
                 onClick={onExport}
                 disabled={!hasFile}
               >
-                📄 Export to PDF
+                <FileText size={16} /> Export to PDF
               </button>
             </div>
             <div className={styles.description}>

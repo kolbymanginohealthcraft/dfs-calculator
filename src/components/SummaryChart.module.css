@@ -39,12 +39,14 @@
   padding-top: 0.2rem;
   border-top: 1px dashed #ccc;
   margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
-.outcomeEmoji {
-  margin-left: 0.4rem;
-  font-size: 1.1rem;
-  vertical-align: middle;
+.outcomeIcon {
+  display: flex;
+  align-items: center;
 }
 
 .outcomeWin {

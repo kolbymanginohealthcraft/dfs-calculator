@@ -46,6 +46,12 @@
   justify-content: center;
   height: auto;
   white-space: nowrap;
+  gap: 0.3rem;
+}
+
+.exportBtn svg {
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 .exportBtn:hover {
@@ -77,6 +83,14 @@
   border-radius: 10px;
   font-weight: bold;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dragOverlayMessage svg {
+  flex-shrink: 0;
+  vertical-align: middle;
 }
 
 
@@ -159,4 +173,17 @@
 
 .caretToggle svg {
   display: block;
+}
+
+.fileName {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.fileName svg {
+  flex-shrink: 0;
+  vertical-align: middle;
 }

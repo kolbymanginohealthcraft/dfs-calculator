@@ -2,6 +2,7 @@ import React from "react";
 import { formatDOB } from "../utils/calculations";
 import { covariateRelatedItems } from "../utils/covariateRelatedItems";
 import "./ExportView.css";
+import { BarChart3 } from "lucide-react";
 
 const ExportView = ({ patient, scores, covariates }) => {
   const today = new Date().toLocaleDateString("en-US", {
@@ -74,7 +75,7 @@ const ExportView = ({ patient, scores, covariates }) => {
       </section>
 
       <section className="section">
-        <h3 className="sectionSubheading">📊 Contributing Covariates</h3>
+        <h3 className="sectionSubheading"><BarChart3 className="sectionIcon" /> Contributing Covariates</h3>
         <table className="covariateTable">
           <thead>
             <tr>

@@ -7,21 +7,31 @@ import {
   ReferenceLine,
 } from "recharts";
 import styles from "./SummaryChart.module.css";
+import { CheckCircle, XCircle } from "lucide-react";
 
 function SummaryChart({ start = 0, modeled = 0, expected }) {
-  const gain = Math.max(modeled - start, 0);
+  // Ensure all values are valid numbers
+  const safeStart = Number.isFinite(start) ? start : 0;
+  const safeModeled = Number.isFinite(modeled) ? modeled : 0;
+  const safeExpected = Number.isFinite(expected) ? expected : undefined;
+  
+  const gain = Math.max(safeModeled - safeStart, 0);
   const outcome =
-    expected !== undefined && !isNaN(expected) && modeled >= expected
+    safeExpected !== undefined && safeModeled >= safeExpected
       ? "WIN"
       : "LOSS";
-  const total = start + gain;
+  const total = safeStart + gain;
 
-  const isExpectedValid = expected !== undefined && !isNaN(expected);
+  const isExpectedValid = safeExpected !== undefined;
+
+  // Calculate a safe domain maximum
+  const domainMax = Math.max(60, safeStart, total);
+  const finalDomainMax = isExpectedValid ? Math.max(domainMax, safeExpected) : domainMax;
 
   const data = [
     {
       name: "",
-      Start: start,
+      Start: safeStart,
       Gain: gain,
       Total: total,
     },
@@ -36,7 +46,7 @@ function SummaryChart({ start = 0, modeled = 0, expected }) {
               className={styles.legendSwatch}
               style={{ background: "#007cbb" }}
             />
-            <span>Start ({start})</span>
+            <span>Start ({safeStart})</span>
           </div>
           <div className={styles.legendItem}>
             <span
@@ -48,11 +58,11 @@ function SummaryChart({ start = 0, modeled = 0, expected }) {
           <div className={`${styles.legendItem} ${styles.legendItemTotal}`}>
             <span>Total: {total}</span>
             <span
-              className={`${styles.outcomeEmoji} ${
+              className={`${styles.outcomeIcon} ${
                 outcome === "WIN" ? styles.outcomeWin : styles.outcomeLoss
               }`}
             >
-              {outcome === "WIN" ? "✅" : "❌"}
+              {outcome === "WIN" ? <CheckCircle size={16} /> : <XCircle size={16} />}
             </span>
           </div>
         </div>
@@ -67,17 +77,17 @@ function SummaryChart({ start = 0, modeled = 0, expected }) {
               <YAxis dataKey="name" type="category" hide />
               <XAxis
                 type="number"
-                domain={[0, Math.max(60, expected || 0, total)]}
+                domain={[0, finalDomainMax]}
                 tick={{ fontSize: 10 }}
                 allowDataOverflow
               />
-              {isExpectedValid && Number.isFinite(expected) && (
+              {isExpectedValid && (
                 <ReferenceLine
-                  x={expected}
+                  x={safeExpected}
                   stroke="#3db3e3"
                   strokeDasharray="4 4"
                   label={{
-                    value: `Expected (${expected.toFixed(2)})`,
+                    value: `Expected (${safeExpected.toFixed(2)})`,
                     position: "top",
                     fill: "#3db3e3",
                     fontSize: 11,

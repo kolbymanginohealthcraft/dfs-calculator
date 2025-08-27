@@ -71,11 +71,38 @@ th, td {
   border: 1px solid #ccc;
 }
 
+/* .headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+} */
+
 .headerRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+
+.headerRow h2 {
+  display: flex;
+  align-items: center;
+  /* margin: 0; */
+}
+
+/* .headerRow h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+} */
+
+.headerIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
 }
 
 .searchInput {
@@ -94,11 +121,14 @@ th, td {
   align-items: center;
   width: 100%;
   max-width: 180px;
+  height: 100%;
 }
 
 .clearButton {
   position: absolute;
   right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   font-size: 1rem;
@@ -106,9 +136,9 @@ th, td {
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .clearButton:hover {
@@ -130,5 +160,4 @@ th, td {
 .highlightedRow {
   background-color: #e5f7f7;
 }
-
 

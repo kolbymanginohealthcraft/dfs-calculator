@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
+import { formatDate } from "../utils/calculations";
+import { ClipboardList } from "lucide-react";
 
 export default function MdsSnapshot({
   groupedSections,
@@ -28,14 +30,29 @@ export default function MdsSnapshot({
   };
 
   const getDescription = (id, value) => {
-    // Redact patient names and sensitive identifiers when isRedacted is true
+    // Redact patient names, sensitive identifiers, and facility information when isRedacted is true
     if (isRedacted && (id === "A0500A" || id === "A0500B" || id === "A0500C" || id === "A0500D" || 
         id === "A0600A" || id === "A0600B" || id === "A0700" || id === "A1300A" ||
-        id === "X0200A" || id === "X0200C")) {
+        id === "X0200A" || id === "X0200C" || id === "A0100A" || id === "A0100B" || id === "A0100C")) {
       if (id === "A0600A") {
         return "***-**-****"; // SSN format
       }
       return "REDACTED";
+    }
+
+    // List of known date-related MDS items
+    const dateItems = [
+      "A0900", "A1600", "A1900", "A2000", "A2200", "A2300", "A2400B", "A2400C",
+      "TARGET_DATE", "SUBMISSION_DATE", "SUBMISSION_COMPLETE_DATE"
+    ];
+
+    // Check if this is a date item and format it
+    const isDateItem = dateItems.includes(id);
+    const isDateValue = value && value.length === 8 && /^\d{8}$/.test(value);
+    
+    if (isDateItem && isDateValue) {
+      const formattedDate = formatDate(value);
+      return highlightMatch(formattedDate);
     }
 
     const key = `${id}|${value}`;
@@ -129,11 +146,14 @@ export default function MdsSnapshot({
     })
     .filter(([, , items]) => items.length > 0);
 
-  return (
+    return (
     <div className={styles.leftPanel}>
       <div className={styles.sticky}>
         <div className={styles.headerRow}>
-          <h2>📋 MDS Values</h2>
+          <h2>
+            <ClipboardList size={20} className={styles.headerIcon} />
+            MDS Values
+          </h2>
           <div className={styles.searchWrapper}>
             <input
               type="text"

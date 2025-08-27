@@ -8,13 +8,15 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node src/utils/server.js"
+    "server": "node src/utils/server.js",
+    "vercel-build": "vite build"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parser": "^3.2.0",
     "express": "^5.1.0",
     "html2pdf.js": "^0.10.3",
+    "lucide-react": "^0.542.0",
     "node-fetch": "^3.3.2",
     "papaparse": "^5.5.3",
     "react": "^19.1.0",
