@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
 
-export default function useValueDescriptions(csvPath = "/itm_val.csv") {
+export default function useValueDescriptions(csvPath = "/src/data/itm_val.csv") {
   const [lookup, setLookup] = useState({});
 
   useEffect(() => {
