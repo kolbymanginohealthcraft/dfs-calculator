@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
-import HomeScreen from '../basic/screens/HomeScreen';
 import StartScoreScreen from '../basic/screens/StartScoreScreen';
 import ExpectedScoreScreen from '../basic/screens/ExpectedScoreScreen';
 import EndScoreScreen from '../basic/screens/EndScoreScreen';
@@ -29,7 +28,7 @@ function BasicApp() {
     <>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<HomeScreen />} />
+        <Route path="/" element={<StartScoreScreen />} />
         <Route path="/start-score" element={<StartScoreScreen />} />
         <Route path="/expected-score" element={<ExpectedScoreScreen />} />
         <Route path="/end-score" element={<EndScoreScreen />} />

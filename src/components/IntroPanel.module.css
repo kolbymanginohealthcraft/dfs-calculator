@@ -1,29 +1,60 @@
 .introPanel {
-  padding: 1rem 2rem;
-  background: #FFF9E6;
-  border-bottom: 1px solid #ccc;
+  padding: var(--spacing-lg) var(--spacing-2xl);
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border-bottom: 1px solid var(--border-glass);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 2rem;
+  gap: var(--spacing-2xl);
   flex-wrap: wrap;
+  box-shadow: var(--shadow-glass);
+  transition: all var(--transition-normal);
 }
 
 .dropzone {
-  padding: 0.5rem 1rem;
-  border: 2px dashed #3db3e3;
-  background: #ffffff;
-  color: #0c436a;
-  border-radius: 6px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: 2px dashed var(--accent-color);
+  background: var(--background-glass);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  border-radius: var(--radius-lg);
   cursor: pointer;
-  line-height: 0rem;
-  font-size: 0.85rem;
+  line-height: 1.2;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.dropzone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 124, 187, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.dropzone:hover {
+  border-color: var(--accent-light);
+  background: var(--background-glass-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glass);
+}
+
+.dropzone:hover::before {
+  left: 100%;
 }
 
 .description {
   flex: 2;
-  font-size: 0.9rem;
-  color: #333;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 .actionsGroup {
@@ -34,19 +65,35 @@
 }
 
 .exportBtn {
-  font-size: 0.85rem;
-  background: #e1f0f5;
-  border: 1px solid #007cbb;
-  color: #007cbb;
-  border-radius: 6px;
+  font-size: 0.9rem;
+  background: var(--gradient-accent);
+  border: 1px solid var(--accent-color);
+  color: var(--text-white);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  padding: 0 1rem;
+  padding: var(--spacing-sm) var(--spacing-lg);
   display: flex;
   align-items: center;
   justify-content: center;
   height: auto;
   white-space: nowrap;
-  gap: 0.3rem;
+  gap: var(--spacing-xs);
+  font-weight: 600;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-colored-accent);
+  position: relative;
+  overflow: hidden;
+}
+
+.exportBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
 }
 
 .exportBtn svg {
@@ -55,7 +102,12 @@
 }
 
 .exportBtn:hover {
-  background: #d4e7f2;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-colored-accent);
+}
+
+.exportBtn:hover::before {
+  left: 100%;
 }
 
 /* ✅ Re-add dragging overlay stylings */
@@ -65,27 +117,30 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(61, 179, 227, 0.2);
+  background: rgba(0, 124, 187, 0.2);
+  backdrop-filter: blur(5px);
   z-index: 999;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  transition: opacity 0.2s ease-in-out;
+  transition: opacity var(--transition-normal);
 }
 
 .dragOverlayMessage {
   font-size: 1.5rem;
-  color: #0c436a;
-  background: #ffffffcc;
-  border: 2px dashed #3db3e3;
-  padding: 2rem;
-  border-radius: 10px;
-  font-weight: bold;
+  color: var(--text-primary);
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border: 2px dashed var(--accent-color);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  font-weight: 600;
   pointer-events: none;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-glass);
 }
 
 .dragOverlayMessage svg {
@@ -95,21 +150,21 @@
 
 
 .noFile {
-  background: #eaf9ff;
-  border-color: #007cbb;
-  box-shadow: 0 0 0 2px #b3e4ff;
+  background: var(--background-glass);
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(0, 124, 187, 0.2);
   animation: pulseBorder 1.2s infinite ease-in-out;
 }
 
 @keyframes pulseBorder {
   0% {
-    box-shadow: 0 0 0 2px #b3e4ff;
+    box-shadow: 0 0 0 2px rgba(0, 124, 187, 0.2);
   }
   50% {
-    box-shadow: 0 0 0 4px #007cbb;
+    box-shadow: 0 0 0 4px var(--accent-color);
   }
   100% {
-    box-shadow: 0 0 0 2px #b3e4ff;
+    box-shadow: 0 0 0 2px rgba(0, 124, 187, 0.2);
   }
 }
 
@@ -146,29 +201,35 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background: #fff9e6;
-  border-bottom: 1px solid #ccc;
-  padding: 0.2rem 1.5rem;
-  height: 1.5rem;
+  background: var(--background-glass);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-glass);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  height: 2rem;
+  box-shadow: var(--shadow-glass);
 }
 
 .caretToggle {
-  background: none;
-  border: none;
+  background: var(--background-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass);
   cursor: pointer;
-  color: #0c436a;
-  padding: 0.2rem 0.5rem;
+  color: var(--text-primary);
+  padding: var(--spacing-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s, background-color 0.2s, transform 0.2s;
-  border-radius: 50%;
+  transition: all var(--transition-normal);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-glass);
 }
 
 .caretToggle:hover {
-  color: #007cbb;
-  background-color: rgba(0, 124, 187, 0.1);
+  color: var(--accent-color);
+  background: var(--background-glass-hover);
+  border-color: var(--border-glass-hover);
   transform: scale(1.1);
+  box-shadow: var(--shadow-glass-hover);
 }
 
 .caretToggle svg {

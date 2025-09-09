@@ -1,17 +1,41 @@
 .end-score-screen {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e0 100%);
+  background-attachment: fixed;
   padding: 0;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.end-score-screen::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(127, 188, 66, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 124, 187, 0.05) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(1deg); }
 }
 
 
 
 .main-content {
   display: flex;
-  gap: 30px;
+  gap: var(--spacing-2xl);
   width: 100%;
-  padding: 20px;
+  padding: var(--spacing-xl);
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
 }
 
 .content-left {
@@ -29,11 +53,13 @@
 }
 
 .score-bar-chart-container {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
+  margin-bottom: var(--spacing-xl);
 }
 
 .chart-action-button {
@@ -45,11 +71,13 @@
 }
 
 .scores-container {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
+  margin-bottom: var(--spacing-xl);
 }
 
 .category-section {
@@ -64,40 +92,37 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #e0e0e0;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--border-glass);
 }
 
 .category-title {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #0c436a;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .table-container {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: white;
+  background: var(--background-glass);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-glass);
 }
 
 .score-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
-  border-bottom: 1px solid #e0e0e0;
-  transition: all 0.3s ease;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--border-glass);
 }
 
 .score-row:last-child {
   border-bottom: none;
-}
-
-.score-row:hover {
-  background-color: #f8f9fa;
 }
 
 .item-label {
@@ -109,8 +134,8 @@
 
 .label-text {
   font-size: 0.95rem;
-  font-weight: 500;
-  color: #333;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .item-progress {
@@ -182,24 +207,26 @@
 
 /* Instructions Panel Styles */
 .instructions-panel {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
   position: sticky;
-  top: 20px;
+  top: var(--spacing-xl);
 }
 
 .instructions-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #0c436a;
-  margin: 0 0 20px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xl) 0;
   text-align: center;
 }
 
 .instruction-section {
-  margin-bottom: 25px;
+  margin-bottom: var(--spacing-xl);
 }
 
 .instruction-section:last-child {
@@ -207,25 +234,25 @@
 }
 
 .instruction-subtitle {
-  font-size: 1.1rem;
-  font-weight: bold;
-  color: #333;
-  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
 }
 
 .instruction-text {
   font-size: 0.95rem;
-  color: #666;
-  line-height: 1.5;
+  color: var(--text-secondary);
+  line-height: 1.6;
   margin: 0;
 }
 
 .instruction-list {
   font-size: 0.95rem;
-  color: #666;
-  line-height: 1.5;
+  color: var(--text-secondary);
+  line-height: 1.6;
   margin: 0;
-  padding-left: 20px;
+  padding-left: var(--spacing-lg);
 }
 
 .instruction-list li {
@@ -245,14 +272,14 @@
 }
 
 .score-number {
-  font-weight: bold;
-  color: #0c436a;
+  font-weight: 700;
+  color: var(--text-primary);
   min-width: 20px;
 }
 
 .score-description {
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .instruction-action-button {

@@ -6,7 +6,7 @@ const HomeScreen = () => {
   const navigate = useNavigate();
 
   const handleBasicMode = () => {
-    navigate('/basic');
+    navigate('/basic/start-score');
   };
 
   const handleAdvancedMode = () => {
