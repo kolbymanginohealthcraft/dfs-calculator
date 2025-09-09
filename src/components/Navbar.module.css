@@ -14,48 +14,31 @@
   border-bottom: 1px solid var(--border-glass);
   box-shadow: var(--shadow-glass);
   transition: all var(--transition-normal);
+  position: relative;
 }
 
 .backButton {
-  background: var(--background-glass);
+  background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   color: var(--text-white);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
   padding: var(--spacing-sm) var(--spacing-lg);
   font-size: 0.9rem;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: all 0.3s ease;
   white-space: nowrap;
   position: relative;
   overflow: hidden;
 }
 
-.backButton::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
 .backButton:hover {
-  background: var(--background-glass-hover);
-  border-color: var(--border-glass-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-glass);
-}
-
-.backButton:hover::before {
-  left: 100%;
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .backButton:focus {
-  outline: 2px solid var(--border-glass-hover);
+  outline: 2px solid rgba(255, 255, 255, 0.5);
   outline-offset: 2px;
 }
 
@@ -81,4 +64,130 @@
   display: block;
   margin-left: auto;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+/* Navbar sections */
+.navbarLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+
+.navbarCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.navbarRight {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+
+.uploadButton {
+  background: linear-gradient(135deg, #ff6b35, #f7931e);
+  backdrop-filter: blur(10px);
+  color: var(--text-white);
+  border: 1px solid #ff6b35;
+  border-radius: 50px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow: hidden;
+  max-width: 200px;
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+}
+
+.uploadButton:hover {
+  background: linear-gradient(135deg, #ff8c42, #ffa726);
+  border-color: #ff8c42;
+}
+
+.uploadButton:active {
+  transform: scale(0.98);
+}
+
+/* Clear button state - red/danger styling */
+.uploadButton.clearButton {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border: 1px solid #dc2626;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.uploadButton.clearButton:hover {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-color: #ef4444;
+}
+
+.uploadButton.clearButton:active {
+  transform: scale(0.98);
+}
+
+.exportButton {
+  background: var(--accent-color);
+  backdrop-filter: blur(10px);
+  color: var(--text-white);
+  border: 1px solid var(--accent-color);
+  border-radius: 50px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow: hidden;
+}
+
+.exportButton:hover {
+  background: var(--accent-light);
+}
+
+/* Drag overlay */
+.dragOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 124, 187, 0.2);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+
+.dragOverlayMessage {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border: 2px dashed var(--accent-color);
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  box-shadow: var(--shadow-glass);
 }

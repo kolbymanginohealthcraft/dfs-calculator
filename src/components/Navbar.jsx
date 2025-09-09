@@ -1,35 +1,139 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
+import { FileText, Upload } from "lucide-react";
 import styles from "./Navbar.module.css";
 
-const Navbar = () => {
+const Navbar = ({ onDrop, onExport, hasFile, fileName }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [dragActive, setDragActive] = useState(false);
+  
+  // Only show upload functionality on advanced route
+  const isAdvancedRoute = location.pathname === '/advanced';
+
+  const { getRootProps, getInputProps, open } = useDropzone({
+    onDrop,
+    accept: { "text/xml": [".xml"] },
+    noClick: true,
+    noKeyboard: true,
+  });
 
   const handleBackToHome = () => {
     navigate('/');
   };
 
+  useEffect(() => {
+    // Only set up drag and drop on advanced route
+    if (!isAdvancedRoute) return;
+    
+    let dragCounter = 0;
+
+    const handleDragEnter = (e) => {
+      e.preventDefault();
+      dragCounter++;
+      setDragActive(true);
+    };
+
+    const handleDragLeave = (e) => {
+      e.preventDefault();
+      dragCounter--;
+      if (dragCounter === 0) setDragActive(false);
+    };
+
+    const handleDrop = (e) => {
+      e.preventDefault();
+      dragCounter = 0;
+      setDragActive(false);
+      const files = Array.from(e.dataTransfer.files || []);
+      if (files.length > 0) onDrop(files);
+    };
+
+    const preventDefaults = (e) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener("dragenter", handleDragEnter);
+    window.addEventListener("dragover", preventDefaults);
+    window.addEventListener("dragleave", handleDragLeave);
+    window.addEventListener("drop", handleDrop);
+
+    return () => {
+      window.removeEventListener("dragenter", handleDragEnter);
+      window.removeEventListener("dragover", preventDefaults);
+      window.removeEventListener("dragleave", handleDragLeave);
+      window.removeEventListener("drop", handleDrop);
+    };
+  }, [onDrop, isAdvancedRoute]);
+
   return (
-    <div className={styles.navbar}>
-      <div className="navbar-left">
-        <button 
-          className={styles.backButton}
-          onClick={handleBackToHome}
-        >
-          Back to Home
-        </button>
+    <>
+      {dragActive && isAdvancedRoute && (
+        <div className={styles.dragOverlay}>
+          <div className={styles.dragOverlayMessage}>
+            <FileText size={16} /> Drop XML to upload
+          </div>
+        </div>
+      )}
+      
+      <div className={styles.navbar} {...(isAdvancedRoute ? getRootProps() : {})}>
+        {isAdvancedRoute && <input {...getInputProps()} />}
+        
+        <div className={styles.navbarLeft}>
+          <button 
+            className={styles.backButton}
+            onClick={handleBackToHome}
+          >
+            Back to Home
+          </button>
+          
+          {isAdvancedRoute && (
+            <button
+              className={`${styles.uploadButton} ${hasFile ? styles.clearButton : ''}`}
+              onClick={hasFile ? () => onDrop([]) : open}
+              title={hasFile ? "Clear file" : "Upload XML file"}
+            >
+              {hasFile ? (
+                <>
+                  <span>×</span>
+                  Clear File
+                </>
+              ) : (
+                <>
+                  <Upload size={16} />
+                  Upload XML
+                </>
+              )}
+            </button>
+          )}
+        </div>
+        
+        <div className={styles.navbarCenter}>
+          <h1 className={styles.navbarTitle}>DFS Calculator</h1>
+        </div>
+        
+        <div className={styles.navbarRight}>
+          {isAdvancedRoute && hasFile && (
+            <button
+              className={styles.exportButton}
+              onClick={onExport}
+              title="Export to PDF"
+            >
+              <FileText size={16} />
+              Export PDF
+            </button>
+          )}
+          
+          <div className={styles.logoContainer}>
+            <img
+              src="/AEGIS_T_White.png"
+              alt="Aegis Logo"
+              className={styles.navbarLogo}
+            />
+          </div>
+        </div>
       </div>
-      <div className="navbar-center">
-        <h1 className={styles.navbarTitle}>DFS Calculator</h1>
-      </div>
-      <div className={styles.logoContainer}>
-        <img
-          src="/AEGIS_T_White.png"
-          alt="Aegis Logo"
-          className={styles.navbarLogo}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

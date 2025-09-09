@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { scoreMap, GG_ITEMS, conditionMap } from "../utils/calculations";
 import {
   extractPatientSummary,
@@ -14,12 +14,13 @@ import useValueDescriptions from "../utils/useValueDescriptions";
 import html2pdf from "html2pdf.js";
 
 import Navbar from "./Navbar";
-import IntroPanel from "./IntroPanel";
 import SummarySection from "./SummarySection";
-import MdsSnapshot from "./MdsSnapshot";
-import ModelEndScore from "./ModelEndScore";
-import Covariates from "./Covariates";
-import ExportView from "./ExportView";
+
+// Lazy load heavy components to improve initial render performance
+const MdsSnapshot = lazy(() => import("./MdsSnapshot"));
+const ModelEndScore = lazy(() => import("./ModelEndScore"));
+const Covariates = lazy(() => import("./Covariates"));
+const ExportView = lazy(() => import("./ExportView"));
 
 import "../index.css";
 
@@ -33,13 +34,23 @@ function AdvancedApp() {
   const [facilityAddress, setFacilityAddress] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
   const [isRedacted, setIsRedacted] = useState(true);
-  const icd10Descriptions = useICD10Lookup();
   const exportRef = useRef();
 
+  const icd10Descriptions = useICD10Lookup();
   const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
 
   const onDrop = useCallback((acceptedFiles) => {
+    // If empty array is passed, clear the file
+    if (acceptedFiles.length === 0) {
+      setFileName("");
+      setParsedValues({});
+      setGroupedSections({});
+      setModeledValues({});
+      setStartScores({});
+      return;
+    }
+    
     const file = acceptedFiles[0];
     handleFileUpload(
       file,
@@ -142,8 +153,7 @@ function AdvancedApp() {
 
   return (
     <div className="app-container">
-      <Navbar />
-      <IntroPanel onDrop={onDrop} onExport={handleExport} hasFile={hasFile} />
+      <Navbar onDrop={onDrop} onExport={handleExport} hasFile={hasFile} fileName={fileName} />
 
       <div className="mainContent">
         <div className="mainLeft">
@@ -176,64 +186,72 @@ function AdvancedApp() {
 
           <div className="snapshotCovariateRow">
             <div className="snapshotPanel scrollableContent">
-              <MdsSnapshot
-                groupedSections={groupedSections}
-                descriptions={descriptions}
-                icd10Descriptions={icd10Descriptions}
-                selectedItems={selectedItems}
-                isRedacted={isRedacted}
-              />
+              <Suspense fallback={<div>Loading...</div>}>
+                <MdsSnapshot
+                  groupedSections={groupedSections}
+                  descriptions={descriptions}
+                  icd10Descriptions={icd10Descriptions}
+                  selectedItems={selectedItems}
+                  isRedacted={isRedacted}
+                />
+              </Suspense>
             </div>
             <div className="covariatesPanel scrollableContent">
-              <Covariates
-                hasFile={hasFile}
-                covariates={covariates}
-                multipliers={functionMultipliers}
-                onCovariateClick={handleCovariateClick}
-              />
+              <Suspense fallback={<div>Loading...</div>}>
+                <Covariates
+                  hasFile={hasFile}
+                  covariates={covariates}
+                  multipliers={functionMultipliers}
+                  onCovariateClick={handleCovariateClick}
+                />
+              </Suspense>
             </div>
           </div>
         </div>
 
         <div className="mainRight scrollableContent">
-          <ModelEndScore
-            modeledValues={modeledValues}
-            startScores={startScores}
-            subtotal={subtotal}
-            modeledTotal={modeledTotal}
-            handleTick={handleTick}
-            setModeledValues={setModeledValues}
-            hasFile={hasFile}
-            parsedValues={parsedValues}
-            weightedScore={weightedScore}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ModelEndScore
+              modeledValues={modeledValues}
+              startScores={startScores}
+              subtotal={subtotal}
+              modeledTotal={modeledTotal}
+              handleTick={handleTick}
+              setModeledValues={setModeledValues}
+              hasFile={hasFile}
+              parsedValues={parsedValues}
+              weightedScore={weightedScore}
+            />
+          </Suspense>
         </div>
       </div>
 
       <div style={{ display: "none" }}>
         <div ref={exportRef}>
-          <ExportView
-            patient={{
-              name: isRedacted ? "REDACTED REDACTED" : `${firstName} ${lastName}`,
-              dob,
-              age,
-              admitDate,
-              ard: ardDate,
-              dischargeDate,
-              facility: isRedacted ? "REDACTED" : facilityName,
-              address: isRedacted ? "REDACTED" : facilityAddress,
-            }}
-            scores={{
-              start: startTotal,
-              expected: weightedScore,
-              modeled: modeledTotal,
-            }}
-            covariates={Object.entries(covariates).map(([name, value]) => ({
-              name,
-              value,
-              multiplier: functionMultipliers[name],
-            }))}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <ExportView
+              patient={{
+                name: isRedacted ? "REDACTED REDACTED" : `${firstName} ${lastName}`,
+                dob,
+                age,
+                admitDate,
+                ard: ardDate,
+                dischargeDate,
+                facility: isRedacted ? "REDACTED" : facilityName,
+                address: isRedacted ? "REDACTED" : facilityAddress,
+              }}
+              scores={{
+                start: startTotal,
+                expected: weightedScore,
+                modeled: modeledTotal,
+              }}
+              covariates={Object.entries(covariates).map(([name, value]) => ({
+                name,
+                value,
+                multiplier: functionMultipliers[name],
+              }))}
+            />
+          </Suspense>
         </div>
       </div>
     </div>
