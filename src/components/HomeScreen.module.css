@@ -1,0 +1,271 @@
+.home-screen {
+  min-height: 100vh;
+  background: var(--background-tertiary);
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+.home-container {
+  width: 100%;
+  background: var(--background-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  padding: var(--spacing-2xl);
+  text-align: center;
+  margin: var(--spacing-xl) 0;
+}
+
+.header {
+  margin-bottom: 40px;
+}
+
+.logo-section {
+  margin-bottom: 20px;
+}
+
+.logo {
+  height: 80px;
+  width: auto;
+  margin-bottom: 20px;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-xs) 0;
+  font-weight: 500;
+}
+
+.subtitle-secondary {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin: 0 0 var(--spacing-xl) 0;
+}
+
+.mode-selection {
+  margin-bottom: 40px;
+}
+
+.mode-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 30px;
+}
+
+.mode-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.mode-card {
+  background: var(--background-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--border-light);
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.mode-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.basic-card {
+  border-color: var(--secondary-color);
+}
+
+.basic-card:hover {
+  border-color: var(--secondary-dark);
+  box-shadow: 0 15px 35px rgba(127, 188, 66, 0.2);
+}
+
+.advanced-card {
+  border-color: var(--accent-color);
+}
+
+.advanced-card:hover {
+  border-color: var(--accent-dark);
+  box-shadow: 0 15px 35px rgba(0, 124, 187, 0.2);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-icon {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.basic-icon {
+  background: var(--secondary-color);
+  color: white;
+}
+
+.advanced-icon {
+  background: var(--accent-color);
+  color: white;
+}
+
+.card-content {
+  margin-bottom: 25px;
+}
+
+.card-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-list li {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  padding-left: 0;
+}
+
+.mode-button {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: none;
+}
+
+.info-section {
+  margin-bottom: 30px;
+}
+
+.info-card {
+  background: var(--background-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  border-left: 4px solid var(--accent-color);
+}
+
+.info-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.info-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.disclaimer {
+  background: #fed7d7;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  border-left: 4px solid #e53e3e;
+}
+
+.disclaimer-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #c53030;
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.disclaimer-text {
+  font-size: 0.9rem;
+  color: #742a2a;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .title {
+    font-size: 2.2rem;
+  }
+  
+  .mode-cards {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .mode-card {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.3rem;
+  }
+  
+  .mode-button {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-screen {
+    padding: 10px;
+  }
+  
+  .home-container {
+    padding: 15px;
+  }
+  
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .mode-title {
+    font-size: 1.5rem;
+  }
+}

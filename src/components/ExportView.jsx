@@ -33,7 +33,7 @@ const ExportView = ({ patient, scores, covariates }) => {
 
   return (
     <div className="exportContainer">
-      <h1 className="reportTitle">Discharge Function Score Report</h1>
+      <h1 className="reportTitle">DFS Report</h1>
 
       <section className="section">
         <p className="patientLine">
@@ -107,7 +107,7 @@ const ExportView = ({ patient, scores, covariates }) => {
           <tfoot>
             <tr className="totalRow">
               <td colSpan="3" style={{ textAlign: "right", fontWeight: "bold" }}>
-                Expected Discharge Function Score:
+                Expected DFS:
               </td>
               <td style={{ fontWeight: "bold" }}>{format(grandTotal)}</td>
             </tr>

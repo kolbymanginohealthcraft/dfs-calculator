@@ -1,0 +1,173 @@
+.score-bar-chart {
+  margin-bottom: 0;
+  padding: 0 20px;
+}
+
+.chart-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #0c436a;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.bar-chart-track {
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.start-bar {
+  height: 100%;
+  background-color: #007cbb;
+  position: absolute;
+  left: 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.required-background {
+  height: 100%;
+  background-color: #5bc0de;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.gain-bar {
+  height: 100%;
+  background-color: #5bc0de;
+  position: absolute;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.expected-line {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background-color: #dc3545;
+}
+
+.bar-value-text {
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.end-total-label {
+  position: absolute;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.end-total-text {
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.bar-chart-labels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.bar-chart-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  flex: 1;
+}
+
+.label-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.gain-dot {
+  background-color: #5bc0de;
+}
+
+.label-text {
+  font-size: 1rem;
+  color: #333;
+}
+
+.gain-text {
+  color: #5bc0de;
+}
+
+.required-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 5px;
+}
+
+.required-text {
+  font-size: 1rem;
+  color: #5bc0de;
+}
+
+.required-gain-label {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(91, 192, 222, 0.2);
+  border-radius: 10px;
+}
+
+.required-gain-text {
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.comparison-indicator {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.comparison-icon {
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.comparison-text {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .bar-chart-labels {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .bar-chart-label {
+    flex: none;
+  }
+}

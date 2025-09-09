@@ -138,7 +138,7 @@ export default function Covariates({
                   colSpan="3"
                   style={{ textAlign: "right", fontWeight: "bold" }}
                 >
-                  Expected Discharge Function Score:
+                  Expected DFS:
                 </td>
                 <td style={{ fontWeight: "bold" }}>{formatNumber(total)}</td>
               </tr>

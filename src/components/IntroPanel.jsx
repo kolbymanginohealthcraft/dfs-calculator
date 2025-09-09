@@ -99,7 +99,7 @@ const IntroPanel = ({ onDrop, onExport, hasFile, fileName }) => {
                 )}
               </div>
               <button
-                className={styles.exportBtn}
+                className={`btn btn-secondary ${styles.exportBtn}`}
                 onClick={onExport}
                 disabled={!hasFile}
               >
