@@ -82,61 +82,42 @@
   color: #007cbb;
 }
 
-.tickRow {
+.scoreRow {
   display: flex;
-  align-items: center; /* Ensures vertical centering */
-  justify-content: space-between;
+  align-items: center;
   gap: 0.5rem;
   padding: 0.4rem 0.5rem;
   font-size: 0.88rem;
   border-bottom: 1px solid #ddd;
   white-space: nowrap;
   overflow: hidden;
-  line-height: 1.2; /* Tighter spacing may help baseline alignment */
+  line-height: 1.2;
+  border-left: 4px solid transparent; /* always reserve space */
 }
 
-.tickRow label {
+.itemLabel {
   flex: 1.6;
   margin-right: 0.5rem;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.tickControls {
+.labelText {
+  display: block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.itemProgress {
+  flex-shrink: 0;
+  margin: 0 0.5rem;
+}
+
+.scoreControls {
   display: flex;
   align-items: center;
   gap: 0.4rem;
   flex-shrink: 0;
-}
-
-.tickControls button {
-  padding: 0.2rem 0.5rem;
-  font-size: 0.85rem;
-  background: #e1f4ec;
-  border: 1px solid #7fbc42;
-  border-radius: 4px;
-  cursor: pointer;
-}
-.tickControls button:hover {
-  background: #d0efdb;
-}
-
-.tickValue {
-  min-width: 1.5rem;
-  text-align: center;
-  font-weight: bold;
-}
-
-.startScore {
-  color: #666;
-  font-size: 0.75rem;
-  flex-shrink: 0;
-  min-width: 4rem;       /* ensures consistent width */
-  text-align: right;     /* aligns numeric and ANA values */
-}
-
-.tickRow {
-  border-left: 4px solid transparent; /* always reserve space */
 }
 
 

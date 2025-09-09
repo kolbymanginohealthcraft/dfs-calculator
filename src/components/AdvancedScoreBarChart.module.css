@@ -1,0 +1,136 @@
+.scoreBarChart {
+  margin-bottom: 0;
+  padding: 0 20px;
+}
+
+.chartTitle {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #0c436a;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.barChartTrack {
+  height: 20px;
+  background-color: #e9ecef;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.startBar {
+  height: 100%;
+  background-color: #007cbb;
+  position: absolute;
+  left: 0;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.requiredBackground {
+  height: 100%;
+  background-color: #5bc0de;
+  position: absolute;
+  border-radius: 10px;
+}
+
+.gainBar {
+  height: 100%;
+  background-color: #5bc0de;
+  position: absolute;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.expectedLine {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background-color: #dc3545;
+}
+
+.barValueText {
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.endTotalLabel {
+  position: absolute;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.endTotalText {
+  font-size: 12px;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.barChartLabels {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.barChartLabel {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  flex: 1;
+}
+
+.labelDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.labelText {
+  font-size: 1rem;
+  color: #333;
+}
+
+.comparisonIndicator {
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+}
+
+.comparisonIcon {
+  font-size: 12px;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.comparisonText {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .barChartLabels {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .barChartLabel {
+    flex: none;
+  }
+}

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomeScreen from './components/HomeScreen';
 import BasicApp from './components/BasicApp';
-import AdvancedApp from './components/AdvancedApp';
+import AdvancedAppNew from './components/AdvancedAppNew';
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomeScreen />} />
           <Route path="/basic/*" element={<BasicApp />} />
-          <Route path="/advanced" element={<AdvancedApp />} />
+          <Route path="/advanced" element={<AdvancedAppNew />} />
         </Routes>
       </div>
     </Router>

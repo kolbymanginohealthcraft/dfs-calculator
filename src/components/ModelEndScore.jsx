@@ -6,7 +6,10 @@ import {
   calculateFunctionScore,
   getContributingItemIds,
 } from "../utils/calculations";
-import SummaryChart from "./SummaryChart";
+import AdvancedScoreBarChart from "./AdvancedScoreBarChart";
+import BarbellChart from "./BarbellChart";
+import ScoreButton from "./ScoreButton";
+import { getScoreTypeColor } from "../utils/themeColors";
 import { Wrench, BarChart3, Target, HandHeart, User, Settings } from "lucide-react";
 
 const ModelEndScore = ({
@@ -76,10 +79,11 @@ const ModelEndScore = ({
               </div>
             </div>
             <div className={styles.chartBox}>
-              <SummaryChart
-                start={startTotal}
-                modeled={modeledTotal}
-                expected={weightedScore}
+              <AdvancedScoreBarChart
+                startTotal={startTotal}
+                modeledTotal={modeledTotal}
+                expectedScore={weightedScore}
+                title="Score Progress"
               />
             </div>
           </>
@@ -131,7 +135,7 @@ const ModelEndScore = ({
                   const delta = modeled - start;
 
                   const rowClasses = [
-                    styles.tickRow,
+                    styles.scoreRow,
                     modeled > start ? styles.gain : "",
                     modeled < start ? styles.loss : "",
                   ]
@@ -149,29 +153,48 @@ const ModelEndScore = ({
                         )}
                       </span>
 
-                      <label title={id}>
-                        {label}{" "}
-                        <span className={styles.itemId}>[{cleanId}]</span>
-                        {delta !== 0 && (
-                          <span
-                            className={`${styles.delta} ${
-                              delta > 0 ? styles.positive : styles.negative
-                            }`}
-                          >
-                            ({delta > 0 ? "+" : ""}
-                            {delta})
-                          </span>
-                        )}
-                      </label>
-
-                      <div className={styles.tickControls}>
-                        <button onClick={() => handleTick(id, -1)}>-</button>
-                        <span className={styles.tickValue}>{modeled}</span>
-                        <button onClick={() => handleTick(id, 1)}>+</button>
+                      <div className={styles.itemLabel}>
+                        <span className={styles.labelText} title={id}>
+                          {label}{" "}
+                          <span className={styles.itemId}>[{cleanId}]</span>
+                          {delta !== 0 && (
+                            <span
+                              className={`${styles.delta} ${
+                                delta > 0 ? styles.positive : styles.negative
+                              }`}
+                            >
+                              ({delta > 0 ? "+" : ""}
+                              {delta})
+                            </span>
+                          )}
+                        </span>
                       </div>
-                      <span className={styles.startScore}>
-                        Start: {startScores[id] === "^" ? "ANA" : start}
-                      </span>
+                      
+                      <div className={styles.itemProgress}>
+                        <BarbellChart
+                          startScore={start}
+                          endScore={modeled}
+                          showEndNode={true}
+                          width={120}
+                          height={30}
+                        />
+                      </div>
+                      
+                      <div className={styles.scoreControls}>
+                        <ScoreButton
+                          type="minus"
+                          onClick={() => handleTick(id, -1)}
+                          color={getScoreTypeColor('end', 'primary')}
+                          outlineColor={getScoreTypeColor('end', 'primary')}
+                        />
+                        
+                        <ScoreButton
+                          type="plus"
+                          onClick={() => handleTick(id, 1)}
+                          color={getScoreTypeColor('end', 'primary')}
+                          outlineColor={getScoreTypeColor('end', 'primary')}
+                        />
+                      </div>
                     </div>
                   );
                 })}

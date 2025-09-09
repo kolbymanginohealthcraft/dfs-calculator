@@ -1,0 +1,488 @@
+/* Advanced App New Layout Styles */
+.appContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e0 100%);
+  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.appContainer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(127, 188, 66, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(0, 124, 187, 0.05) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-20px) rotate(1deg); }
+}
+
+/* Welcome Section */
+.welcomeSection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: var(--spacing-2xl);
+  position: relative;
+  z-index: 2;
+}
+
+.welcomeContainer {
+  max-width: 800px;
+  width: 100%;
+  text-align: center;
+}
+
+.welcomeContent {
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
+}
+
+.welcomeIcon {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-xl) auto;
+  color: white;
+  box-shadow: var(--shadow-colored-accent);
+}
+
+.welcomeIcon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.welcomeTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.welcomeDescription {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-2xl) 0;
+}
+
+.welcomeFeatures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-xl);
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  text-align: left;
+  padding: var(--spacing-lg);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all var(--transition-normal);
+}
+
+.featureItem:hover {
+  background: rgba(255, 255, 255, 0.7);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.featureIcon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--secondary-color), var(--secondary-light));
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.featureIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.featureContent h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.featureContent p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Main Content - Two Column Layout */
+.mainContent {
+  display: flex;
+  gap: var(--spacing-2xl);
+  width: 100%;
+  padding: var(--spacing-xl);
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+.contentLeft {
+  flex: 0 0 800px;
+  min-width: 800px;
+}
+
+.contentRight {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Left Panel - Score Modeling */
+.modelingContainer {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.modelingHeader {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.modelingTitle {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #0c436a;
+  margin: 0 0 5px 0;
+}
+
+.modelingSubtitle {
+  font-size: 0.95rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.modelingContent {
+  min-height: 400px;
+}
+
+/* Right Panel */
+.contentRight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Right Panel Header */
+.rightPanelHeader {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.panelInfo {
+  flex: 1;
+}
+
+.panelTitle {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #0c436a;
+  margin: 0 0 5px 0;
+}
+
+.panelSubtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.panelActions {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.redactButton {
+  background: #0c436a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.redactButton:hover {
+  background: #1a5f8a;
+  transform: translateY(-1px);
+}
+
+/* Right Panel Navigation */
+.rightPanelNavigation {
+  background: white;
+  border-radius: 15px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 5px;
+}
+
+.panelButton {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: none;
+  background: transparent;
+  color: #666;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.panelButton:hover {
+  background: #f8f9fa;
+  color: #0c436a;
+}
+
+.panelButton.panelButtonActive {
+  background: linear-gradient(135deg, #0c436a 0%, #007cbb 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(12, 67, 106, 0.3);
+}
+
+.panelIcon {
+  font-size: 1rem;
+}
+
+.panelLabel {
+  font-weight: 500;
+}
+
+/* Right Panel Content */
+.rightPanelContent {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  overflow-y: auto;
+  min-height: 500px;
+}
+
+/* Right Panel Content Areas */
+.overviewPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.summaryCard {
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+}
+
+.scoresCard {
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 15px;
+}
+
+.cardHeader {
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0c436a;
+  margin: 0;
+}
+
+.scoresGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.scoreItem {
+  text-align: center;
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.scoreLabel {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.scoreValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #007cbb;
+}
+
+/* MDS, Covariates Panels */
+.mdsPanel,
+.covariatesPanel {
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .mainContent {
+    flex-direction: column;
+  }
+  
+  .contentLeft {
+    flex: none;
+    min-width: auto;
+  }
+  
+  .contentRight {
+    flex: none;
+    min-width: auto;
+  }
+  
+  .scoresGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .contentLeft {
+    flex: 0 0 700px;
+    min-width: 700px;
+  }
+  
+  .contentRight {
+    flex: 0 0 350px;
+    min-width: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    padding: var(--spacing-lg);
+    gap: var(--spacing-lg);
+  }
+  
+  .rightPanelHeader {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    text-align: center;
+  }
+  
+  .rightPanelNavigation {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .panelButton {
+    min-width: auto;
+  }
+  
+  .scoresGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .welcomeTitle {
+    font-size: 2rem;
+  }
+  
+  .welcomeDescription {
+    font-size: 1.1rem;
+  }
+  
+  .welcomeFeatures {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainContent {
+    padding: var(--spacing-md);
+  }
+  
+  .modelingContainer,
+  .rightPanelHeader,
+  .rightPanelNavigation,
+  .rightPanelContent {
+    padding: 15px;
+  }
+  
+  .welcomeContent {
+    padding: var(--spacing-lg);
+  }
+  
+  .welcomeTitle {
+    font-size: 1.8rem;
+  }
+  
+  .welcomeDescription {
+    font-size: 1rem;
+  }
+}
