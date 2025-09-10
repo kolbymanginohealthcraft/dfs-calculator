@@ -100,6 +100,14 @@ const ExpectedScoreScreen = () => {
 
   return (
     <BasicLayout rightPanel={<InstructionPanel {...instructionContent.expected} />}>
+      <div className="score-bar-chart-container">
+        <ScoreBarChart
+          startTotal={startTotal}
+          expectedScore={expectedScore}
+          variant="expected"
+        />
+      </div>
+
       <ProgressIndicator
         currentStep="expected"
         onStepPress={handleStepPress}
@@ -107,16 +115,6 @@ const ExpectedScoreScreen = () => {
         expectedScore={expectedScore}
         hasInteracted={hasInteracted}
       />
-
-
-      <div className="score-bar-chart-container">
-        <ScoreBarChart
-          startTotal={startTotal}
-          expectedScore={expectedScore}
-          variant="expected"
-          title="Building the Target"
-        />
-      </div>
 
       <ExpectedScoreSlider
         startTotal={startTotal}

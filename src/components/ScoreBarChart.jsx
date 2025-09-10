@@ -11,7 +11,7 @@ const ScoreBarChart = ({
   showGainBar = false,
   showRequiredBackground = false,
   showExpectedPlaceholder = true,
-  title = "Score Progress",
+  title = "DFS Calculation Summary",
   paddingTop = 0,
   showComparisonIndicator = false,
   // New props for flexibility

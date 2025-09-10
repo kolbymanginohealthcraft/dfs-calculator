@@ -54,7 +54,6 @@ const ModelEndScore = ({
               expectedScore={weightedScore}
               variant="end"
               mode="advanced"
-              title="Building the Result"
             />
           </div>
         )}

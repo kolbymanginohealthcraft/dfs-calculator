@@ -86,6 +86,15 @@ const EndScoreScreen = () => {
 
   return (
     <BasicLayout rightPanel={<InstructionPanel {...instructionContent.end} />}>
+      <div className="score-bar-chart-container">
+        <ScoreBarChart
+          startTotal={startTotal}
+          expectedScore={expectedScore}
+          endTotal={endTotal}
+          variant="end"
+        />
+      </div>
+
       <ProgressIndicator
         currentStep="end"
         onStepPress={handleStepPress}
@@ -94,17 +103,6 @@ const EndScoreScreen = () => {
         endTotal={endTotal}
         hasInteracted={hasInteracted}
       />
-
-
-      <div className="score-bar-chart-container">
-        <ScoreBarChart
-          startTotal={startTotal}
-          expectedScore={expectedScore}
-          endTotal={endTotal}
-          variant="end"
-          title="Building the Result"
-        />
-      </div>
 
       <FunctionItemsList
         mode="basic"

@@ -74,21 +74,19 @@ const StartScoreScreen = () => {
 
   return (
     <BasicLayout rightPanel={<InstructionPanel {...instructionContent.start} />}>
+      <div className="score-bar-chart-container">
+        <ScoreBarChart
+          startTotal={startTotal}
+          variant="start"
+        />
+      </div>
+
       <ProgressIndicator
         currentStep="start"
         onStepPress={handleStepPress}
         startTotal={startTotal}
         hasInteracted={hasInteracted}
       />
-
-
-      <div className="score-bar-chart-container">
-        <ScoreBarChart
-          startTotal={startTotal}
-          variant="start"
-          title="Building the Foundation"
-        />
-      </div>
 
       <FunctionItemsList
         mode="basic"
