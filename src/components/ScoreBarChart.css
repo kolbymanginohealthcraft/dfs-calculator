@@ -1,6 +1,6 @@
 .score-bar-chart {
   margin-bottom: 0;
-  padding: 0 20px;
+  /* padding removed - handled by container */
 }
 
 .chart-title-container {

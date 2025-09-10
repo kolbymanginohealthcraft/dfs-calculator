@@ -1,9 +1,10 @@
 .progress-indicator {
   background-color: #fff;
-  padding: 10px 15px;
-  box-shadow: 0 4px 8px rgba(12, 67, 106, 0.15);
-  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 15px;
+  width: 100%;
+  /* margin-bottom removed - spacing handled by parent gap */
 }
 
 .progress-bar {

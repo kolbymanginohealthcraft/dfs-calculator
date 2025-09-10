@@ -6,9 +6,9 @@ import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import InstructionPanel from '../components/InstructionPanel';
-import Navbar from '../../components/Navbar';
+import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
+import BasicLayout from '../components/BasicLayout';
 import { instructionContent } from '../data/instructionContent';
-import '../styles/BasicLayout.css';
 
 const ExpectedScoreScreen = () => {
   const navigate = useNavigate();
@@ -100,94 +100,40 @@ const ExpectedScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore);
 
   return (
-    <div className="score-screen">
-      <Navbar />
+    <BasicLayout rightPanel={<InstructionPanel {...instructionContent.expected} />}>
+      <ProgressIndicator
+        currentStep="expected"
+        onStepPress={handleStepPress}
+        startTotal={startTotal}
+        expectedScore={expectedScore}
+        hasInteracted={hasInteracted}
+      />
 
-      <div className="main-content">
-        <div className="content-left">
-          <ProgressIndicator
-            currentStep="expected"
-            onStepPress={handleStepPress}
-            startTotal={startTotal}
-            expectedScore={expectedScore}
-            hasInteracted={hasInteracted}
-          />
+      {/* <div className="step-instruction-container">
+        <StepInstruction currentStep="expected" />
+      </div> */}
 
-          {/* <div className="step-instruction-container">
-            <StepInstruction currentStep="expected" />
-          </div> */}
-
-          <div className="score-bar-chart-container">
-            <ScoreBarChart
-              startTotal={startTotal}
-              expectedScore={expectedScore}
-              variant="expected"
-              title="Building the Target"
-            />
-          </div>
-
-          <div className="slider-container">
-            <div className="slider-header">
-              <h2>Adjust Expected Score</h2>
-              <p>Drag the slider or use the fine adjustment buttons</p>
-            </div>
-            
-            <div className="slider-wrapper">
-              <input
-                type="range"
-                min={startTotal}
-                max="60"
-                step="0.01"
-                value={sliderValue}
-                onChange={handleSliderChange}
-                className="score-slider"
-              />
-              <div className="slider-labels">
-                <span>{startTotal}</span>
-                <span>{(startTotal + (60 - startTotal) / 2).toFixed(1)}</span>
-                <span>60</span>
-              </div>
-            </div>
-
-            <div className="fine-adjustment">
-              <button 
-                className="adjust-btn"
-                onClick={() => handleFineAdjustment(-0.01)}
-              >
-                -0.01
-              </button>
-              <button 
-                className="adjust-btn"
-                onClick={() => handleFineAdjustment(-0.1)}
-              >
-                -0.1
-              </button>
-              <span className="current-value">{expectedScore.toFixed(2)}</span>
-              <button 
-                className="adjust-btn"
-                onClick={() => handleFineAdjustment(0.1)}
-              >
-                +0.1
-              </button>
-              <button 
-                className="adjust-btn"
-                onClick={() => handleFineAdjustment(0.01)}
-              >
-                +0.01
-              </button>
-            </div>
-          </div>
-
-          <div className="action-buttons">
-            {/* Button removed - navigation happens automatically via progress indicator */}
-          </div>
-        </div>
-
-        <div className="content-right">
-          <InstructionPanel {...instructionContent.expected} />
-        </div>
+      <div className="score-bar-chart-container">
+        <ScoreBarChart
+          startTotal={startTotal}
+          expectedScore={expectedScore}
+          variant="expected"
+          title="Building the Target"
+        />
       </div>
-    </div>
+
+      <ExpectedScoreSlider
+        startTotal={startTotal}
+        expectedScore={expectedScore}
+        sliderValue={sliderValue}
+        onSliderChange={handleSliderChange}
+        onFineAdjustment={handleFineAdjustment}
+      />
+
+      <div className="action-buttons">
+        {/* Button removed - navigation happens automatically via progress indicator */}
+      </div>
+    </BasicLayout>
   );
 };
 

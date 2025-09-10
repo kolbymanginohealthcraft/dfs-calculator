@@ -8,10 +8,9 @@ import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import InstructionPanel from '../components/InstructionPanel';
-import Navbar from '../../components/Navbar';
+import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
 import { instructionContent } from '../data/instructionContent';
-import '../styles/BasicLayout.css';
 
 const StartScoreScreen = () => {
   const navigate = useNavigate();
@@ -75,50 +74,40 @@ const StartScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(scores, startTotal, null);
 
   return (
-    <div className="score-screen">
-      <Navbar />
+    <BasicLayout rightPanel={<InstructionPanel {...instructionContent.start} />}>
+      <ProgressIndicator
+        currentStep="start"
+        onStepPress={handleStepPress}
+        startTotal={startTotal}
+        hasInteracted={hasInteracted}
+      />
 
-      <div className="main-content">
-        <div className="content-left">
-          <ProgressIndicator
-            currentStep="start"
-            onStepPress={handleStepPress}
-            startTotal={startTotal}
-            hasInteracted={hasInteracted}
-          />
+      {/* <div className="step-instruction-container">
+        <StepInstruction currentStep="start" />
+      </div> */}
 
-          {/* <div className="step-instruction-container">
-            <StepInstruction currentStep="start" />
-          </div> */}
-
-          <div className="score-bar-chart-container">
-            <ScoreBarChart
-              startTotal={startTotal}
-              variant="start"
-              title="Building the Foundation"
-            />
-          </div>
-
-          <FunctionItemsList
-            mode="basic"
-            variant="start"
-            scores={scores}
-            startScores={scores}
-            onScoreAdjustment={handleScoreAdjustment}
-            mobilityType={mobilityType}
-            onMobilityTypeChange={setMobilityType}
-          />
-
-          <div className="action-buttons">
-            {/* Button removed - navigation happens automatically via progress indicator */}
-          </div>
-        </div>
-
-        <div className="content-right">
-          <InstructionPanel {...instructionContent.start} />
-        </div>
+      <div className="score-bar-chart-container">
+        <ScoreBarChart
+          startTotal={startTotal}
+          variant="start"
+          title="Building the Foundation"
+        />
       </div>
-    </div>
+
+      <FunctionItemsList
+        mode="basic"
+        variant="start"
+        scores={scores}
+        startScores={scores}
+        onScoreAdjustment={handleScoreAdjustment}
+        mobilityType={mobilityType}
+        onMobilityTypeChange={setMobilityType}
+      />
+
+      <div className="action-buttons">
+        {/* Button removed - navigation happens automatically via progress indicator */}
+      </div>
+    </BasicLayout>
   );
 };
 

@@ -8,7 +8,8 @@
   border-radius: 15px;
   padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  width: 100%;
+  /* margin-bottom removed - spacing handled by parent gap */
 }
 
 .categorySection {

@@ -8,10 +8,9 @@ import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import InstructionPanel from '../components/InstructionPanel';
-import Navbar from '../../components/Navbar';
+import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
 import { instructionContent } from '../data/instructionContent';
-import '../styles/BasicLayout.css';
 
 const EndScoreScreen = () => {
   const navigate = useNavigate();
@@ -110,49 +109,39 @@ const EndScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
 
   return (
-    <div className="score-screen">
-      <Navbar />
+    <BasicLayout rightPanel={<InstructionPanel {...instructionContent.end} />}>
+      <ProgressIndicator
+        currentStep="end"
+        onStepPress={handleStepPress}
+        startTotal={startTotal}
+        expectedScore={expectedScore}
+        endTotal={endTotal}
+        hasInteracted={hasInteracted}
+      />
 
-      <div className="main-content">
-        <div className="content-left">
-          <ProgressIndicator
-            currentStep="end"
-            onStepPress={handleStepPress}
-            startTotal={startTotal}
-            expectedScore={expectedScore}
-            endTotal={endTotal}
-            hasInteracted={hasInteracted}
-          />
+      {/* <div className="step-instruction-container">
+        <StepInstruction currentStep="end" />
+      </div> */}
 
-          {/* <div className="step-instruction-container">
-            <StepInstruction currentStep="end" />
-          </div> */}
-
-          <div className="score-bar-chart-container">
-            <ScoreBarChart
-              startTotal={startTotal}
-              expectedScore={expectedScore}
-              endTotal={endTotal}
-              variant="end"
-              title="Building the Result"
-            />
-          </div>
-
-          <FunctionItemsList
-            mode="basic"
-            variant="end"
-            scores={endScores}
-            startScores={startScores}
-            onScoreAdjustment={handleScoreAdjustment}
-            mobilityType={mobilityType}
-          />
-        </div>
-
-        <div className="content-right">
-          <InstructionPanel {...instructionContent.end} />
-        </div>
+      <div className="score-bar-chart-container">
+        <ScoreBarChart
+          startTotal={startTotal}
+          expectedScore={expectedScore}
+          endTotal={endTotal}
+          variant="end"
+          title="Building the Result"
+        />
       </div>
-    </div>
+
+      <FunctionItemsList
+        mode="basic"
+        variant="end"
+        scores={endScores}
+        startScores={startScores}
+        onScoreAdjustment={handleScoreAdjustment}
+        mobilityType={mobilityType}
+      />
+    </BasicLayout>
   );
 };
 
