@@ -11,6 +11,7 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName }) => {
   
   // Only show upload functionality on advanced route
   const isAdvancedRoute = location.pathname === '/advanced';
+  const isBasicRoute = location.pathname.startsWith('/basic');
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
@@ -21,6 +22,14 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName }) => {
 
   const handleBackToHome = () => {
     navigate('/');
+  };
+
+  const handleSwitchCalculator = () => {
+    if (isBasicRoute) {
+      navigate('/advanced');
+    } else if (isAdvancedRoute) {
+      navigate('/basic/start-score');
+    }
   };
 
   useEffect(() => {

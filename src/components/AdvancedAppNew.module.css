@@ -702,28 +702,6 @@
   margin-bottom: 8px;
 }
 
-.scoreValues {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.scoreValueItem {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.scoreNumber {
-  font-weight: 700;
-  color: var(--text-primary);
-  min-width: 20px;
-}
-
-.scoreDescription {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-}
 
 .overviewPanel {
   display: flex;

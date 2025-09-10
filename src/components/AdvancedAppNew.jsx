@@ -15,6 +15,7 @@ import { redactFullName, redactFacility, redactAddress } from "../utils/redactio
 import html2pdf from "html2pdf.js";
 
 import Navbar from "./Navbar";
+import ModeBanner from "./ModeBanner";
 import PatientHeader from "./PatientHeader";
 import PatientOverview from "./PatientOverview";
 import BasicLayout from "../basic/components/BasicLayout";
@@ -26,6 +27,7 @@ const Covariates = lazy(() => import("./Covariates"));
 const ExportView = lazy(() => import("./ExportView"));
 
 import "../index.css";
+import "../basic/styles/BasicLayout.css";
 import styles from "./AdvancedAppNew.module.css";
 
 function AdvancedAppNew() {
@@ -183,7 +185,10 @@ function AdvancedAppNew() {
   ];
 
   const advancedNavbar = (
-    <Navbar onDrop={onDrop} onExport={handleExport} hasFile={hasFile} fileName={fileName} />
+    <>
+      <Navbar onDrop={onDrop} onExport={handleExport} hasFile={hasFile} fileName={fileName} />
+      <ModeBanner />
+    </>
   );
 
   return (
@@ -360,30 +365,30 @@ function AdvancedAppNew() {
                       
                       <div className={styles.instructionSection}>
                         <h4 className={styles.instructionSubtitle}>Score Values:</h4>
-                        <div className={styles.scoreValues}>
-                          <div className={styles.scoreValueItem}>
-                            <span className={styles.scoreNumber}>6</span>
-                            <span className={styles.scoreDescription}>Independent</span>
+                        <div className="score-values">
+                          <div className="score-value-item">
+                            <span className="score-number">6</span>
+                            <span className="score-description">Independent</span>
                           </div>
-                          <div className={styles.scoreValueItem}>
-                            <span className={styles.scoreNumber}>5</span>
-                            <span className={styles.scoreDescription}>Supervision or Setup</span>
+                          <div className="score-value-item">
+                            <span className="score-number">5</span>
+                            <span className="score-description">Supervision or Setup</span>
                           </div>
-                          <div className={styles.scoreValueItem}>
-                            <span className={styles.scoreNumber}>4</span>
-                            <span className={styles.scoreDescription}>Minimal Assistance</span>
+                          <div className="score-value-item">
+                            <span className="score-number">4</span>
+                            <span className="score-description">Minimal Assistance</span>
                           </div>
-                          <div className={styles.scoreValueItem}>
-                            <span className={styles.scoreNumber}>3</span>
-                            <span className={styles.scoreDescription}>Moderate Assistance</span>
+                          <div className="score-value-item">
+                            <span className="score-number">3</span>
+                            <span className="score-description">Moderate Assistance</span>
                           </div>
-                          <div className={styles.scoreValueItem}>
-                            <span className={styles.scoreNumber}>2</span>
-                            <span className={styles.scoreDescription}>Maximal Assistance</span>
+                          <div className="score-value-item">
+                            <span className="score-number">2</span>
+                            <span className="score-description">Maximal Assistance</span>
                           </div>
-                          <div className={styles.scoreValueItem}>
-                            <span className={styles.scoreNumber}>1</span>
-                            <span className={styles.scoreDescription}>Dependent</span>
+                          <div className="score-value-item">
+                            <span className="score-number">1</span>
+                            <span className="score-description">Dependent</span>
                           </div>
                         </div>
                       </div>
