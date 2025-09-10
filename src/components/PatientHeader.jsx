@@ -1,5 +1,6 @@
 import React from "react";
 import { formatDOB } from "../utils/calculations";
+import { redactName } from "../utils/redactionUtils";
 import styles from "./PatientHeader.module.css";
 import { Eye, EyeOff, User } from "lucide-react";
 
@@ -22,8 +23,8 @@ const PatientHeader = ({
     );
   }
 
-  const displayFirstName = isRedacted ? "REDACTED" : (firstName || "Unknown");
-  const displayLastName = isRedacted ? "REDACTED" : (lastName || "");
+  const displayFirstName = isRedacted ? redactName(firstName || "Unknown") : (firstName || "Unknown");
+  const displayLastName = isRedacted ? redactName(lastName || "") : (lastName || "");
 
   return (
     <div className={styles.headerBlock}>

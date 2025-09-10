@@ -10,16 +10,12 @@
   min-width: 0;
 }
 
-.progressContainer {
-  margin-bottom: 20px;
-}
 
 .sticky {
   position: sticky;
   top: 0;
   background: inherit;
   z-index: 10;
-  padding-bottom: 0.5rem;
   /* border-bottom: 3px solid rgba(12, 67, 106, 0.2); */
 }
 
@@ -63,14 +59,6 @@
   border-left: 5px solid #7fbc42;
 }
 
-.scrollArea {
-  flex-grow: 1;
-  overflow-y: auto;
-  min-height: 0;
-  padding-right: 0.5rem;
-}
-
-/* .scoresContainer styling moved to FunctionItemsList component */
 
 .scoreSubsection {
   margin-bottom: 1.5rem;
@@ -276,13 +264,6 @@
   margin-bottom: 1rem;
 }
 
-.scoreBarChartContainer {
-  background: white;
-  border-radius: 15px;
-  padding: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
 
 .scoreSummaryBox {
   background: #ffffff;

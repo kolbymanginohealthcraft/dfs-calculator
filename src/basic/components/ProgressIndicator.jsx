@@ -2,7 +2,7 @@ import React from 'react';
 import { getScoreTypeColor } from '../utils/themeColors';
 import '../styles/ProgressIndicator.css';
 
-const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore, endTotal, hasInteracted }) => {
+const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore, endTotal, hasInteracted, mode = 'basic' }) => {
   const steps = [
     { key: 'start', title: 'Step 1:Start Scores', color: getScoreTypeColor('start', 'primary') },
     { key: 'expected', title: 'Step 2: Expected Score', color: getScoreTypeColor('expected', 'primary') },
@@ -26,7 +26,10 @@ const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore
           
           // Special logic for expected step: end step is only clickable if required gain > 0
           let isClickable;
-          if (currentStep === 'expected' && step.key === 'end') {
+          if (mode === 'advanced') {
+            // In advanced mode, only the current step (end) is clickable
+            isClickable = step.key === currentStep;
+          } else if (currentStep === 'expected' && step.key === 'end') {
             const requiredGain = expectedScore ? expectedScore - startTotal : 0;
             isClickable = requiredGain > 0;
           } else {

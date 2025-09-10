@@ -1,9 +1,8 @@
 .headerBlock {
-  background: white;
-  border-radius: 15px;
+  border-radius: 15px 15px 0 0;
   padding: 10px 15px;
-  box-shadow: 0 4px 8px rgba(12, 67, 106, 0.15);
   margin-bottom: 0;
+  border-bottom: 1px solid rgba(12, 67, 106, 0.2);
 }
 
 .headerRow {

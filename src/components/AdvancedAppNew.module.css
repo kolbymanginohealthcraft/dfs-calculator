@@ -31,14 +31,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 144px); /* Account for navbar (64px) + BasicLayout padding (80px) */
   padding: var(--spacing-2xl);
   position: relative;
   z-index: 2;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .welcomeContainer {
-  max-width: 800px;
+  max-width: 1200px;
   width: 100%;
   text-align: center;
 }
@@ -50,9 +52,18 @@
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow-glass);
   border: 1px solid var(--border-glass);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
 }
 
-.welcomeIcon {
+/* Hero Section */
+.heroSection {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.heroIcon {
   width: 80px;
   height: 80px;
   background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
@@ -60,12 +71,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto var(--spacing-xl) auto;
+  margin: 0 auto var(--spacing-lg) auto;
   color: white;
   box-shadow: var(--shadow-colored-accent);
+  animation: float 3s ease-in-out infinite;
 }
 
-.welcomeIcon svg {
+.heroIcon svg {
   width: 40px;
   height: 40px;
 }
@@ -74,8 +86,60 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin: 0 0 var(--spacing-lg) 0;
+  margin: 0 0 var(--spacing-md) 0;
+  background: linear-gradient(135deg, #0c436a, #007cbb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
+
+.welcomeSubtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Upload Hero Section */
+.uploadHero {
+  background: linear-gradient(135deg, rgba(12, 67, 106, 0.08) 0%, rgba(0, 124, 187, 0.08) 100%);
+  border: 2px dashed rgba(12, 67, 106, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.uploadHero:hover {
+  border-color: rgba(12, 67, 106, 0.5);
+  background: linear-gradient(135deg, rgba(12, 67, 106, 0.12) 0%, rgba(0, 124, 187, 0.12) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(12, 67, 106, 0.15);
+}
+
+.uploadIcon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #007cbb, #0c436a);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg) auto;
+  color: white;
+  box-shadow: 0 8px 25px rgba(12, 67, 106, 0.3);
+}
+
+.uploadIcon svg {
+  width: 30px;
+  height: 30px;
+}
+
 
 .welcomeDescription {
   font-size: 1.2rem;
@@ -96,22 +160,7 @@
   overflow: hidden;
 }
 
-.uploadPrompt::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent 30%, rgba(12, 67, 106, 0.02) 50%, transparent 70%);
-  animation: shimmer 3s ease-in-out infinite;
-  pointer-events: none;
-}
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
 
 .uploadIcon {
   width: 60px;
@@ -135,6 +184,17 @@
 .uploadIcon svg {
   width: 30px;
   height: 30px;
+}
+
+.uploadTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  background: linear-gradient(135deg, #0c436a, #007cbb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .uploadTitle {
@@ -178,6 +238,235 @@
 
 .fileTypeIcon {
   font-size: 1.1rem;
+}
+
+
+/* MDS Info Section */
+.mdsInfoSection {
+  background: linear-gradient(135deg, rgba(12, 67, 106, 0.05) 0%, rgba(0, 124, 187, 0.05) 100%);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  border: 1px solid rgba(12, 67, 106, 0.1);
+}
+
+.mdsInfoHeader {
+  text-align: left;
+  margin-bottom: var(--spacing-xl);
+}
+
+.mdsInfoHeader h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.mdsInfoHeader p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.mdsInfoContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  align-items: start;
+  text-align: left;
+}
+
+.mdsInfoText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.infoItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.infoIcon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #007cbb;
+}
+
+.infoIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.infoItem strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.infoItem p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.xmlPreview {
+  background: #1e1e1e;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: left;
+}
+
+.xmlPreviewHeader {
+  background: #2d2d2d;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid #404040;
+  font-size: 0.85rem;
+  color: #d4d4d4;
+  font-weight: 500;
+  text-align: left;
+}
+
+.xmlCode {
+  color: #d4d4d4;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  white-space: pre;
+  padding: var(--spacing-md);
+  overflow-x: auto;
+}
+
+/* MDS Demo Section */
+.mdsDemoSection {
+  text-align: left;
+  position: relative;
+  z-index: 2;
+}
+
+.demoTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  text-align: center;
+}
+
+.demoDescription {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0 0 var(--spacing-xl) 0;
+  text-align: center;
+}
+
+.demoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.demoCard {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: var(--shadow-sm);
+}
+
+.demoCardTitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+  text-align: center;
+}
+
+.xmlPreview {
+  background: #1e1e1e;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+}
+
+.xmlCode {
+  color: #d4d4d4;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin: 0;
+  white-space: pre;
+}
+
+.scoreExplanation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.scoreItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-sm);
+}
+
+.scoreNumber {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.scoreText {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.demoInfo {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  flex-wrap: wrap;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.4);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.infoIcon {
+  font-size: 1.2rem;
 }
 
 .welcomeFeatures {
@@ -236,25 +525,12 @@
   line-height: 1.4;
 }
 
-/* Main Content - Two Column Layout */
-.mainContent {
+/* Right Panel Container */
+.rightPanelContainer {
   display: flex;
-  gap: var(--spacing-2xl);
-  width: 100%;
-  padding: var(--spacing-xl);
-  box-sizing: border-box;
-  position: relative;
-  z-index: 2;
-}
-
-.contentLeft {
-  flex: 1;
-  max-width: 800px;
-}
-
-.contentRight {
-  flex: 1;
-  min-width: 0;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  height: 100%;
 }
 
 /* Left Panel - Score Modeling */
@@ -290,24 +566,20 @@
   min-height: 400px;
 }
 
-/* Right Panel */
-.contentRight {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-}
 
 /* Patient Header Section */
 .patientHeaderSection {
   /* Styles are handled by PatientHeader.module.css */
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: 0;
 }
 
 /* Unified Tab Container */
 .unifiedTabContainer {
-  background: white;
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
   overflow: hidden;
 }
 
@@ -315,47 +587,54 @@
 /* Right Panel Navigation */
 .rightPanelNavigation {
   background: transparent;
-  padding: 10px;
+  padding: 15px 20px 10px 20px;
   display: flex;
-  gap: 5px;
+  gap: 0;
   margin-bottom: 0;
+  border-bottom: 1px solid rgba(12, 67, 106, 0.1);
 }
 
 .panelButton {
-  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 16px;
+  justify-content: flex-start;
+  padding: 12px 20px;
   border: none;
   background: transparent;
   color: #666;
-  border-radius: 8px;
-  font-size: 0.85rem;
+  border-radius: 0;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
   white-space: nowrap;
+  position: relative;
 }
 
 .panelButton:hover {
-  background: #f8f9fa;
   color: #0c436a;
+  background: rgba(12, 67, 106, 0.05);
 }
 
 .panelButton.panelButtonActive {
-  background: linear-gradient(135deg, #0c436a 0%, #007cbb 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(12, 67, 106, 0.3);
+  color: #0c436a;
+  background: transparent;
+  font-weight: 600;
 }
 
-.panelIcon {
-  font-size: 1rem;
+.panelButton.panelButtonActive::after {
+  content: '';
+  position: absolute;
+  bottom: -11px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, #0c436a 0%, #007cbb 100%);
+  border-radius: 2px 2px 0 0;
 }
 
 .panelLabel {
-  font-weight: 500;
+  font-weight: inherit;
 }
 
 /* Right Panel Content */
@@ -368,6 +647,84 @@
 }
 
 /* Right Panel Content Areas */
+.instructionsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.instructionContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.instructionTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-lg) 0;
+  text-align: left;
+}
+
+.instructionSection {
+  margin-bottom: var(--spacing-lg);
+}
+
+.instructionSection:last-child {
+  margin-bottom: 0;
+}
+
+.instructionSubtitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.instructionText {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+}
+
+.instructionList {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  padding-left: var(--spacing-md);
+}
+
+.instructionList li {
+  margin-bottom: 8px;
+}
+
+.scoreValues {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scoreValueItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.scoreNumber {
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 20px;
+}
+
+.scoreDescription {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
 .overviewPanel {
   display: flex;
   flex-direction: column;
@@ -451,44 +808,17 @@
 
 /* Responsive Design */
 @media (max-width: 1200px) {
-  .mainContent {
-    flex-direction: column;
-  }
-  
-  .contentLeft {
-    flex: none;
-    min-width: auto;
-  }
-  
-  .contentRight {
-    flex: none;
-    min-width: auto;
-  }
-  
   .scoresGrid {
     grid-template-columns: 1fr 1fr;
   }
-}
-
-@media (max-width: 900px) {
-  .contentLeft {
-    flex: 0 0 700px;
-    min-width: 700px;
-  }
   
-  .contentRight {
-    flex: 0 0 350px;
-    min-width: 350px;
+  .mdsInfoContent {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-xl);
   }
 }
 
 @media (max-width: 768px) {
-  .mainContent {
-    padding: var(--spacing-lg);
-    gap: var(--spacing-lg);
-  }
-  
-  
   .rightPanelNavigation {
     flex-direction: column;
     gap: 5px;
@@ -506,37 +836,14 @@
     font-size: 2rem;
   }
   
-  .welcomeDescription {
+  .welcomeSubtitle {
     font-size: 1.1rem;
   }
   
-  .welcomeFeatures {
+  
+  .mdsInfoContent {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .mainContent {
-    padding: var(--spacing-md);
-  }
-  
-  .modelingContainer,
-  .patientHeaderSection,
-  .rightPanelNavigation,
-  .rightPanelContent {
-    padding: 15px;
-  }
-  
-  .welcomeContent {
-    padding: var(--spacing-lg);
-  }
-  
-  .welcomeTitle {
-    font-size: 1.8rem;
-  }
-  
-  .welcomeDescription {
-    font-size: 1rem;
+    gap: var(--spacing-lg);
   }
   
   .uploadTitle {
@@ -547,7 +854,78 @@
     font-size: 1rem;
   }
   
-  .uploadPrompt {
+  .mdsInfoHeader h3 {
+    font-size: 1.5rem;
+  }
+  
+  .mdsInfoHeader p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modelingContainer,
+  .patientHeaderSection,
+  .rightPanelNavigation,
+  .rightPanelContent {
+    padding: 15px;
+  }
+  
+  .welcomeContent {
     padding: var(--spacing-lg);
+    gap: var(--spacing-lg);
+  }
+  
+  .welcomeTitle {
+    font-size: 1.8rem;
+  }
+  
+  .welcomeSubtitle {
+    font-size: 1rem;
+  }
+  
+  .uploadTitle {
+    font-size: 1.4rem;
+  }
+  
+  .uploadDescription {
+    font-size: 0.95rem;
+  }
+  
+  .uploadHero {
+    padding: var(--spacing-lg);
+  }
+  
+  
+  .mdsInfoSection {
+    padding: var(--spacing-lg);
+  }
+  
+  .mdsInfoHeader h3 {
+    font-size: 1.3rem;
+  }
+  
+  .mdsInfoHeader p {
+    font-size: 0.95rem;
+  }
+  
+  .infoItem {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
+  }
+  
+  .infoIcon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .xmlCode {
+    font-size: 0.8rem;
+    padding: var(--spacing-sm);
+  }
+  
+  .xmlPreviewHeader {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.8rem;
   }
 }

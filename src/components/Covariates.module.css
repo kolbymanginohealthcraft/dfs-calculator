@@ -7,9 +7,7 @@
   overflow: hidden;
   padding-left: 1rem;
   padding-right: 1rem;
-  border-left: 1px solid #ccc;
   box-sizing: border-box;
-  background: #f0fdf7;
   min-width: 0;
 }
 
@@ -129,18 +127,18 @@
 }
 
 .row:hover {
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
 }
 
 .selectedRow {
-  background-color: #a0d8df;
+  /* background-color: #a0d8df; */
   color: #0c436a;
   font-weight: bold;
   transition: background-color 0.2s ease;
 }
 
 .selectedRow:hover {
-  background-color: #88cbd4 !important;
+  /* background-color: #88cbd4 !important; */
 }
 
 .covariateTable tr {
@@ -157,14 +155,14 @@
 
 /* Total row */
 .totalRow {
-  background-color: #f9f9f9;
+  /* background-color: #f9f9f9; */
   border-top: 2px solid #ccc;
   font-weight: bold;
 }
 
 /* NEW: Group header row */
 .groupRow {
-  background-color: #e7f4f3;
+  /* background-color: #e7f4f3; */
   font-weight: bold;
   color: #0c436a;
   font-size: 0.85rem;

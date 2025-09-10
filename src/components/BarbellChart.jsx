@@ -10,8 +10,10 @@ const BarbellChart = ({
   height = 24
 }) => {
   // Calculate positions based on scores (1-6 scale)
-  const startPosition = ((startScore - 1) / 5) * (width - 24); // 24px for start node width
-  const endPosition = endScore ? ((endScore - 1) / 5) * (width - 20) + 2 : null; // 20px for end node width, offset by 2px to center
+  // Position nodes so they are centered at the same point when they have the same value
+  const basePosition = ((startScore - 1) / 5) * (width - 24);
+  const startPosition = basePosition; // Start node (24px) positioned at base point
+  const endPosition = endScore ? ((endScore - 1) / 5) * (width - 24) + 2 : null; // End node (20px) offset by 2px to center on start node
 
   return (
     <div className="barbell-chart" style={{ width, height }}>

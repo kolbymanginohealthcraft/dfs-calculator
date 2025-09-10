@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import { formatDate } from "../utils/calculations";
+import { redactName } from "../utils/redactionUtils";
 import { ClipboardList } from "lucide-react";
 
 export default function MdsSnapshot({
@@ -67,6 +68,10 @@ export default function MdsSnapshot({
         id === "X0200A" || id === "X0200C" || id === "A0100A" || id === "A0100B" || id === "A0100C")) {
       if (id === "A0600A") {
         return "***-**-****"; // SSN format
+      }
+      // For name fields, use partial redaction instead of full REDACTED
+      if (id === "A0500A" || id === "A0500B" || id === "A0500C" || id === "A0500D") {
+        return redactName(value || "");
       }
       return "REDACTED";
     }

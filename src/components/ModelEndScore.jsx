@@ -22,6 +22,7 @@ const ModelEndScore = ({
   hasFile,
   parsedValues,
   weightedScore,
+  mobilityType,
 }) => {
   const [filterContributing, setFilterContributing] = useState(false);
   const startTotal = calculateFunctionScore(startScores);
@@ -33,21 +34,10 @@ const ModelEndScore = ({
 
   return (
     <>
-      <div className={styles.progressContainer}>
-        <ProgressIndicator
-          currentStep="end"
-          onStepPress={() => {}} // No navigation needed in advanced mode
-          startTotal={startTotal}
-          expectedScore={weightedScore}
-          endTotal={modeledTotal}
-          hasInteracted={true}
-        />
-      </div>
-      
       <div className={styles.sticky}>
 
         {hasFile && (
-          <div className={styles.scoreBarChartContainer}>
+          <div className="score-bar-chart-container">
             <ScoreBarChart
               startTotal={startTotal}
               endTotal={modeledTotal}
@@ -59,21 +49,28 @@ const ModelEndScore = ({
         )}
       </div>
 
-      <div className={styles.scrollArea}>
-        {hasFile && (
-          <div className={styles.scoresContainer}>
-            <FunctionItemsList
-              mode="advanced"
-              variant="advanced"
-              items={GG_ITEMS}
-              scores={modeledValues}
-              startScores={startScores}
-              onScoreAdjustment={handleTick}
-              contributingIds={contributingIds}
-            />
-          </div>
-        )}
-      </div>
+      <ProgressIndicator
+        currentStep="end"
+        onStepPress={() => {}} // No navigation needed in advanced mode
+        startTotal={startTotal}
+        expectedScore={weightedScore}
+        endTotal={modeledTotal}
+        hasInteracted={true}
+        mode="advanced"
+      />
+
+      {hasFile && (
+        <FunctionItemsList
+          mode="advanced"
+          variant="end"
+          items={GG_ITEMS}
+          scores={modeledValues}
+          startScores={startScores}
+          onScoreAdjustment={handleTick}
+          contributingIds={contributingIds}
+          mobilityType={mobilityType}
+        />
+      )}
     </>
   );
 };

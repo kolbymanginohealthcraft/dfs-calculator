@@ -2,10 +2,10 @@ import React from 'react';
 import Navbar from '../../components/Navbar';
 import '../styles/BasicLayout.css';
 
-const BasicLayout = ({ children, rightPanel, navbar, fullWidth = false, expandedRight = false }) => {
+const BasicLayout = ({ children, rightPanel, navbar, fullWidth = false, expandedRight = false, showNavbar = true }) => {
   return (
     <div className="score-screen">
-      {navbar || <Navbar />}
+      {showNavbar && (navbar || <Navbar />)}
       
       <div className={`main-content ${fullWidth ? 'full-width' : ''} ${expandedRight ? 'expanded-right' : ''}`}>
         {!fullWidth ? (

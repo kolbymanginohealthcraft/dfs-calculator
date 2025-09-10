@@ -110,6 +110,13 @@ const FunctionItemsList = ({
   // Check if score is at min/max
   const isScoreAtMin = (item, category = null) => {
     const score = getScore(item, category);
+    const startScore = getStartScore(item, category);
+    
+    // For end/advanced modes, check against start score, otherwise check against absolute minimum
+    if (variant !== 'start' && startScore !== undefined) {
+      return score <= startScore;
+    }
+    
     return score <= 1;
   };
 
@@ -194,10 +201,19 @@ const FunctionItemsList = ({
   const renderDomainSection = (domain, domainItems) => {
     const domainName = domain === 'selfCare' ? 'Self-Care' : 'Mobility';
     
+    // Show mobility type in header when not on step 1 (variant !== 'start')
+    const getDomainTitle = () => {
+      if (domain === 'mobility' && variant !== 'start') {
+        const mobilityTypeText = mobilityType === 'Walk' ? 'Walk' : 'Wheelchair';
+        return `${domainName} Items (${mobilityTypeText})`;
+      }
+      return `${domainName} Items`;
+    };
+    
     return (
       <div className={styles.categorySection} key={domain}>
         <div className={styles.sectionHeader}>
-          <h2 className={styles.categoryTitle}>{domainName} Items</h2>
+          <h2 className={styles.categoryTitle}>{getDomainTitle()}</h2>
           {mode === 'basic' && domain === 'mobility' && onMobilityTypeChange && variant === 'start' && (
             <div className={styles.mobilityTypeSelector}>
               <button

@@ -23,17 +23,24 @@ export const updateScore = (scores, category, key, value) => {
  * @param {Object} scores - Current scores object
  * @param {string} key - Item key
  * @param {number} delta - Amount to adjust by
+ * @param {Object} startScores - Start scores object for validation (optional)
  * @returns {Object} - Updated scores object
  */
 import { clampScore } from './scoreCalculations';
 
-export const adjustScore = (scores, key, delta) => {
+export const adjustScore = (scores, key, delta, startScores = null) => {
   const category = getCategoryForKey(key);
   
   if (!category) return scores;
   
   const currentScore = scores[category][key] || 1;
-  const newScore = clampScore(currentScore + delta);
+  let newScore = clampScore(currentScore + delta);
+  
+  // If startScores are provided, ensure end score doesn't go below start score
+  if (startScores && startScores[category] && startScores[category][key] !== undefined) {
+    const startScore = startScores[category][key];
+    newScore = Math.max(newScore, startScore);
+  }
   
   return updateScore(scores, category, key, newScore);
 };

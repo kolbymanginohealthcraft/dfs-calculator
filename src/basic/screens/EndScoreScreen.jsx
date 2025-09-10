@@ -27,7 +27,7 @@ const EndScoreScreen = () => {
       setHasInteracted(true);
     }
     
-    const newScores = adjustScore(endScores, key, delta);
+    const newScores = adjustScore(endScores, key, delta, startScores);
     setEndScores(newScores);
   };
 
