@@ -1,8 +1,12 @@
 import React from 'react';
 import logoImage from '../assets/logo.png';
-import '../styles/LogoHeader.css';
+import styles from './LogoHeader.module.css';
 
-const LogoHeader = ({ size = 'medium', showTitle = false }) => {
+const LogoHeader = ({ 
+  size = 'medium', 
+  showTitle = false,
+  className = ''
+}) => {
   const getLogoStyle = () => {
     switch (size) {
       case 'small':
@@ -16,17 +20,17 @@ const LogoHeader = ({ size = 'medium', showTitle = false }) => {
   };
 
   return (
-    <div className="logo-header">
-      <div className="logo-container" style={getLogoStyle()}>
+    <div className={`${styles.logoHeader} ${className}`}>
+      <div className={styles.logoContainer} style={getLogoStyle()}>
         <img 
           src={logoImage} 
           alt="Aegis Therapies Logo" 
-          className="logo-image"
+          className={styles.logoImage}
           style={getLogoStyle()}
         />
       </div>
       {showTitle && (
-        <h2 className="logo-title">Aegis Therapies</h2>
+        <h2 className={styles.logoTitle}>Aegis Therapies</h2>
       )}
     </div>
   );

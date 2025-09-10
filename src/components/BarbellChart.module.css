@@ -1,0 +1,64 @@
+.barbellChart {
+  position: relative;
+  display: inline-block;
+}
+
+.barbellTrack {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  transform: translateY(-50%);
+}
+
+.barbellNode {
+  position: absolute;
+  top: 50%;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border: 2px solid white;
+}
+
+.barbellStartNode {
+  width: 24px;
+  height: 24px;
+}
+
+.barbellEndNode {
+  width: 20px;
+  height: 20px;
+}
+
+.barbellNodeText {
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+}
+
+.barbellEndNodeText {
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1;
+}
+
+.barbellConnectionLine {
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  background-color: #5bc0de;
+  transform: translateY(-50%);
+  z-index: 1;
+}

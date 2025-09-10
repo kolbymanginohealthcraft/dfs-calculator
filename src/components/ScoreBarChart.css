@@ -3,11 +3,20 @@
   padding: 0 20px;
 }
 
+.chart-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  height: 24px;
+  min-height: 24px;
+}
+
 .chart-title {
   font-size: 1rem;
   font-weight: bold;
   color: #0c436a;
-  margin-bottom: 15px;
+  margin: 0;
   text-align: left;
 }
 
@@ -105,8 +114,9 @@
 }
 
 .label-text {
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: #333;
+  font-weight: 500;
 }
 
 .gain-text {
@@ -146,22 +156,57 @@
   display: flex;
   align-items: center;
   padding: 4px 8px;
-  border-radius: 4px;
-  margin-left: 8px;
+  border-radius: 16px;
+  margin-left: 12px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  height: fit-content;
 }
 
-.comparison-icon {
-  font-size: 12px;
-  font-weight: bold;
-  margin-right: 4px;
+.comparison-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.comparison-indicator:hover {
+  transform: translateY(-1px) scale(1.01);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.comparison-indicator:hover::before {
+  left: 100%;
 }
 
 .comparison-text {
   font-size: 10px;
-  font-weight: bold;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
+  .chart-title-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .comparison-indicator {
+    margin-left: 0;
+  }
+  
   .bar-chart-labels {
     flex-direction: column;
     gap: 5px;

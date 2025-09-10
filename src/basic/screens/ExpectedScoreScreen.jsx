@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { calculateExpectedScore, hasMeaningfulData } from '../utils/scoreCalculations';
 import { getScoreTypeColor } from '../utils/themeColors';
-import ScoreBarChart from '../components/ScoreBarChart';
+import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
@@ -119,11 +119,7 @@ const ExpectedScoreScreen = () => {
             <ScoreBarChart
               startTotal={startTotal}
               expectedScore={expectedScore}
-              showStartBar={true}
-              showExpectedLine={true}
-              showGainBar={false}
-              showRequiredBackground={true}
-              showExpectedPlaceholder={false}
+              variant="expected"
               title="Building the Target"
             />
           </div>

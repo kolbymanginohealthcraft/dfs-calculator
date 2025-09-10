@@ -1,23 +1,23 @@
-.logo-header {
+.logoHeader {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
 }
 
-.logo-container {
+.logoContainer {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.logo-image {
+.logoImage {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.logo-title {
+.logoTitle {
   font-size: 1.1rem;
   font-weight: bold;
   color: #0c436a;

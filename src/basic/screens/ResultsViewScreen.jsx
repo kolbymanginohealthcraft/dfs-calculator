@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { itemDefs, getContributingKeys } from '../utils/itemDefinitions';
 import { hasMeaningfulData } from '../utils/scoreCalculations';
 import { getScoreTypeColor } from '../utils/themeColors';
-import ScoreBarChart from '../components/ScoreBarChart';
+import ScoreBarChart from '../../components/ScoreBarChart';
 import BarbellChart from '../components/BarbellChart';
 import Navbar from '../../components/Navbar';
 import ConfirmModal from '../components/ConfirmModal';

@@ -1,4 +1,4 @@
-.modal-overlay {
+.modalOverlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   backdrop-filter: blur(2px);
 }
 
-.modal-content {
+.modalContent {
   background: white;
   border-radius: 12px;
   padding: 0;
@@ -33,37 +33,37 @@
   }
 }
 
-.modal-header {
+.modalHeader {
   padding: 20px 24px 0 24px;
   border-bottom: 1px solid #e5e7eb;
 }
 
-.modal-title {
+.modalTitle {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
   color: #1f2937;
 }
 
-.modal-body {
+.modalBody {
   padding: 20px 24px;
 }
 
-.modal-message {
+.modalMessage {
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
   color: #6b7280;
 }
 
-.modal-actions {
+.modalActions {
   display: flex;
   gap: 12px;
   padding: 0 24px 20px 24px;
   justify-content: flex-end;
 }
 
-.modal-btn {
+.modalBtn {
   padding: 8px 16px;
   border: none;
   border-radius: 6px;
@@ -74,24 +74,24 @@
   min-width: 80px;
 }
 
-.modal-btn-cancel {
+.modalBtnCancel {
   background-color: #f3f4f6;
   color: #374151;
 }
 
-.modal-btn-cancel:hover {
+.modalBtnCancel:hover {
   background-color: #e5e7eb;
 }
 
-.modal-btn-confirm {
+.modalBtnConfirm {
   background-color: #dc2626;
   color: white;
 }
 
-.modal-btn-confirm:hover {
+.modalBtnConfirm:hover {
   background-color: #b91c1c;
 }
 
-.modal-btn:active {
+.modalBtn:active {
   transform: translateY(1px);
 }

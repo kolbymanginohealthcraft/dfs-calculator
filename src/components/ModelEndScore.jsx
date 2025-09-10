@@ -52,13 +52,9 @@ const ModelEndScore = ({
               startTotal={startTotal}
               endTotal={modeledTotal}
               expectedScore={weightedScore}
-              showStartBar={true}
-              showExpectedLine={true}
-              showGainBar={true}
-              showRequiredBackground={false}
-              showExpectedPlaceholder={false}
+              variant="end"
+              mode="advanced"
               title="Building the Result"
-              showComparisonIndicator={true}
             />
           </div>
         )}

@@ -4,7 +4,7 @@ import { itemDefs, getContributingKeys, getInitialScores } from '../utils/itemDe
 import { calculateTotalScore, calculateScoreDifference, hasMeaningfulData } from '../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
 import { getScoreTypeColor } from '../utils/themeColors';
-import ScoreBarChart from '../components/ScoreBarChart';
+import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
@@ -131,13 +131,8 @@ const EndScoreScreen = () => {
               startTotal={startTotal}
               expectedScore={expectedScore}
               endTotal={endTotal}
-              showStartBar={true}
-              showExpectedLine={true}
-              showGainBar={true}
-              showRequiredBackground={false}
-              showExpectedPlaceholder={false}
+              variant="end"
               title="Building the Result"
-              showComparisonIndicator={true}
             />
           </div>
 

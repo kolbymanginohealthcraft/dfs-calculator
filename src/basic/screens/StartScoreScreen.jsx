@@ -4,7 +4,7 @@ import { itemDefs, getContributingKeys, getInitialScores, SCORE_CONSTANTS } from
 import { calculateTotalScore, hasMeaningfulData } from '../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
 import { getScoreTypeColor } from '../utils/themeColors';
-import ScoreBarChart from '../components/ScoreBarChart';
+import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
@@ -92,11 +92,7 @@ const StartScoreScreen = () => {
           <div className="score-bar-chart-container">
             <ScoreBarChart
               startTotal={startTotal}
-              showStartBar={true}
-              showExpectedLine={false}
-              showGainBar={false}
-              showRequiredBackground={false}
-              showExpectedPlaceholder={false}
+              variant="start"
               title="Building the Foundation"
             />
           </div>
