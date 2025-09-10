@@ -5,7 +5,9 @@ import { getScoreTypeColor } from '../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
+import InstructionPanel from '../components/InstructionPanel';
 import Navbar from '../../components/Navbar';
+import { instructionContent } from '../data/instructionContent';
 import '../styles/BasicLayout.css';
 
 const ExpectedScoreScreen = () => {
@@ -182,26 +184,7 @@ const ExpectedScoreScreen = () => {
         </div>
 
         <div className="content-right">
-          <div className="instructions-panel">
-            <h3 className="instructions-title">Expected Score Screen</h3>
-            
-            <div className="instruction-section">
-              <h4 className="instruction-subtitle">What you're doing:</h4>
-              <p className="instruction-text">
-                Set the expected score that represents the patient's target functional abilities at discharge.
-              </p>
-            </div>
-            
-            <div className="instruction-section">
-              <h4 className="instruction-subtitle">How to use:</h4>
-              <ul className="instruction-list">
-                <li>Drag the slider to set the expected score</li>
-                <li>Use the +/- buttons for fine-tuning (±0.01)</li>
-                <li>The expected score must be greater than the start score</li>
-                <li>When finished, proceed to set the end scores</li>
-              </ul>
-            </div>
-          </div>
+          <InstructionPanel {...instructionContent.expected} />
         </div>
       </div>
     </div>
