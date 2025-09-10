@@ -9,7 +9,7 @@ import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
 import FunctionItemsList from '../../components/FunctionItemsList';
-import '../styles/StartScoreScreen.css';
+import '../styles/BasicLayout.css';
 
 const StartScoreScreen = () => {
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ const StartScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(scores, startTotal, null);
 
   return (
-    <div className="start-score-screen">
+    <div className="score-screen">
       <Navbar />
 
       <div className="main-content">
@@ -97,17 +97,15 @@ const StartScoreScreen = () => {
             />
           </div>
 
-          <div className="scores-container">
-            <FunctionItemsList
-              mode="basic"
-              variant="start"
-              scores={scores}
-              startScores={scores}
-              onScoreAdjustment={handleScoreAdjustment}
-              mobilityType={mobilityType}
-              onMobilityTypeChange={setMobilityType}
-            />
-          </div>
+          <FunctionItemsList
+            mode="basic"
+            variant="start"
+            scores={scores}
+            startScores={scores}
+            onScoreAdjustment={handleScoreAdjustment}
+            mobilityType={mobilityType}
+            onMobilityTypeChange={setMobilityType}
+          />
 
           <div className="action-buttons">
             {/* Button removed - navigation happens automatically via progress indicator */}

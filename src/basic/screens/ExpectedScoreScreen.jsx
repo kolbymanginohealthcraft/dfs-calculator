@@ -6,7 +6,7 @@ import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
-import '../styles/ExpectedScoreScreen.css';
+import '../styles/BasicLayout.css';
 
 const ExpectedScoreScreen = () => {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const ExpectedScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore);
 
   return (
-    <div className="expected-score-screen">
+    <div className="score-screen">
       <Navbar />
 
       <div className="main-content">

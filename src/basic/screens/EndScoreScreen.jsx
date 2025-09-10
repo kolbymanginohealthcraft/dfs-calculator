@@ -9,7 +9,7 @@ import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
 import FunctionItemsList from '../../components/FunctionItemsList';
-import '../styles/EndScoreScreen.css';
+import '../styles/BasicLayout.css';
 
 const EndScoreScreen = () => {
   const navigate = useNavigate();
@@ -108,7 +108,7 @@ const EndScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
 
   return (
-    <div className="end-score-screen">
+    <div className="score-screen">
       <Navbar />
 
       <div className="main-content">
@@ -136,16 +136,14 @@ const EndScoreScreen = () => {
             />
           </div>
 
-          <div className="scores-container">
-            <FunctionItemsList
-              mode="basic"
-              variant="end"
-              scores={endScores}
-              startScores={startScores}
-              onScoreAdjustment={handleScoreAdjustment}
-              mobilityType={mobilityType}
-            />
-          </div>
+          <FunctionItemsList
+            mode="basic"
+            variant="end"
+            scores={endScores}
+            startScores={startScores}
+            onScoreAdjustment={handleScoreAdjustment}
+            mobilityType={mobilityType}
+          />
         </div>
 
         <div className="content-right">
