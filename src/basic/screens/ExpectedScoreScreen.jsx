@@ -4,7 +4,6 @@ import { calculateExpectedScore, hasMeaningfulData } from '../utils/scoreCalcula
 import { getScoreTypeColor } from '../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
-import StepInstruction from '../components/StepInstruction';
 import InstructionPanel from '../components/InstructionPanel';
 import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
 import BasicLayout from '../components/BasicLayout';
@@ -109,9 +108,6 @@ const ExpectedScoreScreen = () => {
         hasInteracted={hasInteracted}
       />
 
-      {/* <div className="step-instruction-container">
-        <StepInstruction currentStep="expected" />
-      </div> */}
 
       <div className="score-bar-chart-container">
         <ScoreBarChart

@@ -179,9 +179,23 @@ function AdvancedAppNew() {
                 </svg>
               </div>
               <h1 className={styles.welcomeTitle}>Advanced DFS Calculator</h1>
-              <p className={styles.welcomeDescription}>
-                Upload an MDS XML file to begin comprehensive patient function analysis and discharge planning.
-              </p>
+              <div className={styles.uploadPrompt}>
+                <div className={styles.uploadIcon}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7,10 12,15 17,10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                </div>
+                <h2 className={styles.uploadTitle}>Upload Your MDS XML File</h2>
+                <p className={styles.uploadDescription}>
+                  <strong>Drag and drop your MDS XML file</strong> into the upload area above, or click the upload button to get started with comprehensive patient function analysis and discharge planning.
+                </p>
+                <div className={styles.fileTypeNote}>
+                  <span className={styles.fileTypeIcon}>📄</span>
+                  <span>Only XML files are supported</span>
+                </div>
+              </div>
               <div className={styles.welcomeFeatures}>
                 <div className={styles.featureItem}>
                   <div className={styles.featureIcon}>

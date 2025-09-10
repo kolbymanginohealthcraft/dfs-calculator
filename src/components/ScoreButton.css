@@ -15,7 +15,6 @@
 .score-btn:hover:not(:disabled) {
   border-color: var(--button-color, #007cbb);
   color: var(--button-color, #007cbb);
-  transform: scale(1.1);
 }
 
 .score-btn:focus {

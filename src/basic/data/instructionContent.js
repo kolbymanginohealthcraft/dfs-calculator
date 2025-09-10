@@ -36,8 +36,7 @@ export const instructionContent = {
     howToUse: [
       "Use the +/- buttons to adjust each score",
       "Compare start and end scores using the barbell charts",
-      "When finished, view the final results",
-      "To save and share the result, click View Clean Results"
+      "When finished, you can navigate back to previous steps to make adjustments"
     ],
     scoreValues: [
       { number: "6", description: "Independent" },

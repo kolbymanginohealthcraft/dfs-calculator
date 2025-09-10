@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import StartScoreScreen from '../basic/screens/StartScoreScreen';
 import ExpectedScoreScreen from '../basic/screens/ExpectedScoreScreen';
 import EndScoreScreen from '../basic/screens/EndScoreScreen';
-import ResultsViewScreen from '../basic/screens/ResultsViewScreen';
 
 // Component to scroll to top on route changes
 function ScrollToTop() {
@@ -32,7 +31,6 @@ function BasicApp() {
         <Route path="/start-score" element={<StartScoreScreen />} />
         <Route path="/expected-score" element={<ExpectedScoreScreen />} />
         <Route path="/end-score" element={<EndScoreScreen />} />
-        <Route path="/results" element={<ResultsViewScreen />} />
       </Routes>
     </>
   );

@@ -57,8 +57,24 @@
   flex-shrink: 0;
 }
 
+/* Full-width mode styles */
+.main-content.full-width {
+  flex-direction: column;
+}
+
+.content-full-width {
+  width: 100%;
+  max-width: none;
+}
+
+/* Expanded right panel mode */
+.main-content.expanded-right .content-right {
+  width: auto;
+  flex: 1;
+  min-width: 450px; /* Minimum width to maintain usability */
+}
+
 /* Common content containers */
-/* .step-instruction-container styling handled by individual components */
 
 .score-bar-chart-container {
   background: white;

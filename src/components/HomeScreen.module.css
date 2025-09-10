@@ -635,30 +635,38 @@
 /* Disclaimer Section */
 .disclaimer-section {
   padding: var(--spacing-2xl) 0;
-  background: #fef2f2;
+  background: var(--background-secondary);
 }
 
 .disclaimer {
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-lg);
-  background: white;
+  background: var(--background-card);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
-  border-left: 4px solid #ef4444;
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--accent-color);
   box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+}
+
+.disclaimer:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .disclaimer-icon {
   flex-shrink: 0;
   width: 50px;
   height: 50px;
-  background: #fef2f2;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ef4444;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0, 124, 187, 0.2);
 }
 
 .disclaimer-icon svg {
@@ -673,13 +681,13 @@
 .disclaimer-title {
   font-size: 1.2rem;
   font-weight: 600;
-  color: #dc2626;
+  color: var(--text-primary);
   margin: 0 0 var(--spacing-sm) 0;
 }
 
 .disclaimer-text {
   font-size: 1rem;
-  color: #7f1d1d;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
 }

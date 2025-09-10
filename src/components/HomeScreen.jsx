@@ -208,15 +208,16 @@ const HomeScreen = () => {
           <div className={styles['disclaimer']}>
             <div className={styles['disclaimer-icon']}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="M12 8v4M12 16h.01"/>
               </svg>
             </div>
             <div className={styles['disclaimer-content']}>
-              <h4 className={styles['disclaimer-title']}>Important Disclaimer</h4>
+              <h4 className={styles['disclaimer-title']}>Clinical Disclaimer</h4>
               <p className={styles['disclaimer-text']}>
-                Calculator outputs are estimates and do not guarantee results. This tool is 
-                not intended to be used as a substitute for clinical judgment. Always consult 
-                with qualified healthcare professionals for patient care decisions.
+                This calculator provides estimates based on available data and should not replace 
+                clinical judgment. Results are for informational purposes only. Always consult 
+                with qualified healthcare professionals for patient care decisions and treatment planning.
               </p>
             </div>
           </div>

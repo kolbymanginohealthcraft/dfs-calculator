@@ -6,7 +6,6 @@ import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
 import { getScoreTypeColor } from '../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
-import StepInstruction from '../components/StepInstruction';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
@@ -82,9 +81,6 @@ const StartScoreScreen = () => {
         hasInteracted={hasInteracted}
       />
 
-      {/* <div className="step-instruction-container">
-        <StepInstruction currentStep="start" />
-      </div> */}
 
       <div className="score-bar-chart-container">
         <ScoreBarChart

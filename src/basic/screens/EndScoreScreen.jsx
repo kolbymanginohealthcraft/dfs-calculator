@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { itemDefs, getContributingKeys, getInitialScores } from '../utils/itemDefinitions';
-import { calculateTotalScore, calculateScoreDifference, hasMeaningfulData } from '../utils/scoreCalculations';
+import { calculateTotalScore, hasMeaningfulData } from '../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
 import { getScoreTypeColor } from '../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
-import StepInstruction from '../components/StepInstruction';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
@@ -50,22 +49,6 @@ const EndScoreScreen = () => {
     return '✗';
   };
 
-  const handleSubmit = () => {
-    const endTotal = calcEndTotal();
-    const scoreDifference = calculateScoreDifference(startTotal, endTotal);
-    
-    navigate('/basic/results', {
-      state: {
-        startScores,
-        endScores,
-        startTotal,
-        endTotal,
-        expectedScore,
-        mobilityType,
-        scoreDifference,
-      }
-    });
-  };
 
   const handleBackClick = () => {
     navigate('/basic/expected-score', {
@@ -83,12 +66,6 @@ const EndScoreScreen = () => {
   };
 
   const handleStepPress = (step) => {
-    if (step === 'end') {
-      // Already on end step, but Next button was clicked - go to results
-      handleSubmit();
-      return;
-    }
-    
     if (step === 'start') {
       navigate('/basic/start-score');
     } else if (step === 'expected') {
@@ -105,7 +82,6 @@ const EndScoreScreen = () => {
 
 
   const endTotal = calcEndTotal();
-  const scoreDifference = calculateScoreDifference(startTotal, endTotal);
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
 
   return (
@@ -119,9 +95,6 @@ const EndScoreScreen = () => {
         hasInteracted={hasInteracted}
       />
 
-      {/* <div className="step-instruction-container">
-        <StepInstruction currentStep="end" />
-      </div> */}
 
       <div className="score-bar-chart-container">
         <ScoreBarChart
