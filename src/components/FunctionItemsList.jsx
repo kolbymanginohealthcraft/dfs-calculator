@@ -164,7 +164,7 @@ const FunctionItemsList = ({
             startScore={variant === 'start' ? score : startScore}
             endScore={variant === 'start' ? null : score}
             showEndNode={variant !== 'start'}
-            width={120}
+            width={160}
             height={30}
           />
         </div>
