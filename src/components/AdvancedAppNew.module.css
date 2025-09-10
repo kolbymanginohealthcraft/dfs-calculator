@@ -152,8 +152,8 @@
 }
 
 .contentLeft {
-  flex: 0 0 800px;
-  min-width: 800px;
+  flex: 1;
+  max-width: 800px;
 }
 
 .contentRight {
@@ -201,64 +201,28 @@
   gap: var(--spacing-lg);
 }
 
-/* Right Panel Header */
-.rightPanelHeader {
+/* Patient Header Section */
+.patientHeaderSection {
+  /* Styles are handled by PatientHeader.module.css */
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Unified Tab Container */
+.unifiedTabContainer {
   background: white;
   border-radius: 15px;
-  padding: 20px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  overflow: hidden;
 }
 
-.panelInfo {
-  flex: 1;
-}
-
-.panelTitle {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #0c436a;
-  margin: 0 0 5px 0;
-}
-
-.panelSubtitle {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0;
-}
-
-.panelActions {
-  display: flex;
-  gap: var(--spacing-md);
-}
-
-.redactButton {
-  background: #0c436a;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.redactButton:hover {
-  background: #1a5f8a;
-  transform: translateY(-1px);
-}
 
 /* Right Panel Navigation */
 .rightPanelNavigation {
-  background: white;
-  border-radius: 15px;
+  background: transparent;
   padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   display: flex;
   gap: 5px;
+  margin-bottom: 0;
 }
 
 .panelButton {
@@ -300,10 +264,8 @@
 
 /* Right Panel Content */
 .rightPanelContent {
-  background: white;
-  border-radius: 15px;
+  background: transparent;
   padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   flex: 1;
   overflow-y: auto;
   min-height: 500px;
@@ -430,11 +392,6 @@
     gap: var(--spacing-lg);
   }
   
-  .rightPanelHeader {
-    flex-direction: column;
-    gap: var(--spacing-md);
-    text-align: center;
-  }
   
   .rightPanelNavigation {
     flex-direction: column;
@@ -468,7 +425,7 @@
   }
   
   .modelingContainer,
-  .rightPanelHeader,
+  .patientHeaderSection,
   .rightPanelNavigation,
   .rightPanelContent {
     padding: 15px;

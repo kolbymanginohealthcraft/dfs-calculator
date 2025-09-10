@@ -16,6 +16,18 @@ export default function Covariates({
 
   const formatNumber = (n) => Number(n).toFixed(2);
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      if (searchTerm) {
+        // If there's a search term, clear it first
+        setSearchTerm("");
+      } else {
+        // If search is empty, blur the input to exit focus
+        e.target.blur();
+      }
+    }
+  };
+
   const highlightMatch = (text, term) => {
     if (!term) return text;
     const index = text.toLowerCase().indexOf(term.toLowerCase());
@@ -71,8 +83,14 @@ export default function Covariates({
               placeholder="Search covariates..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown}
               className={styles.searchBar}
             />
+            {searchTerm && (
+              <button className={styles.clearButton} onClick={() => setSearchTerm("")}>
+                ✕
+              </button>
+            )}
           </div>
         </div>
         {hasFile && (

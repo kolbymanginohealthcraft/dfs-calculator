@@ -1,0 +1,238 @@
+import React from 'react';
+import BarbellChart from './BarbellChart';
+import ScoreButton from './ScoreButton';
+import { getScoreTypeColor } from '../utils/themeColors';
+import { GG_ITEMS, scoreMap } from '../utils/calculations';
+import { itemDefs, getContributingKeys } from '../basic/utils/itemDefinitions';
+import styles from './FunctionItemsList.module.css';
+
+const FunctionItemsList = ({
+  mode = 'basic', // 'basic' or 'advanced'
+  variant = 'start', // 'start', 'end', or 'advanced'
+  items = [], // For advanced mode, pass GG_ITEMS
+  scores = {}, // Current scores
+  startScores = {}, // For end/advanced modes
+  onScoreAdjustment, // Callback for score changes
+  mobilityType = 'Walk', // For basic mode
+  onMobilityTypeChange, // Callback for mobility type changes in basic mode
+  contributingIds = new Set(), // For advanced mode
+  className = '',
+}) => {
+  // Get items based on mode
+  const getItems = () => {
+    if (mode === 'advanced') {
+      // Group GG_ITEMS by domain and filter for contributing items only
+      const groupedItems = {};
+      items.forEach(item => {
+        const cleanId = item.id.replace(/[0-9]$/, "");
+        const isContributing = contributingIds.has(cleanId);
+        
+        // Only include contributing items
+        if (isContributing) {
+          if (!groupedItems[item.domain]) {
+            groupedItems[item.domain] = [];
+          }
+          groupedItems[item.domain].push(item);
+        }
+      });
+      
+      return Object.entries(groupedItems).map(([domain, domainItems]) => ({
+        domain,
+        items: domainItems
+      }));
+    }
+    
+    // Basic mode - use itemDefs
+    const contributingKeys = getContributingKeys(mobilityType);
+    return [
+      {
+        domain: 'selfCare',
+        items: itemDefs.selfCare.filter(item => contributingKeys.selfCare.includes(item.key))
+      },
+      {
+        domain: 'mobility', 
+        items: itemDefs.mobility.filter(item => contributingKeys.mobility.includes(item.key))
+      }
+    ];
+  };
+
+  // Get score for an item
+  const getScore = (item, category = null) => {
+    if (mode === 'advanced') {
+      return scores[item.id] in scoreMap ? scoreMap[scores[item.id]] : 0;
+    }
+    
+    // Basic mode
+    const key = item.key || item.id;
+    return scores[category] ? scores[category][key] : 0;
+  };
+
+  // Get start score for an item (for end/advanced modes)
+  const getStartScore = (item, category = null) => {
+    if (mode === 'advanced') {
+      const rawStart = startScores[item.id];
+      return rawStart in scoreMap ? scoreMap[rawStart] : 0;
+    }
+    
+    // Basic mode
+    const key = item.key || item.id;
+    return startScores[category] ? startScores[category][key] : 0;
+  };
+
+
+  // Convert advanced label format to basic format
+  const formatLabel = (item) => {
+    if (mode === 'advanced') {
+      // Extract the letter from the ID (e.g., "GG0130A" -> "A")
+      const letter = item.id.slice(-1);
+      return `${letter}. ${item.label}`;
+    }
+    return item.label;
+  };
+
+  // Get button colors based on variant
+  const getButtonColors = () => {
+    switch (variant) {
+      case 'start':
+        return { color: '#007cbb', outlineColor: '#007cbb' };
+      case 'end':
+        return { color: '#28a745', outlineColor: '#28a745' };
+      case 'advanced':
+        return { 
+          color: getScoreTypeColor('end', 'primary'), 
+          outlineColor: getScoreTypeColor('end', 'primary') 
+        };
+      default:
+        return { color: '#007cbb', outlineColor: '#007cbb' };
+    }
+  };
+
+  // Check if score is at min/max
+  const isScoreAtMin = (item, category = null) => {
+    const score = getScore(item, category);
+    return score <= 1;
+  };
+
+  const isScoreAtMax = (item, category = null) => {
+    const score = getScore(item, category);
+    return score >= 6;
+  };
+
+  // Handle score adjustment
+  const handleScoreAdjustment = (item, delta, category = null) => {
+    if (onScoreAdjustment) {
+      if (mode === 'advanced') {
+        onScoreAdjustment(item.id, delta);
+      } else {
+        onScoreAdjustment(item.key, delta);
+      }
+    }
+  };
+
+  // Render a single item row
+  const renderItemRow = (item, category = null, isLast = false) => {
+    const score = getScore(item, category);
+    const startScore = getStartScore(item, category);
+    const delta = score - startScore;
+    const buttonColors = getButtonColors();
+    
+    // Items are already filtered at the getItems level
+
+    const rowClasses = [
+      styles.scoreRow,
+      mode === 'basic' && isLast ? styles.lastRow : '',
+      delta > 0 ? styles.gain : '',
+      delta < 0 ? styles.loss : '',
+    ].filter(Boolean).join(' ');
+
+    return (
+      <div key={item.key || item.id} className={rowClasses}>
+
+        <div className={styles.itemLabel}>
+          <span className={styles.labelText} title={item.id || item.key}>
+            {formatLabel(item)}{' '}
+            {delta !== 0 && (
+              <span className={`${styles.delta} ${delta > 0 ? styles.positive : styles.negative}`}>
+                ({delta > 0 ? '+' : ''}{delta})
+              </span>
+            )}
+          </span>
+        </div>
+        
+        <div className={styles.itemProgress}>
+          <BarbellChart
+            startScore={variant === 'start' ? score : startScore}
+            endScore={variant === 'start' ? null : score}
+            showEndNode={variant !== 'start'}
+            width={120}
+            height={30}
+          />
+        </div>
+        
+        <div className={styles.scoreControls}>
+          <ScoreButton
+            type="minus"
+            onClick={() => handleScoreAdjustment(item, -1, category)}
+            disabled={isScoreAtMin(item, category)}
+            color={buttonColors.color}
+            outlineColor={buttonColors.outlineColor}
+          />
+          
+          <ScoreButton
+            type="plus"
+            onClick={() => handleScoreAdjustment(item, 1, category)}
+            disabled={isScoreAtMax(item, category)}
+            color={buttonColors.color}
+            outlineColor={buttonColors.outlineColor}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  // Render domain section
+  const renderDomainSection = (domain, domainItems) => {
+    const domainName = domain === 'selfCare' ? 'Self-Care' : 'Mobility';
+    
+    return (
+      <div className={styles.categorySection} key={domain}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.categoryTitle}>{domainName} Items</h2>
+          {mode === 'basic' && domain === 'mobility' && onMobilityTypeChange && variant === 'start' && (
+            <div className={styles.mobilityTypeSelector}>
+              <button
+                className={`${styles.mobilityBtn} ${mobilityType === 'Walk' ? styles.active : ''}`}
+                onClick={() => onMobilityTypeChange('Walk')}
+              >
+                Walk
+              </button>
+              <button
+                className={`${styles.mobilityBtn} ${mobilityType === 'Wheel' ? styles.active : ''}`}
+                onClick={() => onMobilityTypeChange('Wheel')}
+              >
+                Wheelchair
+              </button>
+            </div>
+          )}
+        </div>
+        <div className={styles.tableContainer}>
+          {domainItems.map((item, index, filteredArray) => 
+            renderItemRow(item, domain, index === filteredArray.length - 1)
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const itemsData = getItems();
+
+  return (
+    <div className={`${styles.scoresContainer} ${className}`}>
+      {itemsData.map(({ domain, items: domainItems }) => 
+        renderDomainSection(domain, domainItems)
+      )}
+    </div>
+  );
+};
+
+export default FunctionItemsList;

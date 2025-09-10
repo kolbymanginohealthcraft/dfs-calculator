@@ -5,11 +5,10 @@ import { calculateTotalScore, hasMeaningfulData } from '../utils/scoreCalculatio
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
 import { getScoreTypeColor } from '../utils/themeColors';
 import ScoreBarChart from '../components/ScoreBarChart';
-import BarbellChart from '../components/BarbellChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
-import ScoreButton from '../components/ScoreButton';
+import FunctionItemsList from '../../components/FunctionItemsList';
 import '../styles/StartScoreScreen.css';
 
 const StartScoreScreen = () => {
@@ -69,44 +68,6 @@ const StartScoreScreen = () => {
     }
   };
 
-  const renderRow = (item, category, isLast) => {
-    const score = scores[category][item.key];
-    
-    return (
-      <div key={item.key} className={`score-row ${isLast ? 'last-row' : ''}`}>
-        <div className="item-label">
-          <span className="label-text">{item.label}</span>
-        </div>
-        
-        <div className="item-progress">
-          <BarbellChart
-            startScore={score}
-            showEndNode={false}
-            width={120}
-            height={30}
-          />
-        </div>
-        
-        <div className="score-controls">
-          <ScoreButton
-            type="minus"
-            onClick={() => handleScoreAdjustment(item.key, -1)}
-            disabled={isScoreAtMin(scores, item.key)}
-            color="#007cbb"
-            outlineColor="#007cbb"
-          />
-          
-          <ScoreButton
-            type="plus"
-            onClick={() => handleScoreAdjustment(item.key, 1)}
-            disabled={isScoreAtMax(scores, item.key)}
-            color="#007cbb"
-            outlineColor="#007cbb"
-          />
-        </div>
-      </div>
-    );
-  };
 
   const startTotal = calcTotal();
   const hasDataToPreserve = hasMeaningfulData(scores, startTotal, null);
@@ -141,45 +102,15 @@ const StartScoreScreen = () => {
           </div>
 
           <div className="scores-container">
-            <div className="category-section">
-              <div className="section-header">
-                <h2 className="category-title">Self-Care Items</h2>
-              </div>
-              <div className="table-container">
-                {itemDefs.selfCare
-                  .filter(item => contributingKeys.selfCare.includes(item.key))
-                  .map((item, index, filteredArray) => 
-                    renderRow(item, 'selfCare', index === filteredArray.length - 1)
-                  )}
-              </div>
-            </div>
-
-            <div className="category-section">
-              <div className="section-header">
-                <h2 className="category-title">Mobility Items</h2>
-                <div className="mobility-type-selector">
-                  <button
-                    className={`mobility-btn ${mobilityType === 'Walk' ? 'active' : ''}`}
-                    onClick={() => setMobilityType('Walk')}
-                  >
-                    Walk
-                  </button>
-                  <button
-                    className={`mobility-btn ${mobilityType === 'Wheel' ? 'active' : ''}`}
-                    onClick={() => setMobilityType('Wheel')}
-                  >
-                    Wheelchair
-                  </button>
-                </div>
-              </div>
-              <div className="table-container">
-                {itemDefs.mobility
-                  .filter(item => contributingKeys.mobility.includes(item.key))
-                  .map((item, index, filteredArray) => 
-                    renderRow(item, 'mobility', index === filteredArray.length - 1)
-                  )}
-              </div>
-            </div>
+            <FunctionItemsList
+              mode="basic"
+              variant="start"
+              scores={scores}
+              startScores={scores}
+              onScoreAdjustment={handleScoreAdjustment}
+              mobilityType={mobilityType}
+              onMobilityTypeChange={setMobilityType}
+            />
           </div>
 
           <div className="action-buttons">

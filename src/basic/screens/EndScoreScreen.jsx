@@ -5,11 +5,10 @@ import { calculateTotalScore, calculateScoreDifference, hasMeaningfulData } from
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
 import { getScoreTypeColor } from '../utils/themeColors';
 import ScoreBarChart from '../components/ScoreBarChart';
-import BarbellChart from '../components/BarbellChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import StepInstruction from '../components/StepInstruction';
 import Navbar from '../../components/Navbar';
-import ScoreButton from '../components/ScoreButton';
+import FunctionItemsList from '../../components/FunctionItemsList';
 import '../styles/EndScoreScreen.css';
 
 const EndScoreScreen = () => {
@@ -103,46 +102,6 @@ const EndScoreScreen = () => {
     }
   };
 
-  const renderRow = (item, category, isLast) => {
-    const startScore = startScores[category][item.key];
-    const endScore = endScores[category][item.key];
-    
-    return (
-      <div key={item.key} className={`score-row ${isLast ? 'last-row' : ''}`}>
-        <div className="item-label">
-          <span className="label-text">{item.label}</span>
-        </div>
-        
-        <div className="item-progress">
-          <BarbellChart
-            startScore={startScore}
-            endScore={endScore}
-            showEndNode={true}
-            width={120}
-            height={30}
-          />
-        </div>
-        
-        <div className="score-controls">
-          <ScoreButton
-            type="minus"
-            onClick={() => handleScoreAdjustment(item.key, -1)}
-            disabled={isScoreAtMin(endScores, item.key)}
-            color="#28a745"
-            outlineColor="#28a745"
-          />
-          
-          <ScoreButton
-            type="plus"
-            onClick={() => handleScoreAdjustment(item.key, 1)}
-            disabled={isScoreAtMax(endScores, item.key)}
-            color="#28a745"
-            outlineColor="#28a745"
-          />
-        </div>
-      </div>
-    );
-  };
 
   const endTotal = calcEndTotal();
   const scoreDifference = calculateScoreDifference(startTotal, endTotal);
@@ -183,31 +142,14 @@ const EndScoreScreen = () => {
           </div>
 
           <div className="scores-container">
-            <div className="category-section">
-              <div className="section-header">
-                <h2 className="category-title">Self-Care Items</h2>
-              </div>
-              <div className="table-container">
-                {itemDefs.selfCare
-                  .filter(item => contributingKeys.selfCare.includes(item.key))
-                  .map((item, index, filteredArray) => 
-                    renderRow(item, 'selfCare', index === filteredArray.length - 1)
-                  )}
-              </div>
-            </div>
-
-            <div className="category-section">
-              <div className="section-header">
-                <h2 className="category-title">Mobility Items</h2>
-              </div>
-              <div className="table-container">
-                {itemDefs.mobility
-                  .filter(item => contributingKeys.mobility.includes(item.key))
-                  .map((item, index, filteredArray) => 
-                    renderRow(item, 'mobility', index === filteredArray.length - 1)
-                  )}
-              </div>
-            </div>
+            <FunctionItemsList
+              mode="basic"
+              variant="end"
+              scores={endScores}
+              startScores={startScores}
+              onScoreAdjustment={handleScoreAdjustment}
+              mobilityType={mobilityType}
+            />
           </div>
         </div>
 

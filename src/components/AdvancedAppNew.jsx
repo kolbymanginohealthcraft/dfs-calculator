@@ -14,7 +14,8 @@ import useValueDescriptions from "../utils/useValueDescriptions";
 import html2pdf from "html2pdf.js";
 
 import Navbar from "./Navbar";
-import SummarySection from "./SummarySection";
+import PatientHeader from "./PatientHeader";
+import PatientOverview from "./PatientOverview";
 
 // Lazy load heavy components to improve initial render performance
 const MdsSnapshot = lazy(() => import("./MdsSnapshot"));
@@ -225,18 +226,8 @@ function AdvancedAppNew() {
         // Main Application State
         <div className={styles.mainContent}>
           <div className={styles.contentLeft}>
-            {/* Score Modeling Panel */}
-            <div className={styles.modelingContainer}>
-              <div className={styles.modelingHeader}>
-                <h2 className={styles.modelingTitle}>Score Modeling</h2>
-                <p className={styles.modelingSubtitle}>
-                  Adjust function scores to model different discharge scenarios
-                </p>
-              </div>
-              
-              <div className={styles.modelingContent}>
-                <Suspense fallback={<div className={styles.loading}>Loading modeling tools...</div>}>
-                  <ModelEndScore
+            <Suspense fallback={<div className={styles.loading}>Loading modeling tools...</div>}>
+              <ModelEndScore
                     modeledValues={modeledValues}
                     startScores={startScores}
                     subtotal={subtotal}
@@ -247,100 +238,59 @@ function AdvancedAppNew() {
                     parsedValues={parsedValues}
                     weightedScore={weightedScore}
                   />
-                </Suspense>
-              </div>
-            </div>
+            </Suspense>
           </div>
 
           <div className={styles.contentRight}>
-            {/* Right Panel Header */}
-            <div className={styles.rightPanelHeader}>
-              <div className={styles.panelInfo}>
-                <h3 className={styles.panelTitle}>Patient Analysis</h3>
-                <p className={styles.panelSubtitle}>
-                  {isRedacted ? "REDACTED REDACTED" : `${firstName} ${lastName}`} • 
-                  {isRedacted ? " REDACTED" : facilityName}
-                </p>
-              </div>
-              <div className={styles.panelActions}>
-                <button 
-                  className={styles.redactButton}
-                  onClick={toggleRedaction}
-                >
-                  {isRedacted ? 'Show Data' : 'Redact Data'}
-                </button>
-              </div>
+            {/* Patient Header Section - above the solid line */}
+            <div className={styles.patientHeaderSection}>
+              <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                <PatientHeader
+                  firstName={firstName}
+                  lastName={lastName}
+                  dob={dob}
+                  age={age}
+                  hasFile={hasFile}
+                  isRedacted={isRedacted}
+                  onToggleRedaction={toggleRedaction}
+                />
+              </Suspense>
             </div>
 
-            {/* Right Panel Navigation */}
-            <div className={styles.rightPanelNavigation}>
-              {rightPanelOptions.map(option => (
-                <button
-                  key={option.id}
-                  className={`${styles.panelButton} ${activeRightPanel === option.id ? styles.panelButtonActive : ''}`}
-                  onClick={() => setActiveRightPanel(option.id)}
-                >
-                  <span className={styles.panelIcon}>{option.icon}</span>
-                  <span className={styles.panelLabel}>{option.label}</span>
-                </button>
-              ))}
-            </div>
+            {/* Unified Tab Container */}
+            <div className={styles.unifiedTabContainer}>
+              {/* Right Panel Navigation */}
+              <div className={styles.rightPanelNavigation}>
+                {rightPanelOptions.map(option => (
+                  <button
+                    key={option.id}
+                    className={`${styles.panelButton} ${activeRightPanel === option.id ? styles.panelButtonActive : ''}`}
+                    onClick={() => setActiveRightPanel(option.id)}
+                  >
+                    <span className={styles.panelIcon}>{option.icon}</span>
+                    <span className={styles.panelLabel}>{option.label}</span>
+                  </button>
+                ))}
+              </div>
 
-            {/* Right Panel Content */}
-            <div className={styles.rightPanelContent}>
+              {/* Right Panel Content */}
+              <div className={styles.rightPanelContent}>
               {activeRightPanel === 'overview' && (
                 <div className={styles.overviewPanel}>
-                  <div className={styles.summaryCard}>
-                    <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                      <SummarySection
-                        firstName={firstName}
-                        lastName={lastName}
-                        dob={dob}
-                        age={age}
-                        admitDate={admitDate}
-                        ardDate={ardDate}
-                        ardGapDays={ardGapDays}
-                        facility={facility}
-                        facilityName={facilityName}
-                        facilityAddress={facilityAddress}
-                        fileName={fileName}
-                        conditionCode={conditionCode}
-                        conditionCategory={conditionCategory}
-                        mobilityType={mobilityType}
-                        startScore={startTotal}
-                        modeledScore={modeledTotal}
-                        hasFile={hasFile}
-                        isRedacted={isRedacted}
-                        onToggleRedaction={toggleRedaction}
-                      />
-                    </Suspense>
-                  </div>
-                  
-                  <div className={styles.scoresCard}>
-                    <div className={styles.cardHeader}>
-                      <h3 className={styles.cardTitle}>Function Scores</h3>
-                    </div>
-                    <div className={styles.scoresGrid}>
-                      <div className={styles.scoreItem}>
-                        <div className={styles.scoreLabel}>Start Score</div>
-                        <div className={styles.scoreValue}>{startTotal}</div>
-                      </div>
-                      <div className={styles.scoreItem}>
-                        <div className={styles.scoreLabel}>Expected Score</div>
-                        <div className={styles.scoreValue}>{weightedScore.toFixed(1)}</div>
-                      </div>
-                      <div className={styles.scoreItem}>
-                        <div className={styles.scoreLabel}>Modeled Score</div>
-                        <div className={styles.scoreValue}>{modeledTotal}</div>
-                      </div>
-                      <div className={styles.scoreItem}>
-                        <div className={styles.scoreLabel}>Required Gain</div>
-                        <div className={styles.scoreValue}>
-                          {Math.max(0, weightedScore - startTotal).toFixed(1)}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
+                    <PatientOverview
+                      admitDate={admitDate}
+                      ardDate={ardDate}
+                      ardGapDays={ardGapDays}
+                      facility={facility}
+                      facilityName={facilityName}
+                      facilityAddress={facilityAddress}
+                      conditionCategory={conditionCategory}
+                      mobilityType={mobilityType}
+                      hasFile={hasFile}
+                      isRedacted={isRedacted}
+                    />
+                  </Suspense>
                 </div>
               )}
 
@@ -370,6 +320,7 @@ function AdvancedAppNew() {
                   </Suspense>
                 </div>
               )}
+              </div>
             </div>
           </div>
         </div>

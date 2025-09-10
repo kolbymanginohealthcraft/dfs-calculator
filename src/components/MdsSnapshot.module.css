@@ -36,11 +36,22 @@
   color: #0c436a;
   text-align: center;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .sectionLink:hover {
   background: #c4eac5;
+}
+
+.sectionLinkActive {
+  background: #7fbc42 !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(127, 188, 66, 0.3);
+}
+
+.sectionLinkActive:hover {
+  background: #6ba83a !important;
 }
 
 .scrollArea {
@@ -53,6 +64,15 @@
 
 .mdsSection {
   margin-bottom: 1.5rem;
+}
+
+.noSectionSelected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #666;
+  font-style: italic;
 }
 
 .mdsSection h3 {
@@ -132,7 +152,7 @@ th, td {
   background: none;
   border: none;
   font-size: 1rem;
-  color: #999;
+  color: #dc3545;
   cursor: pointer;
   padding: 0;
   line-height: 1;
@@ -142,7 +162,7 @@ th, td {
 }
 
 .clearButton:hover {
-  color: #333;
+  color: #c82333;
 }
 
 .valueCode {

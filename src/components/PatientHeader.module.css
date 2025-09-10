@@ -1,0 +1,112 @@
+.headerBlock {
+  background: white;
+  border-radius: 15px;
+  padding: 10px 15px;
+  box-shadow: 0 4px 8px rgba(12, 67, 106, 0.15);
+  margin-bottom: 0;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.summaryName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0.3rem 0;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  color: #0C436A;
+}
+
+.summaryName svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.inlineDetails {
+  font-size: 0.85rem;
+  font-weight: normal;
+  margin-left: 0.5rem;
+  color: #666;
+}
+
+
+.placeholder {
+  font-style: italic;
+  color: #777;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.toggleButton {
+  background: #e1f0f5;
+  border: 1px solid #007cbb;
+  color: #007cbb;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  background: #d4e7f2;
+  transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .headerRow {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .headerControls {
+    justify-content: center;
+  }
+  
+  .summaryName {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerBlock {
+    padding: 15px 15px 0 15px;
+  }
+  
+  .summaryName {
+    font-size: 1rem;
+  }
+  
+  .inlineDetails {
+    font-size: 0.8rem;
+  }
+}

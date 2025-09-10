@@ -68,101 +68,21 @@
   border-top: 1px solid #e0e0e0;
 }
 
-.scores-container {
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
+/* Scores container styling moved to shared FunctionItemsList component */
 
-.category-section {
-  margin-bottom: 25px;
-}
+/* Section header and category title styling moved to FunctionItemsList component */
 
-.category-section:last-child {
-  margin-bottom: 0;
-}
+/* Table container styling moved to FunctionItemsList component */
 
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid #e0e0e0;
-}
+/* Score row styling moved to shared FunctionItemsList component */
 
-.category-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #0c436a;
-  margin: 0;
-}
+/* Item label styling moved to shared FunctionItemsList component */
 
-.table-container {
-  border: 1px solid #e0e0e0;
-  border-radius: 10px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
+/* Label text styling moved to shared FunctionItemsList component */
 
-.score-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  border-bottom: 1px solid #e0e0e0;
-}
+/* Item progress styling moved to shared FunctionItemsList component */
 
-.score-row:last-child {
-  border-bottom: none;
-}
-
-.item-label {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  flex: 2;
-}
-
-.label-text {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #0c436a;
-}
-
-.item-progress {
-  margin: 0 10px;
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  height: 30px;
-}
-
-.item-progress::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 12px;
-  right: 12px;
-  height: 3px;
-  background: #e0e0e0;
-  border-radius: 2px;
-  transform: translateY(-50%);
-  z-index: 0;
-}
-
-.score-controls {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  justify-content: flex-end;
-}
+/* Score controls styling moved to shared FunctionItemsList component */
 
 
 
@@ -304,31 +224,9 @@
 
 @media (max-width: 768px) {
   
-  .section-header {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
-  }
+  /* Section header responsive styling moved to FunctionItemsList component */
   
-  .scores-container {
-    padding: 15px;
-    margin: 0 10px 15px 10px;
-  }
-  
-  .score-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  
-  .item-progress {
-    margin: 0;
-    align-self: center;
-  }
-  
-  .score-controls {
-    align-self: center;
-  }
+  /* Responsive styling for scores moved to shared FunctionItemsList component */
   
   .score-bar-chart-container {
     margin: 0 10px 15px 10px;

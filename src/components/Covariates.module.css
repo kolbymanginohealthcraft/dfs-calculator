@@ -98,20 +98,22 @@
 .clearButton {
   position: absolute;
   right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
   background: none;
   border: none;
   font-size: 1rem;
-  color: #999;
+  color: #dc3545;
   cursor: pointer;
   padding: 0;
   line-height: 1;
-  height: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .clearButton:hover {
-  color: #333;
+  color: #c82333;
 }
 
 /* Align numeric cells right */

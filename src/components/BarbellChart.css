@@ -9,13 +9,28 @@
 .barbell-track {
   position: absolute;
   width: calc(100% - 24px);
-  height: 4px;
-  background-color: #e9ecef;
-  border-radius: 2px;
-  z-index: -2;
+  height: 5px;
+  background-color: #e0e0e0;
+  border-radius: 3px;
+  z-index: 1;
+  left: 12px;
+  /* top: 50%; */
+  /* transform: translateY(-50%); */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.barbell-chart::before {
+  content: '';
+  position: absolute;
+  width: calc(100% - 24px);
+  height: 6px;
+  background-color: #6c757d;
+  border-radius: 3px;
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
+  z-index: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .barbell-node {
@@ -25,7 +40,7 @@
   border-radius: 12px;
   border: 0.5px solid #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  z-index: 1;
+  z-index: 2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -44,12 +59,14 @@
 
 .barbell-connection-line {
   position: absolute;
-  height: 4px;
+  height: 6px;
   background-color: #5bc0de;
   top: 50%;
   transform: translateY(-50%);
   z-index: 0;
   border-width: 0;
+  border-radius: 3px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .barbell-node-text {

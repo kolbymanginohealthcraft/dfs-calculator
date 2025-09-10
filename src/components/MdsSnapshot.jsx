@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import { formatDate } from "../utils/calculations";
@@ -11,10 +11,41 @@ export default function MdsSnapshot({
   isRedacted = false,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
+  const [activeSection, setActiveSection] = useState(null);
+  const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
   const icd10Descriptions = useICD10Lookup();
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
   const clearSearch = () => setSearchTerm("");
+  
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      if (searchTerm) {
+        // If there's a search term, clear it first
+        setSearchTerm("");
+      } else {
+        // If search is empty, blur the input to exit focus
+        e.target.blur();
+      }
+    }
+  };
+
+  // Auto-select first section when component first loads
+  useEffect(() => {
+    if (!hasBeenInitialized && Object.keys(groupedSections).length > 0) {
+      const firstSection = Object.keys(groupedSections)
+        .sort((a, b) => {
+          if (a.toLowerCase() === "control") return 1;
+          if (b.toLowerCase() === "control") return -1;
+          return a.localeCompare(b);
+        })[0];
+      
+      if (firstSection) {
+        setActiveSection(firstSection);
+        setHasBeenInitialized(true);
+      }
+    }
+  }, [groupedSections, hasBeenInitialized]);
 
   const highlightMatch = (text) => {
     if (!searchTerm || typeof text !== "string") return text;
@@ -160,6 +191,7 @@ export default function MdsSnapshot({
               placeholder="Search MDS values..."
               className={styles.searchInput}
               onChange={handleSearchChange}
+              onKeyDown={handleKeyDown}
               value={searchTerm}
             />
             {searchTerm && (
@@ -182,12 +214,8 @@ export default function MdsSnapshot({
               <button
                 key={sectionKey}
                 type="button"
-                className={styles.sectionLink}
-                onClick={() => {
-                  const el = document.getElementById(`section-${sectionKey}`);
-                  if (el)
-                    el.scrollIntoView({ behavior: "smooth", block: "start" });
-                }}
+                className={`${styles.sectionLink} ${activeSection === sectionKey ? styles.sectionLinkActive : ''}`}
+                onClick={() => setActiveSection(activeSection === sectionKey ? null : sectionKey)}
               >
                 {sectionKey}
               </button>
@@ -196,46 +224,96 @@ export default function MdsSnapshot({
       </div>
 
       <div className={styles.scrollArea}>
-        {filtered
-          .sort(([a], [b]) => {
-            if (a.toLowerCase() === "control") return 1;
-            if (b.toLowerCase() === "control") return -1;
-            return a.localeCompare(b);
-          })
-          .map(([sectionKey, fullName, items]) => (
-            <div
-              key={sectionKey}
-              className={styles.mdsSection}
-              id={`section-${sectionKey}`}
-            >
-              <h3>{fullName}</h3>
-              <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Label</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map(({ id, label, value }) => (
-                    <tr
-                      key={id}
-                      className={
-                        selectedItems.includes(id)
-                          ? styles.highlightedRow
-                          : undefined
-                      }
-                    >
-                      <td>{highlightMatch(id)}</td>
-                      <td>{highlightMatch(label)}</td>
-                      <td>{getDescription(id, value)}</td>
+        {searchTerm ? (
+          // When searching, show all sections with results
+          filtered
+            .sort(([a], [b]) => {
+              if (a.toLowerCase() === "control") return 1;
+              if (b.toLowerCase() === "control") return -1;
+              return a.localeCompare(b);
+            })
+            .map(([sectionKey, fullName, items]) => (
+              <div
+                key={sectionKey}
+                className={styles.mdsSection}
+                id={`section-${sectionKey}`}
+              >
+                <h3>{fullName}</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Label</th>
+                      <th>Value</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
+                  </thead>
+                  <tbody>
+                    {items.map(({ id, label, value }) => (
+                      <tr
+                        key={id}
+                        className={
+                          selectedItems.includes(id)
+                            ? styles.highlightedRow
+                            : undefined
+                        }
+                      >
+                        <td>{highlightMatch(id)}</td>
+                        <td>{highlightMatch(label)}</td>
+                        <td>{getDescription(id, value)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))
+        ) : activeSection ? (
+          // When not searching, show only the active section
+          (() => {
+            const activeSectionData = filtered.find(([sectionKey]) => sectionKey === activeSection);
+            if (!activeSectionData) return null;
+            
+            const [sectionKey, fullName, items] = activeSectionData;
+            return (
+              <div
+                key={sectionKey}
+                className={styles.mdsSection}
+                id={`section-${sectionKey}`}
+              >
+                <h3>{fullName}</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Label</th>
+                      <th>Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {items.map(({ id, label, value }) => (
+                      <tr
+                        key={id}
+                        className={
+                          selectedItems.includes(id)
+                            ? styles.highlightedRow
+                            : undefined
+                        }
+                      >
+                        <td>{highlightMatch(id)}</td>
+                        <td>{highlightMatch(label)}</td>
+                        <td>{getDescription(id, value)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            );
+          })()
+        ) : (
+          // Show message when no section is selected and no search
+          <div className={styles.noSectionSelected}>
+            <p>Select a section above to view MDS data</p>
+          </div>
+        )}
       </div>
     </div>
   );
