@@ -90,6 +90,12 @@ th, td {
   border: 1px solid #ccc;
 }
 
+th {
+  background-color: #e0e0e0;
+  color: #0c436a;
+  font-weight: 600;
+}
+
 /* .headerRow {
   display: flex;
   justify-content: space-between;

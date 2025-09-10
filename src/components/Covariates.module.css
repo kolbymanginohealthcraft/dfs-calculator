@@ -162,7 +162,7 @@
 
 /* NEW: Group header row */
 .groupRow {
-  /* background-color: #e7f4f3; */
+  background-color: #d6f0de;
   font-weight: bold;
   color: #0c436a;
   font-size: 0.85rem;
@@ -175,4 +175,13 @@
 /* NEW: Pivot-style indentation for normal rows */
 .row td:first-child {
   padding-left: 1.25rem;
+}
+
+/* Table header styling */
+.covariateTable th {
+  background-color: #e0e0e0;
+  color: #0c436a;
+  font-weight: 600;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
 }
