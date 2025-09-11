@@ -25,6 +25,7 @@ import BasicLayout from "../basic/components/BasicLayout";
 const MdsSnapshot = lazy(() => import("./MdsSnapshot"));
 const ModelEndScore = lazy(() => import("./ModelEndScore"));
 const Covariates = lazy(() => import("./Covariates"));
+const ImputationTab = lazy(() => import("./ImputationTab"));
 const ExportView = lazy(() => import("./ExportView"));
 
 import "../index.css";
@@ -188,7 +189,8 @@ function AdvancedAppNew() {
     { id: 'instructions', label: 'Instructions' },
     { id: 'overview', label: 'Overview' },
     { id: 'mds', label: 'MDS Data' },
-    { id: 'covariates', label: 'Covariates' }
+    { id: 'covariates', label: 'Covariates' },
+    { id: 'imputation', label: 'Imputation' }
   ];
 
   const advancedNavbar = (
@@ -488,6 +490,23 @@ function AdvancedAppNew() {
                       covariates={covariates}
                       multipliers={functionMultipliers}
                       onCovariateClick={handleCovariateClick}
+                    />
+                  </Suspense>
+                </div>
+              )}
+
+              {activeRightPanel === 'imputation' && (
+                <div className={styles.imputationPanel}>
+                  <Suspense fallback={<div className={styles.loading}>Loading imputation analysis...</div>}>
+                    <ImputationTab
+                      hasFile={hasFile}
+                      parsedValues={parsedValues}
+                      startScores={startScores}
+                      summary={extractPatientSummary(parsedValues, ardDate)}
+                      icdList={Object.entries(parsedValues)
+                        .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+                        .map(([_, value]) => value)
+                        .filter(Boolean)}
                     />
                   </Suspense>
                 </div>

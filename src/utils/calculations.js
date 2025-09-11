@@ -222,8 +222,12 @@ export function getContributingItemIds(values) {
   }
 }
 
-// Map age to covariate
-function getAgeCovariate(age) {
+// ============================================================================
+// CORE DATA PROCESSING FUNCTIONS
+// ============================================================================
+
+// Age processing functions
+export function getAgeCovariate(age) {
   if (age == null) return null;
   if (age <= 54) return "≤54 Years";
   if (age <= 64) return "55-64 Years";
@@ -231,6 +235,385 @@ function getAgeCovariate(age) {
   if (age <= 84) return "75-84 Years";
   if (age <= 90) return "85-90 Years";
   return ">90 Years";
+}
+
+export function processAgeCovariate(parsedValues, summary) {
+  const age = summary?.age ?? calculateAgeAtAdmission(parsedValues["A0900"], parsedValues["A1900"]);
+  return getAgeCovariate(age);
+}
+
+// Mobility type processing
+export function processMobilityType(parsedValues) {
+  return determineMobilityType(parsedValues);
+}
+
+// Uses Wheelchair covariate processing
+export function processUsesWheelchair(parsedValues) {
+  const covariates = {};
+  
+  // Determine if patient uses wheelchair based on mobility type
+  const mobilityType = determineMobilityType(parsedValues);
+  if (mobilityType === "Wheel") {
+    covariates["Uses Wheelchair"] = 1;
+  }
+  
+  return covariates;
+}
+
+// BMI processing
+export function processBMICovariates(parsedValues) {
+  const height = parseFloat(parsedValues["K0200A"]);
+  const weight = parseFloat(parsedValues["K0200B"]);
+  const bmi = height && weight ? Math.round(((weight * 703) / (height * height)) * 10) / 10 : null;
+  
+  const covariates = {};
+  if (bmi > 50) covariates["High BMI"] = 1;
+  if (bmi >= 12 && bmi <= 19) covariates["Low BMI"] = 1;
+  
+  return covariates;
+}
+
+// Cognitive function processing
+export function processCognitiveFunction(parsedValues) {
+  const bims = parsedValues["C0500"];
+  const c0900 = ["C0900A", "C0900B", "C0900C", "C0900D"].map(k => parsedValues[k]);
+  const c0900z = parsedValues["C0900Z"];
+  
+  const bimsScore = (() => {
+    const all1s = c0900.filter(v => v === "1").length >= 2;
+    if (["8", "9", "10", "11", "12"].includes(bims) || all1s) return "Moderately Impaired";
+    if (["01", "02", "03", "04", "05", "06", "07"].includes(bims) || c0900z === "1" || c0900.filter(v => v === "1").length === 1) {
+      return "Severely Impaired";
+    }
+    return "Not Impaired";
+  })();
+  
+  const covariates = {};
+  if (bimsScore === "Moderately Impaired") {
+    covariates["Cognitive Function, BIMS Score: Moderately Impaired - Admission"] = 1;
+  } else if (bimsScore === "Severely Impaired") {
+    covariates["Cognitive Function, BIMS Score: Severely Impaired - Admission"] = 1;
+  }
+  
+  return covariates;
+}
+
+// Communication impairment processing
+export function processCommunicationImpairment(parsedValues) {
+  const b0700 = parsedValues["B0700"];
+  const b0800 = parsedValues["B0800"];
+  
+  const covariates = {};
+  if (["2", "3"].includes(b0700) || ["2", "3"].includes(b0800)) {
+    covariates["Communication Impairment: Moderate to Severe - Admission"] = 1;
+  } else if (
+    (b0700 === "1" && b0800 === "1") ||
+    (b0700 === "1" && b0800 === "0") ||
+    (b0700 === "0" && b0800 === "1")
+  ) {
+    covariates["Communication Impairment: Mild - Admission"] = 1;
+  }
+  
+  return covariates;
+}
+
+// Continence processing
+export function processContinenceCovariates(parsedValues) {
+  const bowelMap = { 1: "Occasionally", 2: "Frequently", 3: "Always", 9: "Not Rated" };
+  const urineMap = { 1: "Occasionally", 2: "Frequently", 3: "Always", 9: "Not Rated" };
+  
+  const bowel = bowelMap[parsedValues["H0400"]];
+  const urine = urineMap[parsedValues["H0300"]];
+  
+  const covariates = {};
+  
+  // Bowel continence
+  if (bowel === "Always") {
+    covariates["Bowel Continence: Always Incontinent - Admission"] = 1;
+  } else if (["Occasionally", "Frequently"].includes(bowel)) {
+    covariates["Bowel Continence: Occasionally Incontinent, Frequently Incontinent - Admission"] = 1;
+  }
+  
+  // Urinary continence
+  if (urine === "Not Rated") {
+    covariates["Urinary Continence: Not Rated (Indwelling Urinary Catheter) - Admission"] = 1;
+  } else if (["Occasionally", "Frequently", "Always"].includes(urine)) {
+    covariates["Urinary Continence: Occasionally Incontinent, Frequently Incontinent, or Always Incontinent - Admission"] = 1;
+  }
+  
+  return covariates;
+}
+
+// Prior functioning processing
+export function processPriorFunctioning(parsedValues) {
+  const covariates = {};
+  
+  // Prior Functioning: Self-Care
+  const pfSelfCare = parsedValues["GG0100A"];
+  if (pfSelfCare === "1") {
+    covariates["Prior Functioning, Self-Care: Dependent"] = 1;
+  } else if (pfSelfCare === "2") {
+    covariates["Prior Functioning, Self-Care: Some Help"] = 1;
+  }
+  
+  // Prior Functioning: Indoor Mobility
+  const pfMobility = parsedValues["GG0100B"];
+  if (pfMobility === "1") {
+    covariates["Prior Functioning, Indoor Mobility (Ambulation): Dependent"] = 1;
+  } else if (pfMobility === "2") {
+    covariates["Prior Functioning, Indoor Mobility (Ambulation): Some Help"] = 1;
+  }
+  
+  // Prior Functioning: Stairs
+  const pfStairs = parsedValues["GG0100C"];
+  if (pfStairs === "1") {
+    covariates["Prior Functioning, Stairs: Dependent"] = 1;
+  } else if (pfStairs === "2") {
+    covariates["Prior Functioning, Stairs: Some Help"] = 1;
+  }
+  
+  // Prior Functioning: Functional Cognition
+  const pfCog = parsedValues["GG0100D"];
+  if (pfCog === "1") {
+    covariates["Prior Functioning, Functional Cognition: Dependent"] = 1;
+  }
+  
+  return covariates;
+}
+
+// Prior mobility device processing
+export function processPriorMobilityDevices(parsedValues) {
+  const covariates = {};
+  
+  if (["1"].includes(parsedValues["GG0110A"]) || ["1"].includes(parsedValues["GG0110B"])) {
+    covariates["Prior Mobility Device Use: Manual Wheelchair and/or Motorized Wheelchair and/or Scooter"] = 1;
+  }
+  if (parsedValues["GG0110C"] === "1") {
+    covariates["Prior Mobility Device Use: Mechanical Lift"] = 1;
+  }
+  if (parsedValues["GG0110D"] === "1") {
+    covariates["Prior Mobility Device Use: Walker"] = 1;
+  }
+  if (parsedValues["GG0110E"] === "1") {
+    covariates["Prior Mobility Device Use: Orthotics/Prosthetics"] = 1;
+  }
+  
+  return covariates;
+}
+
+// Medical condition category processing
+export function processMedicalConditionCategory(parsedValues, startScore) {
+  const covariates = {};
+  
+  const conditionCode = parsedValues["I0020"];
+  const conditionLabel = conditionMap[conditionCode];
+  if (conditionLabel) {
+    const key = `Primary Medical Condition Category: ${conditionLabel}`;
+    covariates[key] = 1;
+    
+    const interactionKey = `Interaction of Admission Function Score and ${key}`;
+    covariates[interactionKey] = startScore;
+  }
+  
+  return covariates;
+}
+
+// HCC condition processing
+export function processHccConditions(parsedValues, icdList) {
+  const covariates = {};
+  
+  // Helper functions for querying comorbidities
+  const normalizedICDs = Array.from(
+    new Set(
+      (icdList || [])
+        .map(code => code?.toUpperCase()?.replace(/[^A-Z0-9]/g, ""))
+        .filter(Boolean)
+    )
+  );
+  
+  const hccSet = new Set(
+    normalizedICDs.map(code => icdToHcc[code]).filter(Boolean)
+  );
+  
+  // Amputations (new combined)
+  if (
+    parsedValues["GG0120D"] === "1" ||
+    parseInt(parsedValues["O0500I"] ?? "0", 10) >= 1 ||
+    hccSet.has(173) ||
+    hccSet.has(189)
+  ) {
+    covariates["Amputations: Traumatic Amputations and Complications (HCC173), Amputation Status, Lower Limb/Amputation Complications (HCC189), Amputation Status, Lower Limb/ Amputation Complications (HCC189)"] = 1;
+  }
+  
+  // Aspiration/Bacterial Pneumonia (HCC114, HCC115) or I2000=1 and I0020 ≠ "12"
+  if (parsedValues["I0020"] !== "12") {
+    if (hccSet.has(114) || hccSet.has(115) || parsedValues["I2000"] === "1") {
+      covariates["Aspiration, Bacterial, and Other Pneumonias: Aspiration and Specified Bacterial Pneumonias (HCC114), Pneumococcal Pneumonia, Empyema, Lung Abscess (HCC115)"] = 1;
+    }
+  }
+  
+  // CKD (HCC137-139) or I1500=1
+  if (
+    parsedValues["I1500"] === "1" ||
+    hccSet.has(137) ||
+    hccSet.has(138) ||
+    hccSet.has(139)
+  ) {
+    covariates["Chronic Kidney Disease - Stages 1-4, Unspecified: Chronic Kidney Disease, Severe (Stage 4) (HCC137), Chronic Kidney Disease, Moderate (Stage 3) (HCC138), Chronic Kidney Disease, Mild or Unspecified (Stages 1-2 or Unspecified) (HCC139)"] = 1;
+  }
+  
+  // Cancer - Colorectal/Bladder/Other (HCC11)
+  if (hccSet.has(11)) {
+    covariates["Colorectal, Bladder, and Other Cancers (HCC11)"] = 1;
+  }
+  
+  // Hemiplegia/Hemiparesis (HCC103) or I4900=1
+  if (parsedValues["I4900"] === "1" || hccSet.has(103)) {
+    covariates["Hemiplegia/Hemiparesis (HCC103)"] = 1;
+  }
+  
+  // Intestinal Obstruction (HCC33)
+  if (hccSet.has(33)) {
+    covariates["Intestinal Obstruction/Perforation (HCC33)"] = 1;
+  }
+  
+  // Lymphoma and Other Cancers (HCC10)
+  if (hccSet.has(10)) {
+    covariates["Lymphoma and Other Cancers (HCC10)"] = 1;
+  }
+  
+  // Major Head Injury (HCC167), I0020 ≠ "01"
+  if (hccSet.has(167) && parsedValues["I0020"] !== "03") {
+    covariates["Major Head Injury (HCC167)"] = 1;
+  }
+  
+  // Mental Health (HCC57-60 or I6000/I5800/I5900/I5950)
+  if (
+    ["I6000", "I5800", "I5900", "I5950"].some(k => parsedValues[k] === "1") ||
+    [57, 58, 59, 60].some(hcc => hccSet.has(hcc))
+  ) {
+    covariates["Mental Health Disorders: Schizophrenia (HCC57), Major Depressive, Bipolar, and Paranoid Disorders (HCC59), Reactive and Unspecified Psychosis (HCC58), Personality Disorders (HCC60)"] = 1;
+  }
+  
+  // Metastatic Cancer/Acute Leukemia (HCC8) or I0100=1
+  if (parsedValues["I0100"] === "1" || hccSet.has(8)) {
+    covariates["Metastatic Cancer and Acute Leukemia (HCC8)"] = 1;
+  }
+  
+  // Multiple Sclerosis (HCC77) and I0020 ≠ "06"
+  if (
+    parsedValues["I0020"] !== "06" &&
+    (parsedValues["I5200"] === "1" || hccSet.has(77))
+  ) {
+    covariates["Multiple Sclerosis (HCC77)"] = 1;
+  }
+  
+  // Other Significant Endocrine Disorders (HCC23)
+  if (hccSet.has(23)) {
+    covariates["Other Significant Endocrine and Metabolic Disorders (HCC23)"] = 1;
+  }
+  
+  // Parkinson's/Huntington's (HCC78) and I0020 ≠ "06"
+  if (
+    parsedValues["I0020"] !== "06" &&
+    (parsedValues["I5250"] === "1" ||
+      parsedValues["I5300"] === "1" ||
+      hccSet.has(78))
+  ) {
+    covariates["Parkinson's and Huntington's Diseases (HCC78)"] = 1;
+  }
+  
+  // Tetraplegia/Paraplegia (HCC70, HCC71), I0020 ≠ "04" or "05"
+  if (
+    !["04", "05"].includes(parsedValues["I0020"]) &&
+    (parsedValues["I5000"] === "1" ||
+      parsedValues["I5100"] === "1" ||
+      hccSet.has(70) ||
+      hccSet.has(71))
+  ) {
+    covariates["Tetraplegia (Excluding Complete Tetraplegia) (HCC70) and Paraplegia (HCC71)"] = 1;
+  }
+  
+  // Infectious disease: Septicemia, Sepsis, SIRS/Shock
+  if (parsedValues["I2100"] === "1" || hccSet.has(2)) {
+    covariates["Septicemia, Sepsis, Systemic Inflammatory Response Syndrome/Shock (HCC2)"] = 1;
+  }
+  
+  // Diabetes (with or without complications)
+  if (parsedValues["I2900"] === "1" || hccSet.has(18) || hccSet.has(19)) {
+    covariates["Diabetes: Diabetes With Chronic Complications (HCC18) or Diabetes Without Complications (HCC19)"] = 1;
+  }
+  
+  // Dementia (with or without complications)
+  if (parsedValues["I4800"] === "1" || hccSet.has(51) || hccSet.has(52)) {
+    covariates["Dementia: Dementia With Complications (HCC51), Dementia Without Complications (HCC52)"] = 1;
+  }
+  
+  // Renal: Dialysis Status or Chronic Kidney Disease Stage 5
+  if (parsedValues["O0110J1A"] === "1" || parsedValues["O0110J1B"] === "1" || hccSet.has(134) || hccSet.has(136)) {
+    covariates["Dialysis Status (HCC134), Chronic Kidney Disease, Stage 5 (HCC136)"] = 1;
+  }
+  
+  // Cardiac: Angina Pectoris
+  if (parsedValues["I0020"] !== "12" && hccSet.has(88)) {
+    covariates["Angina Pectoris (HCC88)"] = 1;
+  }
+  
+  return covariates;
+}
+
+// Additional clinical conditions processing
+export function processAdditionalClinicalConditions(parsedValues) {
+  const covariates = {};
+  
+  // Prior Surgery
+  if (parsedValues["J2000"] === "1") {
+    covariates["Prior Surgery"] = 1;
+  }
+  
+  // No PT or OT on Admission
+  const ptSum = ["O0400B1", "O0400B2", "O0400B3"]
+    .map(k => parseInt(parsedValues[k] ?? "0"))
+    .reduce((a, b) => a + b, 0);
+  const otSum = ["O0400C1", "O0400C2", "O0400C3"]
+    .map(k => parseInt(parsedValues[k] ?? "0"))
+    .reduce((a, b) => a + b, 0);
+  if (ptSum === 0 && otSum === 0) {
+    covariates["No Physical or Occupational Therapy - Admission"] = 1;
+  }
+  
+  // Stage 2 Pressure Ulcer on Admission
+  if (parseInt(parsedValues["M0300B1"] ?? "0") >= 1) {
+    covariates["Stage 2 Pressure Ulcer - Admission"] = 1;
+  }
+  
+  // Stage 3, 4 or Unstageable Pressure Ulcer on Admission
+  const ulcerFields = ["M0300C1", "M0300D1", "M0300E1", "M0300F1", "M0300G1"];
+  const hasSevereUlcer = ulcerFields.some(k => parseInt(parsedValues[k] ?? "0") >= 1);
+  if (hasSevereUlcer) {
+    covariates["Stage 3, 4 or Unstageable Pressure Ulcer/Injury - Admission"] = 1;
+  }
+  
+  // History of Falls - Admission
+  if (
+    parsedValues["J1700A"] === "1" ||
+    parsedValues["J1700B"] === "1" ||
+    parsedValues["J1700C"] === "1"
+  ) {
+    covariates["History of Falls - Admission"] = 1;
+  }
+  
+  // Nutritional Approaches: Mechanically Altered Diet
+  if (parsedValues["K0520C3"] === "1") {
+    covariates["Nutritional Approaches: Mechanically Altered Diet - Admission"] = 1;
+  }
+  
+  // TPN, IV Feeding, or Tube Feeding
+  if (parsedValues["K0520A3"] === "1" || parsedValues["K0520B3"] === "1") {
+    covariates["Total Parenteral/IV Feeding or Tube Feeding: While a Resident - Admission"] = 1;
+  }
+  
+  return covariates;
 }
 
 // Safely square a number
@@ -279,375 +662,32 @@ export function getFunctionCovariates(
 
   // 2. Admission Function score + squared
   const startScore = calculateFunctionScore(startScores);
-
   covariates["Admission Function - Continuous Form"] = startScore;
   covariates["Admission Function - Squared Form"] = squared(startScore);
 
   // 3. Age group logic
-  const age =
-    summary?.age ??
-    calculateAgeAtAdmission(parsedValues["A0900"], parsedValues["A1900"]);
-  const ageCov = getAgeCovariate(age);
+  const ageCov = processAgeCovariate(parsedValues, summary);
   if (ageCov) covariates[ageCov] = 1;
 
-  // 4. Prior Surgery
-  if (parsedValues["J2000"] === "1") {
-    covariates["Prior Surgery"] = 1;
-  }
+  // 4-9. Use extracted processing functions
+  Object.assign(covariates, processContinenceCovariates(parsedValues));
+  Object.assign(covariates, processBMICovariates(parsedValues));
+  Object.assign(covariates, processCognitiveFunction(parsedValues));
+  Object.assign(covariates, processCommunicationImpairment(parsedValues));
+  Object.assign(covariates, processUsesWheelchair(parsedValues));
 
-  // 5. Bowel Incontinence
-  const bowelMap = {
-    1: "Occasionally",
-    2: "Frequently",
-    3: "Always",
-    9: "Not Rated",
-  };
-  const bowel = bowelMap[parsedValues["H0400"]];
-  if (bowel === "Always") {
-    covariates["Bowel Continence: Always Incontinent - Admission"] = 1;
-  } else if (["Occasionally", "Frequently"].includes(bowel)) {
-    covariates[
-      "Bowel Continence: Occasionally Incontinent, Frequently Incontinent - Admission"
-    ] = 1;
-  }
+  // 10-16. Use extracted processing functions
+  Object.assign(covariates, processAdditionalClinicalConditions(parsedValues));
+  Object.assign(covariates, processMedicalConditionCategory(parsedValues, startScore));
+  Object.assign(covariates, processPriorFunctioning(parsedValues));
+  Object.assign(covariates, processPriorMobilityDevices(parsedValues));
 
-  // 6. Urinary Incontinence
-  const urineMap = {
-    1: "Occasionally",
-    2: "Frequently",
-    3: "Always",
-    9: "Not Rated",
-  };
-  const urine = urineMap[parsedValues["H0300"]];
-  if (urine === "Not Rated") {
-    covariates[
-      "Urinary Continence: Not Rated (Indwelling Urinary Catheter) - Admission"
-    ] = 1;
-  } else if (["Occasionally", "Frequently", "Always"].includes(urine)) {
-    covariates[
-      "Urinary Continence: Occasionally Incontinent, Frequently Incontinent, or Always Incontinent - Admission"
-    ] = 1;
-  }
+  // 17-21. Additional clinical conditions (already handled by processAdditionalClinicalConditions)
 
-  // 7. BMI (from inches + pounds)
-  const height = parseFloat(parsedValues["K0200A"]);
-  const weight = parseFloat(parsedValues["K0200B"]);
-  const bmi =
-    height && weight
-      ? Math.round(((weight * 703) / (height * height)) * 10) / 10
-      : null;
-  if (bmi > 50) covariates["High BMI"] = 1;
-  if (bmi >= 12 && bmi <= 19) covariates["Low BMI"] = 1;
+  // 22-42. HCC conditions processing
+  Object.assign(covariates, processHccConditions(parsedValues, icdList));
 
-  // 8. Cognitive Function BIMS
-  const bims = parsedValues["C0500"];
-  const c0900 = ["C0900A", "C0900B", "C0900C", "C0900D"].map(
-    (k) => parsedValues[k]
-  );
-  const c0900z = parsedValues["C0900Z"];
-  const bimsScore = (() => {
-    const all1s = c0900.filter((v) => v === "1").length >= 2;
-    if (["8", "9", "10", "11", "12"].includes(bims) || all1s)
-      return "Moderately Impaired";
-    if (
-      ["01", "02", "03", "04", "05", "06", "07"].includes(bims) ||
-      c0900z === "1" ||
-      c0900.filter((v) => v === "1").length === 1
-    )
-      return "Severely Impaired";
-    return "Not Impaired";
-  })();
-  if (bimsScore === "Moderately Impaired") {
-    covariates[
-      "Cognitive Function, BIMS Score: Moderately Impaired - Admission"
-    ] = 1;
-  } else if (bimsScore === "Severely Impaired") {
-    covariates[
-      "Cognitive Function, BIMS Score: Severely Impaired - Admission"
-    ] = 1;
-  }
-
-  // 9. Communication Impairment
-  const b0700 = parsedValues["B0700"];
-  const b0800 = parsedValues["B0800"];
-  if (["2", "3"].includes(b0700) || ["2", "3"].includes(b0800)) {
-    covariates["Communication Impairment: Moderate to Severe - Admission"] = 1;
-  } else if (
-    (b0700 === "1" && b0800 === "1") ||
-    (b0700 === "1" && b0800 === "0") ||
-    (b0700 === "0" && b0800 === "1")
-  ) {
-    covariates["Communication Impairment: Mild - Admission"] = 1;
-  }
-
-  // 10. No PT or OT on Admission
-  const ptSum = ["O0400B1", "O0400B2", "O0400B3"]
-    .map((k) => parseInt(parsedValues[k] ?? "0"))
-    .reduce((a, b) => a + b, 0);
-  const otSum = ["O0400C1", "O0400C2", "O0400C3"]
-    .map((k) => parseInt(parsedValues[k] ?? "0"))
-    .reduce((a, b) => a + b, 0);
-  if (ptSum === 0 && otSum === 0) {
-    covariates["No Physical or Occupational Therapy - Admission"] = 1;
-  }
-
-  // 11. Medical Condition Category
-  const conditionCode = parsedValues["I0020"];
-  const conditionLabel = conditionMap[conditionCode];
-  if (conditionLabel) {
-    const key = `Primary Medical Condition Category: ${conditionLabel}`;
-    covariates[key] = 1;
-
-    const interactionKey = `Interaction of Admission Function Score and ${key}`;
-    covariates[interactionKey] = startScore;
-  }
-
-  // 12. Prior Functioning: Self-Care
-  const pfSelfCare = parsedValues["GG0100A"];
-  if (pfSelfCare === "1") {
-    covariates["Prior Functioning, Self-Care: Dependent"] = 1;
-  } else if (pfSelfCare === "2") {
-    covariates["Prior Functioning, Self-Care: Some Help"] = 1;
-  }
-
-  // 13. Prior Functioning: Indoor Mobility
-  const pfMobility = parsedValues["GG0100B"];
-  if (pfMobility === "1") {
-    covariates[
-      "Prior Functioning, Indoor Mobility (Ambulation): Dependent"
-    ] = 1;
-    // covariates[
-    //   "Prior Functioning, Indoor Mobility (Ambulation): Dependent, Some Help"
-    // ] = 1;
-  } else if (pfMobility === "2") {
-    covariates[
-      "Prior Functioning, Indoor Mobility (Ambulation): Some Help"
-    ] = 1;
-    // covariates[
-    //   "Prior Functioning, Indoor Mobility (Ambulation): Dependent, Some Help"
-    // ] = 1;
-  }
-
-  // 14. Prior Functioning: Stairs
-  const pfStairs = parsedValues["GG0100C"];
-  if (pfStairs === "1") {
-    covariates["Prior Functioning, Stairs: Dependent"] = 1;
-  } else if (pfStairs === "2") {
-    covariates["Prior Functioning, Stairs: Some Help"] = 1;
-  }
-
-  // 15. Prior Functioning: Functional Cognition
-  const pfCog = parsedValues["GG0100D"];
-  if (pfCog === "1") {
-    covariates["Prior Functioning, Functional Cognition: Dependent"] = 1;
-  }
-
-  // 16. Prior Mobility Device Use
-  if (
-    ["1"].includes(parsedValues["GG0110A"]) ||
-    ["1"].includes(parsedValues["GG0110B"])
-  ) {
-    covariates[
-      "Prior Mobility Device Use: Manual Wheelchair and/or Motorized Wheelchair and/or Scooter"
-    ] = 1;
-  }
-  if (parsedValues["GG0110C"] === "1") {
-    covariates["Prior Mobility Device Use: Mechanical Lift"] = 1;
-  }
-  if (parsedValues["GG0110D"] === "1") {
-    covariates["Prior Mobility Device Use: Walker"] = 1;
-  }
-  if (parsedValues["GG0110E"] === "1") {
-    covariates["Prior Mobility Device Use: Orthotics/Prosthetics"] = 1;
-  }
-
-  // 17. Stage 2 Pressure Ulcer on Admission
-  if (parseInt(parsedValues["M0300B1"] ?? "0") >= 1) {
-    covariates["Stage 2 Pressure Ulcer - Admission"] = 1;
-  }
-
-  // 18. Stage 3, 4 or Unstageable Pressure Ulcer on Admission
-  const ulcerFields = ["M0300C1", "M0300D1", "M0300E1", "M0300F1", "M0300G1"];
-  const hasSevereUlcer = ulcerFields.some(
-    (k) => parseInt(parsedValues[k] ?? "0") >= 1
-  );
-  if (hasSevereUlcer) {
-    covariates[
-      "Stage 3, 4 or Unstageable Pressure Ulcer/Injury - Admission"
-    ] = 1;
-  }
-
-  // 19. History of Falls - Admission
-  if (
-    parsedValues["J1700A"] === "1" ||
-    parsedValues["J1700B"] === "1" ||
-    parsedValues["J1700C"] === "1"
-  ) {
-    covariates["History of Falls - Admission"] = 1;
-  }
-
-  // 20. Nutritional Approaches: Mechanically Altered Diet
-  if (parsedValues["K0520C3"] === "1") {
-    covariates[
-      "Nutritional Approaches: Mechanically Altered Diet - Admission"
-    ] = 1;
-  }
-
-  // 21. TPN, IV Feeding, or Tube Feeding
-  if (parsedValues["K0520A3"] === "1" || parsedValues["K0520B3"] === "1") {
-    covariates[
-      "Total Parenteral/IV Feeding or Tube Feeding: While a Resident - Admission"
-    ] = 1;
-  }
-
-  // Helper functions for querying comorbidities
-  const normalizedICDs = Array.from(
-    new Set(
-      (icdList || [])
-        .map((code) => code?.toUpperCase()?.replace(/[^A-Z0-9]/g, ""))
-        .filter(Boolean)
-    )
-  );
-
-  const hccSet = new Set(
-    normalizedICDs.map((code) => icdToHcc[code]).filter(Boolean)
-  );
-
-  // 24. Amputations (new combined)
-  if (
-    parsedValues["GG0120D"] === "1" ||
-    parseInt(parsedValues["O0500I"] ?? "0", 10) >= 1 ||
-    hccSet.has(173) ||
-    hccSet.has(189)
-  ) {
-    covariates[
-      "Amputations: Traumatic Amputations and Complications (HCC173), Amputation Status, Lower Limb/Amputation Complications (HCC189), Amputation Status, Lower Limb/ Amputation Complications (HCC189)"
-    ] = 1;
-  }
-
-  // 25. Aspiration/Bacterial Pneumonia (HCC114, HCC115) or I2000=1 and I0020 ≠ "12"
-  if (parsedValues["I0020"] !== "12") {
-    if (hccSet.has(114) || hccSet.has(115) || parsedValues["I2000"] === "1") {
-      covariates[
-        "Aspiration, Bacterial, and Other Pneumonias (HCC114/HCC115)"
-      ] = 1;
-    }
-  }
-
-  // 26. CKD (HCC137-139) or I1500=1
-  if (
-    parsedValues["I1500"] === "1" ||
-    hccSet.has(137) ||
-    hccSet.has(138) ||
-    hccSet.has(139)
-  ) {
-    covariates["Chronic Kidney Disease - Stages 1-4, Unspecified: Chronic Kidney Disease, Severe (Stage 4) (HCC137), Chronic Kidney Disease, Moderate (Stage 3) (HCC138), Chronic Kidney Disease, Mild or Unspecified (Stages 1-2 or Unspecified) (HCC139)"] = 1;
-  }
-
-  // 27. Cancer - Colorectal/Bladder/Other (HCC11)
-  if (hccSet.has(11)) {
-    covariates["Colorectal, Bladder, and Other Cancers (HCC11)"] = 1;
-  }
-
-  // 28. Hemiplegia/Hemiparesis (HCC103) or I4900=1
-  if (parsedValues["I4900"] === "1" || hccSet.has(103)) {
-    covariates["Hemiplegia/Hemiparesis (HCC103)"] = 1;
-  }
-
-  // 29. Intestinal Obstruction (HCC33)
-  if (hccSet.has(33)) {
-    covariates["Intestinal Obstruction/Perforation (HCC33)"] = 1;
-  }
-
-  // 30. Lymphoma and Other Cancers (HCC10)
-  if (hccSet.has(10)) {
-    covariates["Lymphoma and Other Cancers (HCC10)"] = 1;
-  }
-
-  // 31. Major Head Injury (HCC167), I0020 ≠ "01"
-  if (hccSet.has(167) && parsedValues["I0020"] !== "03") {
-    covariates["Major Head Injury (HCC167)"] = 1;
-  }
-
-  // 32. Mental Health (HCC57-60 or I6000/I5800/I5900/I5950)
-  if (
-    ["I6000", "I5800", "I5900", "I5950"].some((k) => parsedValues[k] === "1") ||
-    [57, 58, 59, 60].some((hcc) => hccSet.has(hcc))
-  ) {
-    covariates["Mental Health Disorders: Schizophrenia (HCC57), Major Depressive, Bipolar, and Paranoid Disorders (HCC59), Reactive and Unspecified Psychosis (HCC58), Personality Disorders (HCC60)"] = 1;
-  }
-
-  // 33. Metastatic Cancer/Acute Leukemia (HCC8) or I0100=1
-  if (parsedValues["I0100"] === "1" || hccSet.has(8)) {
-    covariates["Metastatic Cancer and Acute Leukemia (HCC8)"] = 1;
-  }
-
-  // 34. Multiple Sclerosis (HCC77) and I0020 ≠ "06"
-  if (
-    parsedValues["I0020"] !== "06" &&
-    (parsedValues["I5200"] === "1" || hccSet.has(77))
-  ) {
-    covariates["Multiple Sclerosis (HCC77)"] = 1;
-  }
-
-  // 35. Other Significant Endocrine Disorders (HCC23)
-  if (hccSet.has(23)) {
-    covariates[
-      "Other Significant Endocrine and Metabolic Disorders (HCC23)"
-    ] = 1;
-  }
-
-  // 36. Parkinson's/Huntington's (HCC78) and I0020 ≠ "06"
-  if (
-    parsedValues["I0020"] !== "06" &&
-    (parsedValues["I5250"] === "1" ||
-      parsedValues["I5300"] === "1" ||
-      hccSet.has(78))
-  ) {
-    covariates["Parkinson's and Huntington's Diseases (HCC78)"] = 1;
-  }
-
-  // 37. Tetraplegia/Paraplegia (HCC70, HCC71), I0020 ≠ "04" or "05"
-  if (
-    !["04", "05"].includes(parsedValues["I0020"]) &&
-    (parsedValues["I5000"] === "1" ||
-      parsedValues["I5100"] === "1" ||
-      hccSet.has(70) ||
-      hccSet.has(71))
-  ) {
-    covariates[
-      "Tetraplegia (Excluding Complete) and Paraplegia (HCC70/71)"
-    ] = 1;
-  }
-
-  // 38. Infectious disease: Septicemia, Sepsis, SIRS/Shock
-  if (parsedValues["I2100"] === "1" || hccSet.has(2)) {
-    covariates[
-      "Septicemia, Sepsis, Systemic Inflammatory Response Syndrome/Shock (HCC2)"
-    ] = 1;
-  }
-
-  // 39. Diabetes (with or without complications)
-  if (parsedValues["I2900"] === "1" || hccSet.has(18) || hccSet.has(19)) {
-    covariates["Diabetes: Diabetes With Chronic Complications (HCC18) or Diabetes Without Complications (HCC19)"] = 1;
-  }
-
-  // 40. Dementia (with or without complications)
-  if (parsedValues["I4800"] === "1" || hccSet.has(51) || hccSet.has(52)) {
-    covariates[
-      "Dementia: Dementia With Complications (HCC51), Dementia Without Complications (HCC52)"
-    ] = 1;
-  }
-
-  // 41. Renal: Dialysis Status or Chronic Kidney Disease Stage 5
-  if (parsedValues["O0110J1A"] === "1" || parsedValues["O0110J1B"] === "1" || hccSet.has(134) || hccSet.has(136)) {
-    covariates["Dialysis Status (HCC134), Chronic Kidney Disease, Stage 5 (HCC136)"] = 1;
-  }
-
-  // 42. Cardiac: Angina Pectoris
-  if (parsedValues["I0020"] !== "12" && hccSet.has(88)) {
-    covariates["Angina Pectoris (HCC88)"] = 1;
-  }
+  // All HCC conditions are now handled by processHccConditions()
 
   // Total weighted score based on covariates
   let weightedScore = 0;
