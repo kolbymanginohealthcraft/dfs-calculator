@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { calculateExpectedScore, hasMeaningfulData } from '../utils/scoreCalculations';
-import { getScoreTypeColor } from '../utils/themeColors';
+import { getScoreTypeColor } from '../../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import InstructionPanel from '../components/InstructionPanel';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getScoreTypeColor } from '../utils/themeColors';
+import { getScoreTypeColor } from '../../utils/themeColors';
 import '../styles/ProgressIndicator.css';
 
 const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore, endTotal, hasInteracted, mode = 'basic' }) => {

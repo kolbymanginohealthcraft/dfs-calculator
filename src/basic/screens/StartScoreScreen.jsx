@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { itemDefs, getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../utils/itemDefinitions';
 import { calculateTotalScore, hasMeaningfulData } from '../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
-import { getScoreTypeColor } from '../utils/themeColors';
+import { getScoreTypeColor } from '../../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import InstructionPanel from '../components/InstructionPanel';
