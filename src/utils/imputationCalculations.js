@@ -28,19 +28,40 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
             const itemMultipliers = imputationMultipliers[ggItemId];
             let imputationScore = 0;
             
-            // Calculate imputation score using standard covariates
+            // Calculate imputation score using all covariates
             Object.entries(itemMultipliers).forEach(([covariateName, multiplier]) => {
-                // Skip item-specific covariates for now (they're for different items)
-                if (covariateName.includes('(GG') || 
-                    covariateName.includes('Valid Score') || 
-                    covariateName.includes('Not Attempted') || 
-                    covariateName.includes('Skipped')) {
-                    return;
-                }
+                let covariateValue = 0;
                 
-                // Map the covariate name to the existing covariate name
-                const mappedCovariateName = covariateMapping[covariateName] || covariateName;
-                const covariateValue = covariates[mappedCovariateName] || 0;
+                // Handle GG item-specific covariates
+                if (covariateName.includes('(GG') && 
+                    (covariateName.includes('Valid Score') || 
+                     covariateName.includes('Not Attempted') || 
+                     covariateName.includes('Skipped'))) {
+                    
+                    // Extract GG item ID from covariate name
+                    const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
+                    if (match) {
+                        const itemId = match[0].slice(1, -1);
+                        const rawValue = targetGGItems[itemId];
+                        
+                        if (covariateName.includes('Valid Score')) {
+                            // Valid score: return the actual score value (1-6) if valid
+                            if (rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue)) {
+                                covariateValue = parseInt(rawValue, 10);
+                            }
+                        } else if (covariateName.includes('Not Attempted')) {
+                            // Not attempted: 1 if value is 07, 0 otherwise
+                            covariateValue = rawValue === '07' ? 1 : 0;
+                        } else if (covariateName.includes('Skipped')) {
+                            // Skipped: 1 if value is 09, 0 otherwise
+                            covariateValue = rawValue === '09' ? 1 : 0;
+                        }
+                    }
+                } else {
+                    // Handle standard covariates
+                    const mappedCovariateName = covariateMapping[covariateName] || covariateName;
+                    covariateValue = covariates[mappedCovariateName] || 0;
+                }
                 
                 imputationScore += covariateValue * multiplier;
             });
@@ -157,19 +178,40 @@ export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdLis
             const itemMultipliers = imputationMultipliers[ggItemId];
             let imputationScore = 0;
             
-            // Calculate imputation score using standard covariates
+            // Calculate imputation score using all covariates
             Object.entries(itemMultipliers).forEach(([covariateName, multiplier]) => {
-                // Skip item-specific covariates for now (they're for different items)
-                if (covariateName.includes('(GG') || 
-                    covariateName.includes('Valid Score') || 
-                    covariateName.includes('Not Attempted') || 
-                    covariateName.includes('Skipped')) {
-                    return;
-                }
+                let covariateValue = 0;
                 
-                // Map the covariate name to the existing covariate name
-                const mappedCovariateName = covariateMapping[covariateName] || covariateName;
-                const covariateValue = covariates[mappedCovariateName] || 0;
+                // Handle GG item-specific covariates
+                if (covariateName.includes('(GG') && 
+                    (covariateName.includes('Valid Score') || 
+                     covariateName.includes('Not Attempted') || 
+                     covariateName.includes('Skipped'))) {
+                    
+                    // Extract GG item ID from covariate name
+                    const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
+                    if (match) {
+                        const itemId = match[0].slice(1, -1);
+                        const rawValue = targetGGItems[itemId];
+                        
+                        if (covariateName.includes('Valid Score')) {
+                            // Valid score: return the actual score value (1-6) if valid
+                            if (rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue)) {
+                                covariateValue = parseInt(rawValue, 10);
+                            }
+                        } else if (covariateName.includes('Not Attempted')) {
+                            // Not attempted: 1 if value is 07, 0 otherwise
+                            covariateValue = rawValue === '07' ? 1 : 0;
+                        } else if (covariateName.includes('Skipped')) {
+                            // Skipped: 1 if value is 09, 0 otherwise
+                            covariateValue = rawValue === '09' ? 1 : 0;
+                        }
+                    }
+                } else {
+                    // Handle standard covariates
+                    const mappedCovariateName = covariateMapping[covariateName] || covariateName;
+                    covariateValue = covariates[mappedCovariateName] || 0;
+                }
                 
                 imputationScore += covariateValue * multiplier;
             });
