@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { itemDefs, getContributingKeys, getInitialScores } from '../utils/itemDefinitions';
-import { calculateTotalScore, hasMeaningfulData } from '../utils/scoreCalculations';
-import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
+import { itemDefs, getContributingKeys, getInitialScores } from '../../utils/itemDefinitions';
+import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
+import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
-import { instructionContent } from '../data/instructionContent';
+import { instructionContent } from '../../data/instructionContent';
 
 const EndScoreScreen = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const EndScoreScreen = () => {
   const { startScores, startTotal, expectedScore, mobilityType } = location.state || {};
   
   // Initialize end scores with start scores
-  const [endScores, setEndScores] = useState(startScores || getInitialScores());
+  const [endScores, setEndScores] = useState(startScores || getInitialScores(mobilityType));
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const contributingKeys = getContributingKeys(mobilityType);

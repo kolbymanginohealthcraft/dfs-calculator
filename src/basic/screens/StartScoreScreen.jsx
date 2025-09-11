@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { itemDefs, getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../utils/itemDefinitions';
-import { calculateTotalScore, hasMeaningfulData } from '../utils/scoreCalculations';
-import { adjustScore, isScoreAtMin, isScoreAtMax } from '../utils/scoreHelpers';
+import { itemDefs, getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../../utils/itemDefinitions';
+import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
+import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
-import { instructionContent } from '../data/instructionContent';
+import { instructionContent } from '../../data/instructionContent';
 
 const StartScoreScreen = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const StartScoreScreen = () => {
   const { startScores, startTotal: incomingStartTotal, mobilityType: incomingMobilityType } = location.state || {};
   
   const [mobilityType, setMobilityType] = useState(incomingMobilityType || 'Walk');
-  const [scores, setScores] = useState(startScores || getInitialScores());
+  const [scores, setScores] = useState(startScores || getInitialScores(mobilityType));
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const contributingKeys = getContributingKeys(mobilityType);

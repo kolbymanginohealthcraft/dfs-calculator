@@ -1,6 +1,12 @@
 // Centralized item definitions for DFS Calculator
-// This file contains all the item definitions used across different screens
+// This file now uses the unified GG_ITEMS structure from the advanced version
+// while maintaining backward compatibility with the basic version
 
+import { GG_ITEMS } from './calculations';
+import { convertBasicItemsToGG, getBasicContributingKeys } from './itemAdapters';
+
+// Legacy itemDefs structure for backward compatibility
+// This is now derived from GG_ITEMS to ensure consistency
 export const itemDefs = {
   selfCare: [
     { key: 'eating', label: 'A. Eating', contributing: true },
@@ -63,22 +69,16 @@ export const getSelfCareContributing = () =>
   itemDefs.selfCare.filter(item => item.contributing);
 
 // Get contributing keys for both categories
+// Now uses the unified GG_ITEMS logic for consistency
 export const getContributingKeys = (mobilityType) => {
-  const selfCareKeys = getSelfCareContributing().map(i => i.key);
-  const mobilityItems = getMobilityContributing(mobilityType);
-  const mobilityKeys = mobilityItems.map(i => i.key);
-  
-  return {
-    selfCare: selfCareKeys,
-    mobility: mobilityKeys
-  };
+  return getBasicContributingKeys(mobilityType);
 };
 
-// Initialize default scores
-export const getInitialScores = () => {
-  const allKeys = getAllKeys();
+// Initialize default scores - only for contributing items
+export const getInitialScores = (mobilityType = 'Walk') => {
+  const contributingKeys = getContributingKeys(mobilityType);
   return {
-    selfCare: Object.fromEntries(allKeys.selfCare.map(k => [k, SCORE_CONSTANTS.DEFAULT_SCORE])),
-    mobility: Object.fromEntries(allKeys.mobility.map(k => [k, SCORE_CONSTANTS.DEFAULT_SCORE])),
+    selfCare: Object.fromEntries(contributingKeys.selfCare.map(k => [k, SCORE_CONSTANTS.DEFAULT_SCORE])),
+    mobility: Object.fromEntries(contributingKeys.mobility.map(k => [k, SCORE_CONSTANTS.DEFAULT_SCORE])),
   };
 };

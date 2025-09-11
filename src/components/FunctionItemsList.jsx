@@ -3,7 +3,7 @@ import BarbellChart from './BarbellChart';
 import ScoreButton from './ScoreButton';
 import { getScoreTypeColor } from '../utils/themeColors';
 import { GG_ITEMS, scoreMap } from '../utils/calculations';
-import { itemDefs, getContributingKeys } from '../basic/utils/itemDefinitions';
+import { itemDefs, getContributingKeys } from '../utils/itemDefinitions';
 import styles from './FunctionItemsList.module.css';
 
 const FunctionItemsList = ({

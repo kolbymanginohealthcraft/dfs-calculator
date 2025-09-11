@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { calculateExpectedScore, hasMeaningfulData } from '../utils/scoreCalculations';
+import { calculateExpectedScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import ProgressIndicator from '../components/ProgressIndicator';
 import InstructionPanel from '../components/InstructionPanel';
 import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
 import BasicLayout from '../components/BasicLayout';
-import { instructionContent } from '../data/instructionContent';
+import { instructionContent } from '../../data/instructionContent';
 
 const ExpectedScoreScreen = () => {
   const navigate = useNavigate();

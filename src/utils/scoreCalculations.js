@@ -1,4 +1,8 @@
 // Score calculation utilities for DFS Calculator
+// Now uses the unified GG_ITEMS structure for consistency
+
+import { convertBasicScoresToGG, getContributingGGItems } from './itemAdapters';
+import { calculateFunctionScore } from './calculations';
 
 /**
  * Calculate the total score for a category
@@ -25,12 +29,9 @@ export const calculateCategoryTotal = (scores, contributingKeys) => {
 import { getContributingKeys } from './itemDefinitions';
 
 export const calculateTotalScore = (scores, mobilityType) => {
-  const contributingKeys = getContributingKeys(mobilityType);
-  
-  const selfCareTotal = calculateCategoryTotal(scores.selfCare, contributingKeys.selfCare);
-  const mobilityTotal = calculateCategoryTotal(scores.mobility, contributingKeys.mobility);
-  
-  return selfCareTotal + mobilityTotal;
+  // Convert basic scores to GG format and use advanced calculation
+  const ggScores = convertBasicScoresToGG(scores);
+  return calculateFunctionScore(ggScores);
 };
 
 /**
