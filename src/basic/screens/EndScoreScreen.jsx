@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getContributingKeys, getInitialScores } from '../../utils/itemDefinitions';
 import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
@@ -83,6 +83,31 @@ const EndScoreScreen = () => {
   const endTotal = calcEndTotal();
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
 
+  // Prepare export data for the basic app
+  const exportData = {
+    patient: {
+      name: "Basic App User", // Basic app doesn't have patient data
+      dob: null,
+      age: null,
+      ard: null,
+      facility: "Basic Calculator",
+      address: null
+    },
+    scores: {
+      start: startTotal,
+      expected: expectedScore,
+      modeled: endTotal,
+      // Pass the detailed scores for function items
+      selfCare: endScores.selfCare || {},
+      mobility: endScores.mobility || {},
+      startScores: {
+        selfCare: startScores.selfCare || {},
+        mobility: startScores.mobility || {}
+      }
+    },
+    mobilityType: mobilityType
+  };
+
   return (
     <BasicLayout 
       rightPanel={<InstructionPanel {...instructionContent.end} />}
@@ -92,6 +117,7 @@ const EndScoreScreen = () => {
       expectedScore={expectedScore}
       endTotal={endTotal}
       hasInteracted={hasInteracted}
+      exportData={exportData}
     >
       <div className="score-bar-chart-container">
         <ScoreBarChart

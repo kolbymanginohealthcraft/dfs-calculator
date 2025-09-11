@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import html2pdf from "html2pdf.js";
 import Navbar from '../../components/Navbar';
 import ModeBanner from '../../components/ModeBanner';
+import ExportView from '../../components/ExportView';
 import '../styles/BasicLayout.css';
 
 const BasicLayout = ({ 
@@ -17,11 +20,49 @@ const BasicLayout = ({
   expectedScore,
   endTotal,
   hasInteracted,
-  mode = 'basic'
+  mode = 'basic',
+  // Export props
+  exportData
 }) => {
+  const location = useLocation();
+  const [exportState, setExportState] = useState(null);
+  const exportRef = useRef();
+
+  const isBasicEndScore = location.pathname === '/basic/end-score';
+
+  const handleExport = () => {
+    if (!exportState) return;
+    
+    // Generate a sequence number based on timestamp
+    const timestamp = Date.now();
+    const sequenceNumber = timestamp.toString().slice(-6); // Use last 6 digits for shorter filename
+    
+    html2pdf()
+      .set({
+        margin: 0.5,
+        filename: `dfs-basic-${sequenceNumber}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+      })
+      .from(exportRef.current)
+      .save();
+  };
+
+  // Update export state when exportData changes
+  React.useEffect(() => {
+    if (exportData && isBasicEndScore) {
+      setExportState(exportData);
+    }
+  }, [exportData, isBasicEndScore]);
+
+  // Create navbar with export functionality for basic end score
+  const navbarWithExport = isBasicEndScore && exportState ? (
+    <Navbar onExport={handleExport} />
+  ) : navbar;
   return (
     <div className="score-screen">
-      {showNavbar && (navbar || <Navbar />)}
+      {showNavbar && (navbarWithExport || <Navbar />)}
       {!navbar && (
         <ModeBanner 
           currentStep={currentStep}
@@ -53,6 +94,19 @@ const BasicLayout = ({
           </div>
         )}
       </div>
+
+      {/* Hidden Export View for Basic App */}
+      {isBasicEndScore && exportState && (
+        <div style={{ display: "none" }}>
+          <div ref={exportRef}>
+            <ExportView
+              patient={exportState.patient}
+              scores={exportState.scores}
+              mobilityType={exportState.mobilityType}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

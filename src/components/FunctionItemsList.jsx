@@ -260,12 +260,23 @@ const FunctionItemsList = ({
       }
       return `${domainName} Items`;
     };
+
+    // Get footnote for wheelchair mobility type
+    const getMobilityFootnote = () => {
+      if (domain === 'mobility' && mobilityType === 'Wheel' && variant !== 'start') {
+        return (
+          <span className={styles.footnote}>Item R counts double</span>
+        );
+      }
+      return null;
+    };
     
     return (
       <div className={styles.categorySection} key={domain}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.categoryTitle}>{getDomainTitle()}</h2>
           <div className={styles.headerControls}>
+            {getMobilityFootnote()}
             {domain === 'selfCare' && onScoreAdjustment && (
               <button
                 className={styles.resetAllBtn}

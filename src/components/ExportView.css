@@ -21,6 +21,10 @@
 }
 
 .section {
+  margin-bottom: 2rem;
+}
+
+.section:last-of-type {
   margin-bottom: 0.8rem;
 }
 
@@ -153,29 +157,167 @@
     font-size: 9px;
     color: black;
   }
+
+  .summaryValue.over-achieved {
+    color: black !important;
+  }
+
+  .summaryValue.under-achieved {
+    color: black !important;
+  }
+
+  .summaryGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.3rem;
+  }
+
+  .summaryCell {
+    padding: 0.3rem;
+  }
 }
 
-.summaryLine {
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
   font-size: 11px;
-  padding: 0.3rem 0.4rem;
+}
+
+.summaryCell {
   background: #f2fafa;
   border: 1px solid #bbb;
   border-radius: 4px;
-  display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  flex-wrap: wrap;
+  padding: 0.4rem;
+  text-align: center;
+  border-left: 3px solid #3599B8;
 }
 
 .summaryLabel {
   font-weight: bold;
   color: #265947;
+  margin-bottom: 0.2rem;
+  font-size: 10px;
 }
 
 .summaryValue {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.summaryValue.over-achieved {
+  color: #28a745;
+}
+
+.summaryValue.under-achieved {
+  color: #dc3545;
+}
+
+/* Function Items Table Styles */
+.functionItemsContainer {
+  margin-bottom: 1rem;
+}
+
+.domainSection {
+  margin-bottom: 0.8rem;
+}
+
+.domainTitle {
+  font-size: 12px;
+  font-weight: bold;
+  color: #0c436a;
+  margin: 0 0 0.5rem 0;
+  padding: 0.3rem 0.5rem;
+  background-color: #eaf5f8;
+  border-left: 3px solid #3599B8;
+}
+
+.mobilityType {
+  font-weight: normal;
+  color: #666;
+}
+
+.footnote {
+  font-size: 9px;
+  font-weight: 400;
+  color: #666;
+  font-style: italic;
+  margin-left: auto;
+  float: right;
+}
+
+.functionItemsTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10.5px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.functionItemsTable th,
+.functionItemsTable td {
+  border: 1px solid #bbb;
+  padding: 0.25rem 0.4rem;
+  line-height: 1.3;
+}
+
+.functionItemsTable thead {
+  background-color: #eaf5f8;
+}
+
+.functionItemsTable th {
+  font-weight: bold;
+  background-color: #cce5ea;
+  color: #0c436a;
+  text-align: left;
+}
+
+.functionItemsTable td {
+  text-align: left;
+}
+
+.scoreCell {
+  text-align: center !important;
+  font-weight: bold;
   min-width: 2rem;
 }
 
-.summaryDivider {
-  color: #aaa;
+.gainCell {
+  text-align: center !important;
+  font-weight: bold;
+  min-width: 2.5rem;
+}
+
+.gainCell.positive {
+  color: #28a745;
+}
+
+.gainCell.negative {
+  color: #dc3545;
+}
+
+
+.itemName {
+  font-weight: 500;
+}
+
+/* Print styles for function items */
+@media print {
+  .domainTitle {
+    background-color: #eaeaea !important;
+    color: black !important;
+    border-color: black !important;
+  }
+
+  .functionItemsTable thead {
+    background-color: #eaeaea !important;
+  }
+
+
+  .gainCell.positive {
+    color: black !important;
+  }
+
+  .gainCell.negative {
+    color: black !important;
+  }
 }

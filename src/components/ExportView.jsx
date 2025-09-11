@@ -1,35 +1,75 @@
 import React from "react";
 import { formatDOB } from "../utils/calculations";
-import { covariateRelatedItems } from "../utils/covariateRelatedItems";
+import { getBasicContributingItems, getContributingGGItemsForDisplay } from "../utils/itemAdapters";
+import { getContributingKeys } from "../utils/itemDefinitions";
+import { GG_ITEMS, scoreMap } from "../utils/calculations";
 import "./ExportView.css";
 import { BarChart3 } from "lucide-react";
 
-const ExportView = ({ patient, scores, covariates }) => {
+const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) => {
   const today = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
     day: "numeric",
   });
 
-  const grouped = {};
-  covariates.forEach(({ name, value, multiplier }) => {
-    const group = covariateRelatedItems[name]?.group || "Other";
-    if (!grouped[group]) grouped[group] = [];
-    grouped[group].push({ name, value, multiplier });
-  });
-
-  const groupOrder = (a, b) => {
-    if (a === "Baseline") return -1;
-    if (b === "Baseline") return 1;
-    return a.localeCompare(b);
+  // Get function items data based on whether we have functionItems prop or need to derive it
+  const getFunctionItemsData = () => {
+    if (functionItems && functionItems.scores) {
+      // Advanced app - derive items from GG_ITEMS and filter by contributing items
+      const actualMobilityType = functionItems.mobilityType || mobilityType;
+      const contributingGGItems = getContributingGGItemsForDisplay(actualMobilityType);
+      
+      const contributingItems = GG_ITEMS.filter(item => {
+        return contributingGGItems.has(item.id);
+      });
+      
+      // Group by domain
+      const grouped = {
+        selfCare: contributingItems.filter(item => item.domain === 'selfCare'),
+        mobility: contributingItems.filter(item => item.domain === 'mobility')
+      };
+      
+      return grouped;
+    } else {
+      // Basic app - derive from scores and mobilityType
+      const contributingItems = getBasicContributingItems(mobilityType);
+      return {
+        selfCare: contributingItems.selfCare,
+        mobility: contributingItems.mobility
+      };
+    }
   };
 
-  const format = (n) => (n !== undefined ? Number(n).toFixed(2) : "—");
+  const functionItemsData = getFunctionItemsData();
 
-  const grandTotal = covariates.reduce(
-    (sum, { value, multiplier }) => sum + value * (multiplier ?? 0),
-    0
-  );
+  // Helper function to get score for an item
+  const getItemScore = (item, domain) => {
+    if (functionItems && functionItems.scores) {
+      // Advanced app structure
+      const rawScore = functionItems.scores[item.id];
+      const score = rawScore in scoreMap ? scoreMap[rawScore] : 0;
+      return score;
+    } else {
+      // Basic app structure - scores passed separately
+      const key = item.key || item.id;
+      return scores[domain] ? scores[domain][key] : 0;
+    }
+  };
+
+  // Helper function to get start score for an item
+  const getItemStartScore = (item, domain) => {
+    if (functionItems && functionItems.startScores) {
+      // Advanced app structure
+      const rawStart = functionItems.startScores[item.id];
+      const startScore = rawStart in scoreMap ? scoreMap[rawStart] : 0;
+      return startScore;
+    } else {
+      // Basic app structure - startScores passed separately
+      const key = item.key || item.id;
+      return scores.startScores && scores.startScores[domain] ? scores.startScores[domain][key] : 0;
+    }
+  };
 
   return (
     <div className="exportContainer">
@@ -38,10 +78,10 @@ const ExportView = ({ patient, scores, covariates }) => {
       <section className="section">
         <p className="patientLine">
           <span className="label">Patient:</span> {patient.name}
-          {(patient.dob || patient.age || patient.ard) && (
+          {(patient.age || patient.ard) && (
             <span>
               {" "}
-              (age: {patient.age}, DOB {formatDOB(patient.dob)}, ARD{" "}
+              (age: {patient.age}, ARD{" "}
               {formatDOB(patient.ard)})
             </span>
           )}
@@ -53,66 +93,108 @@ const ExportView = ({ patient, scores, covariates }) => {
       </section>
 
       <section className="section">
-        <h3 className="sectionSubheading">📋 Summary</h3>
-        <div className="summaryLine">
-          <span className="summaryLabel">Start Score:</span>{" "}
-          <span className="summaryValue">{scores.start ?? "—"}</span>
-          <span className="summaryDivider">|</span>
-          <span className="summaryLabel">Expected Score:</span>{" "}
-          <span className="summaryValue">
-            {scores.expected !== undefined
-              ? Number(scores.expected).toFixed(2)
-              : "—"}
-          </span>
-          <span className="summaryDivider">|</span>
-          <span className="summaryLabel">Modeled Score:</span>{" "}
-          <span className="summaryValue">
-            {scores.modeled !== undefined
-              ? Number(scores.modeled).toFixed(2)
-              : "—"}
-          </span>
+        <h3 className="sectionSubheading">Summary</h3>
+        <div className="summaryGrid">
+          <div className="summaryCell">
+            <div className="summaryLabel">Start Score</div>
+            <div className="summaryValue">{scores.start ?? "—"}</div>
+          </div>
+          <div className="summaryCell">
+            <div className="summaryLabel">Expected Score</div>
+            <div className="summaryValue">
+              {scores.expected !== undefined
+                ? Number(scores.expected).toFixed(2)
+                : "—"}
+            </div>
+          </div>
+          <div className="summaryCell">
+            <div className="summaryLabel">End Score</div>
+            <div className={`summaryValue ${(() => {
+              if (scores.expected === undefined || scores.modeled === undefined) return '';
+              const diff = scores.modeled - scores.expected;
+              return diff >= 0 ? 'over-achieved' : 'under-achieved';
+            })()}`}>
+              {(() => {
+                if (scores.modeled === undefined) return "—";
+                const endScore = Number(scores.modeled).toFixed(0);
+                if (scores.expected !== undefined) {
+                  const diff = scores.modeled - scores.expected;
+                  if (diff >= 0) {
+                    return `${endScore} (${diff.toFixed(2)} over)`;
+                  } else {
+                    return `${endScore} (${Math.abs(diff).toFixed(2)} under)`;
+                  }
+                }
+                return endScore;
+              })()}
+            </div>
+          </div>
+          <div className="summaryCell">
+            <div className="summaryLabel">Gain</div>
+            <div className={`summaryValue ${(() => {
+              if (scores.start === undefined || scores.modeled === undefined) return '';
+              const gain = scores.modeled - scores.start;
+              return gain >= 0 ? 'over-achieved' : 'under-achieved';
+            })()}`}>
+              {(() => {
+                if (scores.start === undefined || scores.modeled === undefined) return "—";
+                const gain = scores.modeled - scores.start;
+                if (scores.expected !== undefined) {
+                  const required = scores.expected - scores.start;
+                  return `+${gain.toFixed(0)} (required ${required.toFixed(2)})`;
+                }
+                return gain >= 0 ? `+${gain.toFixed(0)}` : `${gain.toFixed(0)}`;
+              })()}
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="section">
-        <h3 className="sectionSubheading"><BarChart3 className="sectionIcon" /> Contributing Covariates</h3>
-        <table className="covariateTable">
-          <thead>
-            <tr>
-              <th>Covariate</th>
-              <th>Value</th>
-              <th>Multiplier</th>
-              <th>Contribution</th>
-            </tr>
-          </thead>
-
-          {Object.entries(grouped)
-            .sort(([a], [b]) => groupOrder(a, b))
-            .map(([group, items]) => (
-              <tbody key={group}>
-                <tr className="groupRow">
-                  <td colSpan="4">{group}</td>
-                </tr>
-                {items.map(({ name, value, multiplier }) => (
-                  <tr key={name}>
-                    <td>{name}</td>
-                    <td>{value}</td>
-                    <td>{format(multiplier)}</td>
-                    <td>{format(value * multiplier)}</td>
+        <h3 className="sectionSubheading">Function Items Analysis</h3>
+        <div className="functionItemsContainer">
+          {Object.entries(functionItemsData).map(([domain, items]) => (
+            <div key={domain} className="domainSection">
+              <h4 className="domainTitle">
+                {domain === 'selfCare' ? 'Self-Care Items' : 'Mobility Items'}
+                {domain === 'mobility' && (functionItems?.mobilityType || mobilityType) && (
+                  <span className="mobilityType"> ({functionItems?.mobilityType === 'Wheel' ? 'Wheelchair' : functionItems?.mobilityType || (mobilityType === 'Wheel' ? 'Wheelchair' : mobilityType)})</span>
+                )}
+                {domain === 'mobility' && (functionItems?.mobilityType === 'Wheel' || mobilityType === 'Wheel') && (
+                  <span className="footnote">Item R counts double</span>
+                )}
+              </h4>
+              <table className="functionItemsTable">
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Start Score</th>
+                    <th>End Score</th>
+                    <th>Gain</th>
                   </tr>
-                ))}
-              </tbody>
-            ))}
-
-          <tfoot>
-            <tr className="totalRow">
-              <td colSpan="3" style={{ textAlign: "right", fontWeight: "bold" }}>
-                Expected DFS:
-              </td>
-              <td style={{ fontWeight: "bold" }}>{format(grandTotal)}</td>
-            </tr>
-          </tfoot>
-        </table>
+                </thead>
+                <tbody>
+                  {items.map((item) => {
+                    const startScore = getItemStartScore(item, domain);
+                    const endScore = getItemScore(item, domain);
+                    const gain = endScore - startScore;
+                    
+                    return (
+                      <tr key={item.key || item.id}>
+                        <td className="itemName">{item.label}</td>
+                        <td className="scoreCell">{startScore}</td>
+                        <td className="scoreCell">{endScore}</td>
+                        <td className={`gainCell ${gain > 0 ? 'positive' : gain < 0 ? 'negative' : ''}`}>
+                          {gain > 0 ? `+${gain}` : gain === 0 ? '—' : gain}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
       </section>
 
       <p className="footerNote">

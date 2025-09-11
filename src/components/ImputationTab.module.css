@@ -99,6 +99,7 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.85rem;
+  table-layout: fixed;
 }
 
 .imputationTable th {
@@ -112,12 +113,38 @@
 .imputationTable td {
   padding: 0.4rem;
   border: 1px solid #ccc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Align numeric cells right */
-.imputationTable td:nth-child(2),
-.imputationTable td:nth-child(3),
+/* Column widths */
+.imputationTable th:nth-child(1),
+.imputationTable td:nth-child(1) {
+  width: 35%; /* GG Item - needs more space for long names */
+}
+
+.imputationTable th:nth-child(2),
+.imputationTable td:nth-child(2) {
+  width: 15%; /* Raw MDS */
+  text-align: right;
+}
+
+.imputationTable th:nth-child(3),
+.imputationTable td:nth-child(3) {
+  width: 15%; /* Needs Imputation */
+  text-align: center;
+}
+
+.imputationTable th:nth-child(4),
 .imputationTable td:nth-child(4) {
+  width: 20%; /* Score */
+  text-align: right;
+}
+
+.imputationTable th:nth-child(5),
+.imputationTable td:nth-child(5) {
+  width: 15%; /* Imputed */
   text-align: right;
 }
 
@@ -237,4 +264,189 @@ mark {
   color: #856404;
   padding: 0.1rem 0.2rem;
   border-radius: 2px;
+}
+
+/* Threshold Visualization Styles */
+.thresholdVisualization {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #dee2e6;
+}
+
+.thresholdVisualization h5 {
+  margin: 0 0 1rem 0;
+  color: #0c436a;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Simplified Bar Chart */
+.simpleBarContainer {
+  margin-bottom: 1rem;
+}
+
+.barChart {
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.backgroundBar {
+  position: relative;
+  height: 12px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+/* Threshold lines inside the bar */
+.thresholdLines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.thresholdLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #6c757d;
+  transform: translateX(-50%);
+}
+
+/* Score Marker */
+.scoreMarker {
+  position: absolute;
+  top: -6px;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.scoreLine {
+  width: 2px;
+  height: 24px;
+  background-color: #dc3545;
+  margin: 0 auto;
+  box-shadow: 0 0 4px rgba(220, 53, 69, 0.3);
+}
+
+.scoreLabel {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #dc3545;
+  color: white;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.scoreLabel::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: #dc3545;
+}
+
+/* Threshold Labels */
+.thresholdLabels {
+  position: relative;
+  height: 20px;
+  margin-top: 0.3rem;
+}
+
+.thresholdLabel {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: #666;
+  font-family: monospace;
+  text-align: center;
+  background-color: #fff;
+  padding: 0.1rem 0.2rem;
+  border-radius: 2px;
+  border: 1px solid #dee2e6;
+}
+
+.thresholdLabel:last-child {
+  transform: translateX(50%);
+}
+
+/* Value Labels Above Bar */
+.valueLabelsAbove {
+  position: relative;
+  height: 30px;
+  margin-bottom: 0.5rem;
+}
+
+.valueLabelAbove {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  color: #0c436a;
+  font-weight: 600;
+  background-color: #e3f2fd;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #bbdefb;
+  display: inline-block;
+  min-width: 24px;
+  text-align: center;
+}
+
+/* Result Summary */
+.resultSummary {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.resultBox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #fff;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border: 2px solid #d4edda;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resultLabel {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.resultScore {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #dc3545;
+  font-family: monospace;
+}
+
+.resultArrow {
+  font-size: 1.2rem;
+  color: #28a745;
+  font-weight: bold;
+}
+
+.resultValue {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #28a745;
 }

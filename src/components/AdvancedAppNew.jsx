@@ -552,11 +552,11 @@ function AdvancedAppNew() {
                 expected: weightedScore,
                 modeled: modeledTotal,
               }}
-              covariates={Object.entries(covariates).map(([name, value]) => ({
-                name,
-                value,
-                multiplier: functionMultipliers[name],
-              }))}
+              functionItems={{
+                scores: modeledValues,
+                startScores: startScores,
+                mobilityType: mobilityType
+              }}
             />
           </Suspense>
         </div>

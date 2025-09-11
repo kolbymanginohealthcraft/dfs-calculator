@@ -12,6 +12,7 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
   // Only show upload functionality on advanced route
   const isAdvancedRoute = location.pathname === '/advanced';
   const isBasicRoute = location.pathname.startsWith('/basic');
+  const isBasicEndScore = location.pathname === '/basic/end-score';
 
   const { getRootProps, getInputProps, open } = useDropzone({
     onDrop,
@@ -129,7 +130,7 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
         </div>
         
         <div className={styles.navbarRight}>
-          {isAdvancedRoute && hasFile && (
+          {((isAdvancedRoute && hasFile) || isBasicEndScore) && (
             <button
               className={styles.exportButton}
               onClick={onExport}

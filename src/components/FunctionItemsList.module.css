@@ -251,3 +251,12 @@
   border: 1px solid #bbdefb;
   border-radius: 4px;
 }
+
+/* Footnote styling for inline notes */
+.footnote {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #666;
+  font-style: italic;
+  margin-right: auto;
+}
