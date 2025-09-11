@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { calculateExpectedScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
-import ProgressIndicator from '../components/ProgressIndicator';
 import InstructionPanel from '../components/InstructionPanel';
 import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
 import BasicLayout from '../components/BasicLayout';
@@ -99,7 +98,14 @@ const ExpectedScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore);
 
   return (
-    <BasicLayout rightPanel={<InstructionPanel {...instructionContent.expected} />}>
+    <BasicLayout 
+      rightPanel={<InstructionPanel {...instructionContent.expected} />}
+      currentStep="expected"
+      onStepPress={handleStepPress}
+      startTotal={startTotal}
+      expectedScore={expectedScore}
+      hasInteracted={hasInteracted}
+    >
       <div className="score-bar-chart-container">
         <ScoreBarChart
           startTotal={startTotal}
@@ -107,14 +113,6 @@ const ExpectedScoreScreen = () => {
           variant="expected"
         />
       </div>
-
-      <ProgressIndicator
-        currentStep="expected"
-        onStepPress={handleStepPress}
-        startTotal={startTotal}
-        expectedScore={expectedScore}
-        hasInteracted={hasInteracted}
-      />
 
       <ExpectedScoreSlider
         startTotal={startTotal}

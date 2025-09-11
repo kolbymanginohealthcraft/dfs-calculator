@@ -114,6 +114,19 @@
   color: #c82333;
 }
 
+/* Table styling */
+.covariateTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.covariateTable td {
+  border: 1px solid #ccc;
+  padding: 0.4rem;
+}
+
 /* Align numeric cells right */
 .covariateTable td:nth-child(2),
 .covariateTable td:nth-child(3),

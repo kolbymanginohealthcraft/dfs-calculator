@@ -39,6 +39,7 @@
   position: relative;
   z-index: 1;
   color: white;
+  gap: var(--spacing-lg);
 }
 
 .modeInfo {
@@ -127,6 +128,139 @@
   transform: rotate(180deg);
 }
 
+/* Progress Navigation Styles */
+.progressNavigation {
+  display: flex;
+  align-items: center;
+  margin: 0 var(--spacing-md);
+}
+
+.progressBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progressStep {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 100px;
+  height: 36px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-primary);
+  font-family: inherit;
+  padding: var(--spacing-sm) var(--spacing-md);
+  gap: 6px;
+}
+
+.progressStep:hover:not(:disabled):not(.activeStep) {
+  background: #f8f9fa;
+  border-color: #cbd5e0;
+}
+
+.activeStep {
+  background: #f8f9fa;
+  color: var(--text-primary);
+  border: 3px solid #0c436a;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(12, 67, 106, 0.2), inset 0 0 0 1px rgba(12, 67, 106, 0.1);
+}
+
+.activeStep .stepNumber {
+  color: var(--text-primary);
+}
+
+.activeStep .stepLabel {
+  color: var(--text-primary);
+}
+
+.completedStep {
+  background: #e8f5e8;
+  border-color: var(--secondary-color);
+  color: var(--text-primary);
+}
+
+.completedStep .stepNumber {
+  color: var(--text-primary);
+}
+
+.completedStep .stepLabel {
+  color: var(--text-primary);
+}
+
+.disabledStep {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.disabledStep .stepNumber {
+  color: #a0aec0;
+}
+
+.disabledStep .stepLabel {
+  color: #a0aec0;
+}
+
+.progressLine {
+  width: 16px;
+  height: 2px;
+  background-color: #e2e8f0;
+}
+
+.completedLine {
+  background-color: var(--secondary-color);
+}
+
+.stepDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.activeDot {
+  width: 8px;
+  height: 8px;
+}
+
+.completedDot {
+  opacity: 0.8;
+}
+
+.stepTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+}
+
+.stepNumber {
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: inherit;
+}
+
+.stepLabel {
+  font-size: 0.6rem;
+  font-weight: 500;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+  color: inherit;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .modeBanner {
@@ -163,6 +297,43 @@
   
   .modeName {
     font-size: 0.9rem;
+  }
+  
+  .progressNavigation {
+    margin: 0 var(--spacing-sm);
+  }
+  
+  .progressBar {
+    gap: 4px;
+  }
+  
+  .progressStep {
+    min-width: 85px;
+    height: 32px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .stepDot {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .activeDot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .stepNumber {
+    font-size: 0.6rem;
+  }
+  
+  .stepLabel {
+    font-size: 0.55rem;
+    max-width: 75px;
+  }
+  
+  .progressLine {
+    width: 12px;
   }
   
   .switchButton {

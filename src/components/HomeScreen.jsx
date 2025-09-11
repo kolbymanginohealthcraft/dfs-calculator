@@ -35,7 +35,7 @@ const HomeScreen = () => {
               Patient function assessment and discharge planning tool for healthcare professionals
             </p>
             <div className={styles['hero-badges']}>
-              <span className={styles['badge']}>Clinical Tool</span>
+              <span className={styles['badge']}>Clinical Transparency</span>
               <span className={styles['badge']}>Two Versions</span>
               <span className={styles['badge']}>Easy Export</span>
             </div>

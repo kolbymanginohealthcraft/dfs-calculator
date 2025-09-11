@@ -10,7 +10,6 @@ import ScoreBarChart from "./ScoreBarChart";
 import FunctionItemsList from "./FunctionItemsList";
 import { getScoreTypeColor } from "../utils/themeColors";
 import { Wrench, BarChart3, Target, HandHeart, User, Settings } from "lucide-react";
-import ProgressIndicator from "../basic/components/ProgressIndicator";
 
 const ModelEndScore = ({
   modeledValues,
@@ -50,15 +49,6 @@ const ModelEndScore = ({
         )}
       </div>
 
-      <ProgressIndicator
-        currentStep="end"
-        onStepPress={() => {}} // No navigation needed in advanced mode
-        startTotal={startTotal}
-        expectedScore={weightedScore}
-        endTotal={modeledTotal}
-        hasInteracted={true}
-        mode="advanced"
-      />
 
       {hasFile && (
         <FunctionItemsList

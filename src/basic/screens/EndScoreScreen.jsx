@@ -5,7 +5,6 @@ import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalcula
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import ScoreBarChart from '../../components/ScoreBarChart';
-import ProgressIndicator from '../components/ProgressIndicator';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
@@ -85,7 +84,15 @@ const EndScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
 
   return (
-    <BasicLayout rightPanel={<InstructionPanel {...instructionContent.end} />}>
+    <BasicLayout 
+      rightPanel={<InstructionPanel {...instructionContent.end} />}
+      currentStep="end"
+      onStepPress={handleStepPress}
+      startTotal={startTotal}
+      expectedScore={expectedScore}
+      endTotal={endTotal}
+      hasInteracted={hasInteracted}
+    >
       <div className="score-bar-chart-container">
         <ScoreBarChart
           startTotal={startTotal}
@@ -94,15 +101,6 @@ const EndScoreScreen = () => {
           variant="end"
         />
       </div>
-
-      <ProgressIndicator
-        currentStep="end"
-        onStepPress={handleStepPress}
-        startTotal={startTotal}
-        expectedScore={expectedScore}
-        endTotal={endTotal}
-        hasInteracted={hasInteracted}
-      />
 
       <FunctionItemsList
         mode="basic"
