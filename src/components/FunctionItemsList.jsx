@@ -3,7 +3,7 @@ import BarbellChart from './BarbellChart';
 import ScoreButton from './ScoreButton';
 import { getScoreTypeColor } from '../utils/themeColors';
 import { GG_ITEMS, scoreMap } from '../utils/calculations';
-import { getContributingKeys } from '../utils/itemDefinitions';
+import { getContributingKeys, getInitialScores } from '../utils/itemDefinitions';
 import { getBasicContributingItems } from '../utils/itemAdapters';
 import styles from './FunctionItemsList.module.css';
 
@@ -138,6 +138,50 @@ const FunctionItemsList = ({
     }
   };
 
+  // Handle reset all - determine reset state based on variant
+  const handleResetAll = () => {
+    if (!onScoreAdjustment) return;
+
+    // Determine what the reset state should be based on variant
+    let resetState;
+    if (variant === 'start') {
+      // Start mode: reset all to default scores (1)
+      resetState = getInitialScores(mobilityType);
+    } else {
+      // End/Advanced modes: reset to start scores (green nodes back to blue nodes)
+      resetState = startScores;
+    }
+
+    // Apply the reset by calling onScoreAdjustment for each item
+    if (mode === 'advanced') {
+      // For advanced mode, reset each GG item
+      Object.keys(resetState).forEach(itemId => {
+        const currentScore = scoreMap[scores[itemId]] || 0;
+        const targetScore = scoreMap[resetState[itemId]] || 0;
+        if (currentScore !== targetScore) {
+          const delta = targetScore - currentScore;
+          if (delta !== 0) {
+            onScoreAdjustment(itemId, delta);
+          }
+        }
+      });
+    } else {
+      // For basic mode, reset each category
+      Object.keys(resetState).forEach(category => {
+        Object.keys(resetState[category]).forEach(key => {
+          const currentScore = scores[category]?.[key] || 0;
+          const targetScore = resetState[category][key];
+          if (currentScore !== targetScore) {
+            const delta = targetScore - currentScore;
+            if (delta !== 0) {
+              onScoreAdjustment(key, delta);
+            }
+          }
+        });
+      });
+    }
+  };
+
   // Render a single item row
   const renderItemRow = (item, category = null, isLast = false) => {
     const score = getScore(item, category);
@@ -221,22 +265,33 @@ const FunctionItemsList = ({
       <div className={styles.categorySection} key={domain}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.categoryTitle}>{getDomainTitle()}</h2>
-          {mode === 'basic' && domain === 'mobility' && onMobilityTypeChange && variant === 'start' && (
-            <div className={styles.mobilityTypeSelector}>
+          <div className={styles.headerControls}>
+            {domain === 'selfCare' && onScoreAdjustment && (
               <button
-                className={`${styles.mobilityBtn} ${mobilityType === 'Walk' ? styles.active : ''}`}
-                onClick={() => onMobilityTypeChange('Walk')}
+                className={styles.resetAllBtn}
+                onClick={handleResetAll}
+                title="Reset all items to their original values"
               >
-                Walk
+                Reset All
               </button>
-              <button
-                className={`${styles.mobilityBtn} ${mobilityType === 'Wheel' ? styles.active : ''}`}
-                onClick={() => onMobilityTypeChange('Wheel')}
-              >
-                Wheelchair
-              </button>
-            </div>
-          )}
+            )}
+            {mode === 'basic' && domain === 'mobility' && onMobilityTypeChange && variant === 'start' && (
+              <div className={styles.mobilityTypeSelector}>
+                <button
+                  className={`${styles.mobilityBtn} ${mobilityType === 'Walk' ? styles.active : ''}`}
+                  onClick={() => onMobilityTypeChange('Walk')}
+                >
+                  Walk
+                </button>
+                <button
+                  className={`${styles.mobilityBtn} ${mobilityType === 'Wheel' ? styles.active : ''}`}
+                  onClick={() => onMobilityTypeChange('Wheel')}
+                >
+                  Wheelchair
+                </button>
+              </div>
+            )}
+          </div>
         </div>
         <div className={styles.tableContainer}>
           {domainItems.map((item, index, filteredArray) => 

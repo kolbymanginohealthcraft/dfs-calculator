@@ -182,7 +182,7 @@ const ScoreBarChart = ({
           >
             {expectedScore ? (
               <>
-                {gainLabel}: {Math.round(actualGain)}
+                {gainLabel}: {endTotal ? Math.round(actualGain) : 'TBD'}
                 {requiredGain > 0 && (
                   <span style={{ fontSize: '0.9em', opacity: 0.8 }}>
                     {' '}(required {requiredGain.toFixed(2)})
