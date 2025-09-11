@@ -23,6 +23,7 @@ const ModelEndScore = ({
   parsedValues,
   weightedScore,
   mobilityType,
+  imputedItems = new Set(),
 }) => {
   const [filterContributing, setFilterContributing] = useState(false);
   const startTotal = calculateFunctionScore(startScores);
@@ -69,6 +70,7 @@ const ModelEndScore = ({
           onScoreAdjustment={handleTick}
           contributingIds={contributingIds}
           mobilityType={mobilityType}
+          imputedItems={imputedItems}
         />
       )}
     </>

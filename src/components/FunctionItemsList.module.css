@@ -201,3 +201,15 @@
     gap: 0.5rem;
   }
 }
+
+/* Imputed value label */
+.imputedLabel {
+  color: #495057;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-left: 0.5rem;
+  padding: 0.125rem 0.375rem;
+  background-color: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 4px;
+}

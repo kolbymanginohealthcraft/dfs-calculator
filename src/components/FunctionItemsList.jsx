@@ -17,6 +17,7 @@ const FunctionItemsList = ({
   mobilityType = 'Walk', // For basic mode
   onMobilityTypeChange, // Callback for mobility type changes in basic mode
   contributingIds = new Set(), // For advanced mode
+  imputedItems = new Set(), // Items that have imputed start scores
   className = '',
 }) => {
   // Get items based on mode
@@ -159,6 +160,11 @@ const FunctionItemsList = ({
         <div className={styles.itemLabel}>
           <span className={styles.labelText} title={item.id || item.key}>
             {formatLabel(item)}{' '}
+            {imputedItems.has(item.id) && (
+              <span className={styles.imputedLabel}>
+                Imputed
+              </span>
+            )}
             {delta !== 0 && (
               <span className={`${styles.delta} ${delta > 0 ? styles.positive : styles.negative}`}>
                 ({delta > 0 ? '+' : ''}{delta})
@@ -199,7 +205,7 @@ const FunctionItemsList = ({
   };
 
   // Render domain section
-  const renderDomainSection = (domain, domainItems) => {
+  const renderDomainSection = (domain, domainItems, isFirst = false) => {
     const domainName = domain === 'selfCare' ? 'Self-Care' : 'Mobility';
     
     // Show mobility type in header when not on step 1 (variant !== 'start')
@@ -245,8 +251,8 @@ const FunctionItemsList = ({
 
   return (
     <div className={`${styles.scoresContainer} ${className}`}>
-      {itemsData.map(({ domain, items: domainItems }) => 
-        renderDomainSection(domain, domainItems)
+      {itemsData.map(({ domain, items: domainItems }, index) => 
+        renderDomainSection(domain, domainItems, index === 0)
       )}
     </div>
   );

@@ -37,6 +37,7 @@ function AdvancedAppNew() {
   const [groupedSections, setGroupedSections] = useState({});
   const [modeledValues, setModeledValues] = useState({});
   const [startScores, setStartScores] = useState({});
+  const [imputedItems, setImputedItems] = useState(new Set());
   const [fileName, setFileName] = useState("");
   const [facilityName, setFacilityName] = useState("");
   const [facilityAddress, setFacilityAddress] = useState("");
@@ -60,6 +61,7 @@ function AdvancedAppNew() {
       setGroupedSections({});
       setModeledValues({});
       setStartScores({});
+      setImputedItems(new Set());
       setCovariates({});
       setWeightedScore(0);
       return;
@@ -72,7 +74,8 @@ function AdvancedAppNew() {
       setParsedValues,
       setGroupedSections,
       setModeledValues,
-      setStartScores
+      setStartScores,
+      setImputedItems
     );
   }, []);
 
@@ -530,6 +533,7 @@ function AdvancedAppNew() {
               parsedValues={parsedValues}
               weightedScore={weightedScore}
               mobilityType={mobilityType}
+              imputedItems={imputedItems}
             />
           </Suspense>
         ) : null}

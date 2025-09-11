@@ -3,7 +3,7 @@ import styles from "./ImputationTab.module.css";
 import { Calculator } from "lucide-react";
 import { imputationMultipliers } from "../utils/imputationMultipliers";
 import { getImputationThresholds } from "../utils/imputationCalculations";
-import { getFunctionCovariates, GG_ITEMS } from "../utils/calculations";
+import { getFunctionCovariates, GG_ITEMS, determineMobilityType } from "../utils/calculations";
 
 export default function ImputationTab({
   hasFile,
@@ -43,9 +43,47 @@ export default function ImputationTab({
 
   // Helper function to get covariate value
   const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores) => {
-    // Use the existing covariate calculation logic
+    // First check for GG item-specific covariates
+    const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues);
+    if (ggItemSpecificValue !== null) {
+      return ggItemSpecificValue;
+    }
+    
+    // Use the existing covariate calculation logic for general covariates
     const result = getFunctionCovariates(parsedValues, summary, icdList, startScores);
     return result?.covariates?.[covariateName] || 0;
+  };
+
+  // Helper function to calculate GG item-specific covariates
+  const getGGItemSpecificCovariate = (covariateName, parsedValues) => {
+    // Check if this is a GG item-specific covariate (contains "Valid Score", "Not Attempted", or "Skipped")
+    if (covariateName.includes(" - Valid Score") || 
+        covariateName.includes(" - Not Attempted") || 
+        covariateName.includes(" - Skipped")) {
+      
+      // Extract the GG item ID from the covariate name (e.g., "Walk 150 Feet (GG0170K1) - Valid Score" -> "GG0170K1")
+      const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
+      if (match) {
+        const ggItemId = match[0].slice(1, -1); // Remove parentheses
+        const rawValue = parsedValues[ggItemId];
+        
+        if (covariateName.includes(" - Valid Score")) {
+          // Valid Score: return the numeric value if valid (01-06), else 0
+          if (rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue)) {
+            return parseInt(rawValue, 10);
+          }
+          return 0;
+        } else if (covariateName.includes(" - Not Attempted")) {
+          // Not Attempted: return 1 if value is 07, else 0
+          return rawValue === '07' ? 1 : 0;
+        } else if (covariateName.includes(" - Skipped")) {
+          // Skipped: return 1 if value is 09, else 0
+          return rawValue === '09' ? 1 : 0;
+        }
+      }
+    }
+    
+    return null; // Not a GG item-specific covariate
   };
 
   // Helper function to get GG item label (following FunctionItemsList.jsx pattern)
@@ -67,10 +105,25 @@ export default function ImputationTab({
   const imputationData = useMemo(() => {
     if (!hasFile || !parsedValues || !startScores) return {};
 
+    // Determine mobility type
+    const mobilityType = determineMobilityType(parsedValues);
+    
+    // Define which items are walker-specific vs wheelchair-specific
+    const walkerItems = new Set(['GG0170I1', 'GG0170J1', 'GG0170K1', 'GG0170L1', 'GG0170M1', 'GG0170N1', 'GG0170O1']);
+    const wheelchairItems = new Set(['GG0170R1', 'GG0170S1']);
+    
     const data = {};
     const ggItems = Object.keys(imputationMultipliers);
 
     for (const ggItemId of ggItems) {
+      // Filter items based on mobility type
+      if (walkerItems.has(ggItemId) && mobilityType !== 'Walk') {
+        continue; // Skip walker items if not a walker
+      }
+      if (wheelchairItems.has(ggItemId) && mobilityType !== 'Wheel') {
+        continue; // Skip wheelchair items if not a wheelchair user
+      }
+      
       const multipliers = imputationMultipliers[ggItemId];
       const thresholds = getImputationThresholds(ggItemId);
       
