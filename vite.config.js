@@ -8,4 +8,8 @@ export default defineConfig({
       "/api": "http://localhost:3001", // your Express server (for npm run dev)
     },
   },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+  },
 });
