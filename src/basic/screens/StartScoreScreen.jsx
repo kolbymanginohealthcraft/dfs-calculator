@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { itemDefs, getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../../utils/itemDefinitions';
+import { getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../../utils/itemDefinitions';
 import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
@@ -21,6 +21,35 @@ const StartScoreScreen = () => {
   const [hasInteracted, setHasInteracted] = useState(false);
 
   const contributingKeys = getContributingKeys(mobilityType);
+
+  // Handle mobility type changes - update scores to include new contributing items
+  const handleMobilityTypeChange = (newMobilityType) => {
+    setMobilityType(newMobilityType);
+    
+    // Get the new contributing keys for the new mobility type
+    const newContributingKeys = getContributingKeys(newMobilityType);
+    
+    // Create new scores object with existing scores preserved where possible
+    const newScores = {
+      selfCare: { ...scores.selfCare },
+      mobility: { ...scores.mobility }
+    };
+    
+    // Add any missing contributing items with default scores
+    newContributingKeys.selfCare.forEach(key => {
+      if (!newScores.selfCare.hasOwnProperty(key)) {
+        newScores.selfCare[key] = SCORE_CONSTANTS.DEFAULT_SCORE;
+      }
+    });
+    
+    newContributingKeys.mobility.forEach(key => {
+      if (!newScores.mobility.hasOwnProperty(key)) {
+        newScores.mobility[key] = SCORE_CONSTANTS.DEFAULT_SCORE;
+      }
+    });
+    
+    setScores(newScores);
+  };
 
   const handleScoreAdjustment = (key, delta) => {
     if (!hasInteracted) {
@@ -95,7 +124,7 @@ const StartScoreScreen = () => {
         startScores={scores}
         onScoreAdjustment={handleScoreAdjustment}
         mobilityType={mobilityType}
-        onMobilityTypeChange={setMobilityType}
+        onMobilityTypeChange={handleMobilityTypeChange}
       />
 
       <div className="action-buttons">

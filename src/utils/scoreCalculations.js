@@ -31,7 +31,7 @@ import { getContributingKeys } from './itemDefinitions';
 export const calculateTotalScore = (scores, mobilityType) => {
   // Convert basic scores to GG format and use advanced calculation
   const ggScores = convertBasicScoresToGG(scores);
-  return calculateFunctionScore(ggScores);
+  return calculateFunctionScore(ggScores, mobilityType);
 };
 
 /**

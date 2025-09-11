@@ -50,15 +50,22 @@ export const adjustScore = (scores, key, delta, startScores = null) => {
  * @param {string} key - Item key
  * @returns {string|null} - Category name or null if not found
  */
-import { itemDefs } from './itemDefinitions';
+import { GG_TO_BASIC_MAPPING } from './itemAdapters';
+import { GG_ITEMS } from './calculations';
 
 export const getCategoryForKey = (key) => {
-  if (itemDefs.selfCare.some(item => item.key === key)) {
-    return 'selfCare';
-  }
-  if (itemDefs.mobility.some(item => item.key === key)) {
+  // Handle the duplicate wheelchair R item
+  if (key === 'pushingWheelchairR2') {
     return 'mobility';
   }
+  
+  // Find the GG item for this basic key
+  const ggId = Object.keys(GG_TO_BASIC_MAPPING).find(gg => GG_TO_BASIC_MAPPING[gg] === key);
+  if (ggId) {
+    const ggItem = GG_ITEMS.find(item => item.id === ggId);
+    return ggItem ? ggItem.domain : null;
+  }
+  
   return null;
 };
 
@@ -165,3 +172,4 @@ export const countScores = (scores) => {
   const mobilityCount = Object.keys(scores.mobility || {}).length;
   return selfCareCount + mobilityCount;
 };
+

@@ -10,8 +10,11 @@ export const scoreMap = {
   "06": 6,
   "07": 1,
   "08": 1,
+  "09": 1,
   10: 1,
+  "10": 1,
   88: 1,
+  "88": 1,
   "^": 1,
 };
 
@@ -169,7 +172,7 @@ export function determineMobilityType(parsedValues) {
     : "Walk";
 }
 
-export function calculateFunctionScore(values) {
+export function calculateFunctionScore(values, mobilityType = null) {
   const safe = (key) => {
     const v = values[key];
     return valid.has(v) ? parseInt(v, 10) : 1;
@@ -188,9 +191,10 @@ export function calculateFunctionScore(values) {
   const mj = safe("GG0170J");
   const mr = safe("GG0170R");
 
-  const mobilityType = determineMobilityType(values);
+  // Use provided mobility type or determine from values
+  const actualMobilityType = mobilityType || determineMobilityType(values);
 
-  if (mobilityType === "Wheel") {
+  if (actualMobilityType === "Wheel") {
     return sa + sb + sc + ma + mc + md + me + mf + mr + mr;
   } else {
     return sa + sb + sc + ma + mc + md + me + mf + mi + mj;

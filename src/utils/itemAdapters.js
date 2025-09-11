@@ -58,6 +58,11 @@ export const convertBasicScoresToGG = (basicScores) => {
   // Convert mobility scores
   if (basicScores.mobility) {
     Object.entries(basicScores.mobility).forEach(([key, score]) => {
+      // Skip the duplicate wheelchair R item - it's handled by the original
+      if (key === 'pushingWheelchairR2') {
+        return;
+      }
+      
       const ggId = BASIC_TO_GG_MAPPING[key];
       if (ggId) {
         // Convert numeric score to GG format (01-06)
@@ -99,6 +104,7 @@ export const convertGGScoresToBasic = (ggScores) => {
 };
 
 // Get contributing GG_ITEMS based on mobility type (for basic version compatibility)
+// This is used for CALCULATION - includes duplicates for wheelchair R
 export const getContributingGGItems = (mobilityType) => {
   const contributingItems = new Set();
   
@@ -111,8 +117,6 @@ export const getContributingGGItems = (mobilityType) => {
   contributingSelfCareItems.forEach(id => contributingItems.add(id));
   
   // Mobility items based on type
-  const mobilityItems = GG_ITEMS.filter(item => item.domain === 'mobility');
-  
   if (mobilityType === 'Walk') {
     // For walking, include items that are relevant for walking
     const walkItems = [
@@ -121,8 +125,8 @@ export const getContributingGGItems = (mobilityType) => {
       'GG0170D', // Sit to stand
       'GG0170E', // Chair/bed-to-chair transfer
       'GG0170F', // Toilet transfer
+      'GG0170I', // Walk 10 feet
       'GG0170J', // Walk 50 feet with two turns
-      'GG0170K', // Walk 150 feet
     ];
     walkItems.forEach(id => contributingItems.add(id));
   } else if (mobilityType === 'Wheel') {
@@ -136,8 +140,49 @@ export const getContributingGGItems = (mobilityType) => {
       'GG0170R', // Wheel 50 feet with two turns
     ];
     wheelItems.forEach(id => contributingItems.add(id));
-    // For wheelchair, R item is counted twice
+    // For wheelchair, R item is counted twice in calculation
     contributingItems.add('GG0170R');
+  }
+  
+  return contributingItems;
+};
+
+// Get contributing GG_ITEMS for DISPLAY only (no duplicates)
+export const getContributingGGItemsForDisplay = (mobilityType) => {
+  const contributingItems = new Set();
+  
+  // Self-care items (only contributing ones: A, B, C)
+  const contributingSelfCareItems = [
+    'GG0130A', // Eating
+    'GG0130B', // Oral hygiene
+    'GG0130C', // Toileting hygiene
+  ];
+  contributingSelfCareItems.forEach(id => contributingItems.add(id));
+  
+  // Mobility items based on type
+  if (mobilityType === 'Walk') {
+    // For walking, include items that are relevant for walking
+    const walkItems = [
+      'GG0170A', // Roll left and right
+      'GG0170C', // Lying to sitting on bed side
+      'GG0170D', // Sit to stand
+      'GG0170E', // Chair/bed-to-chair transfer
+      'GG0170F', // Toilet transfer
+      'GG0170I', // Walk 10 feet
+      'GG0170J', // Walk 50 feet with two turns
+    ];
+    walkItems.forEach(id => contributingItems.add(id));
+  } else if (mobilityType === 'Wheel') {
+    // For wheelchair, include items that are relevant for wheelchair
+    const wheelItems = [
+      'GG0170A', // Roll left and right
+      'GG0170C', // Lying to sitting on bed side
+      'GG0170D', // Sit to stand
+      'GG0170E', // Chair/bed-to-chair transfer
+      'GG0170F', // Toilet transfer
+      'GG0170R', // Wheel 50 feet with two turns (only once for display)
+    ];
+    wheelItems.forEach(id => contributingItems.add(id));
   }
   
   return contributingItems;
@@ -182,8 +227,9 @@ export const convertBasicItemsToGG = (basicItemDefs) => {
 };
 
 // Helper function to get basic version contributing keys using GG_ITEMS logic
+// This is used for CALCULATION - includes duplicates for wheelchair R
 export const getBasicContributingKeys = (mobilityType) => {
-  const contributingGGItems = getContributingGGItems(mobilityType);
+  const contributingGGItems = getContributingGGItems(mobilityType); // Use calculation version (with duplicates)
   const contributingKeys = {
     selfCare: [],
     mobility: []
@@ -198,10 +244,48 @@ export const getBasicContributingKeys = (mobilityType) => {
           contributingKeys.selfCare.push(basicKey);
         } else if (ggItem.domain === 'mobility') {
           contributingKeys.mobility.push(basicKey);
+          
+          // For wheelchair mode, if this is the R item, add it twice for calculation
+          if (mobilityType === 'Wheel' && ggId === 'GG0170R') {
+            contributingKeys.mobility.push('pushingWheelchairR2');
+          }
         }
       }
     }
   });
   
   return contributingKeys;
+};
+
+// Get contributing items directly from GG_ITEMS for basic mode display
+export const getBasicContributingItems = (mobilityType) => {
+  const contributingGGItems = getContributingGGItemsForDisplay(mobilityType); // Use display version (no duplicates)
+  const contributingItems = {
+    selfCare: [],
+    mobility: []
+  };
+  
+  contributingGGItems.forEach(ggId => {
+    const basicKey = GG_TO_BASIC_MAPPING[ggId];
+    if (basicKey) {
+      const ggItem = GG_ITEMS.find(item => item.id === ggId);
+      if (ggItem) {
+        // Create item with unified description and basic key
+        const item = {
+          key: basicKey,
+          label: `${ggItem.id.slice(-1)}. ${ggItem.label}`, // Add letter prefix (A, B, C, etc.)
+          domain: ggItem.domain,
+          contributing: true
+        };
+        
+        if (ggItem.domain === 'selfCare') {
+          contributingItems.selfCare.push(item);
+        } else if (ggItem.domain === 'mobility') {
+          contributingItems.mobility.push(item);
+        }
+      }
+    }
+  });
+  
+  return contributingItems;
 };

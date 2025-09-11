@@ -3,7 +3,8 @@ import BarbellChart from './BarbellChart';
 import ScoreButton from './ScoreButton';
 import { getScoreTypeColor } from '../utils/themeColors';
 import { GG_ITEMS, scoreMap } from '../utils/calculations';
-import { itemDefs, getContributingKeys } from '../utils/itemDefinitions';
+import { getContributingKeys } from '../utils/itemDefinitions';
+import { getBasicContributingItems } from '../utils/itemAdapters';
 import styles from './FunctionItemsList.module.css';
 
 const FunctionItemsList = ({
@@ -42,16 +43,16 @@ const FunctionItemsList = ({
       }));
     }
     
-    // Basic mode - use itemDefs
-    const contributingKeys = getContributingKeys(mobilityType);
+    // Basic mode - use unified GG_ITEMS descriptions
+    const contributingItems = getBasicContributingItems(mobilityType);
     return [
       {
         domain: 'selfCare',
-        items: itemDefs.selfCare.filter(item => contributingKeys.selfCare.includes(item.key))
+        items: contributingItems.selfCare
       },
       {
         domain: 'mobility', 
-        items: itemDefs.mobility.filter(item => contributingKeys.mobility.includes(item.key))
+        items: contributingItems.mobility
       }
     ];
   };
