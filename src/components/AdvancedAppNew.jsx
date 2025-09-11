@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
+import { useDropzone } from "react-dropzone";
 import { scoreMap, GG_ITEMS, conditionMap } from "../utils/calculations";
 import {
   extractPatientSummary,
@@ -43,6 +44,7 @@ function AdvancedAppNew() {
   const [activeRightPanel, setActiveRightPanel] = useState('instructions');
   const [covariates, setCovariates] = useState({});
   const [weightedScore, setWeightedScore] = useState(0);
+  const uploadOpenFunctionRef = useRef(null);
   const exportRef = useRef();
 
   const icd10Descriptions = useICD10Lookup();
@@ -71,6 +73,11 @@ function AdvancedAppNew() {
       setModeledValues,
       setStartScores
     );
+  }, []);
+
+  // Callback to receive the open function from navbar
+  const handleUploadClick = useCallback((openFunction) => {
+    uploadOpenFunctionRef.current = openFunction;
   }, []);
 
   const handleTick = (key, delta) => {
@@ -186,7 +193,7 @@ function AdvancedAppNew() {
 
   const advancedNavbar = (
     <>
-      <Navbar onDrop={onDrop} onExport={handleExport} hasFile={hasFile} fileName={fileName} />
+      <Navbar onDrop={onDrop} onExport={handleExport} hasFile={hasFile} fileName={fileName} onUploadClick={handleUploadClick} />
       <ModeBanner />
     </>
   );
@@ -202,21 +209,9 @@ function AdvancedAppNew() {
           <div className={styles.welcomeSection}>
             <div className={styles.welcomeContainer}>
               <div className={styles.welcomeContent}>
-                {/* Hero Section */}
-                <div className={styles.heroSection}>
-                  <div className={styles.heroIcon}>
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <h1 className={styles.welcomeTitle}>Advanced DFS Calculator</h1>
-                  <p className={styles.welcomeSubtitle}>
-                    Comprehensive patient function analysis and discharge planning made simple
-                  </p>
-                </div>
 
                 {/* Main Upload Section */}
-                <div className={styles.uploadHero}>
+                <div className={styles.uploadHero} onClick={() => uploadOpenFunctionRef.current?.()} style={{ cursor: 'pointer' }}>
                   <div className={styles.uploadIcon}>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -228,7 +223,7 @@ function AdvancedAppNew() {
                   </div>
                   <h2 className={styles.uploadTitle}>Upload Your MDS XML File</h2>
                   <p className={styles.uploadDescription}>
-                    <strong>Drag and drop your MDS XML file</strong> into the upload area above, or click the upload button to begin comprehensive patient function analysis.
+                    <strong>Drag and drop anywhere on the page</strong> or <strong>click here to upload</strong> your MDS XML file and begin comprehensive patient function analysis.
                   </p>
                   <div className={styles.fileTypeNote}>
                     <span className={styles.fileTypeIcon}>📄</span>
@@ -236,6 +231,61 @@ function AdvancedAppNew() {
                   </div>
                 </div>
 
+                {/* Privacy Notice Section */}
+                <div className={styles.privacySection}>
+                  <div className={styles.privacyHeader}>
+                    <div className={styles.privacyIcon}>
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22C12 22 20 16 20 10V4L12 2L4 4V10C4 16 12 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <h3 className={styles.privacyTitle}>Privacy & Data Protection</h3>
+                    <p className={styles.privacySubtitle}>
+                      This lightweight application is designed with your privacy and HIPAA compliance in mind
+                    </p>
+                  </div>
+                  
+                  <div className={styles.privacyContent}>
+                    <div className={styles.privacyItem}>
+                      <div className={styles.privacyItemIcon}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3 3H21V21H3V3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M9 9H15V15H9V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>No Data Storage</strong>
+                        <p>Your files and patient data are never saved to our servers. Everything is processed locally in your browser.</p>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.privacyItem}>
+                      <div className={styles.privacyItemIcon}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>Session-Based Processing</strong>
+                        <p>Upload your file, analyze the data, and export results. The moment you refresh the page or leave the site, all data is gone.</p>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.privacyItem}>
+                      <div className={styles.privacyItemIcon}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <strong>HIPAA Compliant Design</strong>
+                        <p>This intentional design ensures maximum privacy protection and compliance with healthcare data regulations.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
                 {/* MDS Information Section */}
                 <div className={styles.mdsInfoSection}>

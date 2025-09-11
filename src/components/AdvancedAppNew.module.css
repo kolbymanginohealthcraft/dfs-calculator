@@ -240,6 +240,114 @@
   font-size: 1.1rem;
 }
 
+/* Privacy Section */
+.privacySection {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl);
+  border: 1px solid rgba(34, 197, 94, 0.1);
+}
+
+.privacyHeader {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.privacyIcon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg) auto;
+  color: white;
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.3);
+}
+
+.privacyIcon svg {
+  width: 30px;
+  height: 30px;
+}
+
+.privacyTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-sm) 0;
+  background: linear-gradient(135deg, #16a34a, #22c55e);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.privacySubtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.privacyContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  text-align: left;
+}
+
+.privacyItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  transition: all 0.3s ease;
+}
+
+.privacyItem:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.1);
+}
+
+.privacyItemIcon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #22c55e, #10b981);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.2);
+}
+
+.privacyItemIcon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.privacyItem strong {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.privacyItem p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
 
 /* MDS Info Section */
 .mdsInfoSection {

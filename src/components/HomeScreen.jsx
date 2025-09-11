@@ -32,12 +32,12 @@ const HomeScreen = () => {
               <span className={styles['hero-subtitle']}>Discharge Function Score</span>
             </h1>
             <p className={styles['hero-description']}>
-              Advanced patient function assessment and discharge planning tool for healthcare professionals
+              Patient function assessment and discharge planning tool for healthcare professionals
             </p>
             <div className={styles['hero-badges']}>
               <span className={styles['badge']}>Clinical Tool</span>
-              <span className={styles['badge']}>MDS Integration</span>
-              <span className={styles['badge']}>Evidence-Based</span>
+              <span className={styles['badge']}>Two Versions</span>
+              <span className={styles['badge']}>Easy Export</span>
             </div>
           </div>
           
@@ -81,7 +81,7 @@ const HomeScreen = () => {
                 <div className={styles['hero-mode-content']}>
                   <h3 className={styles['hero-mode-title']}>Advanced Mode</h3>
                   <p className={styles['hero-mode-description']}>
-                    Full MDS integration with comprehensive analysis
+                    Upload MDS XML files for comprehensive analysis
                   </p>
                 </div>
                 <button 
@@ -114,50 +114,41 @@ const HomeScreen = () => {
             <div className={styles['feature-card']}>
               <div className={styles['feature-icon']}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                  <path d="M9 12H5a2 2 0 0 0-2 2v3c0 1.1.9 2 2 2h4m0-7v7m0-7h10a2 2 0 0 1 2 2v3c0 1.1-.9 2-2 2H9m0-7V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
                 </svg>
               </div>
-              <h3 className={styles['feature-title']}>Evidence-Based</h3>
+              <h3 className={styles['feature-title']}>CMS Compliant</h3>
               <p className={styles['feature-description']}>
-                Built on validated clinical methodologies and peer-reviewed research
+                Based on CMS legislation and regulatory requirements for discharge planning
               </p>
             </div>
 
             <div className={styles['feature-card']}>
               <div className={styles['feature-icon']}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                  <path d="M2 17l10 5 10-5"/>
-                  <path d="M2 12l10 5 10-5"/>
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10,9 9,9 8,9"/>
                 </svg>
               </div>
-              <h3 className={styles['feature-title']}>MDS Integration</h3>
+              <h3 className={styles['feature-title']}>MDS File Upload</h3>
               <p className={styles['feature-description']}>
-                Seamlessly import and process MDS XML files for automated calculations
+                Upload exported MDS XML files from your EMR for automated calculations
               </p>
             </div>
+
 
             <div className={styles['feature-card']}>
               <div className={styles['feature-icon']}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M3 3h18v18H3zM9 9h6v6H9z"/>
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
               </div>
-              <h3 className={styles['feature-title']}>Comprehensive Reports</h3>
+              <h3 className={styles['feature-title']}>Fast & Accurate</h3>
               <p className={styles['feature-description']}>
-                Generate detailed reports with visualizations and export capabilities
-              </p>
-            </div>
-
-            <div className={styles['feature-card']}>
-              <div className={styles['feature-icon']}>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                </svg>
-              </div>
-              <h3 className={styles['feature-title']}>Secure & Compliant</h3>
-              <p className={styles['feature-description']}>
-                HIPAA-compliant with enterprise-grade security and data protection
+                Quick calculations with precise results for efficient discharge planning
               </p>
             </div>
           </div>
@@ -173,7 +164,7 @@ const HomeScreen = () => {
               <p className={styles['about-description']}>
                 The DFS Calculator is a comprehensive tool designed to help healthcare professionals 
                 assess and model patient function scores for discharge planning. Whether you need 
-                a quick manual calculation or detailed analysis with MDS integration, our tool 
+                a quick manual calculation or detailed analysis with uploaded MDS files, our tool 
                 provides the flexibility and accuracy you need.
               </p>
               <div className={styles['about-highlights']}>

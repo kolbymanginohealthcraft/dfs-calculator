@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { FileText, Upload } from "lucide-react";
 import styles from "./Navbar.module.css";
 
-const Navbar = ({ onDrop, onExport, hasFile, fileName }) => {
+const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dragActive, setDragActive] = useState(false);
@@ -19,6 +19,13 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName }) => {
     noClick: true,
     noKeyboard: true,
   });
+
+  // Pass the open function to parent component
+  useEffect(() => {
+    if (onUploadClick && isAdvancedRoute) {
+      onUploadClick(open);
+    }
+  }, [onUploadClick, isAdvancedRoute, open]);
 
   const handleBackToHome = () => {
     navigate('/');
