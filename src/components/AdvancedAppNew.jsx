@@ -18,7 +18,6 @@ import html2pdf from "html2pdf.js";
 import Navbar from "./Navbar";
 import ModeBanner from "./ModeBanner";
 import PatientHeader from "./PatientHeader";
-import PatientOverview from "./PatientOverview";
 import BasicLayout from "../basic/components/BasicLayout";
 import InstructionPanel from "../basic/components/InstructionPanel";
 import { instructionContent } from "../data/instructionContent";
@@ -192,7 +191,6 @@ function AdvancedAppNew() {
 
   const rightPanelOptions = [
     { id: 'instructions', label: 'Instructions' },
-    { id: 'overview', label: 'Overview' },
     { id: 'mds', label: 'MDS Data' },
     { id: 'covariates', label: 'Covariates' },
     { id: 'imputation', label: 'Imputation' }
@@ -427,6 +425,14 @@ function AdvancedAppNew() {
                     hasFile={hasFile}
                     isRedacted={isRedacted}
                     onToggleRedaction={toggleRedaction}
+                    admitDate={admitDate}
+                    ardDate={ardDate}
+                    ardGapDays={ardGapDays}
+                    facility={facility}
+                    facilityName={facilityName}
+                    facilityAddress={facilityAddress}
+                    conditionCategory={conditionCategory}
+                    mobilityType={mobilityType}
                   />
                 </Suspense>
               </div>
@@ -458,25 +464,6 @@ function AdvancedAppNew() {
               )}
 
               <div className={styles.rightPanelContent}>
-              {activeRightPanel === 'overview' && (
-                <div className={styles.overviewPanel}>
-                  <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
-                    <PatientOverview
-                      admitDate={admitDate}
-                      ardDate={ardDate}
-                      ardGapDays={ardGapDays}
-                      facility={facility}
-                      facilityName={facilityName}
-                      facilityAddress={facilityAddress}
-                      conditionCategory={conditionCategory}
-                      mobilityType={mobilityType}
-                      hasFile={hasFile}
-                      isRedacted={isRedacted}
-                    />
-                  </Suspense>
-                </div>
-              )}
-
               {activeRightPanel === 'mds' && (
                 <div className={styles.mdsPanel}>
                   <Suspense fallback={<div className={styles.loading}>Loading MDS data...</div>}>

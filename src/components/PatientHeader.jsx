@@ -1,8 +1,8 @@
 import React from "react";
 import { formatDOB } from "../utils/calculations";
-import { redactName } from "../utils/redactionUtils";
+import { redactName, redactFacility, redactAddress } from "../utils/redactionUtils";
 import styles from "./PatientHeader.module.css";
-import { Eye, EyeOff, User } from "lucide-react";
+import { Eye, EyeOff, User, Building2, Calendar, ClipboardList } from "lucide-react";
 
 const PatientHeader = ({
   firstName,
@@ -12,6 +12,15 @@ const PatientHeader = ({
   hasFile,
   isRedacted,
   onToggleRedaction,
+  // Overview data
+  admitDate,
+  ardDate,
+  ardGapDays,
+  facility,
+  facilityName,
+  facilityAddress,
+  conditionCategory,
+  mobilityType,
 }) => {
   if (!hasFile) {
     return (
@@ -25,6 +34,8 @@ const PatientHeader = ({
 
   const displayFirstName = isRedacted ? redactName(firstName || "Unknown") : (firstName || "Unknown");
   const displayLastName = isRedacted ? redactName(lastName || "") : (lastName || "");
+  const displayFacilityName = isRedacted ? redactFacility(facilityName || `CCN: ${facility || "Unknown"}`) : (facilityName || `CCN: ${facility || "Unknown"}`);
+  const displayFacilityAddress = isRedacted ? redactAddress(facilityAddress || "Unknown") : (facilityAddress || "Unknown");
 
   return (
     <div className={styles.headerBlock}>
@@ -44,6 +55,38 @@ const PatientHeader = ({
           >
             {isRedacted ? <><Eye className={styles.buttonIcon} /> Show Info</> : <><EyeOff className={styles.buttonIcon} /> Hide Info</>}
           </button>
+        </div>
+      </div>
+      
+      {/* Compact Overview Information */}
+      <div className={styles.compactOverview}>
+        <div className={styles.overviewColumn}>
+          <div className={styles.overviewItem}>
+            <Calendar size={14} />
+            <span className={styles.overviewLabel}>Admit:</span>
+            <span className={styles.overviewValue}>
+              {formatDOB(admitDate) || "Unknown"}
+              {ardGapDays != null && (
+                <span className={styles.ardDayInfo}> (ARD on day {ardGapDays})</span>
+              )}
+            </span>
+          </div>
+          <div className={styles.overviewItem}>
+            <ClipboardList size={14} />
+            <span className={styles.overviewLabel}>Condition:</span>
+            <span className={styles.overviewValue}>{conditionCategory || "Unknown"}</span>
+          </div>
+        </div>
+        
+        <div className={styles.overviewColumn}>
+          <div className={styles.overviewItem}>
+            <Building2 size={14} />
+            <span className={styles.overviewLabel}>Facility:</span>
+            <div className={styles.facilityInfo}>
+              <span className={styles.overviewValue}>{displayFacilityName}</span>
+              <span className={styles.facilityAddress}>{displayFacilityAddress}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
