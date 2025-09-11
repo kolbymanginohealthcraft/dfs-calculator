@@ -128,10 +128,3 @@ export const unmappedCovariates = [
   "End of worksheet"
 ];
 
-// Summary
-export const mappingSummary = {
-  totalImputationCovariates: 120,
-  successfullyMapped: 62,
-  unmappedCount: 58,
-  mappingRate: 51.7%
-};
