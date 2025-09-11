@@ -1,5 +1,25 @@
 // Instruction content for different screens in the basic app
 
+// Common score values used across multiple instruction types
+const commonScoreValues = [
+  { number: "6", description: "Independent" },
+  { number: "5", description: "Supervision or Setup" },
+  { number: "4", description: "Minimal Assistance" },
+  { number: "3", description: "Moderate Assistance" },
+  { number: "2", description: "Substantial/Maximal Assistance" },
+  { number: "1", description: "Dependent" }
+];
+
+// Advanced score values (slightly different description for score 2)
+const advancedScoreValues = [
+  { number: "6", description: "Independent" },
+  { number: "5", description: "Supervision or Setup" },
+  { number: "4", description: "Minimal Assistance" },
+  { number: "3", description: "Moderate Assistance" },
+  { number: "2", description: "Maximal Assistance" },
+  { number: "1", description: "Dependent" }
+];
+
 export const instructionContent = {
   start: {
     title: "Start Score Screen",
@@ -9,14 +29,7 @@ export const instructionContent = {
       "Choose Walk or Wheelchair for mobility items",
       "When finished, proceed to set the expected score"
     ],
-    scoreValues: [
-      { number: "6", description: "Independent" },
-      { number: "5", description: "Supervision or Setup" },
-      { number: "4", description: "Minimal Assistance" },
-      { number: "3", description: "Moderate Assistance" },
-      { number: "2", description: "Substantial/Maximal Assistance" },
-      { number: "1", description: "Dependent" }
-    ]
+    scoreValues: commonScoreValues
   },
   
   expected: {
@@ -38,13 +51,18 @@ export const instructionContent = {
       "Watch how the gains bring the score closer to the expected score",
       "When finished, you can export the results"
     ],
-    scoreValues: [
-      { number: "6", description: "Independent" },
-      { number: "5", description: "Supervision or Setup" },
-      { number: "4", description: "Minimal Assistance" },
-      { number: "3", description: "Moderate Assistance" },
-      { number: "2", description: "Substantial/Maximal Assistance" },
-      { number: "1", description: "Dependent" }
-    ]
+    scoreValues: commonScoreValues
+  },
+
+  advanced: {
+    title: "Advanced DFS Calculator",
+    whatYoureDoing: "You have already uploaded the MDS file, so you already have the start scores and expected score. Now you just need to set the final scores for each self-care and mobility item. These scores represent the patient's functional abilities at the end of their episode or at any interim point in their stay.",
+    howToUse: [
+      "Review tabs to explore how the calculations were made and details from the MDS file",
+      "Use the +/- buttons to adjust each score",
+      "Watch how the gains bring the score closer to the expected score",
+      "When finished, you can export the results"
+    ],
+    scoreValues: advancedScoreValues
   }
 };

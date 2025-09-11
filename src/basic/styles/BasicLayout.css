@@ -144,6 +144,17 @@
   top: var(--spacing-xl);
 }
 
+/* Instructions content without container styling */
+.instructions-content {
+  padding: var(--spacing-lg);
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  border-radius: 0;
+  position: static;
+}
+
 .instructions-title {
   font-size: 1.5rem;
   font-weight: 700;

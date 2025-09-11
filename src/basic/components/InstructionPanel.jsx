@@ -5,10 +5,11 @@ const InstructionPanel = ({
   title, 
   whatYoureDoing, 
   howToUse, 
-  scoreValues = null 
+  scoreValues = null,
+  noContainer = false
 }) => {
   return (
-    <div className="instructions-panel">
+    <div className={noContainer ? "instructions-content" : "instructions-panel"}>
       <h3 className="instructions-title">{title}</h3>
       
       <div className="instruction-section">

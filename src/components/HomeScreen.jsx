@@ -104,7 +104,7 @@ const HomeScreen = () => {
       <section className={styles['features-section']}>
         <div className={styles['container']}>
           <div className={styles['section-header']}>
-            <h2 className={styles['section-title']}>Why Choose DFS Calculator?</h2>
+            <h2 className={styles['section-title']}>Why It Exists</h2>
             <p className={styles['section-description']}>
               Built by healthcare professionals for healthcare professionals
             </p>
@@ -160,9 +160,9 @@ const HomeScreen = () => {
         <div className={styles['container']}>
           <div className={styles['about-content']}>
             <div className={styles['about-text']}>
-              <h2 className={styles['about-title']}>About DFS Calculator</h2>
+              <h2 className={styles['about-title']}>About This Tool</h2>
               <p className={styles['about-description']}>
-                The DFS Calculator is a comprehensive tool designed to help healthcare professionals 
+                The DFS Calculator is a comprehensive application designed to help healthcare professionals 
                 assess and model patient function scores for discharge planning. Whether you need 
                 a quick manual calculation or detailed analysis with uploaded MDS files, our tool 
                 provides the flexibility and accuracy you need.

@@ -20,6 +20,8 @@ import ModeBanner from "./ModeBanner";
 import PatientHeader from "./PatientHeader";
 import PatientOverview from "./PatientOverview";
 import BasicLayout from "../basic/components/BasicLayout";
+import InstructionPanel from "../basic/components/InstructionPanel";
+import { instructionContent } from "../data/instructionContent";
 
 // Lazy load heavy components to improve initial render performance
 const MdsSnapshot = lazy(() => import("./MdsSnapshot"));
@@ -356,6 +358,57 @@ function AdvancedAppNew() {
                     </div>
                   </div>
                 </div>
+
+                {/* Analysis Overview Section */}
+                <div className={styles.mdsItemsSection}>
+                  <div className={styles.mdsItemsHeader}>
+                    <div className={styles.mdsItemsIcon}>
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <h3>Why is the MDS file so important?</h3>
+                    <p>This tool processes 110+ MDS data points to transform complex patient assessments into actionable discharge predictions.</p>
+                  </div>
+                  
+                  <div className={styles.mdsItemsContent}>
+                    {/* Core Components Overview */}
+                    <div className={styles.analysisOverview}>
+                      <div className={styles.analysisCard}>
+                        <div className={styles.analysisIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <h4>Functional Abilities</h4>
+                        <p>Core mobility and self-care activities including eating, toileting, transfers, walking, and stairs</p>
+                      </div>
+
+                      <div className={styles.analysisCard}>
+                        <div className={styles.analysisIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <h4>Clinical Factors</h4>
+                        <p>Medical conditions, cognitive status, BMI, nutrition, pain levels, and therapy services</p>
+                      </div>
+
+                      <div className={styles.analysisCard}>
+                        <div className={styles.analysisIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <h4>Medical History</h4>
+                        <p>Primary diagnoses, comorbidities, and prior functional abilities</p>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -392,66 +445,19 @@ function AdvancedAppNew() {
               </div>
 
               {/* Right Panel Content */}
-              <div className={styles.rightPanelContent}>
               {activeRightPanel === 'instructions' && (
-                <div className={styles.instructionsPanel}>
-                  <Suspense fallback={<div className={styles.loading}>Loading instructions...</div>}>
-                    <div className={styles.instructionContent}>
-                      <h3 className={styles.instructionTitle}>Advanced DFS Calculator</h3>
-                      
-                      <div className={styles.instructionSection}>
-                        <h4 className={styles.instructionSubtitle}>What you're doing:</h4>
-                        <p className={styles.instructionText}>
-                          Use the advanced DFS calculator to analyze patient function scores, review MDS data, and explore covariates that influence discharge planning.
-                        </p>
-                      </div>
-                      
-                      <div className={styles.instructionSection}>
-                        <h4 className={styles.instructionSubtitle}>How to use:</h4>
-                        <ul className={styles.instructionList}>
-                          <li>Upload an MDS XML file to get started</li>
-                          <li>Review patient overview and facility information</li>
-                          <li>Examine MDS data sections and item values</li>
-                          <li>Explore covariates and their impact on expected scores</li>
-                          <li>Adjust function scores using the modeling tools</li>
-                          <li>Export comprehensive PDF reports</li>
-                        </ul>
-                      </div>
-                      
-                      <div className={styles.instructionSection}>
-                        <h4 className={styles.instructionSubtitle}>Score Values:</h4>
-                        <div className="score-values">
-                          <div className="score-value-item">
-                            <span className="score-number">6</span>
-                            <span className="score-description">Independent</span>
-                          </div>
-                          <div className="score-value-item">
-                            <span className="score-number">5</span>
-                            <span className="score-description">Supervision or Setup</span>
-                          </div>
-                          <div className="score-value-item">
-                            <span className="score-number">4</span>
-                            <span className="score-description">Minimal Assistance</span>
-                          </div>
-                          <div className="score-value-item">
-                            <span className="score-number">3</span>
-                            <span className="score-description">Moderate Assistance</span>
-                          </div>
-                          <div className="score-value-item">
-                            <span className="score-number">2</span>
-                            <span className="score-description">Maximal Assistance</span>
-                          </div>
-                          <div className="score-value-item">
-                            <span className="score-number">1</span>
-                            <span className="score-description">Dependent</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Suspense>
-                </div>
+                <Suspense fallback={<div className={styles.loading}>Loading instructions...</div>}>
+                  <InstructionPanel
+                    title={instructionContent.advanced.title}
+                    whatYoureDoing={instructionContent.advanced.whatYoureDoing}
+                    howToUse={instructionContent.advanced.howToUse}
+                    scoreValues={instructionContent.advanced.scoreValues}
+                    noContainer={true}
+                  />
+                </Suspense>
               )}
 
+              <div className={styles.rightPanelContent}>
               {activeRightPanel === 'overview' && (
                 <div className={styles.overviewPanel}>
                   <Suspense fallback={<div className={styles.loading}>Loading...</div>}>
