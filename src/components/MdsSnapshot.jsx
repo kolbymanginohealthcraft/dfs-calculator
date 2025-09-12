@@ -3,12 +3,15 @@ import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import { formatDate } from "../utils/calculations";
 import { redactName } from "../utils/redactionUtils";
-import { ClipboardList } from "lucide-react";
+import { ClipboardList, X, ArrowLeft } from "lucide-react";
 
 export default function MdsSnapshot({
   groupedSections,
   descriptions,
   selectedItems = [],
+  selectedCovariate = null,
+  onClearSelection,
+  onClearFilter,
   isRedacted = false,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,6 +50,26 @@ export default function MdsSnapshot({
       }
     }
   }, [groupedSections, hasBeenInitialized]);
+
+  // Clear active section when a covariate is selected to show all sections
+  // Reset to first section when covariate is cleared
+  useEffect(() => {
+    if (selectedCovariate) {
+      setActiveSection(null);
+    } else if (hasBeenInitialized && Object.keys(groupedSections).length > 0) {
+      // Reset to first section when covariate filter is cleared
+      const firstSection = Object.keys(groupedSections)
+        .sort((a, b) => {
+          if (a.toLowerCase() === "control") return 1;
+          if (b.toLowerCase() === "control") return -1;
+          return a.localeCompare(b);
+        })[0];
+      
+      if (firstSection) {
+        setActiveSection(firstSection);
+      }
+    }
+  }, [selectedCovariate, groupedSections, hasBeenInitialized]);
 
   const highlightMatch = (text) => {
     if (!searchTerm || typeof text !== "string") return text;
@@ -166,6 +189,7 @@ export default function MdsSnapshot({
           : "";
 
         const matchesSearch =
+          searchTerm === "" || // If no search term, match everything
           id.toLowerCase().includes(search) ||
           label.toLowerCase().includes(search) ||
           rawValue.includes(search) ||
@@ -175,7 +199,9 @@ export default function MdsSnapshot({
         const matchesHighlight =
           selectedItems.length === 0 || selectedItems.includes(id);
 
-        return matchesSearch && matchesHighlight;
+        // If we have selected items (covariate filter), only show those items
+        // If no selected items, show items based on search
+        return selectedItems.length > 0 ? matchesHighlight : matchesSearch;
       });
 
       return [sectionKey, fullName, filteredItems];
@@ -207,6 +233,34 @@ export default function MdsSnapshot({
           </div>
         </div>
 
+        {/* Covariate Selection Indicator */}
+        {selectedCovariate && (
+          <div className={styles.covariateIndicator}>
+            <div className={styles.covariateIndicatorContent}>
+              <button 
+                className={styles.covariateIndicatorBack}
+                onClick={onClearSelection}
+                title="Back to Covariates tab"
+              >
+                <ArrowLeft size={16} />
+                <span>Back to Covariates</span>
+              </button>
+              <div className={styles.covariateIndicatorText}>
+                <span className={styles.covariateIndicatorLabel}>Showing MDS items for:</span>
+                <span className={styles.covariateIndicatorName}>{selectedCovariate}</span>
+              </div>
+              <button 
+                className={styles.covariateIndicatorClear}
+                onClick={onClearFilter}
+                title="Clear filter and show all MDS items"
+              >
+                <X size={16} />
+                <span>Clear</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className={styles.navButtons}>
           {filtered
             .map(([sectionKey]) => sectionKey)
@@ -229,8 +283,8 @@ export default function MdsSnapshot({
       </div>
 
       <div className={styles.scrollArea}>
-        {searchTerm ? (
-          // When searching, show all sections with results
+        {(searchTerm || selectedCovariate) ? (
+          // When searching or covariate selected, show all sections with results
           filtered
             .sort(([a], [b]) => {
               if (a.toLowerCase() === "control") return 1;

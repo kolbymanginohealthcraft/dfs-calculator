@@ -136,22 +136,49 @@
 
 .row {
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
 .row:hover {
-  /* background-color: #f0f0f0; */
+  background-color: rgba(127, 188, 66, 0.08);
+  transform: translateX(2px);
+  box-shadow: 0 2px 4px rgba(127, 188, 66, 0.15);
+}
+
+.row:hover::after {
+  content: "→";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-size: 0.9rem;
 }
 
 .selectedRow {
-  /* background-color: #a0d8df; */
+  background-color: rgba(127, 188, 66, 0.15);
   color: #0c436a;
   font-weight: bold;
-  transition: background-color 0.2s ease;
+  border-left: 3px solid var(--secondary-color);
+  transition: all 0.2s ease;
 }
 
 .selectedRow:hover {
-  /* background-color: #88cbd4 !important; */
+  background-color: rgba(127, 188, 66, 0.2);
+  transform: translateX(1px);
+}
+
+.selectedRow::before {
+  content: "✓";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-size: 0.8rem;
 }
 
 .covariateTable tr {

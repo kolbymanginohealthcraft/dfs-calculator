@@ -10,9 +10,9 @@ export default function Covariates({
   multipliers = {},
   onCovariateClick,
   selectedItems = [],
+  selectedCovariate = null,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCovariate, setSelectedCovariate] = useState(null);
 
   const formatNumber = (n) => Number(n).toFixed(2);
 
@@ -59,11 +59,8 @@ export default function Covariates({
     const itemsUsed = covariateRelatedItems?.[key]?.items ?? [];
     if (itemsUsed.length === 0) return;
 
-    const isAlreadySelected = selectedCovariate === key;
-    setSelectedCovariate(isAlreadySelected ? null : key);
-
     if (onCovariateClick) {
-      onCovariateClick(isAlreadySelected ? [] : itemsUsed);
+      onCovariateClick(key, itemsUsed);
     }
   };
 
@@ -96,7 +93,7 @@ export default function Covariates({
         {hasFile && (
           <p className={styles.covariateNote}>
             These items contributed to the expected discharge function score.
-            Click a row to view its related MDS items (if available).
+            Click a row to view its related MDS items in the MDS Data tab.
           </p>
         )}
       </div>

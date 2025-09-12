@@ -44,6 +44,7 @@ function AdvancedAppNew() {
   const [facilityName, setFacilityName] = useState("");
   const [facilityAddress, setFacilityAddress] = useState("");
   const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedCovariate, setSelectedCovariate] = useState(null);
   const [isRedacted, setIsRedacted] = useState(true);
   const [activeRightPanel, setActiveRightPanel] = useState('instructions');
   const [covariates, setCovariates] = useState({});
@@ -192,16 +193,37 @@ function AdvancedAppNew() {
       .save();
   };
 
-  const handleCovariateClick = (itemsArray) => {
+  const handleCovariateClick = (covariateKey, itemsArray) => {
     // If the clicked items match what's already selected, clear them
     const isSameSelection =
       itemsArray.length === selectedItems.length &&
       itemsArray.every((item) => selectedItems.includes(item));
 
-    const newSelection = isSameSelection ? [] : itemsArray;
+    if (isSameSelection) {
+      // Clear selection
+      setSelectedItems([]);
+      setSelectedCovariate(null);
+    } else {
+      // Set new selection and switch to MDS tab
+      setSelectedItems(itemsArray);
+      setSelectedCovariate(covariateKey);
+      setActiveRightPanel('mds');
+    }
 
-    console.log("[AdvancedAppNew.jsx] Setting selectedItems to:", newSelection);
-    setSelectedItems(newSelection);
+    console.log("[AdvancedAppNew.jsx] Covariate clicked:", covariateKey, "Items:", itemsArray);
+  };
+
+  const clearCovariateSelection = () => {
+    setSelectedItems([]);
+    setSelectedCovariate(null);
+    setActiveRightPanel('covariates'); // Switch back to covariates tab
+  };
+
+  const clearCovariateFilter = () => {
+    setSelectedItems([]);
+    setSelectedCovariate(null);
+    // Stay on MDS tab and reset to default section view
+    // The MdsSnapshot component will handle resetting to Section A
   };
 
   const toggleRedaction = () => {
@@ -214,6 +236,15 @@ function AdvancedAppNew() {
     { id: 'covariates', label: 'Covariates' },
     { id: 'imputation', label: 'Imputation' }
   ];
+
+  const handleTabChange = (tabId) => {
+    // Clear covariate selection when navigating away from MDS tab
+    if (activeRightPanel === 'mds' && tabId !== 'mds') {
+      setSelectedItems([]);
+      setSelectedCovariate(null);
+    }
+    setActiveRightPanel(tabId);
+  };
 
   const advancedNavbar = (
     <>
@@ -468,7 +499,7 @@ function AdvancedAppNew() {
                   <button
                     key={option.id}
                     className={`${styles.panelButton} ${activeRightPanel === option.id ? styles.panelButtonActive : ''}`}
-                    onClick={() => setActiveRightPanel(option.id)}
+                    onClick={() => handleTabChange(option.id)}
                   >
                     <span className={styles.panelLabel}>{option.label}</span>
                   </button>
@@ -497,6 +528,9 @@ function AdvancedAppNew() {
                       descriptions={descriptions}
                       icd10Descriptions={icd10Descriptions}
                       selectedItems={selectedItems}
+                      selectedCovariate={selectedCovariate}
+                      onClearSelection={clearCovariateSelection}
+                      onClearFilter={clearCovariateFilter}
                       isRedacted={isRedacted}
                     />
                   </Suspense>
@@ -511,6 +545,7 @@ function AdvancedAppNew() {
                       covariates={covariates}
                       multipliers={functionMultipliers}
                       onCovariateClick={handleCovariateClick}
+                      selectedCovariate={selectedCovariate}
                     />
                   </Suspense>
                 </div>

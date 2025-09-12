@@ -438,7 +438,7 @@ export default function ImputationTab({
                                   
                                   return (
                                     <tr key={covariateName}>
-                                      <td>{covariateName}</td>
+                                      <td title={covariateName}>{covariateName}</td>
                                       <td>{value}</td>
                                       <td>{formatNumber(multiplier)}</td>
                                       <td>{formatNumber(contribution)}</td>
@@ -446,6 +446,16 @@ export default function ImputationTab({
                                   );
                                 })}
                               </tbody>
+                              <tfoot>
+                                <tr className={styles.totalRow}>
+                                  <td colSpan="3" style={{ textAlign: "right", fontWeight: "bold" }}>
+                                    Total Imputation Score:
+                                  </td>
+                                  <td style={{ fontWeight: "bold", color: "#dc3545" }}>
+                                    {formatNumber(data.imputationScore)}
+                                  </td>
+                                </tr>
+                              </tfoot>
                             </table>
                           </div>
                         </td>
