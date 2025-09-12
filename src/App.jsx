@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomeScreen from './components/HomeScreen';
 import BasicApp from './components/BasicApp';
 import AdvancedAppNew from './components/AdvancedAppNew';
+import FAQ from './components/FAQ';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/basic/*" element={<BasicApp />} />
           <Route path="/advanced" element={<AdvancedAppNew />} />
+          <Route path="/faq" element={<FAQ />} />
         </Routes>
       </div>
     </Router>

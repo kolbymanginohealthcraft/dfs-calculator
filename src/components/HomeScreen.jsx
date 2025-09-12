@@ -13,11 +13,29 @@ const HomeScreen = () => {
     navigate('/advanced');
   };
 
+  const handleFAQ = () => {
+    navigate('/faq');
+  };
+
   return (
     <div className={styles['home-screen']}>
       {/* Hero Section */}
       <section className={styles['hero']}>
         <div className={styles['hero-background']}></div>
+        <div className={styles['hero-header']}>
+          <button 
+            className={styles['faq-link']}
+            onClick={handleFAQ}
+            title="Frequently Asked Questions"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+              <path d="M12 17h.01"/>
+            </svg>
+            <span>Need help? Check our FAQ</span>
+          </button>
+        </div>
         <div className={styles['hero-container']}>
           <div className={styles['hero-content']}>
             <div className={styles['hero-logo']}>
