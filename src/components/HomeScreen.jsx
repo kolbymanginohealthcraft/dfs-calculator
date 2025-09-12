@@ -135,7 +135,7 @@ const HomeScreen = () => {
               </div>
               <h3 className={styles['feature-title']}>MDS File Upload</h3>
               <p className={styles['feature-description']}>
-                Upload exported MDS XML files from your EMR for automated calculations
+                Upload exported MDS files from your EMR for automated calculations
               </p>
             </div>
 
@@ -146,9 +146,9 @@ const HomeScreen = () => {
                   <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                 </svg>
               </div>
-              <h3 className={styles['feature-title']}>Fast & Accurate</h3>
+              <h3 className={styles['feature-title']}>Immediate Results</h3>
               <p className={styles['feature-description']}>
-                Quick calculations with precise results for efficient discharge planning
+                Quick, precise calculations for efficient discharge planning
               </p>
             </div>
           </div>
@@ -207,7 +207,7 @@ const HomeScreen = () => {
               <h4 className={styles['disclaimer-title']}>Clinical Disclaimer</h4>
               <p className={styles['disclaimer-text']}>
                 This calculator provides estimates based on available data and should not replace 
-                clinical judgment. Results are for informational purposes only. Always consult 
+                clinical judgment. Results are for informational purposes only and do not guarantee results. Always consult 
                 with qualified healthcare professionals for patient care decisions and treatment planning.
               </p>
             </div>
