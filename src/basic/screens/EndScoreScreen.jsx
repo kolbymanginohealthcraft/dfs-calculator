@@ -82,6 +82,9 @@ const EndScoreScreen = () => {
 
   const endTotal = calcEndTotal();
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
+  
+  // Determine if end score meets expected score for accent border styling
+  const meetsExpectedScore = endTotal >= expectedScore;
 
   // Prepare export data for the basic app
   const exportData = {
@@ -119,7 +122,13 @@ const EndScoreScreen = () => {
       hasInteracted={hasInteracted}
       exportData={exportData}
     >
-      <div className="score-bar-chart-container">
+      <div 
+        className="score-bar-chart-container"
+        style={{
+          borderLeft: `4px solid ${meetsExpectedScore ? '#059669' : '#dc2626'}`,
+          background: `linear-gradient(90deg, ${meetsExpectedScore ? '#10b981' : '#ef4444'} 0%, transparent 4px), white`
+        }}
+      >
         <ScoreBarChart
           startTotal={startTotal}
           expectedScore={expectedScore}
@@ -135,6 +144,7 @@ const EndScoreScreen = () => {
         startScores={startScores}
         onScoreAdjustment={handleScoreAdjustment}
         mobilityType={mobilityType}
+        meetsExpectedScore={meetsExpectedScore}
       />
     </BasicLayout>
   );
