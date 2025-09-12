@@ -19,6 +19,7 @@ const FunctionItemsList = ({
   contributingIds = new Set(), // For advanced mode
   imputedItems = new Set(), // Items that have imputed start scores
   className = '',
+  meetsExpectedScore = null, // null, true, or false for accent border styling
 }) => {
   // Get items based on mode
   const getItems = () => {
@@ -315,8 +316,21 @@ const FunctionItemsList = ({
 
   const itemsData = getItems();
 
+  // Determine accent border styling
+  const getAccentBorderStyle = () => {
+    if (meetsExpectedScore === null) return {};
+    
+    return {
+      borderLeft: `4px solid ${meetsExpectedScore ? '#059669' : '#dc2626'}`,
+      background: `linear-gradient(90deg, ${meetsExpectedScore ? '#10b981' : '#ef4444'} 0%, transparent 4px), white`
+    };
+  };
+
   return (
-    <div className={`${styles.scoresContainer} ${className}`}>
+    <div 
+      className={`${styles.scoresContainer} ${className}`}
+      style={getAccentBorderStyle()}
+    >
       {itemsData.map(({ domain, items: domainItems }, index) => 
         renderDomainSection(domain, domainItems, index === 0)
       )}

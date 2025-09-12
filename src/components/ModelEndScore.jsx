@@ -28,6 +28,9 @@ const ModelEndScore = ({
   const startTotal = calculateFunctionScore(startScores);
   const contributingIds = getContributingItemIds(modeledValues);
 
+  // Determine if end score meets expected score for accent border styling
+  const meetsExpectedScore = modeledTotal >= weightedScore;
+
   const toggleFilter = () => {
     setFilterContributing((prev) => !prev);
   };
@@ -37,7 +40,13 @@ const ModelEndScore = ({
       <div className={styles.sticky}>
 
         {hasFile && (
-          <div className="score-bar-chart-container">
+          <div 
+            className="score-bar-chart-container"
+            style={{
+              borderLeft: `4px solid ${meetsExpectedScore ? '#059669' : '#dc2626'}`,
+              background: `linear-gradient(90deg, ${meetsExpectedScore ? '#10b981' : '#ef4444'} 0%, transparent 4px), white`
+            }}
+          >
             <ScoreBarChart
               startTotal={startTotal}
               endTotal={modeledTotal}
@@ -61,6 +70,7 @@ const ModelEndScore = ({
           contributingIds={contributingIds}
           mobilityType={mobilityType}
           imputedItems={imputedItems}
+          meetsExpectedScore={meetsExpectedScore}
         />
       )}
     </>
