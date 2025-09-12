@@ -8,7 +8,7 @@ import {
   getFunctionCovariates,
 } from "../utils/calculations";
 import { fetchFacilityInfo } from "../utils/facilityLookup";
-import { handleFileUpload } from "../utils/fileParser";
+import { handleFileUploadWithValidation } from "../utils/enhancedFileParser";
 import { functionMultipliers } from "../utils/functionMultipliers";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import useValueDescriptions from "../utils/useValueDescriptions";
@@ -18,6 +18,7 @@ import html2pdf from "html2pdf.js";
 import Navbar from "./Navbar";
 import ModeBanner from "./ModeBanner";
 import PatientHeader from "./PatientHeader";
+import ValidationError from "./ValidationError";
 import BasicLayout from "../basic/components/BasicLayout";
 import InstructionPanel from "../basic/components/InstructionPanel";
 import { instructionContent } from "../data/instructionContent";
@@ -47,6 +48,8 @@ function AdvancedAppNew() {
   const [activeRightPanel, setActiveRightPanel] = useState('instructions');
   const [covariates, setCovariates] = useState({});
   const [weightedScore, setWeightedScore] = useState(0);
+  const [validationError, setValidationError] = useState(null);
+  const [validationWarning, setValidationWarning] = useState(null);
   const uploadOpenFunctionRef = useRef(null);
   const exportRef = useRef();
 
@@ -54,7 +57,7 @@ function AdvancedAppNew() {
   const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
 
-  const onDrop = useCallback((acceptedFiles) => {
+  const onDrop = useCallback(async (acceptedFiles) => {
     // If empty array is passed, clear the file
     if (acceptedFiles.length === 0) {
       setFileName("");
@@ -65,19 +68,35 @@ function AdvancedAppNew() {
       setImputedItems(new Set());
       setCovariates({});
       setWeightedScore(0);
+      setValidationError(null);
+      setValidationWarning(null);
       return;
     }
     
     const file = acceptedFiles[0];
-    handleFileUpload(
+    const uploadSuccess = await handleFileUploadWithValidation(
       file,
       setFileName,
       setParsedValues,
       setGroupedSections,
       setModeledValues,
       setStartScores,
-      setImputedItems
+      setImputedItems,
+      setValidationError,
+      setValidationWarning
     );
+    
+    // If validation failed, clear all file data to prevent calculator from showing
+    if (!uploadSuccess) {
+      setFileName("");
+      setParsedValues({});
+      setGroupedSections({});
+      setModeledValues({});
+      setStartScores({});
+      setImputedItems(new Set());
+      setCovariates({});
+      setWeightedScore(0);
+    }
   }, []);
 
   // Callback to receive the open function from navbar
@@ -205,6 +224,12 @@ function AdvancedAppNew() {
 
   return (
     <div className={styles.appContainer}>
+      <ValidationError 
+        error={validationError}
+        warning={validationWarning}
+        onDismissError={() => setValidationError(null)}
+        onDismissWarning={() => setValidationWarning(null)}
+      />
       <BasicLayout 
         navbar={advancedNavbar}
         fullWidth={!hasFile}

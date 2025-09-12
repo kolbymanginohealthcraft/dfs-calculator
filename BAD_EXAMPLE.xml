@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Created from PDF via Acrobat SaveAsXML -->
+<!-- Mapping Table version: 28-February-2003 -->
+<TaggedPDF-doc>
+<?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="Adobe XMP Core 9.1-c001 79.675d0f7, 2023/06/11-19:21:16        ">
+   <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+      <rdf:Description rdf:about=""
+            xmlns:xmp="http://ns.adobe.com/xap/1.0/"
+            xmlns:pdf="http://ns.adobe.com/pdf/1.3/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/">
+         <xmp:CreateDate>2025-06-27T16:02:13-04:00</xmp:CreateDate>
+         <xmp:ModifyDate>2025-06-27T16:02:15-04:00</xmp:ModifyDate>
+         <pdf:Producer>iText 2.1.7 by 1T3XT</pdf:Producer>
+         <dc:format>xml</dc:format>
+      </rdf:Description>
+   </rdf:RDF>
+</x:xmpmeta>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                           
+<?xpacket end="w"?>
+<?xpacket end='r'?>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_0.jpg"/>
+Resident ____________________________________________________________ Identifier________________________________ Date _______________________ </Figure>
+
+<P>MINIMUM DATA SET (MDS) - Version 3.0 </P>
+
+<Part>
+<H3>RESIDENT ASSESSMENT AND CARE SCREENING </H3>
+
+<Sect>
+<H3>Nursing Home Comprehensive (NC) Item Set </H3>
+
+<Table>
+<TR>
+<TH>Section A - Identification Information </TH>
+</TR>
+
+<TR>
+<TH>A0050. Type of Record </TH>
+</TR>
+</Table>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_1.jpg"/>
+Enter Code□</Figure>
+
+<L>
+<LI>
+<Lbl>1. </Lbl>
+
+<LBody>Add new record → Continue to A0100, Facility Provider Numbers </LBody>
+</LI>
+
+<LI>
+<Lbl>2. </Lbl>
+
+<LBody>Modify existing record → Continue to A0100, Facility Provider Numbers </LBody>
+</LI>
+
+<LI>
+<Lbl>3. </Lbl>
+
+<LBody>Inactivate existing record → Skip to X0150, Type of Provider </LBody>
+</LI>
+</L>
+
+<Sect>
+<H5>A0100. Facility Provider Numbers </H5>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_2.jpg"/>
+A. National Provider Identifier (NPI):□□□□□□□□□□B. CMS Certification Number (CCN):□□□□□□□□□□□□C. State Provider Number:□□□□□□□□□□□□□□□</Figure>
+
+<P>A0200. Type of Provider </P>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_3.jpg"/>
+Enter Code□</Figure>
+
+<P>Type of provider</P>
+
+<L>
+<LI>
+<Lbl>1. </Lbl>
+
+<LBody>Nursing home (SNF/NF)</LBody>
+</LI>
+
+<LI>
+<Lbl>2. </Lbl>
+
+<LBody>Swing Bed </LBody>
+</LI>
+</L>
+
+<P>A0310. Type of Assessment </P>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_4.jpg"/>
+Enter Code□□</Figure>
+
+<P>A. Federal OBRA Reason for Assessment </P>
+
+<L>
+<LI>
+<Lbl>01. </Lbl>
+
+<LBody>Admission assessment (required by day 14)</LBody>
+</LI>
+
+<LI>
+<Lbl>02. </Lbl>
+
+<LBody>Quarterly review assessment </LBody>
+</LI>
+
+<LI>
+<Lbl>03. </Lbl>
+
+<LBody>Annual assessment </LBody>
+</LI>
+
+<LI>
+<Lbl>04. </Lbl>
+
+<LBody>Significant change in status assessment </LBody>
+</LI>
+
+<LI>
+<Lbl>05. </Lbl>
+
+<LBody>Significant correction to prior comprehensive assessment </LBody>
+</LI>
+</L>
+
+<P><Figure>
+
+<ImageData src="images/Bender MDS_img_5.jpg"/>
+□□99. None of the aboveassessmentprior quarterlytoSignificant correction06. </Figure>
+</P>
+
+<P>Enter Code </P>
+
+<P>B. PPS Assessment PPS Scheduled Assessment for a Medicare Part A Stay</P>
+
+<P>01. 5-day scheduled assessment </P>
+
+<P>PPS Unscheduled Assessment for a Medicare Part A Stay</P>
+
+<P>08. IPA - Interim Payment Assessment </P>
+
+<P><Figure>
+
+<ImageData src="images/Bender MDS_img_6.jpg"/>
+99. None of the aboveNot PPS Assessment</Figure>
+</P>
+
+<P><Figure>
+
+<ImageData src="images/Bender MDS_img_7.jpg"/>
+□□□1. Yes </Figure>
+Enter Code E. Is this assessment the first assessment (OBRA, Scheduled PPS, or Discharge) since the most recent admission/entry or reentry?</P>
+
+<P>0. No </P>
+
+<P>Enter Code F. Entry/discharge reporting</P>
+
+<P>01. Entry tracking record</P>
+
+<L>
+<LI>
+<Lbl>10. </Lbl>
+
+<LBody>Discharge assessment-return not anticipated</LBody>
+</LI>
+
+<LI>
+<Lbl>11. </Lbl>
+
+<LBody>Discharge assessment-return anticipated</LBody>
+</LI>
+
+<LI>
+<Lbl>12. </Lbl>
+
+<LBody>Death in facility tracking record</LBody>
+</LI>
+</L>
+
+<P>99. None of the above </P>
+
+<Sect>
+<H5>A0310 continued on next page </H5>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_8.jpg"/>
+Section A - Identification InformationA0310. Type of Assessment - Continued Resident ____________________________________________________________ Identifier________________________________ Date _______________________ </Figure>
+
+<P>Enter Code G. Type of discharge - Complete only if A0310F = 10 or 11 </P>
+
+<P>1. Planned</P>
+
+<P>□ </P>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_9.jpg"/>
+2. Unplanned </Figure>
+
+<P>Enter Code G1. Is this a SNF Part A Interrupted Stay?</P>
+
+<P>0. No</P>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_10.jpg"/>
+□1. Yes </Figure>
+
+<P>Enter Code<Figure>
+
+<ImageData src="images/Bender MDS_img_11.jpg"/>
+□0</Figure>
+</P>
+
+<P>H. Is this a SNF Part A PPS Discharge Assessment?</P>
+
+<L>
+<LI>
+<Lbl>0. </Lbl>
+
+<LBody>No </LBody>
+</LI>
+
+<LI>
+<Lbl>1. </Lbl>
+
+<LBody>Yes </LBody>
+</LI>
+</L>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_12.jpg"/>
+A0410. Unit Certification or Licensure DesignationEnter Code□</Figure>
+
+<L>
+<LI>
+<Lbl>1. </Lbl>
+
+<LBody>Unit is neither Medicare nor Medicaid certified and MDS data is not required by the State</LBody>
+</LI>
+
+<LI>
+<Lbl>2. </Lbl>
+
+<LBody>Unit is neither Medicare nor Medicaid certified but MDS data is required by the State</LBody>
+</LI>
+
+<LI>
+<Lbl>3. </Lbl>
+
+<LBody>Unit is Medicare and/or Medicaid certified </LBody>
+</LI>
+</L>
+
+<Table>
+<TR>
+<TH>A0500. Legal Name of Resident </TH>
+
+<TH/>
+
+<TH/>
+</TR>
+
+<TR>
+<TD>A. First name:</TD>
+
+<TD>B. </TD>
+
+<TD>Middle initial:</TD>
+</TR>
+
+<TR>
+<TD><Figure>
+
+<ImageData src="images/Bender MDS_img_13.jpg"/>
+C. Last name:□□□□□□□□□□□□□□□□□□D. Suffix:□□□</Figure>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_14.jpg"/>
+Bender</Figure>
+</TD>
+
+<TD/>
+
+<TD><Figure>
+
+<ImageData src="images/Bender MDS_img_15.jpg"/>
+</Figure>
+</TD>
+</TR>
+
+<TR>
+<TD>A0600. Social Security and Medicare Numbers </TD>
+
+<TD/>
+
+<TD/>
+</TR>
+</Table>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_16.jpg"/>
+□□□□□□□□□□□□</Figure>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_17.jpg"/>
+□</Figure>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_18.jpg"/>
+A. Social Security Number:□□□ -□□ -□□□□B. Medicare Number:□□□□□□□□□□□□</Figure>
+
+<P>A0700. Medicaid Number -Enter “+” if pending, “N” if not a Medicaid recipient</P>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_19.jpg"/>
+□□□□□□□□□□□□□□</Figure>
+</Sect>
+</Sect>
+
+<Sect>
+<H5>A0800. Gender </H5>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_20.jpg"/>
+Enter Code□</Figure>
+
+<L>
+<LI>
+<Lbl>1. </Lbl>
+
+<LBody>Male </LBody>
+</LI>
+
+<LI>
+<Lbl>2. </Lbl>
+
+<LBody>Female </LBody>
+</LI>
+</L>
+</Sect>
+
+<Sect>
+<H5>A0900. Birth Date </H5>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_21.jpg"/>
+□□ -□□ -□□□□Month Day Year </Figure>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_22.jpg"/>
+Resident ____________________________________________________________ Identifier________________________________ Date _______________________ </Figure>
+</Sect>
+</Sect>
+
+<Sect>
+<H3>Section A - Identification Information </H3>
+
+<Sect>
+<H5>A1005. Ethnicity </H5>
+
+<P>Are you of Hispanic, Latino/a, or Spanish origin? </P>
+
+<P>↓	 Check all that apply </P>
+
+<L>
+<LI><Figure>
+
+<ImageData src="images/Bender MDS_img_23.jpg"/>
+□</Figure>
+
+<Lbl>A. </Lbl>
+
+<LBody>No, not of Hispanic, Latino/a, or Spanish origin</LBody>
+</LI>
+
+<LI><Figure>
+
+<ImageData src="images/Bender MDS_img_24.jpg"/>
+□</Figure>
+
+<Lbl>B. </Lbl>
+
+<LBody>Yes, Mexican, Mexican American, Chicano/a </LBody>
+</LI>
+
+<LI>□ <Figure>
+
+<ImageData src="images/Bender MDS_img_25.jpg"/>
+</Figure>
+C. Yes, Puerto Rican </LI>
+
+<LI><Figure>
+
+<ImageData src="images/Bender MDS_img_26.jpg"/>
+□</Figure>
+
+<Lbl>D. </Lbl>
+
+<LBody>Yes, Cuban </LBody>
+</LI>
+
+<LI><Figure>
+
+<ImageData src="images/Bender MDS_img_27.jpg"/>
+□</Figure>
+
+<Lbl>E. </Lbl>
+
+<LBody>Yes, another Hispanic, Latino/a, or Spanish origin </LBody>
+</LI>
+
+<LI><Figure>
+
+<ImageData src="images/Bender MDS_img_28.jpg"/>
+□</Figure>
+
+<Lbl>X. </Lbl>
+
+<LBody>Resident unable to respond </LBody>
+</LI>
+</L>
+<Figure>
+
+<ImageData src="images/Bender MDS_img_29.jpg"/>
+□</Figure>
+
+<P>Y. Resident declines to respond </P>
+
+<P>A1010. Race </P>
+
+<P>What is your race? </P>
+
+<P>↓	 Check all that apply </P>
+
+<L>
+<LI>□ <Figure>
+
+<ImageData src="images/Bender MDS_img_30.jpg"/>
+</Figure>
+A. White </LI>
+
+<LI>□ <Figure>
+
+<ImageData src="images/Bender MDS_img_31.jpg"/>
+</Figure>
+B. B
