@@ -103,7 +103,7 @@
 .badge {
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: none;
   padding: var(--spacing-sm) var(--spacing-lg);
   border-radius: 50px;
   font-size: 0.9rem;
@@ -127,25 +127,43 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-xs);
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
-  font-weight: 500;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
   font-family: inherit;
+  box-shadow: 0 4px 15px rgba(0, 124, 187, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.faq-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.faq-link:hover::before {
+  left: 100%;
 }
 
 .faq-link:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent-color));
+  border-color: rgba(255, 255, 255, 0.5);
   color: white;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 124, 187, 0.4);
 }
 
 .faq-link svg {

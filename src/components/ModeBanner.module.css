@@ -128,6 +128,10 @@
   transform: rotate(180deg);
 }
 
+.buttonText {
+  transition: opacity 0.3s ease;
+}
+
 /* Progress Navigation Styles */
 .progressNavigation {
   display: flex;
@@ -171,12 +175,10 @@
   box-shadow: 0 2px 4px rgba(12, 67, 106, 0.2), inset 0 0 0 1px rgba(12, 67, 106, 0.1);
 }
 
-.activeStep .stepNumber {
+.activeStep .stepText {
   color: var(--text-primary);
-}
-
-.activeStep .stepLabel {
-  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.8rem;
 }
 
 .completedStep {
@@ -185,12 +187,9 @@
   color: var(--text-primary);
 }
 
-.completedStep .stepNumber {
+.completedStep .stepText {
   color: var(--text-primary);
-}
-
-.completedStep .stepLabel {
-  color: var(--text-primary);
+  font-weight: 500;
 }
 
 .disabledStep {
@@ -200,11 +199,7 @@
   cursor: not-allowed;
 }
 
-.disabledStep .stepNumber {
-  color: #a0aec0;
-}
-
-.disabledStep .stepLabel {
+.disabledStep .stepText {
   color: #a0aec0;
 }
 
@@ -234,34 +229,59 @@
   opacity: 0.8;
 }
 
-.stepTextContainer {
+.stepText {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
+  align-items: center;
 }
 
 .stepNumber {
-  font-size: 0.65rem;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
+  margin-right: 0;
+  font-weight: 500;
+  color: inherit;
+}
+
+.stepColon {
+  margin-right: 4px;
+  font-weight: 500;
   color: inherit;
 }
 
 .stepLabel {
-  font-size: 0.6rem;
   font-weight: 500;
-  line-height: 1;
-  text-align: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 90px;
   color: inherit;
 }
 
 /* Responsive design */
+@media (max-width: 1024px) {
+  .stepColon {
+    display: none;
+  }
+  
+  .stepLabel {
+    display: none;
+  }
+  
+  .buttonText {
+    display: none;
+  }
+  
+  .switchButton {
+    padding: var(--spacing-sm);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+}
+
 @media (max-width: 768px) {
   .modeBanner {
     padding: var(--spacing-sm) var(--spacing-lg);
@@ -323,13 +343,17 @@
     height: 6px;
   }
   
-  .stepNumber {
-    font-size: 0.6rem;
+  .stepText {
+    font-size: 0.7rem;
+    max-width: 85px;
   }
   
   .stepLabel {
-    font-size: 0.55rem;
-    max-width: 75px;
+    display: none;
+  }
+  
+  .activeStep .stepText {
+    font-size: 0.75rem;
   }
   
   .progressLine {
@@ -337,8 +361,24 @@
   }
   
   .switchButton {
-    width: 100%;
-    justify-content: center;
-    padding: var(--spacing-sm) var(--spacing-md);
+    width: 36px;
+    height: 36px;
+  }
+  
+  .switchButton svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepNumber {
+    display: none;
+  }
+  
+  .stepText::before {
+    content: attr(data-step-number);
+    font-weight: 500;
+    color: inherit;
   }
 }
