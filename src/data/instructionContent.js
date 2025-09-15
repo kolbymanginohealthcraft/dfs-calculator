@@ -36,7 +36,7 @@ export const instructionContent = {
   
   end: {
     title: "End Score Screen",
-    whatYoureDoing: "Set the interim or final functional ability score for each self-care and mobility item. These scores represent the patient's functional abilities at the end of their episode or at any interim point in their stay.",
+    whatYoureDoing: "Set the interim or final functional ability score for each self-care and mobility item.",
     howToUse: [
       "Use the +/- buttons to adjust each score",
       "Watch how the gains bring the score closer to the expected score",
