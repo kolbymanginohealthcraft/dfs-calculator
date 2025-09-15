@@ -3,22 +3,13 @@
 // Common score values used across multiple instruction types
 const commonScoreValues = [
   { number: "6", description: "Independent" },
-  { number: "5", description: "Supervision or Setup" },
-  { number: "4", description: "Minimal Assistance" },
-  { number: "3", description: "Moderate Assistance" },
-  { number: "2", description: "Substantial/Maximal Assistance" },
+  { number: "5", description: "Setup or clean-up assistance" },
+  { number: "4", description: "Supervision or touching assistance" },
+  { number: "3", description: "Partial/moderate assistance" },
+  { number: "2", description: "Substantial/maximal assistance" },
   { number: "1", description: "Dependent" }
 ];
 
-// Advanced score values (slightly different description for score 2)
-const advancedScoreValues = [
-  { number: "6", description: "Independent" },
-  { number: "5", description: "Supervision or Setup" },
-  { number: "4", description: "Minimal Assistance" },
-  { number: "3", description: "Moderate Assistance" },
-  { number: "2", description: "Maximal Assistance" },
-  { number: "1", description: "Dependent" }
-];
 
 export const instructionContent = {
   start: {
@@ -63,6 +54,6 @@ export const instructionContent = {
       "Watch how the gains bring the score closer to the expected score",
       "When finished, you can export the results"
     ],
-    scoreValues: advancedScoreValues
+    scoreValues: commonScoreValues
   }
 };

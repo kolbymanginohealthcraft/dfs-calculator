@@ -96,26 +96,27 @@
 
 .mobilityBtn {
   background: white;
-  border: 1px solid #ccc;
+  border: 1px solid #007cbb;
   border-radius: 20px;
   padding: 4px 12px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
-  color: #666;
+  color: #007cbb;
+  transition: all 0.2s ease;
 }
 
 
 .mobilityBtn.active {
-  background: rgba(12, 67, 106, 0.1);
-  color: #0c436a;
-  border: 2px solid #0c436a;
+  background: #007cbb;
+  color: white;
+  border: 1px solid #007cbb;
 }
 
 .mobilityBtn:hover:not(.active) {
-  background: #f8f9fa;
-  border-color: #999;
-  color: #0c436a;
+  background: #f0f8ff;
+  border-color: #0056b3;
+  color: #0056b3;
 }
 
 

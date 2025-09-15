@@ -33,9 +33,9 @@ const ModeBanner = ({
 
   // Progress steps for basic mode
   const steps = [
-    { key: 'start', title: 'Step 1: Start Scores', color: getScoreTypeColor('start', 'primary') },
-    { key: 'expected', title: 'Step 2: Expected Score', color: getScoreTypeColor('expected', 'primary') },
-    { key: 'end', title: 'Step 3: End Scores', color: getScoreTypeColor('end', 'primary') },
+    { key: 'start', title: 'Step 1: Start GG Scores', color: getScoreTypeColor('start', 'primary') },
+    { key: 'expected', title: 'Step 2: Expected DFS', color: getScoreTypeColor('expected', 'primary') },
+    { key: 'end', title: 'Step 3: Interim/End GG Scores', color: getScoreTypeColor('end', 'primary') },
   ];
 
   const getStepIndex = (stepKey) => {

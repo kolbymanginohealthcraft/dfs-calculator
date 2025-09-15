@@ -259,6 +259,9 @@ const FunctionItemsList = ({
         const mobilityTypeText = mobilityType === 'Walk' ? 'Walk' : 'Wheelchair';
         return `${domainName} Items (${mobilityTypeText})`;
       }
+      if (domain === 'mobility' && variant === 'start') {
+        return `${domainName} Items (choose type)`;
+      }
       return `${domainName} Items`;
     };
 

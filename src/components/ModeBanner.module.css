@@ -237,7 +237,7 @@
   color: inherit;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 120px;
+  /* max-width: 120px; */
   display: flex;
   align-items: center;
 }
@@ -260,7 +260,7 @@
 }
 
 /* Responsive design */
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .stepColon {
     display: none;
   }

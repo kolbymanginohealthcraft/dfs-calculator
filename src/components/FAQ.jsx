@@ -39,7 +39,7 @@ const FAQ = () => {
       questions: [
         {
           question: "What's the difference between Basic and Advanced modes?",
-          answer: "Basic Mode allows for quick manual entry of function scores for straightforward assessments. Advanced Mode enables you to upload MDS XML files from your EMR for comprehensive, automated analysis with over 100+ data points that provide more precise expected scores."
+          answer: "Basic Mode allows for quick manual entry of function scores for straightforward assessments. Advanced Mode enables you to upload MDS files in XML format from your EMR (electronic medical record) system for comprehensive, automated analysis with over 100+ data points that provide more precise expected scores."
         },
         {
           question: "Which mode should I choose?",
@@ -81,7 +81,73 @@ const FAQ = () => {
         },
         {
           question: "What do the different score levels mean?",
-          answer: "Score 6 = Independent, Score 5 = Supervision or Setup, Score 4 = Minimal Assistance, Score 3 = Moderate Assistance, Score 2 = Substantial/Maximal Assistance, Score 1 = Dependent. These align with standard MDS assessment criteria."
+          answer: (
+            <div className={styles['score-levels-container']}>
+              <p className={styles['score-intro']}>
+                Function scores are based on the resident's usual performance at the start of the stay (admission) for each activity. 
+                If helper assistance is required because the resident's performance is unsafe or of poor quality, score according to 
+                the amount of assistance provided. Activities may be completed with or without assistive devices.
+              </p>
+              <div className={styles['score-levels']}>
+                <div className={styles['score-level']}>
+                  <span className={styles['score-number']}>06</span>
+                  <div className={styles['score-content']}>
+                    <strong className={styles['score-title']}>Independent</strong>
+                    <p className={styles['score-description']}>
+                      Resident completes the activity by themself with no assistance from a helper.
+                    </p>
+                  </div>
+                </div>
+                <div className={styles['score-level']}>
+                  <span className={styles['score-number']}>05</span>
+                  <div className={styles['score-content']}>
+                    <strong className={styles['score-title']}>Setup or clean-up assistance</strong>
+                    <p className={styles['score-description']}>
+                      Helper sets up or cleans up; resident completes activity. Helper assists only prior to or following the activity.
+                    </p>
+                  </div>
+                </div>
+                <div className={styles['score-level']}>
+                  <span className={styles['score-number']}>04</span>
+                  <div className={styles['score-content']}>
+                    <strong className={styles['score-title']}>Supervision or touching assistance</strong>
+                    <p className={styles['score-description']}>
+                      Helper provides verbal cues and/or touching/steadying and/or contact guard assistance as resident completes activity. 
+                      Assistance may be provided throughout the activity or intermittently.
+                    </p>
+                  </div>
+                </div>
+                <div className={styles['score-level']}>
+                  <span className={styles['score-number']}>03</span>
+                  <div className={styles['score-content']}>
+                    <strong className={styles['score-title']}>Partial/moderate assistance</strong>
+                    <p className={styles['score-description']}>
+                      Helper does LESS THAN HALF the effort. Helper lifts, holds, or supports trunk or limbs, but provides less than half the effort.
+                    </p>
+                  </div>
+                </div>
+                <div className={styles['score-level']}>
+                  <span className={styles['score-number']}>02</span>
+                  <div className={styles['score-content']}>
+                    <strong className={styles['score-title']}>Substantial/maximal assistance</strong>
+                    <p className={styles['score-description']}>
+                      Helper does MORE THAN HALF the effort. Helper lifts or holds trunk or limbs and provides more than half the effort.
+                    </p>
+                  </div>
+                </div>
+                <div className={styles['score-level']}>
+                  <span className={styles['score-number']}>01</span>
+                  <div className={styles['score-content']}>
+                    <strong className={styles['score-title']}>Dependent</strong>
+                    <p className={styles['score-description']}>
+                      Helper does ALL of the effort. Resident does none of the effort to complete the activity. 
+                      Or, the assistance of 2 or more helpers is required for the resident to complete the activity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
         },
         {
           question: "How accurate are the expected scores?",
