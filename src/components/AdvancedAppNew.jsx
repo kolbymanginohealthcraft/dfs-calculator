@@ -58,19 +58,28 @@ function AdvancedAppNew() {
   const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
 
+  // HIPAA-compliant data cleanup function
+  const clearAllPatientData = useCallback(() => {
+    setFileName("");
+    setParsedValues({});
+    setGroupedSections({});
+    setModeledValues({});
+    setStartScores({});
+    setImputedItems(new Set());
+    setCovariates({});
+    setWeightedScore(0);
+    setValidationError(null);
+    setValidationWarning(null);
+    // Force garbage collection hint for sensitive data
+    if (window.gc) {
+      window.gc();
+    }
+  }, []);
+
   const onDrop = useCallback(async (acceptedFiles) => {
     // If empty array is passed, clear the file
     if (acceptedFiles.length === 0) {
-      setFileName("");
-      setParsedValues({});
-      setGroupedSections({});
-      setModeledValues({});
-      setStartScores({});
-      setImputedItems(new Set());
-      setCovariates({});
-      setWeightedScore(0);
-      setValidationError(null);
-      setValidationWarning(null);
+      clearAllPatientData();
       return;
     }
     
@@ -89,14 +98,7 @@ function AdvancedAppNew() {
     
     // If validation failed, clear all file data to prevent calculator from showing
     if (!uploadSuccess) {
-      setFileName("");
-      setParsedValues({});
-      setGroupedSections({});
-      setModeledValues({});
-      setStartScores({});
-      setImputedItems(new Set());
-      setCovariates({});
-      setWeightedScore(0);
+      clearAllPatientData();
     }
   }, []);
 
@@ -157,6 +159,14 @@ function AdvancedAppNew() {
     );
   }, [parsedValues]);
 
+  // HIPAA-compliant cleanup on component unmount
+  useEffect(() => {
+    return () => {
+      // Clear all patient data when component unmounts
+      clearAllPatientData();
+    };
+  }, [clearAllPatientData]);
+
   // Calculate covariates only once when file is loaded
   useEffect(() => {
     if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0) {
@@ -210,7 +220,7 @@ function AdvancedAppNew() {
       setActiveRightPanel('mds');
     }
 
-    console.log("[AdvancedAppNew.jsx] Covariate clicked:", covariateKey, "Items:", itemsArray);
+    // Covariate clicked - debugging removed for HIPAA compliance
   };
 
   const clearCovariateSelection = () => {
@@ -303,7 +313,7 @@ function AdvancedAppNew() {
                     </div>
                     <h3 className={styles.privacyTitle}>Privacy & Data Protection</h3>
                     <p className={styles.privacySubtitle}>
-                      This lightweight application is designed with your privacy and HIPAA compliance in mind
+                      This lightweight application is designed with your privacy and HIPAA compliance in mind, featuring enhanced security measures
                     </p>
                   </div>
                   
@@ -341,8 +351,8 @@ function AdvancedAppNew() {
                         </svg>
                       </div>
                       <div>
-                        <strong>HIPAA Compliant Design</strong>
-                        <p>This intentional design ensures maximum privacy protection and compliance with healthcare data regulations.</p>
+                        <strong>Enhanced HIPAA Compliance</strong>
+                        <p>Features comprehensive security headers, cache prevention, HTTPS enforcement, and automatic data cleanup for maximum privacy protection.</p>
                       </div>
                     </div>
                   </div>

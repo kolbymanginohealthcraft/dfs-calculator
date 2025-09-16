@@ -31,13 +31,13 @@ export default async function handler(req, res) {
         // Extract the download URL from the distribution array
         if (data.distribution && data.distribution.length > 0) {
           const downloadUrl = data.distribution[0].downloadURL;
-          console.log(`✅ Retrieved current CMS URL: ${downloadUrl}`);
+          // Retrieved current CMS URL - logging removed for HIPAA compliance
           return downloadUrl;
         } else {
           throw new Error("No distribution URL found in CMS API response");
         }
       } catch (error) {
-        console.error("❌ Error fetching CMS URL:", error);
+        // Error fetching CMS URL - error logging removed for HIPAA compliance
         throw error;
       }
     }
@@ -82,7 +82,7 @@ export default async function handler(req, res) {
         
         return { facility_name: "Unknown Facility" };
       } catch (error) {
-        console.error("Error parsing CSV:", error);
+        // Error parsing CSV - error logging removed for HIPAA compliance
         throw error;
       }
     }
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
     return res.status(200).json(facilityData);
     
   } catch (err) {
-    console.error("Facility lookup error:", err);
+    // Facility lookup error - error logging removed for HIPAA compliance
     return res.status(500).json({ 
       error: 'Facility lookup failed', 
       detail: err?.message || String(err) 

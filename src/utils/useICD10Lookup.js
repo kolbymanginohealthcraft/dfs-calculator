@@ -9,20 +9,20 @@ const useICD10Lookup = () => {
     if (!hasLoaded.current) {
       hasLoaded.current = true;
       const url = "/icd10_lookup_2025.json";
-      console.log("📦 Fetching ICD data from:", url);
+      // Fetching ICD data - logging removed for HIPAA compliance
 
       fetch(url)
         .then((res) => {
-          console.log("🌐 Fetch response:", res);
+          // Fetch response received - logging removed for HIPAA compliance
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
           return res.json();
         })
         .then((data) => {
-          console.log("📚 Loaded ICD descriptions:", Object.keys(data).length);
+          // ICD descriptions loaded - logging removed for HIPAA compliance
           setLookup(data);
         })
         .catch((err) => {
-          console.error("❌ Failed to load ICD-10 descriptions", err);
+          // Failed to load ICD-10 descriptions - error logging removed for HIPAA compliance
         });
     }
   }, []);

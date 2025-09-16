@@ -80,6 +80,10 @@ export function handleFileUpload(
 
   file.text().then((text) => {
     const parsed = parseXml(text);
+    
+    // HIPAA compliance: Clear the file text from memory immediately after parsing
+    text = null;
+    
     setParsedValues(parsed);
 
     const grouped = {};

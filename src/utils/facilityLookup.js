@@ -10,7 +10,7 @@ export async function fetchFacilityInfo(ccn, setFacilityName, setFacilityAddress
     setFacilityName(name);
     setFacilityAddress(address);
   } catch (error) {
-    console.error("Failed to fetch facility name:", error);
+    // Failed to fetch facility name - error logging removed for HIPAA compliance
     setFacilityName("Lookup failed");
     setFacilityAddress("");
   }
