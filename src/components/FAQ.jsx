@@ -1,10 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './FAQ.module.css';
 
 const FAQ = () => {
   const navigate = useNavigate();
   const [openItems, setOpenItems] = useState(new Set());
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const searchInputRef = useRef(null);
+
+  // Auto-focus search input when component mounts
+  useEffect(() => {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
 
   const toggleItem = (index) => {
     const newOpenItems = new Set(openItems);
@@ -14,6 +24,88 @@ const FAQ = () => {
       newOpenItems.add(index);
     }
     setOpenItems(newOpenItems);
+  };
+
+  const clearSearch = () => {
+    setSearchTerm('');
+    setOpenItems(new Set()); // Close all items when clearing search
+  };
+
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+  };
+
+  const handleSearchBlur = () => {
+    setIsSearchFocused(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      if (searchTerm) {
+        // First escape: clear search
+        clearSearch();
+      } else if (isSearchFocused) {
+        // Second escape: exit search focus
+        searchInputRef.current?.blur();
+      }
+    }
+  };
+
+  // Function to highlight matching text
+  const highlightText = (text, searchTerm) => {
+    if (!searchTerm.trim()) {
+      return text;
+    }
+
+    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    
+    // If text is a string, process it normally
+    if (typeof text === 'string') {
+      const parts = text.split(regex);
+      return parts.map((part, index) => {
+        if (regex.test(part)) {
+          return (
+            <span key={index} className={styles['highlight']}>
+              {part}
+            </span>
+          );
+        }
+        return part;
+      });
+    }
+    
+    // If text is JSX, recursively process it
+    if (React.isValidElement(text)) {
+      const processChildren = (children) => {
+        return React.Children.map(children, (child, index) => {
+          if (typeof child === 'string') {
+            const parts = child.split(regex);
+            return parts.map((part, partIndex) => {
+              if (regex.test(part)) {
+                return (
+                  <span key={`${index}-${partIndex}`} className={styles['highlight']}>
+                    {part}
+                  </span>
+                );
+              }
+              return part;
+            });
+          } else if (React.isValidElement(child)) {
+            return React.cloneElement(child, {
+              key: child.key || index,
+              children: processChildren(child.props.children)
+            });
+          }
+          return child;
+        });
+      };
+
+      return React.cloneElement(text, {
+        children: processChildren(text.props.children)
+      });
+    }
+    
+    return text;
   };
 
   const faqData = [
@@ -30,7 +122,7 @@ const FAQ = () => {
         },
         {
           question: "Is this tool CMS compliant?",
-          answer: "Yes, the DFS Calculator is based on CMS legislation and regulatory requirements for discharge planning. It follows established guidelines and standards to ensure compliance with healthcare regulations."
+          answer: "Yes, the DFS Calculator is based on documented CMS guidance and standards."
         }
       ]
     },
@@ -38,22 +130,42 @@ const FAQ = () => {
       category: "Getting Started",
       questions: [
         {
-          question: "What's the difference between Basic and Advanced modes?",
-          answer: "Basic Mode allows for quick manual entry of function scores for straightforward assessments. Advanced Mode enables you to upload MDS files in XML format from your EMR (electronic medical record) system for comprehensive, automated analysis with over 100+ data points that provide more precise expected scores."
-        },
-        {
-          question: "Which mode should I choose?",
-          answer: "Choose Basic Mode if you need a quick assessment or don't have access to MDS files. Choose Advanced Mode if you have MDS XML files available and want the most accurate calculations based on comprehensive patient data."
+          question: "How do I access the DFS Calculator?",
+          answer: "The tool is accessed via the Aegis Therapies myCare Portal. Users will use their Aegis assigned credentials to log onto myCare. Once logged on locate the DFS Calculator Tile. If desired, the tile can be saved as a favorite. [potentially need to build these out a bit for employees vs. clients]"
         },
         {
           question: "Do I need to create an account?",
-          answer: "No, the DFS Calculator is designed to be used without requiring user accounts or registration. Simply choose your mode and start using the tool immediately."
+          answer: "No, the DFS Calculator is designed to be used without requiring any additional user accounts or registration."
+        },
+        {
+          question: "What's the difference between Basic and Advanced modes?",
+          answer: (
+            <div>
+              <p><strong>Basic Mode</strong> allows for quick manual entry of approximate function scores for discharge planning.</p>
+              <div className={styles['mode-separator']}></div>
+              <p><strong>Advanced Mode</strong> enables you to upload MDS files in XML format from your EMR (electronic medical record) system for comprehensive, automated analysis with over 100+ data points that provide more precise expected scores.</p>
+            </div>
+          )
+        },
+        {
+          question: "Which mode should I choose?",
+          answer: (
+            <div>
+              <p>Choose <strong>Basic Mode</strong> if you need a quick approximation or are not able to export the MDS file.</p>
+              <div className={styles['mode-separator']}></div>
+              <p>Choose <strong>Advanced Mode</strong> if you have MDS XML files available and want the most accurate calculations based on comprehensive patient data.</p>
+            </div>
+          )
         }
       ]
     },
     {
-      category: "File Upload & Data",
+      category: "Data and File Uploads",
       questions: [
+        {
+          question: "Is my patient data secure?",
+          answer: "The DFS Calculator processes data locally in your browser. No patient data is stored on devices nor on external servers. However, always follow your facility's data security protocols when using any clinical tools."
+        },
         {
           question: "What file formats are supported?",
           answer: "The Advanced Mode supports MDS files in XML format. These are typically exported from your Electronic Medical Record (EMR) system. The tool processes standard MDS assessment data to calculate function scores."
@@ -63,30 +175,26 @@ const FAQ = () => {
           answer: "The tool processes comprehensive MDS data including patient demographics, functional assessments (GG items), cognitive function (BIMS scores), communication abilities, continence status, mobility type, BMI, and ICD-10 diagnosis codes to calculate accurate function scores."
         },
         {
-          question: "Is my patient data secure?",
-          answer: "The DFS Calculator processes data locally in your browser. No patient data is stored on external servers. However, always follow your facility's data security protocols when using any clinical tools."
-        },
-        {
-          question: "What if my MDS file has missing data?",
-          answer: "The tool includes imputation capabilities to handle missing data points. It uses statistical models based on available patient information to estimate missing function scores, ensuring calculations can still be performed even with incomplete data."
+          question: "What if my MDS file has missing data or Activity Not Attempted (ANA) scores?",
+          answer: (
+            <div>
+              <p>If you are using the <strong>Basic mode</strong> and the MDS has items that are scored using anything other than 1 through 6, enter a default score of 1.</p>
+              <div className={styles['mode-separator']}></div>
+              <p>If you are using the <strong>Advanced mode</strong>, the tool includes imputation capabilities to handle missing data points. It uses statistical models based on available patient information to estimate missing function scores, ensuring calculations can still be performed even with incomplete data.</p>
+            </div>
+          )
         }
       ]
     },
     {
-      category: "Scoring & Calculations",
+      category: "Scoring and Calculations",
       questions: [
-        {
-          question: "How are function scores calculated?",
-          answer: "Function scores range from 1 (Dependent) to 6 (Independent), with intermediate levels for different assistance needs. The tool calculates expected scores based on patient characteristics, comorbidities, and functional status using validated algorithms."
-        },
         {
           question: "What do the different score levels mean?",
           answer: (
             <div className={styles['score-levels-container']}>
               <p className={styles['score-intro']}>
-                Function scores are based on the resident's usual performance at the start of the stay (admission) for each activity. 
-                If helper assistance is required because the resident's performance is unsafe or of poor quality, score according to 
-                the amount of assistance provided. Activities may be completed with or without assistive devices.
+                Function scores are based on the resident's usual performance at the start of the stay (admission) for each activity. The scoring scale utilized is from Section GG of the MDS. If helper assistance is required because the resident's performance is unsafe or of poor quality, score according to the amount of assistance provided. Activities may be completed with or without assistive devices.
               </p>
               <div className={styles['score-levels']}>
                 <div className={styles['score-level']}>
@@ -150,21 +258,29 @@ const FAQ = () => {
           )
         },
         {
-          question: "How accurate are the expected scores?",
-          answer: "Expected scores in Advanced Mode are calculated using comprehensive algorithms based on CMS guidelines and validated research. Basic Mode relies on clinical judgment. Advanced Mode provides more precise estimates due to the extensive data analysis."
+          question: "If using the Basic mode, how do I know where to set the expected score?",
+          answer: "If your facility has MDS scrubber software that provides a calculated expected score, enter that score. If not, based on our data, we recommend that you set the expected score at a level that is 13-15 points above the admission score."
+        },
+        // {
+        //   question: "Am I able to adjust the score?",
+        //   answer: "Yes, all scores can be manually adjusted based on your clinical judgment. The tool provides a starting point, but you can modify any score to better reflect the patient's actual or expected functional status."
+        // },
+        {
+          question: "If using the Advanced mode, how are function scores calculated?",
+          answer: "Function scores range from 1 (Dependent) to 6 (Independent), with intermediate levels for different assistance needs. The tool calculates expected scores based on patient characteristics, comorbidities, and functional status using validated algorithms."
         },
         {
-          question: "Can I adjust the calculated scores?",
-          answer: "Yes, all calculated scores can be manually adjusted based on your clinical judgment. The tool provides a starting point, but you can modify any score to better reflect the patient's actual or expected functional status."
+          question: "How accurate are the expected scores?",
+          answer: "Expected scores in Advanced Mode are calculated using comprehensive algorithms based on CMS guidelines and validated research. Basic Mode relies on clinical judgment. Advanced Mode provides more precise estimates due to the extensive data analysis."
         }
       ]
     },
     {
-      category: "Export & Results",
+      category: "Export and Results",
       questions: [
         {
-          question: "Can I export my results?",
-          answer: "Yes, the tool provides export functionality to save your calculations and results. You can export data in pdf format for documentation and sharing with your healthcare team."
+          question: "Can I export and save my results?",
+          answer: "As noted earlier, the DFS Calculator processes data locally in your browser. No patient data is stored on external servers. However, the tool provides export functionality to save your calculations and results. You can export data in pdf format and save the files locally using a naming convention of your design for documentation and sharing with your healthcare team."
         },
         {
           question: "What information is included in the export?",
@@ -173,23 +289,6 @@ const FAQ = () => {
         {
           question: "How can I use these results in discharge planning?",
           answer: "The DFS results help identify functional goals, track progress, and support discharge planning decisions. They provide objective data to guide therapy planning, family discussions, and care transitions."
-        }
-      ]
-    },
-    {
-      category: "Technical Support",
-      questions: [
-        {
-          question: "What browsers are supported?",
-          answer: "The DFS Calculator works with modern web browsers including Chrome, Firefox, Safari, and Edge. For the best experience, ensure your browser is up to date."
-        },
-        {
-          question: "What if I encounter an error?",
-          answer: "If you encounter technical issues, try refreshing the page or clearing your browser cache. For file upload issues, ensure your MDS file is in the correct XML format. Contact your IT support if problems persist."
-        },
-        {
-          question: "Is there a mobile version?",
-          answer: "The tool is designed to work on various devices, but for the best experience with complex data entry and file uploads, we recommend using a desktop or tablet computer."
         }
       ]
     },
@@ -209,8 +308,73 @@ const FAQ = () => {
           answer: "Yes, the DFS Calculator can support quality improvement initiatives by providing objective data on functional outcomes, helping identify trends, and supporting evidence-based practice decisions."
         }
       ]
+    },
+    {
+      category: "Technical Support",
+      questions: [
+        {
+          question: "What browsers are supported?",
+          answer: "The DFS Calculator works with modern web browsers including Chrome, Firefox, Safari, and Edge. For the best experience, ensure your browser is up to date."
+        },
+        {
+          question: "What if I encounter an error?",
+          answer: "If you encounter technical issues, try refreshing the page or clearing your browser cache. For file upload issues, ensure your MDS file is in the correct XML format. Contact your IT support if problems persist."
+        }
+        // {
+        //   question: "Is there a mobile version?",
+        //   answer: "The tool is designed to work on various devices, but for the best experience with complex data entry and file uploads, we recommend using a desktop or tablet computer."
+        // }
+      ]
     }
   ];
+
+  // Helper function to extract text content from JSX
+  const extractTextFromJSX = (element) => {
+    if (typeof element === 'string') {
+      return element;
+    }
+    if (React.isValidElement(element)) {
+      const children = React.Children.map(element.props.children, extractTextFromJSX);
+      return children ? children.join('') : '';
+    }
+    if (Array.isArray(element)) {
+      return element.map(extractTextFromJSX).join('');
+    }
+    return '';
+  };
+
+  // Filter FAQ data based on search term and auto-expand results
+  const filteredFaqData = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return faqData;
+    }
+
+    const searchLower = searchTerm.toLowerCase();
+    const filtered = faqData.map(category => ({
+      ...category,
+      questions: category.questions.filter(item => {
+        const questionText = item.question.toLowerCase();
+        const answerText = typeof item.answer === 'string' 
+          ? item.answer.toLowerCase() 
+          : extractTextFromJSX(item.answer).toLowerCase();
+        
+        return questionText.includes(searchLower) || answerText.includes(searchLower);
+      })
+    })).filter(category => category.questions.length > 0);
+
+    // Auto-expand all filtered results
+    if (filtered.length > 0) {
+      const newOpenItems = new Set();
+      filtered.forEach((category, categoryIndex) => {
+        category.questions.forEach((_, questionIndex) => {
+          newOpenItems.add(`${categoryIndex}-${questionIndex}`);
+        });
+      });
+      setOpenItems(newOpenItems);
+    }
+
+    return filtered;
+  }, [searchTerm]);
 
   return (
     <div className={styles['faq-container']}>
@@ -235,15 +399,48 @@ const FAQ = () => {
 
       {/* FAQ Content */}
       <div className={styles['faq-content']}>
-        <div className={styles['faq-intro']}>
-          <p>
-            Find answers to common questions about using the DFS Calculator. 
-            If you don't see your question answered here, please consult with your 
-            clinical team or IT support.
-          </p>
+        {/* Search Bar */}
+        <div className={styles['search-container']}>
+          <div className={styles['search-bar']}>
+            <svg className={styles['search-icon']} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="M21 21l-4.35-4.35"/>
+            </svg>
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search FAQs..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onFocus={handleSearchFocus}
+              onBlur={handleSearchBlur}
+              onKeyDown={handleKeyDown}
+              className={styles['search-input']}
+            />
+            {searchTerm && (
+              <button
+                onClick={clearSearch}
+                className={styles['clear-button']}
+                aria-label="Clear search"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            )}
+          </div>
+          {searchTerm && (
+            <div className={styles['search-results-info']}>
+              {filteredFaqData.reduce((total, category) => total + category.questions.length, 0)} result(s) found
+              {filteredFaqData.reduce((total, category) => total + category.questions.length, 0) > 0 && (
+                <span className={styles['auto-expanded-note']}> • Auto-expanded</span>
+              )}
+            </div>
+          )}
         </div>
 
-        {faqData.map((category, categoryIndex) => (
+        {filteredFaqData.map((category, categoryIndex) => (
           <div key={categoryIndex} className={styles['faq-category']}>
             <h2 className={styles['category-title']}>{category.category}</h2>
             <div className={styles['faq-items']}>
@@ -257,7 +454,9 @@ const FAQ = () => {
                       className={`${styles['faq-question']} ${isOpen ? styles['open'] : ''}`}
                       onClick={() => toggleItem(globalIndex)}
                     >
-                      <span className={styles['question-text']}>{item.question}</span>
+                      <span className={styles['question-text']}>
+                        {highlightText(item.question, searchTerm)}
+                      </span>
                       <svg 
                         className={`${styles['chevron']} ${isOpen ? styles['rotated'] : ''}`}
                         viewBox="0 0 24 24" 
@@ -270,7 +469,11 @@ const FAQ = () => {
                     </button>
                     {isOpen && (
                       <div className={styles['faq-answer']}>
-                        <p>{item.answer}</p>
+                        {typeof item.answer === 'string' ? (
+                          <p>{highlightText(item.answer, searchTerm)}</p>
+                        ) : (
+                          highlightText(item.answer, searchTerm)
+                        )}
                       </div>
                     )}
                   </div>
