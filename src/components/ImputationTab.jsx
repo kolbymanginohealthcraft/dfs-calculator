@@ -74,11 +74,11 @@ export default function ImputationTab({
           }
           return 0;
         } else if (covariateName.includes(" - Not Attempted")) {
-          // Not Attempted: return 1 if value is 07, else 0
-          return rawValue === '07' ? 1 : 0;
+          // Not Attempted: return 1 if value is any ANA value (07, 08, 09, 10, 88), else 0
+          return ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
         } else if (covariateName.includes(" - Skipped")) {
-          // Skipped: return 1 if value is 09, else 0
-          return rawValue === '09' ? 1 : 0;
+          // Skipped: return 1 if value is ^ (skip pattern), else 0
+          return rawValue === '^' ? 1 : 0;
         }
       }
     }

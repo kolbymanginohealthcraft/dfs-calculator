@@ -50,11 +50,11 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
                                 covariateValue = parseInt(rawValue, 10);
                             }
                         } else if (covariateName.includes('Not Attempted')) {
-                            // Not attempted: 1 if value is 07, 0 otherwise
-                            covariateValue = rawValue === '07' ? 1 : 0;
+                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88), 0 otherwise
+                            covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
                         } else if (covariateName.includes('Skipped')) {
-                            // Skipped: 1 if value is 09, 0 otherwise
-                            covariateValue = rawValue === '09' ? 1 : 0;
+                            // Skipped: 1 if value is ^ (skip pattern), 0 otherwise
+                            covariateValue = rawValue === '^' ? 1 : 0;
                         }
                     }
                 } else {
@@ -200,11 +200,11 @@ export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdLis
                                 covariateValue = parseInt(rawValue, 10);
                             }
                         } else if (covariateName.includes('Not Attempted')) {
-                            // Not attempted: 1 if value is 07, 0 otherwise
-                            covariateValue = rawValue === '07' ? 1 : 0;
+                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88), 0 otherwise
+                            covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
                         } else if (covariateName.includes('Skipped')) {
-                            // Skipped: 1 if value is 09, 0 otherwise
-                            covariateValue = rawValue === '09' ? 1 : 0;
+                            // Skipped: 1 if value is ^ (skip pattern), 0 otherwise
+                            covariateValue = rawValue === '^' ? 1 : 0;
                         }
                     }
                 } else {
