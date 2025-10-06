@@ -1,6 +1,11 @@
 import icdToHcc from "./icdToHcc";
 import { functionMultipliers } from "./functionMultipliers";
 
+// Configuration flag for I0020 dependency methodology
+// Set to true to use original CMS logic with I0020 dependencies
+// Set to false to use modified logic without I0020 dependencies
+const USE_I0020_DEPENDENCIES = true;
+
 export const scoreMap = {
   "01": 1,
   "02": 2,
@@ -436,37 +441,41 @@ export function processHccConditions(parsedValues, icdList) {
   );
   
   // Amputations (new combined)
-  // COMMENTED OUT: I0020 !== "08" condition due to CMS ambiguity
   // Original CMS logic: = 1 if GG0120D = [1] or O0500I ≥ [1] or I8000 or I0020B = see Crosswalk ICD-10 codes to HCC173, HCC189;
   // = 0 if I0020 = [08]; else = 0
-  // if (parsedValues["I0020"] !== "08") {
-  //   if (
-  //     parsedValues["GG0120D"] === "1" ||
-  //     parseInt(parsedValues["O0500I"] ?? "0", 10) >= 1 ||
-  //     hccSet.has(173) ||
-  //     hccSet.has(189)
-  //   ) {
-  //     covariates["Amputations: Traumatic Amputations and Complications (HCC173), Amputation Status, Lower Limb/Amputation Complications (HCC189), Amputation Status, Lower Limb/ Amputation Complications (HCC189)"] = 1;
-  //   }
-  // }
-  if (
-    parsedValues["GG0120D"] === "1" ||
-    parseInt(parsedValues["O0500I"] ?? "0", 10) >= 1 ||
-    hccSet.has(173) ||
-    hccSet.has(189)
-  ) {
-    covariates["Amputations: Traumatic Amputations and Complications (HCC173), Amputation Status, Lower Limb/Amputation Complications (HCC189), Amputation Status, Lower Limb/ Amputation Complications (HCC189)"] = 1;
+  if (USE_I0020_DEPENDENCIES) {
+    if (parsedValues["I0020"] !== "08") {
+      if (
+        parsedValues["GG0120D"] === "1" ||
+        parseInt(parsedValues["O0500I"] ?? "0", 10) >= 1 ||
+        hccSet.has(173) ||
+        hccSet.has(189)
+      ) {
+        covariates["Amputations: Traumatic Amputations and Complications (HCC173), Amputation Status, Lower Limb/Amputation Complications (HCC189), Amputation Status, Lower Limb/ Amputation Complications (HCC189)"] = 1;
+      }
+    }
+  } else {
+    if (
+      parsedValues["GG0120D"] === "1" ||
+      parseInt(parsedValues["O0500I"] ?? "0", 10) >= 1 ||
+      hccSet.has(173) ||
+      hccSet.has(189)
+    ) {
+      covariates["Amputations: Traumatic Amputations and Complications (HCC173), Amputation Status, Lower Limb/Amputation Complications (HCC189), Amputation Status, Lower Limb/ Amputation Complications (HCC189)"] = 1;
+    }
   }
   
   // Aspiration/Bacterial Pneumonia (HCC114, HCC115) or I2000=1 and I0020 ≠ "12"
-  // COMMENTED OUT: I0020 !== "12" condition due to CMS ambiguity
-  // if (parsedValues["I0020"] !== "12") {
-  //   if (hccSet.has(114) || hccSet.has(115) || parsedValues["I2000"] === "1") {
-  //     covariates["Aspiration, Bacterial, and Other Pneumonias: Aspiration and Specified Bacterial Pneumonias (HCC114), Pneumococcal Pneumonia, Empyema, Lung Abscess (HCC115)"] = 1;
-  //   }
-  // }
-  if (hccSet.has(114) || hccSet.has(115) || parsedValues["I2000"] === "1") {
-    covariates["Aspiration, Bacterial, and Other Pneumonias: Aspiration and Specified Bacterial Pneumonias (HCC114), Pneumococcal Pneumonia, Empyema, Lung Abscess (HCC115)"] = 1;
+  if (USE_I0020_DEPENDENCIES) {
+    if (parsedValues["I0020"] !== "12") {
+      if (hccSet.has(114) || hccSet.has(115) || parsedValues["I2000"] === "1") {
+        covariates["Aspiration, Bacterial, and Other Pneumonias: Aspiration and Specified Bacterial Pneumonias (HCC114), Pneumococcal Pneumonia, Empyema, Lung Abscess (HCC115)"] = 1;
+      }
+    }
+  } else {
+    if (hccSet.has(114) || hccSet.has(115) || parsedValues["I2000"] === "1") {
+      covariates["Aspiration, Bacterial, and Other Pneumonias: Aspiration and Specified Bacterial Pneumonias (HCC114), Pneumococcal Pneumonia, Empyema, Lung Abscess (HCC115)"] = 1;
+    }
   }
   
   // CKD (HCC137-139) or I1500=1
@@ -500,12 +509,14 @@ export function processHccConditions(parsedValues, icdList) {
   }
   
   // Major Head Injury (HCC167), I0020 ≠ "01"
-  // COMMENTED OUT: I0020 !== "03" condition due to CMS ambiguity
-  // if (hccSet.has(167) && parsedValues["I0020"] !== "03") {
-  //   covariates["Major Head Injury (HCC167)"] = 1;
-  // }
-  if (hccSet.has(167)) {
-    covariates["Major Head Injury (HCC167)"] = 1;
+  if (USE_I0020_DEPENDENCIES) {
+    if (hccSet.has(167) && parsedValues["I0020"] !== "03") {
+      covariates["Major Head Injury (HCC167)"] = 1;
+    }
+  } else {
+    if (hccSet.has(167)) {
+      covariates["Major Head Injury (HCC167)"] = 1;
+    }
   }
   
   // Mental Health (HCC57-60 or I6000/I5800/I5900/I5950)
@@ -522,15 +533,17 @@ export function processHccConditions(parsedValues, icdList) {
   }
   
   // Multiple Sclerosis (HCC77) and I0020 ≠ "06"
-  // COMMENTED OUT: I0020 !== "06" condition due to CMS ambiguity
-  // if (
-  //   parsedValues["I0020"] !== "06" &&
-  //   (parsedValues["I5200"] === "1" || hccSet.has(77))
-  // ) {
-  //   covariates["Multiple Sclerosis (HCC77)"] = 1;
-  // }
-  if (parsedValues["I5200"] === "1" || hccSet.has(77)) {
-    covariates["Multiple Sclerosis (HCC77)"] = 1;
+  if (USE_I0020_DEPENDENCIES) {
+    if (
+      parsedValues["I0020"] !== "06" &&
+      (parsedValues["I5200"] === "1" || hccSet.has(77))
+    ) {
+      covariates["Multiple Sclerosis (HCC77)"] = 1;
+    }
+  } else {
+    if (parsedValues["I5200"] === "1" || hccSet.has(77)) {
+      covariates["Multiple Sclerosis (HCC77)"] = 1;
+    }
   }
   
   // Other Significant Endocrine Disorders (HCC23)
@@ -539,37 +552,41 @@ export function processHccConditions(parsedValues, icdList) {
   }
   
   // Parkinson's/Huntington's (HCC78) and I0020 ≠ "06"
-  // COMMENTED OUT: I0020 !== "06" condition due to CMS ambiguity
-  // if (
-  //   parsedValues["I0020"] !== "06" &&
-  //   (parsedValues["I5250"] === "1" ||
-  //     parsedValues["I5300"] === "1" ||
-  //     hccSet.has(78))
-  // ) {
-  //   covariates["Parkinson's and Huntington's Diseases (HCC78)"] = 1;
-  // }
-  if (parsedValues["I5250"] === "1" ||
-      parsedValues["I5300"] === "1" ||
-      hccSet.has(78)) {
-    covariates["Parkinson's and Huntington's Diseases (HCC78)"] = 1;
+  if (USE_I0020_DEPENDENCIES) {
+    if (
+      parsedValues["I0020"] !== "06" &&
+      (parsedValues["I5250"] === "1" ||
+        parsedValues["I5300"] === "1" ||
+        hccSet.has(78))
+    ) {
+      covariates["Parkinson's and Huntington's Diseases (HCC78)"] = 1;
+    }
+  } else {
+    if (parsedValues["I5250"] === "1" ||
+        parsedValues["I5300"] === "1" ||
+        hccSet.has(78)) {
+      covariates["Parkinson's and Huntington's Diseases (HCC78)"] = 1;
+    }
   }
   
   // Tetraplegia/Paraplegia (HCC70, HCC71), I0020 ≠ "04" or "05"
-  // COMMENTED OUT: I0020 !== "04" or "05" condition due to CMS ambiguity
-  // if (
-  //   !["04", "05"].includes(parsedValues["I0020"]) &&
-  //   (parsedValues["I5000"] === "1" ||
-  //     parsedValues["I5100"] === "1" ||
-  //     hccSet.has(70) ||
-  //     hccSet.has(71))
-  // ) {
-  //   covariates["Tetraplegia (Excluding Complete Tetraplegia) (HCC70) and Paraplegia (HCC71)"] = 1;
-  // }
-  if (parsedValues["I5000"] === "1" ||
-      parsedValues["I5100"] === "1" ||
-      hccSet.has(70) ||
-      hccSet.has(71)) {
-    covariates["Tetraplegia (Excluding Complete Tetraplegia) (HCC70) and Paraplegia (HCC71)"] = 1;
+  if (USE_I0020_DEPENDENCIES) {
+    if (
+      !["04", "05"].includes(parsedValues["I0020"]) &&
+      (parsedValues["I5000"] === "1" ||
+        parsedValues["I5100"] === "1" ||
+        hccSet.has(70) ||
+        hccSet.has(71))
+    ) {
+      covariates["Tetraplegia (Excluding Complete Tetraplegia) (HCC70) and Paraplegia (HCC71)"] = 1;
+    }
+  } else {
+    if (parsedValues["I5000"] === "1" ||
+        parsedValues["I5100"] === "1" ||
+        hccSet.has(70) ||
+        hccSet.has(71)) {
+      covariates["Tetraplegia (Excluding Complete Tetraplegia) (HCC70) and Paraplegia (HCC71)"] = 1;
+    }
   }
   
   // Infectious disease: Septicemia, Sepsis, SIRS/Shock
@@ -593,12 +610,14 @@ export function processHccConditions(parsedValues, icdList) {
   }
   
   // Cardiac: Angina Pectoris
-  // COMMENTED OUT: I0020 !== "12" condition due to CMS ambiguity
-  // if (parsedValues["I0020"] !== "12" && hccSet.has(88)) {
-  //   covariates["Angina Pectoris (HCC88)"] = 1;
-  // }
-  if (hccSet.has(88)) {
-    covariates["Angina Pectoris (HCC88)"] = 1;
+  if (USE_I0020_DEPENDENCIES) {
+    if (parsedValues["I0020"] !== "12" && hccSet.has(88)) {
+      covariates["Angina Pectoris (HCC88)"] = 1;
+    }
+  } else {
+    if (hccSet.has(88)) {
+      covariates["Angina Pectoris (HCC88)"] = 1;
+    }
   }
   
   return covariates;
