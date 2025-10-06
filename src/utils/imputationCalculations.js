@@ -1,6 +1,6 @@
 import { getFunctionCovariates } from './calculations.js';
 import { getImputationMultipliers } from './coefficientLoader.js';
-import { covariateMapping } from './imputationMultipliers.js';
+import { covariateMapping } from './covariateMapping.js';
 
 /**
  * Imputes missing or invalid GG items using the imputation methodology

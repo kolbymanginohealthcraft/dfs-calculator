@@ -17,11 +17,9 @@ console.log('================================\n');
 
 const transformations = [
   'generateMdsLookup.cjs',
-  'generateValueDescriptions.cjs', 
-  'generateFunctionMultipliers.cjs',
-  'generateImputationMultipliers.cjs',
   'generateIcdToHcc.cjs',
-  'generateIcd10Lookup.cjs'
+  'generateIcd10Lookup.cjs',
+  'generateAllCoefficients.cjs'
 ];
 
 let successCount = 0;

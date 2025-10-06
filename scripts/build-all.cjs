@@ -40,21 +40,6 @@ const transformations = [
     description: 'Transform MDS item master definitions'
   },
   {
-    name: 'Value Descriptions', 
-    script: 'transformers/generateValueDescriptions.cjs',
-    description: 'Transform MDS value descriptions'
-  },
-  {
-    name: 'Function Multipliers',
-    script: 'transformers/generateFunctionMultipliers.cjs', 
-    description: 'Extract function multipliers from risk adjustment appendix'
-  },
-  {
-    name: 'Imputation Multipliers',
-    script: 'transformers/generateImputationMultipliers.cjs',
-    description: 'Extract imputation multipliers from imputation appendix'
-  },
-  {
     name: 'ICD-to-HCC Mapping',
     script: 'transformers/generateIcdToHcc.cjs',
     description: 'Create ICD-10 to HCC crosswalk'
@@ -63,6 +48,11 @@ const transformations = [
     name: 'ICD-10 Lookup',
     script: 'transformers/generateIcd10Lookup.cjs',
     description: 'Generate ICD-10 code lookup'
+  },
+  {
+    name: 'All Coefficients (Multi-Version)',
+    script: 'transformers/generateAllCoefficients.cjs',
+    description: 'Extract all historical function and imputation multipliers'
   }
 ];
 
