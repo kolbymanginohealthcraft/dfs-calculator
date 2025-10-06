@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react";
 import styles from "./Covariates.module.css";
 import { BarChart3 } from "lucide-react";
-import { functionMultipliers } from "../utils/functionMultipliers";
 import { covariateRelatedItems } from "../utils/covariateRelatedItems";
 
 export default function Covariates({

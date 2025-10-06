@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import styles from "./ImputationTab.module.css";
 import { Calculator } from "lucide-react";
-import { imputationMultipliers } from "../utils/imputationMultipliers";
+import { getImputationMultipliers } from "../utils/coefficientLoader";
 import { getImputationThresholds } from "../utils/imputationCalculations";
 import { getFunctionCovariates, GG_ITEMS, determineMobilityType } from "../utils/calculations";
 
@@ -42,7 +42,7 @@ export default function ImputationTab({
   };
 
   // Helper function to get covariate value
-  const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores) => {
+  const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate) => {
     // First check for GG item-specific covariates
     const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues);
     if (ggItemSpecificValue !== null) {
@@ -50,7 +50,7 @@ export default function ImputationTab({
     }
     
     // Use the existing covariate calculation logic for general covariates
-    const result = getFunctionCovariates(parsedValues, summary, icdList, startScores);
+    const result = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
     return result?.covariates?.[covariateName] || 0;
   };
 
@@ -105,6 +105,10 @@ export default function ImputationTab({
   const imputationData = useMemo(() => {
     if (!hasFile || !parsedValues || !startScores) return {};
 
+    // Get ARD date and version-specific multipliers
+    const ardDate = parsedValues['A2300'];
+    const imputationMultipliers = getImputationMultipliers(ardDate);
+
     // Determine mobility type
     const mobilityType = determineMobilityType(parsedValues);
     
@@ -134,7 +138,7 @@ export default function ImputationTab({
       // Calculate imputation score using covariate * multiplier
       for (const [covariateName, multiplier] of Object.entries(multipliers)) {
         // Get covariate value from the main covariate calculation
-        const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores);
+        const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate);
         
         if (covariateValue !== 0) {
           covariates[covariateName] = covariateValue;

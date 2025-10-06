@@ -1,7 +1,7 @@
 import mdsItemLookup from "../data/mds_item_lookup.json";
 import { GG_ITEMS, getFunctionCovariates, extractPatientSummary } from "./calculations";
 import { parseXml } from "./xmlParser"; // already used in your code
-import { imputationMultipliers } from "./imputationMultipliers";
+import { getImputationMultipliersForItem } from "./coefficientLoader";
 import { getImputationThresholds } from "./imputationCalculations";
 
 // Helper function to calculate GG item-specific covariates
@@ -33,27 +33,28 @@ const getGGItemSpecificCovariate = (covariateName, parsedValues) => {
 };
 
 // Helper function to get covariate value
-const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores) => {
+const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate) => {
   const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues);
   if (ggItemSpecificValue !== null) {
     return ggItemSpecificValue;
   }
   
-  const result = getFunctionCovariates(parsedValues, summary, icdList, startScores);
+  const result = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
   return result?.covariates?.[covariateName] || 0;
 };
 
 // Function to calculate imputed value for a specific GG item
 const calculateImputedValue = (ggItemId, parsedValues, summary, icdList, startScores) => {
-  const multipliers = imputationMultipliers[ggItemId];
-  if (!multipliers) return "01"; // Default fallback
+  const ardDate = parsedValues['A2300'];
+  const multipliers = getImputationMultipliersForItem(ggItemId, ardDate);
+  if (!multipliers || Object.keys(multipliers).length === 0) return "01"; // Default fallback
   
   const thresholds = getImputationThresholds(ggItemId);
   let imputationScore = 0;
 
   // Calculate imputation score using covariate * multiplier
   for (const [covariateName, multiplier] of Object.entries(multipliers)) {
-    const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores);
+    const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate);
     imputationScore += covariateValue * multiplier;
   }
 

@@ -2,43 +2,62 @@
  * Coefficient Loader - Version-Aware Data Access
  * 
  * This utility provides access to the correct version of coefficients
- * based on the ARD (Assessment Reference Date) from the MDS file.
+ * based on the ARD (Assessment Reference Date - A2300) from the MDS file.
  */
 
 import allVersions from '../data/coefficients-all-versions.json';
 
 /**
  * Determine which Update ID to use based on an assessment date
- * @param {string} dateStr - Date string in format YYYYMMDD or YYYY-MM-DD
+ * @param {string} dateStr - Date string from A2300 field in format YYYYMMDD or YYYY-MM-DD
  * @returns {string} Update ID ('1', '2', '3', etc.)
  */
 export function getUpdateIdForDate(dateStr) {
   if (!dateStr) {
-    console.warn('No date provided, using latest version');
+    console.warn('No ARD date (A2300) provided, using latest coefficient version');
     return allVersions.schedule[allVersions.schedule.length - 1].updateId;
   }
   
   // Parse date string (handle both YYYYMMDD and YYYY-MM-DD formats)
   let assessmentDate;
   if (dateStr.includes('-')) {
+    // YYYY-MM-DD format
     assessmentDate = new Date(dateStr);
   } else if (dateStr.length === 8) {
-    // YYYYMMDD format
+    // YYYYMMDD format (MDS standard)
     const year = dateStr.substring(0, 4);
     const month = dateStr.substring(4, 6);
     const day = dateStr.substring(6, 8);
     assessmentDate = new Date(`${year}-${month}-${day}`);
   } else {
-    console.warn('Invalid date format, using latest version');
+    console.warn(`Invalid ARD date format: ${dateStr}, using latest version`);
     return allVersions.schedule[allVersions.schedule.length - 1].updateId;
   }
   
   // Find matching schedule entry
+  // Normalize all dates to midnight UTC to avoid timezone issues
+  const assessmentDateOnly = new Date(Date.UTC(
+    assessmentDate.getUTCFullYear(),
+    assessmentDate.getUTCMonth(),
+    assessmentDate.getUTCDate()
+  ));
+  
   for (const period of allVersions.schedule) {
     const startDate = new Date(period.startDate);
-    const endDate = period.endDate ? new Date(period.endDate) : new Date('9999-12-31');
+    const startDateOnly = new Date(Date.UTC(
+      startDate.getUTCFullYear(),
+      startDate.getUTCMonth(),
+      startDate.getUTCDate()
+    ));
     
-    if (assessmentDate >= startDate && assessmentDate <= endDate) {
+    const endDate = period.endDate ? new Date(period.endDate) : new Date('9999-12-31');
+    const endDateOnly = new Date(Date.UTC(
+      endDate.getUTCFullYear(),
+      endDate.getUTCMonth(),
+      endDate.getUTCDate()
+    ));
+    
+    if (assessmentDateOnly >= startDateOnly && assessmentDateOnly <= endDateOnly) {
       return period.updateId;
     }
   }

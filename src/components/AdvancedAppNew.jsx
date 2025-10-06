@@ -9,7 +9,7 @@ import {
 } from "../utils/calculations";
 import { fetchFacilityInfo } from "../utils/facilityLookup";
 import { handleFileUploadWithValidation } from "../utils/enhancedFileParser";
-import { functionMultipliers } from "../utils/functionMultipliers";
+import { getFunctionMultipliers } from "../utils/coefficientLoader";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
@@ -49,6 +49,7 @@ function AdvancedAppNew() {
   const [activeRightPanel, setActiveRightPanel] = useState('instructions');
   const [covariates, setCovariates] = useState({});
   const [weightedScore, setWeightedScore] = useState(0);
+  const [versionMultipliers, setVersionMultipliers] = useState({});
   const [validationError, setValidationError] = useState(null);
   const [validationWarning, setValidationWarning] = useState(null);
   const uploadOpenFunctionRef = useRef(null);
@@ -68,6 +69,7 @@ function AdvancedAppNew() {
     setImputedItems(new Set());
     setCovariates({});
     setWeightedScore(0);
+    setVersionMultipliers({});
     setValidationError(null);
     setValidationWarning(null);
     // Force garbage collection hint for sensitive data
@@ -175,11 +177,16 @@ function AdvancedAppNew() {
         .map(([_, value]) => value)
         .filter(Boolean);
 
+      // Get version-specific multipliers
+      const multipliers = getFunctionMultipliers(ardDate);
+      setVersionMultipliers(multipliers);
+
       const result = getFunctionCovariates(
         parsedValues,
         extractPatientSummary(parsedValues, ardDate),
         icdList,
-        startScores
+        startScores,
+        ardDate
       );
 
       if (result) {
@@ -553,7 +560,7 @@ function AdvancedAppNew() {
                     <Covariates
                       hasFile={hasFile}
                       covariates={covariates}
-                      multipliers={functionMultipliers}
+                      multipliers={versionMultipliers}
                       onCovariateClick={handleCovariateClick}
                       selectedCovariate={selectedCovariate}
                     />

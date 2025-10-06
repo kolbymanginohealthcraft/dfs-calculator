@@ -161,13 +161,23 @@ updateIdColumns.forEach(({updateId}) => {
   functionMultipliers[updateId] = {};
 });
 
+// Helper function to normalize covariate names (match covariateMapping.js pattern)
+function normalizeCovariateName(name) {
+  return name
+    .replace(/–/g, '-')  // Replace en-dash with regular hyphen
+    .replace(/—/g, '-')  // Replace em-dash with regular hyphen  
+    .replace(/'/g, "'")  // Replace smart apostrophe with regular apostrophe
+    .replace(/'/g, "'")  // Replace another smart apostrophe variant
+    .trim();
+}
+
 // Parse coefficients (starting from row 2)
 let processedCount = 0;
 for (let i = 2; i < raCoeffData.length; i++) {
   const row = raCoeffData[i];
   if (!row[0]) continue;
   
-  const covariateName = row[0].toString().trim();
+  const covariateName = normalizeCovariateName(row[0].toString());
   
   updateIdColumns.forEach(({updateId, columnIndex}) => {
     const value = row[columnIndex];
@@ -242,8 +252,11 @@ schedule.forEach(({updateId}) => {
     const row = data[i];
     if (!row || row.length < 2) continue;
     
-    const covariateName = row[0]?.toString().trim();
-    if (!covariateName || covariateName === 'Reference' || covariateName.includes('filter')) continue;
+    const rawCovariateName = row[0]?.toString().trim();
+    if (!rawCovariateName || rawCovariateName === 'Reference' || rawCovariateName.includes('filter')) continue;
+    
+    // Normalize covariate name to match code expectations
+    const covariateName = normalizeCovariateName(rawCovariateName);
     
     // Get value for each GG item
     ggItems.forEach(({item, columnIndex}) => {

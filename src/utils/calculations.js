@@ -1,5 +1,5 @@
 import icdToHcc from "./icdToHcc";
-import { functionMultipliers } from "./functionMultipliers";
+import { getFunctionMultipliers } from "./coefficientLoader";
 
 // Configuration flag for I0020 dependency methodology
 // Set to true to use original CMS logic with I0020 dependencies
@@ -713,8 +713,13 @@ export function getFunctionCovariates(
   parsedValues,
   summary,
   icdList,
-  startScores
+  startScores,
+  ardDate = null
 ) {
+  // Get the correct version of function multipliers based on ARD date
+  const ardDateValue = ardDate || parsedValues['A2300'];
+  const functionMultipliers = getFunctionMultipliers(ardDateValue);
+  
   const covariates = {};
 
   // 1. Intercept and Entry terms

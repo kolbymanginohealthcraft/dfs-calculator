@@ -1,5 +1,6 @@
 import { getFunctionCovariates } from './calculations.js';
-import { imputationMultipliers, covariateMapping } from './imputationMultipliers.js';
+import { getImputationMultipliers } from './coefficientLoader.js';
+import { covariateMapping } from './imputationMultipliers.js';
 
 /**
  * Imputes missing or invalid GG items using the imputation methodology
@@ -11,8 +12,12 @@ import { imputationMultipliers, covariateMapping } from './imputationMultipliers
  * @returns {Object} Object with imputed values for missing/invalid GG items
  */
 export function imputeMissingGGItems(parsedValues, summary, icdList, startScores, targetGGItems) {
+    // Get ARD date and correct version of multipliers
+    const ardDate = parsedValues['A2300'];
+    const imputationMultipliers = getImputationMultipliers(ardDate);
+    
     // Get the standard covariates (same as used for expected score calculation)
-    const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores);
+    const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
     
     const imputedValues = {};
     
@@ -161,8 +166,12 @@ export function convertImputationScoreToGGValueWithThresholds(score, ggItemId) {
  * @returns {Object} Object with imputed values for missing/invalid GG items
  */
 export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdList, startScores, targetGGItems) {
+    // Get ARD date and correct version of multipliers
+    const ardDate = parsedValues['A2300'];
+    const imputationMultipliers = getImputationMultipliers(ardDate);
+    
     // Get the standard covariates (same as used for expected score calculation)
-    const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores);
+    const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
     
     const imputedValues = {};
     
