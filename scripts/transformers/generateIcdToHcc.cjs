@@ -36,7 +36,7 @@ if (availableFiles.length === 0) {
 
 const EXCEL_SOURCE = path.join(DATA_SOURCE_DIR, availableFiles[0]);
 console.log(`Using file: ${availableFiles[0]}`);
-const JS_OUTPUT = path.join(__dirname, '..', '..', 'src', 'utils', 'icdToHcc_generated.js');
+const JSON_OUTPUT = path.join(__dirname, '..', '..', 'src', 'data', 'icdToHcc.json');
 
 console.log('ICD-to-HCC Mapping Generator');
 console.log('============================\n');
@@ -88,18 +88,26 @@ try {
   
   // Find the header row to identify columns
   let headerRow = -1;
-  let icdColumn = -1;
   let hccColumn = -1;
+  let icdColumn = -1;
   
   for (let i = 0; i < Math.min(10, data.length); i++) {
     const row = data[i];
     if (row && row.length > 1) {
-      // Look for ICD code pattern in first column
+      // Look for header row with "HCC" and "ICD-10 Code"
       const firstCell = row[0]?.toString().trim();
-      if (firstCell && firstCell.match(/^[A-Z]\d{2,3}(\.\d+)?$/)) {
+      const secondCell = row[1]?.toString().trim();
+      if (firstCell && firstCell.match(/HCC/i) && secondCell && secondCell.match(/ICD.*10.*Code/i)) {
+        headerRow = i + 2; // Skip header and filter row
+        hccColumn = 0;
+        icdColumn = 1;
+        break;
+      }
+      // Alternative: Look for ICD code pattern in second column
+      if (secondCell && secondCell.match(/^[A-Z]\d{2,3}(\.\d+)?/)) {
         headerRow = i;
-        icdColumn = 0;
-        hccColumn = 1; // Assume second column is HCC
+        hccColumn = 0;
+        icdColumn = 1;
         break;
       }
     }
@@ -122,10 +130,11 @@ try {
       const icdCode = row[icdColumn]?.toString().trim();
       const hccCode = row[hccColumn]?.toString().trim();
       
-      // Validate ICD code format (e.g., A021, A021.1)
-      if (icdCode && icdCode.match(/^[A-Z]\d{2,3}(\.\d+)?$/) && hccCode && hccCode.match(/^\d+$/)) {
-        // Remove any decimal points from ICD code for consistency
-        const cleanIcdCode = icdCode.replace('.', '');
+      // Validate ICD code format - more permissive to catch all ICD-10 formats
+      // ICD-10 can be: A01, A012, A0123, A01.2, A012.3, etc.
+      if (icdCode && icdCode.match(/^[A-Z][0-9A-Z]+(\.[0-9A-Z]+)?/) && hccCode && !isNaN(hccCode)) {
+        // Remove any spaces, decimal points, and extra characters for consistency
+        const cleanIcdCode = icdCode.replace(/[.\s]/g, '').trim();
         mappings[cleanIcdCode] = parseInt(hccCode, 10);
         processedCount++;
       } else {
@@ -144,35 +153,32 @@ try {
     console.log(`Skipped ${skippedCount} invalid rows`);
   }
   
-  // Generate the JavaScript file content
-  const jsContent = `// ICD-10 to HCC mapping for discharge function score
-// Generated from ${availableFiles[0]}
-// Sheet: ${sheetName}
-// Generated on: ${new Date().toISOString()}
-
-const icdToHcc = {
-${Object.entries(mappings)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(([icd, hcc]) => `  ${icd}: ${hcc}`)
-  .join(',\n')}
-};
-
-export { icdToHcc };
-`;
+  // Sort mappings for consistent output
+  const sortedMappings = {};
+  Object.keys(mappings)
+    .sort((a, b) => a.localeCompare(b))
+    .forEach(key => {
+      sortedMappings[key] = mappings[key];
+    });
   
   // Ensure output directory exists
-  const outputDir = path.dirname(JS_OUTPUT);
+  const outputDir = path.dirname(JSON_OUTPUT);
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
   
-  // Write to JavaScript file
-  console.log(`\nWriting JS to: ${JS_OUTPUT}`);
-  fs.writeFileSync(JS_OUTPUT, jsContent, 'utf8');
+  // Write to JSON file
+  console.log(`\nWriting JSON to: ${JSON_OUTPUT}`);
+  fs.writeFileSync(
+    JSON_OUTPUT,
+    JSON.stringify(sortedMappings, null, 2),
+    'utf8'
+  );
   
-  console.log(`\n✅ Successfully generated icdToHcc_generated.js`);
+  console.log(`\n✅ Successfully generated icdToHcc.json`);
   console.log(`   Total mappings: ${Object.keys(mappings).length}`);
-  console.log(`   ⚠️  This is a test file - verify before replacing the original`);
+  console.log(`   Source: ${availableFiles[0]}`);
+  console.log(`   Sheet: ${sheetName}`);
   
 } catch (error) {
   console.error('❌ Error processing Excel file:', error.message);

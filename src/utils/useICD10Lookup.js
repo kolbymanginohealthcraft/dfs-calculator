@@ -8,7 +8,7 @@ const useICD10Lookup = () => {
     // Only fetch once
     if (!hasLoaded.current) {
       hasLoaded.current = true;
-      const url = "/icd10_lookup_2025.json";
+      const url = "/icd10_lookup_2026.json";
       // Fetching ICD data - logging removed for HIPAA compliance
 
       fetch(url)

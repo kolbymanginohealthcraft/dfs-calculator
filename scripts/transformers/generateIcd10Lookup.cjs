@@ -22,7 +22,7 @@ const isCompareMode = args.includes('--compare');
 let specifiedYear = args.find(arg => /^\d{4}$/.test(arg));
 
 // Configuration
-const DATA_SOURCE_DIR = path.join(__dirname, 'data-sources');
+const DATA_SOURCE_DIR = path.join(__dirname, '..', 'data-sources');
 
 // Find available ICD-10 files
 const availableFiles = fs.readdirSync(DATA_SOURCE_DIR)
@@ -55,8 +55,8 @@ if (specifiedYear) {
 }
 
 const TXT_SOURCE = path.join(DATA_SOURCE_DIR, sourceFile);
-const JSON_OUTPUT = path.join(__dirname, '..', 'public', `icd10_lookup_${year}.json`);
-const JSON_OUTPUT_COMPARE = path.join(__dirname, '..', `icd10_lookup_${year}_generated.json`);
+const JSON_OUTPUT = path.join(__dirname, '..', '..', 'public', `icd10_lookup_${year}.json`);
+const JSON_OUTPUT_COMPARE = path.join(__dirname, '..', '..', `icd10_lookup_${year}_generated.json`);
 
 console.log(`Source: ${sourceFile}`);
 console.log(`Year: ${year}\n`);

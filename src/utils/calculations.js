@@ -1,4 +1,4 @@
-import icdToHcc from "./icdToHcc";
+import icdToHcc from "../data/icdToHcc.json";
 import { getFunctionMultipliers } from "./coefficientLoader";
 
 // Configuration flag for I0020 dependency methodology
