@@ -1,7 +1,10 @@
 import { useEffect, useState, useRef } from "react";
-import Papa from "papaparse";
 
-export default function useValueDescriptions(csvPath = "/itm_val.csv") {
+/**
+ * Hook to load MDS item value descriptions
+ * Now uses JSON instead of CSV for faster parsing
+ */
+export default function useValueDescriptions(jsonPath = "/itm_val.json") {
   const [lookup, setLookup] = useState({});
   const hasLoaded = useRef(false);
 
@@ -9,21 +12,16 @@ export default function useValueDescriptions(csvPath = "/itm_val.csv") {
     // Only fetch once
     if (!hasLoaded.current) {
       hasLoaded.current = true;
-      fetch(csvPath)
-        .then((res) => res.text())
-        .then((csvText) => {
-          const { data } = Papa.parse(csvText, { header: true });
-          const map = {};
-          data.forEach((row) => {
-            if (row.itm_id && row.val_id) {
-              const key = `${row.itm_id}|${row.val_id}`;
-              map[key] = row.val_txt;
-            }
-          });
-          setLookup(map);
+      fetch(jsonPath)
+        .then((res) => res.json())
+        .then((data) => {
+          setLookup(data);
+        })
+        .catch((error) => {
+          console.error('Error loading value descriptions:', error);
         });
     }
-  }, [csvPath]);
+  }, [jsonPath]);
 
   return lookup;
 }

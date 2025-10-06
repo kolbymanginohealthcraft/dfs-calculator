@@ -40,6 +40,11 @@ const transformations = [
     description: 'Transform MDS item master definitions'
   },
   {
+    name: 'MDS Value Descriptions',
+    script: 'transformers/generateValueDescriptions.cjs',
+    description: 'Transform MDS item value descriptions to JSON'
+  },
+  {
     name: 'ICD-to-HCC Mapping',
     script: 'transformers/generateIcdToHcc.cjs',
     description: 'Create ICD-10 to HCC crosswalk'
