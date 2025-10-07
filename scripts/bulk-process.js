@@ -30,6 +30,14 @@ import {
   calculateImputedValue
 } from '../src/utils/fileParser.js';
 
+// Validation config (adapted from fileValidation.js for Node.js)
+const VALIDATION_CONFIG = {
+  REQUIRED_MDS_ELEMENTS: ['A0100A', 'A0100B', 'A2300', 'I0020'],
+  REQUIRED_GG_ELEMENTS: ['GG0130A1', 'GG0130B1', 'GG0130C1', 'GG0170A1', 'GG0170B1', 'GG0170C1'],
+  VALID_GG_VALUES: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '88', '^', '-'],
+  VALID_DATE_PATTERN: /^\d{4}-\d{2}-\d{2}$|^\d{8}$/,
+};
+
 /**
  * Simple XML parser for MDS format (Node.js compatible)
  * Parses the simple <TAG>value</TAG> format used in MDS files
@@ -88,6 +96,100 @@ function buildStartScores(parsed, summary, icdList, ardDate) {
 }
 
 /**
+ * Validate MDS content (adapted from fileValidation.js)
+ */
+function validateMdsContent(parsed, xmlString) {
+  const errors = [];
+  
+  // Check item set code for assessment type
+  const itemSetCode = parsed['ITM_SBST_CD'];
+  if (itemSetCode && itemSetCode !== 'NC' && itemSetCode !== 'NP') {
+    const assessmentTypeDescriptions = {
+      'NQ': 'Nursing home quarterly assessment',
+      'ND': 'Nursing home discharge assessment', 
+      'NT': 'Nursing home tracking record',
+      'SP': 'Swing bed PPS assessment',
+      'SD': 'Swing bed discharge assessment',
+      'NPE': 'Nursing home PPS Part A Discharge',
+    };
+    const desc = assessmentTypeDescriptions[itemSetCode] || 'unknown type';
+    errors.push(`Invalid assessment type: ${itemSetCode} (${desc}). Only NC/NP accepted.`);
+  }
+  
+  // Check for PDF conversion indicators
+  const pdfPatterns = [
+    /iText.*xml/i,
+    /Created from PDF via Acrobat/i,
+    /<TaggedPDF-doc>/i,
+    /MINIMUM DATA SET.*Version.*RESIDENT ASSESSMENT/i,
+    /Type of Assessment Enter Code/m,
+    /____|□|Enter Code.*01\. Admission assessment/m,
+  ];
+  
+  if (pdfPatterns.some(pattern => pattern.test(xmlString))) {
+    errors.push('PDF conversion detected. This is not a valid MDS data file.');
+  }
+  
+  // Check for missing required MDS elements
+  const missingRequired = VALIDATION_CONFIG.REQUIRED_MDS_ELEMENTS.filter(
+    element => !parsed[element] || parsed[element].trim() === ''
+  );
+  if (missingRequired.length > 0) {
+    errors.push(`Missing required elements: ${missingRequired.join(', ')}`);
+  }
+  
+  // Check for required GG elements
+  const missingGG = VALIDATION_CONFIG.REQUIRED_GG_ELEMENTS.filter(element => !parsed[element]);
+  if (missingGG.length > 0) {
+    // Check if this is a discharge assessment
+    const dischargeElements = Object.keys(parsed).filter(key => 
+      (key.startsWith('GG0130') || key.startsWith('GG0170')) && key.endsWith('3')
+    );
+    if (dischargeElements.length > 0) {
+      errors.push('Discharge assessment detected. Not accepted for function score calculations.');
+    } else {
+      errors.push(`Missing GG elements: ${missingGG.join(', ')}`);
+    }
+  }
+  
+  // Validate GG values
+  const invalidGGValues = [];
+  VALIDATION_CONFIG.REQUIRED_GG_ELEMENTS.forEach(element => {
+    const value = parsed[element];
+    if (value && !VALIDATION_CONFIG.VALID_GG_VALUES.includes(value)) {
+      invalidGGValues.push(`${element}=${value}`);
+    }
+  });
+  if (invalidGGValues.length > 0) {
+    errors.push(`Invalid GG values: ${invalidGGValues.join(', ')}`);
+  }
+  
+  // Validate date format
+  const ardDate = parsed['A2300'];
+  if (ardDate && !VALIDATION_CONFIG.VALID_DATE_PATTERN.test(ardDate)) {
+    errors.push(`Invalid date format: A2300='${ardDate}'`);
+  }
+  
+  // Validate A0310A (Type of Assessment)
+  const assessmentType = parsed['A0310A'];
+  if (assessmentType && assessmentType !== '01' && assessmentType !== '99') {
+    const types = {
+      '02': 'Quarterly review', '03': 'Annual', '04': 'Significant change',
+      '05': 'Correction to comprehensive', '06': 'Correction to quarterly'
+    };
+    const desc = types[assessmentType] || 'unknown';
+    errors.push(`Invalid A0310A: ${assessmentType} (${desc}). Only 01 or 99 accepted.`);
+  }
+  
+  // Check for invalid root element
+  if (!xmlString.includes('<ASSESSMENT>') && !xmlString.includes('<MDS>')) {
+    errors.push('Invalid root element. Must be ASSESSMENT or MDS.');
+  }
+  
+  return errors;
+}
+
+/**
  * Get ICD code list from parsed data
  */
 function getIcdList(parsed) {
@@ -105,6 +207,29 @@ function processFile(filePath) {
   try {
     const xmlContent = fs.readFileSync(filePath, 'utf8');
     const parsed = parseXmlNode(xmlContent);
+    
+    // Validate MDS content first
+    const validationErrors = validateMdsContent(parsed, xmlContent);
+    if (validationErrors.length > 0) {
+      // Return validation error result
+      return {
+        fileName: path.basename(filePath),
+        patientFirstName: parsed['A0500A'] || '',
+        patientLastName: parsed['A0500C'] || '',
+        facilityName: parsed['A0100B'] || parsed['FAC_ID'] || '',
+        ard: parsed['A2300'] ? formatDate(parsed['A2300']) : '',
+        admitDate: '',
+        primaryCondition: '',
+        mobilityType: '',
+        startScore: '',
+        expectedScore: '',
+        scoreDifference: '',
+        age: '',
+        assessmentType: parsed['A0310F'] || '',
+        success: false,
+        error: validationErrors[0] // Show first validation error
+      };
+    }
     
     // Extract basic patient info
     const ardDate = parsed['A2300'];
@@ -151,7 +276,7 @@ function processFile(filePath) {
       mobilityType: mobilityType,
       startScore: startScore,
       expectedScore: expectedScore,
-      scoreDifference: (expectedScore - startScore).toFixed(1),
+      scoreDifference: (expectedScore - startScore).toFixed(2),
       age: summary.age || '',
       assessmentType: assessmentType || '',
       success: true,
@@ -273,6 +398,7 @@ function main() {
   const results = [];
   let successCount = 0;
   let errorCount = 0;
+  let validationErrorCount = 0;
   
   files.forEach((file, index) => {
     const fileName = path.basename(file);
@@ -285,8 +411,16 @@ function main() {
       successCount++;
       console.log(`✅ (Start: ${result.startScore}, Expected: ${result.expectedScore})`);
     } else {
-      errorCount++;
-      console.log(`❌ ${result.error}`);
+      // Check if it's a validation error (vs processing error)
+      if (result.error && typeof result.error === 'string' && 
+          (result.error.includes('Invalid') || result.error.includes('Missing') || 
+           result.error.includes('detected') || result.error.includes('PDF'))) {
+        validationErrorCount++;
+        console.log(`⚠️  VALIDATION ERROR: ${result.error}`);
+      } else {
+        errorCount++;
+        console.log(`❌ ${result.error}`);
+      }
     }
   });
   
@@ -299,7 +433,8 @@ function main() {
   console.log('==========================');
   console.log(`Total Files: ${files.length}`);
   console.log(`✅ Successful: ${successCount}`);
-  console.log(`❌ Errors: ${errorCount}`);
+  console.log(`⚠️  Validation Errors: ${validationErrorCount}`);
+  console.log(`❌ Processing Errors: ${errorCount}`);
   console.log(`\n📄 Results saved to: ${outputFile}`);
   
   // Display sample results
@@ -315,6 +450,26 @@ function main() {
       console.log(`  Condition: ${r.primaryCondition}`);
       console.log(`  Mobility: ${r.mobilityType}`);
       console.log(`  Start Score: ${r.startScore} → Expected: ${r.expectedScore} (Δ ${r.scoreDifference})`);
+      console.log('');
+    });
+  }
+  
+  // Display validation errors
+  if (validationErrorCount > 0) {
+    console.log('\n⚠️  Validation Errors:');
+    console.log('----------------------------');
+    const errors = results.filter(r => !r.success && r.error && 
+      (r.error.includes('Invalid') || r.error.includes('Missing') || 
+       r.error.includes('detected') || r.error.includes('PDF')));
+    errors.forEach(r => {
+      console.log(`${r.fileName}:`);
+      console.log(`  ERROR: ${r.error}`);
+      if (r.patientFirstName || r.patientLastName) {
+        console.log(`  Patient: ${r.patientFirstName} ${r.patientLastName}`);
+      }
+      if (r.facilityName) {
+        console.log(`  Facility: ${r.facilityName}`);
+      }
       console.log('');
     });
   }

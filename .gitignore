@@ -24,3 +24,9 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Test data files (MDS XML files for testing)
+test-data/examples/*.xml
+
+# Bulk processing output
+bulk-results.csv
