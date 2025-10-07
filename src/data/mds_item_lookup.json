@@ -20,11 +20,11 @@
     "itm_sect_label": "A"
   },
   "A0300A": {
-    "itm_shrt_label": "Item filler: replaces old A0300A",
+    "itm_shrt_label": "Deprecated: STATE_PMT_ASMT_PRPSE_CD",
     "itm_sect_label": "A"
   },
   "A0300B": {
-    "itm_shrt_label": "Item filler: replaces old A0300B",
+    "itm_shrt_label": "Deprecated: STATE_PMT_ASMT_TYPE_CD",
     "itm_sect_label": "A"
   },
   "A0310A": {
@@ -36,11 +36,11 @@
     "itm_sect_label": "A"
   },
   "A0310C": {
-    "itm_shrt_label": "Item filler: replaces old A0310C",
+    "itm_shrt_label": "Deprecated: PPS_OMRA_CD",
     "itm_sect_label": "A"
   },
   "A0310D": {
-    "itm_shrt_label": "Item filler: replaces old A0310D",
+    "itm_shrt_label": "Deprecated: SB_CLNCL_CHG_CD",
     "itm_sect_label": "A"
   },
   "A0310E": {
@@ -96,7 +96,7 @@
     "itm_sect_label": "A"
   },
   "A0800": {
-    "itm_shrt_label": "Item filler: replaces old A0800",
+    "itm_shrt_label": "Deprecated: GNDR_CD",
     "itm_sect_label": "A"
   },
   "A0810": {
@@ -108,27 +108,27 @@
     "itm_sect_label": "A"
   },
   "A1000A": {
-    "itm_shrt_label": "Item filler: replaces old A1000A",
+    "itm_shrt_label": "Deprecated: AMRCN_INDN_AK_NTV_CD",
     "itm_sect_label": "A"
   },
   "A1000B": {
-    "itm_shrt_label": "Item filler: replaces old A1000B",
+    "itm_shrt_label": "Deprecated: ASN_CD",
     "itm_sect_label": "A"
   },
   "A1000C": {
-    "itm_shrt_label": "Item filler: replaces old A1000C",
+    "itm_shrt_label": "Deprecated: AFRCN_AMRCN_CD",
     "itm_sect_label": "A"
   },
   "A1000D": {
-    "itm_shrt_label": "Item filler: replaces old A1000D",
+    "itm_shrt_label": "Deprecated: HSPNC_CD",
     "itm_sect_label": "A"
   },
   "A1000E": {
-    "itm_shrt_label": "Item filler: replaces old A1000E",
+    "itm_shrt_label": "Deprecated: NTV_HI_PCFC_ISLNDR_CD",
     "itm_sect_label": "A"
   },
   "A1000F": {
-    "itm_shrt_label": "Item filler: replaces old A1000F",
+    "itm_shrt_label": "Deprecated: WHT_CD",
     "itm_sect_label": "A"
   },
   "A1005A": {
@@ -228,11 +228,11 @@
     "itm_sect_label": "A"
   },
   "A1100A": {
-    "itm_shrt_label": "Item filler: replaces old A1100A",
+    "itm_shrt_label": "Deprecated: NEED_INTRPTR_CD",
     "itm_sect_label": "A"
   },
   "A1100B": {
-    "itm_shrt_label": "Item filler: replaces old A1100B",
+    "itm_shrt_label": "Deprecated: INTRPTR_LANG_TXT",
     "itm_sect_label": "A"
   },
   "A1110A": {
@@ -248,23 +248,23 @@
     "itm_sect_label": "A"
   },
   "A1250A": {
-    "itm_shrt_label": "Item filler: replaces old A1250A",
+    "itm_shrt_label": "Deprecated: TRNSPRTN_MDCL_CD",
     "itm_sect_label": "A"
   },
   "A1250B": {
-    "itm_shrt_label": "Item filler: replaces old A1250B",
+    "itm_shrt_label": "Deprecated: TRNSPRTN_NON_MDCL_CD",
     "itm_sect_label": "A"
   },
   "A1250C": {
-    "itm_shrt_label": "Item filler: replaces old A1250C",
+    "itm_shrt_label": "Deprecated: TRNSPRTN_NO_CD",
     "itm_sect_label": "A"
   },
   "A1250X": {
-    "itm_shrt_label": "Item filler: replaces old A1250X",
+    "itm_shrt_label": "Deprecated: TRNSPRTN_NO_RSPNS_CD",
     "itm_sect_label": "A"
   },
   "A1250Y": {
-    "itm_shrt_label": "Item filler: replaces old A1250Y",
+    "itm_shrt_label": "Deprecated: TRNSPRTN_DCLN_RSPNS_CD",
     "itm_sect_label": "A"
   },
   "A1255": {
@@ -336,7 +336,7 @@
     "itm_sect_label": "A"
   },
   "A1800": {
-    "itm_shrt_label": "Item filler: replaces old A1800",
+    "itm_shrt_label": "Deprecated: ENTRD_FROM_TXT",
     "itm_sect_label": "A"
   },
   "A1805": {
@@ -352,7 +352,7 @@
     "itm_sect_label": "A"
   },
   "A2100": {
-    "itm_shrt_label": "Item filler: replaces old A2100",
+    "itm_shrt_label": "Deprecated: DSCHRG_STUS_CD",
     "itm_sect_label": "A"
   },
   "A2105": {
@@ -552,19 +552,19 @@
     "itm_sect_label": "C"
   },
   "C1300A": {
-    "itm_shrt_label": "Item filler: replaces old C1300A",
+    "itm_shrt_label": "Deprecated: INATTNTN_CD",
     "itm_sect_label": "C"
   },
   "C1300B": {
-    "itm_shrt_label": "Item filler: replaces old C1300B",
+    "itm_shrt_label": "Deprecated: DISORGNZ_THNKG_CD",
     "itm_sect_label": "C"
   },
   "C1300C": {
-    "itm_shrt_label": "Item filler: replaces old C1300C",
+    "itm_shrt_label": "Deprecated: ALTRD_CONSCS_CD",
     "itm_sect_label": "C"
   },
   "C1300D": {
-    "itm_shrt_label": "Item filler: replaces old C1300D",
+    "itm_shrt_label": "Deprecated: PSYCHMTR_RTRDTN_CD",
     "itm_sect_label": "C"
   },
   "C1310A": {
@@ -584,7 +584,7 @@
     "itm_sect_label": "C"
   },
   "C1600": {
-    "itm_shrt_label": "Item filler: replaces old C1600",
+    "itm_shrt_label": "Deprecated: CHG_MENTL_STUS_CD",
     "itm_sect_label": "C"
   },
   "CALCULATED_ITEMS_FILLER1": {
@@ -728,83 +728,83 @@
     "itm_sect_label": "D"
   },
   "D0200A1": {
-    "itm_shrt_label": "Item filler: replaces old D0200A1",
+    "itm_shrt_label": "Deprecated: INTRST_LOSS_CD",
     "itm_sect_label": "D"
   },
   "D0200A2": {
-    "itm_shrt_label": "Item filler: replaces old D0200A2",
+    "itm_shrt_label": "Deprecated: INTRST_LOSS_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200B1": {
-    "itm_shrt_label": "Item filler: replaces old D0200B1",
+    "itm_shrt_label": "Deprecated: FEEL_DOWN_CD",
     "itm_sect_label": "D"
   },
   "D0200B2": {
-    "itm_shrt_label": "Item filler: replaces old D0200B2",
+    "itm_shrt_label": "Deprecated: FEEL_DOWN_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200C1": {
-    "itm_shrt_label": "Item filler: replaces old D0200C1",
+    "itm_shrt_label": "Deprecated: TRBL_SLEEP_CD",
     "itm_sect_label": "D"
   },
   "D0200C2": {
-    "itm_shrt_label": "Item filler: replaces old D0200C2",
+    "itm_shrt_label": "Deprecated: TRBL_SLEEP_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200D1": {
-    "itm_shrt_label": "Item filler: replaces old D0200D1",
+    "itm_shrt_label": "Deprecated: LTL_ENRGY_CD",
     "itm_sect_label": "D"
   },
   "D0200D2": {
-    "itm_shrt_label": "Item filler: replaces old D0200D2",
+    "itm_shrt_label": "Deprecated: LTL_ENRGY_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200E1": {
-    "itm_shrt_label": "Item filler: replaces old D0200E1",
+    "itm_shrt_label": "Deprecated: POOR_APTIT_CD",
     "itm_sect_label": "D"
   },
   "D0200E2": {
-    "itm_shrt_label": "Item filler: replaces old D0200E2",
+    "itm_shrt_label": "Deprecated: POOR_APTIT_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200F1": {
-    "itm_shrt_label": "Item filler: replaces old D0200F1",
+    "itm_shrt_label": "Deprecated: SELF_DPRCTN_CD",
     "itm_sect_label": "D"
   },
   "D0200F2": {
-    "itm_shrt_label": "Item filler: replaces old D0200F2",
+    "itm_shrt_label": "Deprecated: SELF_DPRCTN_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200G1": {
-    "itm_shrt_label": "Item filler: replaces old D0200G1",
+    "itm_shrt_label": "Deprecated: CNCNTRTN_CD",
     "itm_sect_label": "D"
   },
   "D0200G2": {
-    "itm_shrt_label": "Item filler: replaces old D0200G2",
+    "itm_shrt_label": "Deprecated: CNCNTRTN_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200H1": {
-    "itm_shrt_label": "Item filler: replaces old D0200H1",
+    "itm_shrt_label": "Deprecated: MVMT_DFRNT_CD",
     "itm_sect_label": "D"
   },
   "D0200H2": {
-    "itm_shrt_label": "Item filler: replaces old D0200H2",
+    "itm_shrt_label": "Deprecated: MVMT_DFRNT_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0200I1": {
-    "itm_shrt_label": "Item filler: replaces old D0200I1",
+    "itm_shrt_label": "Deprecated: NGTV_STATE_CD",
     "itm_sect_label": "D"
   },
   "D0200I2": {
-    "itm_shrt_label": "Item filler: replaces old D0200I2",
+    "itm_shrt_label": "Deprecated: NGTV_STATE_FREQ_CD",
     "itm_sect_label": "D"
   },
   "D0300": {
-    "itm_shrt_label": "Item filler: replaces old D0300",
+    "itm_shrt_label": "Deprecated: MOOD_SCRE_NUM",
     "itm_sect_label": "D"
   },
   "D0350": {
-    "itm_shrt_label": "Item filler: replaces old D0350",
+    "itm_shrt_label": "Deprecated: NGTV_STATE_NTFY_STF_CD",
     "itm_sect_label": "D"
   },
   "D0500A1": {
@@ -892,7 +892,7 @@
     "itm_sect_label": "D"
   },
   "D0650": {
-    "itm_shrt_label": "Item filler: replaces old D0650",
+    "itm_shrt_label": "Deprecated: STF_NGTV_STATE_NTFY_CD",
     "itm_sect_label": "D"
   },
   "D0700": {
@@ -976,7 +976,7 @@
     "itm_sect_label": "E"
   },
   "EFFECTIVE_DATE": {
-    "itm_shrt_label": "Item filler: replaces old EFFECTIVE_DATE",
+    "itm_shrt_label": "Deprecated: EFCTV_DT",
     "itm_sect_label": "EFFECTIVE"
   },
   "F0300": {
@@ -1152,147 +1152,147 @@
     "itm_sect_label": "Control"
   },
   "G0110A1": {
-    "itm_shrt_label": "Item filler: replaces old G0110A1",
+    "itm_shrt_label": "Deprecated: BED_MBLTY_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110A2": {
-    "itm_shrt_label": "Item filler: replaces old G0110A2",
+    "itm_shrt_label": "Deprecated: BED_MBLTY_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110B1": {
-    "itm_shrt_label": "Item filler: replaces old G0110B1",
+    "itm_shrt_label": "Deprecated: TRNSFR_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110B2": {
-    "itm_shrt_label": "Item filler: replaces old G0110B2",
+    "itm_shrt_label": "Deprecated: TRNSFR_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110C1": {
-    "itm_shrt_label": "Item filler: replaces old G0110C1",
+    "itm_shrt_label": "Deprecated: WLK_ROOM_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110C2": {
-    "itm_shrt_label": "Item filler: replaces old G0110C2",
+    "itm_shrt_label": "Deprecated: WLK_ROOM_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110D1": {
-    "itm_shrt_label": "Item filler: replaces old G0110D1",
+    "itm_shrt_label": "Deprecated: WLK_CRDR_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110D2": {
-    "itm_shrt_label": "Item filler: replaces old G0110D2",
+    "itm_shrt_label": "Deprecated: WLK_CRDR_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110E1": {
-    "itm_shrt_label": "Item filler: replaces old G0110E1",
+    "itm_shrt_label": "Deprecated: LOCOMTN_ON_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110E2": {
-    "itm_shrt_label": "Item filler: replaces old G0110E2",
+    "itm_shrt_label": "Deprecated: LOCOMTN_ON_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110F1": {
-    "itm_shrt_label": "Item filler: replaces old G0110F1",
+    "itm_shrt_label": "Deprecated: LOCOMTN_OFF_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110F2": {
-    "itm_shrt_label": "Item filler: replaces old G0110F2",
+    "itm_shrt_label": "Deprecated: LOCOMTN_OFF_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110G1": {
-    "itm_shrt_label": "Item filler: replaces old G0110G1",
+    "itm_shrt_label": "Deprecated: DRESS_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110G2": {
-    "itm_shrt_label": "Item filler: replaces old G0110G2",
+    "itm_shrt_label": "Deprecated: DRESS_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110H1": {
-    "itm_shrt_label": "Item filler: replaces old G0110H1",
+    "itm_shrt_label": "Deprecated: EATG_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110H2": {
-    "itm_shrt_label": "Item filler: replaces old G0110H2",
+    "itm_shrt_label": "Deprecated: EATG_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110I1": {
-    "itm_shrt_label": "Item filler: replaces old G0110I1",
+    "itm_shrt_label": "Deprecated: TOILTG_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110I2": {
-    "itm_shrt_label": "Item filler: replaces old G0110I2",
+    "itm_shrt_label": "Deprecated: TOILTG_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0110J1": {
-    "itm_shrt_label": "Item filler: replaces old G0110J1",
+    "itm_shrt_label": "Deprecated: PRSNL_HYGNE_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0110J2": {
-    "itm_shrt_label": "Item filler: replaces old G0110J2",
+    "itm_shrt_label": "Deprecated: PRSNL_HYGNE_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0120A": {
-    "itm_shrt_label": "Item filler: replaces old G0120A",
+    "itm_shrt_label": "Deprecated: BATHG_SELF_CD",
     "itm_sect_label": "G"
   },
   "G0120B": {
-    "itm_shrt_label": "Item filler: replaces old G0120B",
+    "itm_shrt_label": "Deprecated: BATHG_SPRT_CD",
     "itm_sect_label": "G"
   },
   "G0300A": {
-    "itm_shrt_label": "Item filler: replaces old G0300A",
+    "itm_shrt_label": "Deprecated: BAL_SEAT_STNDG_CD",
     "itm_sect_label": "G"
   },
   "G0300B": {
-    "itm_shrt_label": "Item filler: replaces old G0300B",
+    "itm_shrt_label": "Deprecated: BAL_WLKG_CD",
     "itm_sect_label": "G"
   },
   "G0300C": {
-    "itm_shrt_label": "Item filler: replaces old G0300C",
+    "itm_shrt_label": "Deprecated: BAL_TRNG_ARND_CD",
     "itm_sect_label": "G"
   },
   "G0300D": {
-    "itm_shrt_label": "Item filler: replaces old G0300D",
+    "itm_shrt_label": "Deprecated: BAL_TOILT_CD",
     "itm_sect_label": "G"
   },
   "G0300E": {
-    "itm_shrt_label": "Item filler: replaces old G0300E",
+    "itm_shrt_label": "Deprecated: BAL_SRFC_TRNSFR_CD",
     "itm_sect_label": "G"
   },
   "G0400A": {
-    "itm_shrt_label": "Item filler: replaces old G0400A",
+    "itm_shrt_label": "Deprecated: UPR_XTRMTY_MTN_CD",
     "itm_sect_label": "G"
   },
   "G0400B": {
-    "itm_shrt_label": "Item filler: replaces old G0400B",
+    "itm_shrt_label": "Deprecated: LWR_XTRMTY_MTN_CD",
     "itm_sect_label": "G"
   },
   "G0600A": {
-    "itm_shrt_label": "Item filler: replaces old G0600A",
+    "itm_shrt_label": "Deprecated: CANE_CD",
     "itm_sect_label": "G"
   },
   "G0600B": {
-    "itm_shrt_label": "Item filler: replaces old G0600B",
+    "itm_shrt_label": "Deprecated: WLKR_CD",
     "itm_sect_label": "G"
   },
   "G0600C": {
-    "itm_shrt_label": "Item filler: replaces old G0600C",
+    "itm_shrt_label": "Deprecated: WHLCHR_CD",
     "itm_sect_label": "G"
   },
   "G0600D": {
-    "itm_shrt_label": "Item filler: replaces old G0600D",
+    "itm_shrt_label": "Deprecated: LIMB_PRSTHTC_CD",
     "itm_sect_label": "G"
   },
   "G0600Z": {
-    "itm_shrt_label": "Item filler: replaces old G0600Z",
+    "itm_shrt_label": "Deprecated: NO_MBLTY_CD",
     "itm_sect_label": "G"
   },
   "G0900A": {
-    "itm_shrt_label": "Item filler: replaces old G0900A",
+    "itm_shrt_label": "Deprecated: INCRS_INDPNDNC_CD",
     "itm_sect_label": "G"
   },
   "G0900B": {
-    "itm_shrt_label": "Item filler: replaces old G0900B",
+    "itm_shrt_label": "Deprecated: STF_INCRS_INDPNDNC_CD",
     "itm_sect_label": "G"
   },
   "GG0100A": {
@@ -1368,7 +1368,7 @@
     "itm_sect_label": "GG"
   },
   "GG0130A2": {
-    "itm_shrt_label": "Item filler: replaces old GG0130A2",
+    "itm_shrt_label": "Deprecated: EATG_SELF_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0130A3": {
@@ -1384,7 +1384,7 @@
     "itm_sect_label": "GG"
   },
   "GG0130B2": {
-    "itm_shrt_label": "Item filler: replaces old GG0130B2",
+    "itm_shrt_label": "Deprecated: ORAL_HYGNE_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0130B3": {
@@ -1400,7 +1400,7 @@
     "itm_sect_label": "GG"
   },
   "GG0130C2": {
-    "itm_shrt_label": "Item filler: replaces old GG0130C2",
+    "itm_shrt_label": "Deprecated: TOILT_HYGNE_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0130C3": {
@@ -1416,7 +1416,7 @@
     "itm_sect_label": "GG"
   },
   "GG0130E2": {
-    "itm_shrt_label": "Item filler: replaces old GG0130E2",
+    "itm_shrt_label": "Deprecated: SHWR_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0130E3": {
@@ -1432,7 +1432,7 @@
     "itm_sect_label": "GG"
   },
   "GG0130F2": {
-    "itm_shrt_label": "Item filler: replaces old GG0130F2",
+    "itm_shrt_label": "Deprecated: UPR_DRSG_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0130F3": {
@@ -1448,7 +1448,7 @@
     "itm_sect_label": "GG"
   },
   "GG0130G2": {
-    "itm_shrt_label": "Item filler: replaces old GG0130G2",
+    "itm_shrt_label": "Deprecated: LWR_DRSG_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0130G3": {
@@ -1464,7 +1464,7 @@
     "itm_sect_label": "GG"
   },
   "GG0130H2": {
-    "itm_shrt_label": "Item filler: replaces old GG0130H2",
+    "itm_shrt_label": "Deprecated: FTWR_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0130H3": {
@@ -1492,7 +1492,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170A2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170A2",
+    "itm_shrt_label": "Deprecated: ROLL_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170A3": {
@@ -1508,7 +1508,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170B2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170B2",
+    "itm_shrt_label": "Deprecated: SIT_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170B3": {
@@ -1524,7 +1524,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170C2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170C2",
+    "itm_shrt_label": "Deprecated: LYNG_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170C3": {
@@ -1540,7 +1540,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170D2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170D2",
+    "itm_shrt_label": "Deprecated: STAND_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170D3": {
@@ -1556,7 +1556,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170E2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170E2",
+    "itm_shrt_label": "Deprecated: CHR_TRNSF_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170E3": {
@@ -1572,7 +1572,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170F2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170F2",
+    "itm_shrt_label": "Deprecated: TOILT_TRNSF_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170F3": {
@@ -1600,7 +1600,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170G2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170G2",
+    "itm_shrt_label": "Deprecated: CAR_TRNSF_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170G3": {
@@ -1608,11 +1608,11 @@
     "itm_sect_label": "GG"
   },
   "GG0170H1": {
-    "itm_shrt_label": "Item filler: replaces old GG0170H1",
+    "itm_shrt_label": "Deprecated: WLK_ADMSN_CD",
     "itm_sect_label": "GG"
   },
   "GG0170H3": {
-    "itm_shrt_label": "Item filler: replaces old GG0170H3",
+    "itm_shrt_label": "Deprecated: WLK_DSCHRG_CD",
     "itm_sect_label": "GG"
   },
   "GG0170I1": {
@@ -1620,7 +1620,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170I2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170I2",
+    "itm_shrt_label": "Deprecated: WLK_10_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170I3": {
@@ -1636,7 +1636,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170J2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170J2",
+    "itm_shrt_label": "Deprecated: WLK_50_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170J3": {
@@ -1652,7 +1652,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170K2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170K2",
+    "itm_shrt_label": "Deprecated: WLK_150_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170K3": {
@@ -1668,7 +1668,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170L2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170L2",
+    "itm_shrt_label": "Deprecated: WLK_10U_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170L3": {
@@ -1680,7 +1680,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170M2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170M2",
+    "itm_shrt_label": "Deprecated: STP_1_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170M3": {
@@ -1692,7 +1692,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170N2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170N2",
+    "itm_shrt_label": "Deprecated: STP_4_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170N3": {
@@ -1704,7 +1704,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170O2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170O2",
+    "itm_shrt_label": "Deprecated: STP_12_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170O3": {
@@ -1716,7 +1716,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170P2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170P2",
+    "itm_shrt_label": "Deprecated: PCKP_OBJ_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170P3": {
@@ -1740,7 +1740,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170R2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170R2",
+    "itm_shrt_label": "Deprecated: WHL_50_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170R3": {
@@ -1768,7 +1768,7 @@
     "itm_sect_label": "GG"
   },
   "GG0170S2": {
-    "itm_shrt_label": "Item filler: replaces old GG0170S2",
+    "itm_shrt_label": "Deprecated: WHL_150_GOAL_CD",
     "itm_sect_label": "GG"
   },
   "GG0170S3": {
@@ -1848,7 +1848,7 @@
     "itm_sect_label": "I"
   },
   "I0020A": {
-    "itm_shrt_label": "Item filler: replaces old I0020A",
+    "itm_shrt_label": "Deprecated: OTH_MDCL_COND_ICD_CD",
     "itm_sect_label": "I"
   },
   "I0020B": {
@@ -2188,7 +2188,7 @@
     "itm_sect_label": "J"
   },
   "J0400": {
-    "itm_shrt_label": "Item filler: replaces old J0400",
+    "itm_shrt_label": "Deprecated: PAIN_FREQ_CD",
     "itm_sect_label": "J"
   },
   "J0410": {
@@ -2196,11 +2196,11 @@
     "itm_sect_label": "J"
   },
   "J0500A": {
-    "itm_shrt_label": "Item filler: replaces old J0500A",
+    "itm_shrt_label": "Deprecated: PAIN_EFCT_SLEEP_CD",
     "itm_sect_label": "J"
   },
   "J0500B": {
-    "itm_shrt_label": "Item filler: replaces old J0500B",
+    "itm_shrt_label": "Deprecated: PAIN_EFCT_ACTVTY_CD",
     "itm_sect_label": "J"
   },
   "J0510": {
@@ -2484,63 +2484,63 @@
     "itm_sect_label": "K"
   },
   "K0500A": {
-    "itm_shrt_label": "Item filler: replaces old K0500A",
+    "itm_shrt_label": "Deprecated: PEN_CD",
     "itm_sect_label": "K"
   },
   "K0500B": {
-    "itm_shrt_label": "Item filler: replaces old K0500B",
+    "itm_shrt_label": "Deprecated: FEEDG_TUBE_CD",
     "itm_sect_label": "K"
   },
   "K0500C": {
-    "itm_shrt_label": "Item filler: replaces old K0500C",
+    "itm_shrt_label": "Deprecated: ALTR_FOOD_CD",
     "itm_sect_label": "K"
   },
   "K0500D": {
-    "itm_shrt_label": "Item filler: replaces old K0500D",
+    "itm_shrt_label": "Deprecated: THRPTC_DIET_CD",
     "itm_sect_label": "K"
   },
   "K0500Z": {
-    "itm_shrt_label": "Item filler: replaces old K0500Z",
+    "itm_shrt_label": "Deprecated: NO_FEEDG_CD",
     "itm_sect_label": "K"
   },
   "K0510A1": {
-    "itm_shrt_label": "Item filler: replaces old K0510A1",
+    "itm_shrt_label": "Deprecated: PEN_PRIOR_CD",
     "itm_sect_label": "K"
   },
   "K0510A2": {
-    "itm_shrt_label": "Item filler: replaces old K0510A2",
+    "itm_shrt_label": "Deprecated: PEN_POST_CD",
     "itm_sect_label": "K"
   },
   "K0510B1": {
-    "itm_shrt_label": "Item filler: replaces old K0510B1",
+    "itm_shrt_label": "Deprecated: FEEDG_TUBE_PRIOR_CD",
     "itm_sect_label": "K"
   },
   "K0510B2": {
-    "itm_shrt_label": "Item filler: replaces old K0510B2",
+    "itm_shrt_label": "Deprecated: FEEDG_TUBE_POST_CD",
     "itm_sect_label": "K"
   },
   "K0510C1": {
-    "itm_shrt_label": "Item filler: replaces old K0510C1",
+    "itm_shrt_label": "Deprecated: ALTR_FOOD_PRIOR_CD",
     "itm_sect_label": "K"
   },
   "K0510C2": {
-    "itm_shrt_label": "Item filler: replaces old K0510C2",
+    "itm_shrt_label": "Deprecated: ALTR_FOOD_POST_CD",
     "itm_sect_label": "K"
   },
   "K0510D1": {
-    "itm_shrt_label": "Item filler: replaces old K0510D1",
+    "itm_shrt_label": "Deprecated: THRPTC_DIET_PRIOR_CD",
     "itm_sect_label": "K"
   },
   "K0510D2": {
-    "itm_shrt_label": "Item filler: replaces old K0510D2",
+    "itm_shrt_label": "Deprecated: THRPTC_DIET_POST_CD",
     "itm_sect_label": "K"
   },
   "K0510Z1": {
-    "itm_shrt_label": "Item filler: replaces old K0510Z1",
+    "itm_shrt_label": "Deprecated: NO_FEEDG_PRIOR_CD",
     "itm_sect_label": "K"
   },
   "K0510Z2": {
-    "itm_shrt_label": "Item filler: replaces old K0510Z2",
+    "itm_shrt_label": "Deprecated: NO_FEEDG_POST_CD",
     "itm_sect_label": "K"
   },
   "K0520A1": {
@@ -2616,15 +2616,15 @@
     "itm_sect_label": "K"
   },
   "K0700A": {
-    "itm_shrt_label": "Item filler: replaces old K0700A",
+    "itm_shrt_label": "Deprecated: CAL_PEN_CD",
     "itm_sect_label": "K"
   },
   "K0700B": {
-    "itm_shrt_label": "Item filler: replaces old K0700B",
+    "itm_shrt_label": "Deprecated: IV_TUBE_DAILY_CD",
     "itm_sect_label": "K"
   },
   "K0710A1": {
-    "itm_shrt_label": "Item filler: replaces old K0710A1",
+    "itm_shrt_label": "Deprecated: CAL_PRNTRL_PRIOR_CD",
     "itm_sect_label": "K"
   },
   "K0710A2": {
@@ -2636,7 +2636,7 @@
     "itm_sect_label": "K"
   },
   "K0710B1": {
-    "itm_shrt_label": "Item filler: replaces old K0710B1",
+    "itm_shrt_label": "Deprecated: IV_TUBE_DAILY_PRIOR_CD",
     "itm_sect_label": "K"
   },
   "K0710B2": {
@@ -2720,7 +2720,7 @@
     "itm_sect_label": "M"
   },
   "M0300B3": {
-    "itm_shrt_label": "Item filler: replaces old M0300B3",
+    "itm_shrt_label": "Deprecated: STG_2_ULCR_OLD_DT",
     "itm_sect_label": "M"
   },
   "M0300C1": {
@@ -2764,47 +2764,47 @@
     "itm_sect_label": "M"
   },
   "M0610A": {
-    "itm_shrt_label": "Item filler: replaces old M0610A",
+    "itm_shrt_label": "Deprecated: STG_3_4_ULCR_LNGTH_NUM",
     "itm_sect_label": "M"
   },
   "M0610B": {
-    "itm_shrt_label": "Item filler: replaces old M0610B",
+    "itm_shrt_label": "Deprecated: STG_3_4_ULCR_WDTH_NUM",
     "itm_sect_label": "M"
   },
   "M0610C": {
-    "itm_shrt_label": "Item filler: replaces old M0610C",
+    "itm_shrt_label": "Deprecated: STG_3_4_ULCR_DPTH_NUM",
     "itm_sect_label": "M"
   },
   "M0700": {
-    "itm_shrt_label": "Item filler: replaces old M0700",
+    "itm_shrt_label": "Deprecated: ULCR_TISUE_TYPE_CD",
     "itm_sect_label": "M"
   },
   "M0800A": {
-    "itm_shrt_label": "Item filler: replaces old M0800A",
+    "itm_shrt_label": "Deprecated: WRSNG_STG_2_ULCR_NUM",
     "itm_sect_label": "M"
   },
   "M0800B": {
-    "itm_shrt_label": "Item filler: replaces old M0800B",
+    "itm_shrt_label": "Deprecated: WRSNG_STG_3_ULCR_NUM",
     "itm_sect_label": "M"
   },
   "M0800C": {
-    "itm_shrt_label": "Item filler: replaces old M0800C",
+    "itm_shrt_label": "Deprecated: WRSNG_STG_4_ULCR_NUM",
     "itm_sect_label": "M"
   },
   "M0900A": {
-    "itm_shrt_label": "Item filler: replaces old M0900A",
+    "itm_shrt_label": "Deprecated: PRSR_ULCR_PRIOR_CD",
     "itm_sect_label": "M"
   },
   "M0900B": {
-    "itm_shrt_label": "Item filler: replaces old M0900B",
+    "itm_shrt_label": "Deprecated: HEALD_STG_2_ULCR_NUM",
     "itm_sect_label": "M"
   },
   "M0900C": {
-    "itm_shrt_label": "Item filler: replaces old M0900C",
+    "itm_shrt_label": "Deprecated: HEALD_STG_3_ULCR_NUM",
     "itm_sect_label": "M"
   },
   "M0900D": {
-    "itm_shrt_label": "Item filler: replaces old M0900D",
+    "itm_shrt_label": "Deprecated: HEALD_STG_4_ULCR_NUM",
     "itm_sect_label": "M"
   },
   "M1030": {
@@ -2932,67 +2932,67 @@
     "itm_sect_label": "N"
   },
   "N0400A": {
-    "itm_shrt_label": "Item filler: replaces old N0400A",
+    "itm_shrt_label": "Deprecated: ANTIPSYCHTC_RCVD_CD",
     "itm_sect_label": "N"
   },
   "N0400B": {
-    "itm_shrt_label": "Item filler: replaces old N0400B",
+    "itm_shrt_label": "Deprecated: ANTINXTY_CD",
     "itm_sect_label": "N"
   },
   "N0400C": {
-    "itm_shrt_label": "Item filler: replaces old N0400C",
+    "itm_shrt_label": "Deprecated: ANTIDPRSNT_CD",
     "itm_sect_label": "N"
   },
   "N0400D": {
-    "itm_shrt_label": "Item filler: replaces old N0400D",
+    "itm_shrt_label": "Deprecated: HPNTC_CD",
     "itm_sect_label": "N"
   },
   "N0400E": {
-    "itm_shrt_label": "Item filler: replaces old N0400E",
+    "itm_shrt_label": "Deprecated: ANTICOAGLNT_CD",
     "itm_sect_label": "N"
   },
   "N0400F": {
-    "itm_shrt_label": "Item filler: replaces old N0400F",
+    "itm_shrt_label": "Deprecated: ANTBTC_CD",
     "itm_sect_label": "N"
   },
   "N0400G": {
-    "itm_shrt_label": "Item filler: replaces old N0400G",
+    "itm_shrt_label": "Deprecated: DRTC_CD",
     "itm_sect_label": "N"
   },
   "N0400Z": {
-    "itm_shrt_label": "Item filler: replaces old N0400Z",
+    "itm_shrt_label": "Deprecated: NO_MDCTN_RCVD_CD",
     "itm_sect_label": "N"
   },
   "N0410A": {
-    "itm_shrt_label": "Item filler: replaces old N0410A",
+    "itm_shrt_label": "Deprecated: ANTIPSYCHTC_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0410B": {
-    "itm_shrt_label": "Item filler: replaces old N0410B",
+    "itm_shrt_label": "Deprecated: ANTINXTY_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0410C": {
-    "itm_shrt_label": "Item filler: replaces old N0410C",
+    "itm_shrt_label": "Deprecated: ANTIDPRSNT_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0410D": {
-    "itm_shrt_label": "Item filler: replaces old N0410D",
+    "itm_shrt_label": "Deprecated: HPNTC_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0410E": {
-    "itm_shrt_label": "Item filler: replaces old N0410E",
+    "itm_shrt_label": "Deprecated: ANTICOAGLNT_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0410F": {
-    "itm_shrt_label": "Item filler: replaces old N0410F",
+    "itm_shrt_label": "Deprecated: ANTBTC_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0410G": {
-    "itm_shrt_label": "Item filler: replaces old N0410G",
+    "itm_shrt_label": "Deprecated: DRTC_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0410H": {
-    "itm_shrt_label": "Item filler: replaces old N0410H",
+    "itm_shrt_label": "Deprecated: OPIOID_DAY_NUM",
     "itm_sect_label": "N"
   },
   "N0415A1": {
@@ -3120,111 +3120,111 @@
     "itm_sect_label": "N"
   },
   "O0100A1": {
-    "itm_shrt_label": "Item filler: replaces old O0100A1",
+    "itm_shrt_label": "Deprecated: CHMTHRPY_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100A2": {
-    "itm_shrt_label": "Item filler: replaces old O0100A2",
+    "itm_shrt_label": "Deprecated: CHMTHRPY_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100B1": {
-    "itm_shrt_label": "Item filler: replaces old O0100B1",
+    "itm_shrt_label": "Deprecated: RDTN_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100B2": {
-    "itm_shrt_label": "Item filler: replaces old O0100B2",
+    "itm_shrt_label": "Deprecated: RDTN_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100C1": {
-    "itm_shrt_label": "Item filler: replaces old O0100C1",
+    "itm_shrt_label": "Deprecated: OXGN_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100C2": {
-    "itm_shrt_label": "Item filler: replaces old O0100C2",
+    "itm_shrt_label": "Deprecated: OXGN_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100D1": {
-    "itm_shrt_label": "Item filler: replaces old O0100D1",
+    "itm_shrt_label": "Deprecated: SCTNG_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100D2": {
-    "itm_shrt_label": "Item filler: replaces old O0100D2",
+    "itm_shrt_label": "Deprecated: SCTNG_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100E1": {
-    "itm_shrt_label": "Item filler: replaces old O0100E1",
+    "itm_shrt_label": "Deprecated: TRCHOSTMY_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100E2": {
-    "itm_shrt_label": "Item filler: replaces old O0100E2",
+    "itm_shrt_label": "Deprecated: TRCHOSTMY_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100F1": {
-    "itm_shrt_label": "Item filler: replaces old O0100F1",
+    "itm_shrt_label": "Deprecated: VNTLTR_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100F2": {
-    "itm_shrt_label": "Item filler: replaces old O0100F2",
+    "itm_shrt_label": "Deprecated: VNTLTR_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100G1": {
-    "itm_shrt_label": "Item filler: replaces old O0100G1",
+    "itm_shrt_label": "Deprecated: CPAP_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100G2": {
-    "itm_shrt_label": "Item filler: replaces old O0100G2",
+    "itm_shrt_label": "Deprecated: CPAP_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100H1": {
-    "itm_shrt_label": "Item filler: replaces old O0100H1",
+    "itm_shrt_label": "Deprecated: IV_MDCTN_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100H2": {
-    "itm_shrt_label": "Item filler: replaces old O0100H2",
+    "itm_shrt_label": "Deprecated: IV_MDCTN_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100I1": {
-    "itm_shrt_label": "Item filler: replaces old O0100I1",
+    "itm_shrt_label": "Deprecated: TRNSFSN_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100I2": {
-    "itm_shrt_label": "Item filler: replaces old O0100I2",
+    "itm_shrt_label": "Deprecated: TRNSFSN_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100J1": {
-    "itm_shrt_label": "Item filler: replaces old O0100J1",
+    "itm_shrt_label": "Deprecated: DLYS_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100J2": {
-    "itm_shrt_label": "Item filler: replaces old O0100J2",
+    "itm_shrt_label": "Deprecated: DLYS_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100K1": {
-    "itm_shrt_label": "Item filler: replaces old O0100K1",
+    "itm_shrt_label": "Deprecated: HOSPC_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100K2": {
-    "itm_shrt_label": "Item filler: replaces old O0100K2",
+    "itm_shrt_label": "Deprecated: HOSPC_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100L2": {
-    "itm_shrt_label": "Item filler: replaces old O0100L2",
+    "itm_shrt_label": "Deprecated: RESP_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100M1": {
-    "itm_shrt_label": "Item filler: replaces old O0100M1",
+    "itm_shrt_label": "Deprecated: ISLTN_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100M2": {
-    "itm_shrt_label": "Item filler: replaces old O0100M2",
+    "itm_shrt_label": "Deprecated: ISLTN_POST_CD",
     "itm_sect_label": "O"
   },
   "O0100Z1": {
-    "itm_shrt_label": "Item filler: replaces old O0100Z1",
+    "itm_shrt_label": "Deprecated: NO_TRTMT_PRIOR_CD",
     "itm_sect_label": "O"
   },
   "O0100Z2": {
-    "itm_shrt_label": "Item filler: replaces old O0100Z2",
+    "itm_shrt_label": "Deprecated: NO_TRTMT_POST_CD",
     "itm_sect_label": "O"
   },
   "O0110A10A": {
@@ -3580,91 +3580,91 @@
     "itm_sect_label": "O"
   },
   "O0400A1": {
-    "itm_shrt_label": "Item filler: replaces old O0400A1",
+    "itm_shrt_label": "Deprecated: SPCH_THRPY_IND_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400A2": {
-    "itm_shrt_label": "Item filler: replaces old O0400A2",
+    "itm_shrt_label": "Deprecated: SPCH_THRPY_CNC_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400A3": {
-    "itm_shrt_label": "Item filler: replaces old O0400A3",
+    "itm_shrt_label": "Deprecated: SPCH_THRPY_GRP_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400A3A": {
-    "itm_shrt_label": "Item filler: replaces old O0400A3A",
+    "itm_shrt_label": "Deprecated: ST_CO_TRMT_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400A4": {
-    "itm_shrt_label": "Item filler: replaces old O0400A4",
+    "itm_shrt_label": "Deprecated: SPCH_THRPY_DAY_NUM",
     "itm_sect_label": "O"
   },
   "O0400A5": {
-    "itm_shrt_label": "Item filler: replaces old O0400A5",
+    "itm_shrt_label": "Deprecated: SPCH_THRPY_STRT_DT",
     "itm_sect_label": "O"
   },
   "O0400A6": {
-    "itm_shrt_label": "Item filler: replaces old O0400A6",
+    "itm_shrt_label": "Deprecated: SPCH_THRPY_END_DT",
     "itm_sect_label": "O"
   },
   "O0400B1": {
-    "itm_shrt_label": "Item filler: replaces old O0400B1",
+    "itm_shrt_label": "Deprecated: OT_INDVDL_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400B2": {
-    "itm_shrt_label": "Item filler: replaces old O0400B2",
+    "itm_shrt_label": "Deprecated: OT_CNCRNT_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400B3": {
-    "itm_shrt_label": "Item filler: replaces old O0400B3",
+    "itm_shrt_label": "Deprecated: OT_GRP_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400B3A": {
-    "itm_shrt_label": "Item filler: replaces old O0400B3A",
+    "itm_shrt_label": "Deprecated: OT_CO_TRMT_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400B4": {
-    "itm_shrt_label": "Item filler: replaces old O0400B4",
+    "itm_shrt_label": "Deprecated: OT_DAY_NUM",
     "itm_sect_label": "O"
   },
   "O0400B5": {
-    "itm_shrt_label": "Item filler: replaces old O0400B5",
+    "itm_shrt_label": "Deprecated: OT_STRT_DT",
     "itm_sect_label": "O"
   },
   "O0400B6": {
-    "itm_shrt_label": "Item filler: replaces old O0400B6",
+    "itm_shrt_label": "Deprecated: OT_END_DT",
     "itm_sect_label": "O"
   },
   "O0400C1": {
-    "itm_shrt_label": "Item filler: replaces old O0400C1",
+    "itm_shrt_label": "Deprecated: PT_INDVDL_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400C2": {
-    "itm_shrt_label": "Item filler: replaces old O0400C2",
+    "itm_shrt_label": "Deprecated: PT_CNCRNT_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400C3": {
-    "itm_shrt_label": "Item filler: replaces old O0400C3",
+    "itm_shrt_label": "Deprecated: PT_GRP_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400C3A": {
-    "itm_shrt_label": "Item filler: replaces old O0400C3A",
+    "itm_shrt_label": "Deprecated: PT_CO_TRMT_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400C4": {
-    "itm_shrt_label": "Item filler: replaces old O0400C4",
+    "itm_shrt_label": "Deprecated: PT_DAY_NUM",
     "itm_sect_label": "O"
   },
   "O0400C5": {
-    "itm_shrt_label": "Item filler: replaces old O0400C5",
+    "itm_shrt_label": "Deprecated: PT_STRT_DT",
     "itm_sect_label": "O"
   },
   "O0400C6": {
-    "itm_shrt_label": "Item filler: replaces old O0400C6",
+    "itm_shrt_label": "Deprecated: PT_END_DT",
     "itm_sect_label": "O"
   },
   "O0400D1": {
-    "itm_shrt_label": "Item filler: replaces old O0400D1",
+    "itm_shrt_label": "Deprecated: RT_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400D2": {
@@ -3672,23 +3672,23 @@
     "itm_sect_label": "O"
   },
   "O0400E1": {
-    "itm_shrt_label": "Item filler: replaces old O0400E1",
+    "itm_shrt_label": "Deprecated: PSYCH_THRPY_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400E2": {
-    "itm_shrt_label": "Item filler: replaces old O0400E2",
+    "itm_shrt_label": "Deprecated: PSYCH_THRPY_DAY_NUM",
     "itm_sect_label": "O"
   },
   "O0400F1": {
-    "itm_shrt_label": "Item filler: replaces old O0400F1",
+    "itm_shrt_label": "Deprecated: RCRTNL_THRPY_MIN_NUM",
     "itm_sect_label": "O"
   },
   "O0400F2": {
-    "itm_shrt_label": "Item filler: replaces old O0400F2",
+    "itm_shrt_label": "Deprecated: RCRTNL_THRPY_DAY_NUM",
     "itm_sect_label": "O"
   },
   "O0420": {
-    "itm_shrt_label": "Item filler: replaces old O0420",
+    "itm_shrt_label": "Deprecated: DSTNCT_THRPY_DAY_NUM",
     "itm_sect_label": "O"
   },
   "O0425A1": {
@@ -3756,11 +3756,11 @@
     "itm_sect_label": "O"
   },
   "O0450A": {
-    "itm_shrt_label": "Item filler: replaces old O0450A",
+    "itm_shrt_label": "Deprecated: RSMPTN_THRPY_CD",
     "itm_sect_label": "O"
   },
   "O0450B": {
-    "itm_shrt_label": "Item filler: replaces old O0450B",
+    "itm_shrt_label": "Deprecated: RSMPTN_THRPY_DT",
     "itm_sect_label": "O"
   },
   "O0500A": {
@@ -3804,11 +3804,11 @@
     "itm_sect_label": "O"
   },
   "O0600": {
-    "itm_shrt_label": "Item filler: replaces old O0600",
+    "itm_shrt_label": "Deprecated: PHYSN_EXMN_NUM",
     "itm_sect_label": "O"
   },
   "O0700": {
-    "itm_shrt_label": "Item filler: replaces old O0700",
+    "itm_shrt_label": "Deprecated: PHYSN_ORDR_NUM",
     "itm_sect_label": "O"
   },
   "ORIGINAL_ASSESSMENT_ID": {
@@ -3876,15 +3876,15 @@
     "itm_sect_label": "Control"
   },
   "Q0100A": {
-    "itm_shrt_label": "Item filler: replaces old Q0100A",
+    "itm_shrt_label": "Deprecated: RSDNT_PRTCPTN_CD",
     "itm_sect_label": "Q"
   },
   "Q0100B": {
-    "itm_shrt_label": "Item filler: replaces old Q0100B",
+    "itm_shrt_label": "Deprecated: FMLY_PRTCPTN_CD",
     "itm_sect_label": "Q"
   },
   "Q0100C": {
-    "itm_shrt_label": "Item filler: replaces old Q0100C",
+    "itm_shrt_label": "Deprecated: GRDN_PRTCPTN_CD",
     "itm_sect_label": "Q"
   },
   "Q0110A": {
@@ -3912,11 +3912,11 @@
     "itm_sect_label": "Q"
   },
   "Q0300A": {
-    "itm_shrt_label": "Item filler: replaces old Q0300A",
+    "itm_shrt_label": "Deprecated: RSDNT_GOAL_CD",
     "itm_sect_label": "Q"
   },
   "Q0300B": {
-    "itm_shrt_label": "Item filler: replaces old Q0300B",
+    "itm_shrt_label": "Deprecated: GOAL_SRC_CD",
     "itm_sect_label": "Q"
   },
   "Q0310A": {
@@ -3932,7 +3932,7 @@
     "itm_sect_label": "Q"
   },
   "Q0400B": {
-    "itm_shrt_label": "Item filler: replaces old Q0400B",
+    "itm_shrt_label": "Deprecated: DSCHRG_DTRMNTN_CD",
     "itm_sect_label": "Q"
   },
   "Q0490": {
@@ -3940,7 +3940,7 @@
     "itm_sect_label": "Q"
   },
   "Q0500A": {
-    "itm_shrt_label": "Item filler: replaces old Q0500A",
+    "itm_shrt_label": "Deprecated: RSDNT_RTRN_CMNTY_CD",
     "itm_sect_label": "Q"
   },
   "Q0500B": {
@@ -3956,7 +3956,7 @@
     "itm_sect_label": "Q"
   },
   "Q0550B": {
-    "itm_shrt_label": "Item filler: replaces old Q0550B",
+    "itm_shrt_label": "Deprecated: SRC_REASK_CD",
     "itm_sect_label": "Q"
   },
   "Q0550C": {
@@ -3964,7 +3964,7 @@
     "itm_sect_label": "Q"
   },
   "Q0600": {
-    "itm_shrt_label": "Item filler: replaces old Q0600",
+    "itm_shrt_label": "Deprecated: LCA_RFRL_CD",
     "itm_sect_label": "Q"
   },
   "Q0610A": {
@@ -4496,7 +4496,7 @@
     "itm_sect_label": "S"
   },
   "S1200Z": {
-    "itm_shrt_label": "Item filler: replaces old S1200Z",
+    "itm_shrt_label": "Deprecated: NO_MNTL_HLTH_CD",
     "itm_sect_label": "S"
   },
   "S1210A": {
@@ -6088,7 +6088,7 @@
     "itm_sect_label": "X"
   },
   "X0300": {
-    "itm_shrt_label": "Item filler: replaces old X0300",
+    "itm_shrt_label": "Deprecated: CRCTN_GNDR_CD",
     "itm_sect_label": "X"
   },
   "X0310": {
@@ -6104,11 +6104,11 @@
     "itm_sect_label": "X"
   },
   "X0570A": {
-    "itm_shrt_label": "Item filler: replaces old X0570A",
+    "itm_shrt_label": "Deprecated: CRCTN_OSA_TYPE_PURP",
     "itm_sect_label": "X"
   },
   "X0570B": {
-    "itm_shrt_label": "Item filler: replaces old X0570B",
+    "itm_shrt_label": "Deprecated: CRCTN_OSA_TYPE_CD",
     "itm_sect_label": "X"
   },
   "X0600A": {
@@ -6120,11 +6120,11 @@
     "itm_sect_label": "X"
   },
   "X0600C": {
-    "itm_shrt_label": "Item filler: replaces old X0600C",
+    "itm_shrt_label": "Deprecated: CRCTN_PPS_OMRA_CD",
     "itm_sect_label": "X"
   },
   "X0600D": {
-    "itm_shrt_label": "Item filler: replaces old X0600D",
+    "itm_shrt_label": "Deprecated: CRCTN_SB_CLNCL_CHG_CD",
     "itm_sect_label": "X"
   },
   "X0600F": {
@@ -6168,7 +6168,7 @@
     "itm_sect_label": "X"
   },
   "X0900E": {
-    "itm_shrt_label": "Item filler: replaces old X0900E",
+    "itm_shrt_label": "Deprecated: MDFCTN_ADD_THRPY_DT_CD",
     "itm_sect_label": "X"
   },
   "X0900Z": {
@@ -6204,15 +6204,15 @@
     "itm_sect_label": "Z"
   },
   "Z0100C": {
-    "itm_shrt_label": "Item filler: replaces old Z0100C",
+    "itm_shrt_label": "Deprecated: MDCR_STAY_ASMT_CD",
     "itm_sect_label": "Z"
   },
   "Z0150A": {
-    "itm_shrt_label": "Item filler: replaces old Z0150A",
+    "itm_shrt_label": "Deprecated: MDCR_NTHRPY_HIPPS_TXT",
     "itm_sect_label": "Z"
   },
   "Z0150B": {
-    "itm_shrt_label": "Item filler: replaces old Z0150B",
+    "itm_shrt_label": "Deprecated: MDCR_NTHRPY_RUGVRSN_TXT",
     "itm_sect_label": "Z"
   },
   "Z0200A": {

@@ -50,8 +50,9 @@ fs.createReadStream(CSV_SOURCE)
   .on('data', (row) => {
     // Extract relevant fields from CSV (using actual column names from CSV)
     let itemId = row['itm_id'] || row['ITM_ID'] || row['Item ID'];
-    const shortLabel = row['itm_shrt_label'] || row['ITM_SHRT_LABEL'] || row['Short Label'];
+    let shortLabel = row['itm_shrt_label'] || row['ITM_SHRT_LABEL'] || row['Short Label'];
     let sectionLabel = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Label'];
+    const dbId = row['itm_db_id'] || row['ITM_DB_ID'] || row['DB ID'];
     
     // Handle filler items - extract the actual old item code
     if (sectionLabel === 'Filler' && shortLabel && shortLabel.includes('replaces old ')) {
@@ -70,6 +71,14 @@ fs.createReadStream(CSV_SOURCE)
         // Extract section label from the code (letters before first digit)
         const sectionMatch = oldItemCode.match(/^([A-Z]+)/);
         sectionLabel = sectionMatch ? sectionMatch[1] : 'Unknown';
+        
+        // Replace the label with a cleaner format using the database ID
+        if (dbId) {
+          shortLabel = `Deprecated: ${dbId}`;
+        } else {
+          shortLabel = `Deprecated: ${oldItemCode}`;
+        }
+        
         fillerTransformCount++;
       }
     }
