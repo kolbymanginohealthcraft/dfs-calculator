@@ -3,6 +3,7 @@ import { GG_ITEMS, getFunctionCovariates, extractPatientSummary } from "./calcul
 import { parseXml } from "./xmlParser"; // already used in your code
 import { getImputationMultipliersForItem } from "./coefficientLoader";
 import { getImputationThresholds } from "./imputationCalculations";
+import { getSectionName } from "./sectionNames";
 
 // Helper function to calculate GG item-specific covariates
 const getGGItemSpecificCovariate = (covariateName, parsedValues) => {
@@ -95,7 +96,7 @@ export function handleFileUpload(
       if (!item) return;
 
       const sectLabel = item.itm_sect_label || "Other";
-      const fullName = item.sect_name || sectLabel;
+      const fullName = getSectionName(sectLabel);
 
       if (!grouped[sectLabel]) {
         grouped[sectLabel] = {

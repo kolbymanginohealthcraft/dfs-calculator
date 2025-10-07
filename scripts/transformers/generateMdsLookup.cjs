@@ -46,11 +46,11 @@ let skippedCount = 0;
 fs.createReadStream(CSV_SOURCE)
   .pipe(csv())
   .on('data', (row) => {
-    // Extract relevant fields from CSV
-    const itemId = row['ITM_ID'] || row['item_id'] || row['Item ID'];
-    const shortLabel = row['ITM_SHRT_LABEL'] || row['short_label'] || row['Short Label'];
-    const sectionLabel = row['ITM_SECT_LABEL'] || row['section_label'] || row['Section Label'];
-    const sectionName = row['SECT_NAME'] || row['section_name'] || row['Section Name'];
+    // Extract relevant fields from CSV (using actual column names from CSV)
+    const itemId = row['itm_id'] || row['ITM_ID'] || row['Item ID'];
+    const shortLabel = row['itm_shrt_label'] || row['ITM_SHRT_LABEL'] || row['Short Label'];
+    const sectionLabel = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Label'];
+    const sectionName = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Name'];
     
     if (itemId && shortLabel) {
       lookup[itemId] = {
