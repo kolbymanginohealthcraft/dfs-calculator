@@ -3,6 +3,7 @@ import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import { formatDate } from "../utils/calculations";
 import { redactName } from "../utils/redactionUtils";
+import { getHccDisplayForIcd } from "../utils/hccMapping";
 import { ClipboardList, X, ArrowLeft } from "lucide-react";
 
 export default function MdsSnapshot({
@@ -129,6 +130,11 @@ export default function MdsSnapshot({
     const displayValue =
       isDiagnosisCode && !isTrulyBlank ? value.replace(/\^/g, "") : value;
 
+    // Get HCC mapping for diagnosis codes
+    const hccDisplay = isDiagnosisCode && !isTrulyBlank 
+      ? getHccDisplayForIcd(cleanedValue) 
+      : "";
+
     if (labelDesc) {
       return (
         <>
@@ -139,6 +145,11 @@ export default function MdsSnapshot({
           <span className={styles.valueDescription}>
             {highlightMatch(labelDesc)}
           </span>
+          {hccDisplay && (
+            <span className={styles.hccDisplay}>
+              {" "}({hccDisplay})
+            </span>
+          )}
         </>
       );
     }
@@ -153,6 +164,11 @@ export default function MdsSnapshot({
           <span className={styles.valueDescription}>
             {highlightMatch(icdDesc)}
           </span>
+          {hccDisplay && (
+            <span className={styles.hccDisplay}>
+              {" "}({hccDisplay})
+            </span>
+          )}
         </>
       );
     }
@@ -164,6 +180,11 @@ export default function MdsSnapshot({
             {highlightMatch(displayValue)}
           </span>
           : <span className={styles.valueDescription}>Diagnosis not found</span>
+          {hccDisplay && (
+            <span className={styles.hccDisplay}>
+              {" "}({hccDisplay})
+            </span>
+          )}
         </>
       );
     }

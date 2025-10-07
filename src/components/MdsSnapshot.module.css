@@ -182,6 +182,16 @@ th {
   font-size: .75rem;
 }
 
+.hccDisplay {
+  font-weight: 600;
+  color: #7fbc42;
+  font-size: 0.7rem;
+  background: rgba(127, 188, 66, 0.1);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  margin-left: 0.2rem;
+}
+
 .highlightedRow {
   /* background-color: #e5f7f7; */
 }

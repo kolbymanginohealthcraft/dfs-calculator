@@ -494,7 +494,7 @@ export const covariateRelatedItems = {
   "Mental Health Disorders: Schizophrenia (HCC57), Major Depressive, Bipolar, and Paranoid Disorders (HCC59), Reactive and Unspecified Psychosis (HCC58), Personality Disorders (HCC60)":
     {
       items: [
-        "I1600",
+        "I6000",
         "I5800",
         "I5900",
         "I5950",
