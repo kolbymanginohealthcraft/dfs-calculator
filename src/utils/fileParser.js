@@ -50,7 +50,7 @@ const calculateImputedValue = (ggItemId, parsedValues, summary, icdList, startSc
   const multipliers = getImputationMultipliersForItem(ggItemId, ardDate);
   if (!multipliers || Object.keys(multipliers).length === 0) return "01"; // Default fallback
   
-  const thresholds = getImputationThresholds(ggItemId);
+  const thresholds = getImputationThresholds(ggItemId, ardDate);
   let imputationScore = 0;
 
   // Calculate imputation score using covariate * multiplier

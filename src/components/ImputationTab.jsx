@@ -130,7 +130,7 @@ export default function ImputationTab({
       }
       
       const multipliers = imputationMultipliers[ggItemId];
-      const thresholds = getImputationThresholds(ggItemId);
+      const thresholds = getImputationThresholds(ggItemId, ardDate);
       
       // Get covariates for this specific GG item
       const covariates = {};

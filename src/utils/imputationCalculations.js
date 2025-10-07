@@ -115,37 +115,46 @@ function convertImputationScoreToGGValue(score) {
 }
 
 /**
- * Gets imputation thresholds for a specific GG item
+ * Gets imputation thresholds for a specific GG item based on ARD date
  * @param {string} ggItemId - The GG item ID (e.g., 'GG0130A1')
+ * @param {string} ardDate - The ARD date to determine which Update ID to use
  * @returns {Array} Array of threshold values for that item
  */
-export function getImputationThresholds(ggItemId) {
-    // These are the actual threshold values from the Excel file
-    const thresholds = {
-        'GG0130A1': [-0.1123, 0.6144, 1.3938, 2.5248, 4.3795],
-        'GG0130B1': [1.4879, 2.5838, 3.8326, 5.0506, 6.7074],
-        'GG0130C1': [2.8737, 4.5488, 6.3553, 8.1051, 8.6432],
-        'GG0170A1': [2.3401, 4.2169, 6.2126, 7.9598, 8.2783],
-        'GG0170C1': [4.2872, 7.2511, 10.435, 13.6939, 14.7376],
-        'GG0170D1': [4.304, 6.7892, 10.0151, 13.5503, 14.3346],
-        'GG0170E1': [5.3876, 7.8085, 11.2353, 15.3698, 16.4788],
-        'GG0170F1': [5.0562, 7.3647, 10.3898, 13.8425, 14.7658],
-        'GG0170I1': [3.9142, 4.6879, 6.7485, 10.1968, 10.6805],
-        'GG0170J1': [6.1533, 6.6822, 8.6952, 12.692, 13.5531],
-        'GG0170R1': [3.339, 4.3719, 5.4746, 6.8456, 7.4021]
-    };
+export function getImputationThresholds(ggItemId, ardDate = null) {
+    // Get the correct imputation multipliers based on ARD date
+    const itemMultipliers = ardDate 
+        ? getImputationMultipliers(ardDate)[ggItemId]
+        : null;
     
-    return thresholds[ggItemId] || [-0.5, 0.5, 1.5, 2.5, 3.5];
+    // Extract Model Threshold 1-5 from the multipliers
+    if (itemMultipliers) {
+        const thresholds = [
+            itemMultipliers["Model Threshold 1"],
+            itemMultipliers["Model Threshold 2"],
+            itemMultipliers["Model Threshold 3"],
+            itemMultipliers["Model Threshold 4"],
+            itemMultipliers["Model Threshold 5"]
+        ];
+        
+        // Only return if we have all 5 thresholds
+        if (thresholds.every(t => typeof t === 'number')) {
+            return thresholds;
+        }
+    }
+    
+    // Fallback to default thresholds if not found
+    return [-0.5, 0.5, 1.5, 2.5, 3.5];
 }
 
 /**
  * Converts an imputation score to a GG item value using item-specific thresholds
  * @param {number} score - The calculated imputation score
  * @param {string} ggItemId - The GG item ID
+ * @param {string} ardDate - The ARD date to determine which Update ID to use
  * @returns {string} The GG item value as a string ('01' to '06')
  */
-export function convertImputationScoreToGGValueWithThresholds(score, ggItemId) {
-    const thresholds = getImputationThresholds(ggItemId);
+export function convertImputationScoreToGGValueWithThresholds(score, ggItemId, ardDate = null) {
+    const thresholds = getImputationThresholds(ggItemId, ardDate);
     
     // Determine which category the score falls into
     if (score < thresholds[0]) return '01'; // 1
@@ -226,7 +235,7 @@ export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdLis
             });
             
             // Convert imputation score to GG item value using item-specific thresholds
-            const imputedValue = convertImputationScoreToGGValueWithThresholds(imputationScore, ggItemId);
+            const imputedValue = convertImputationScoreToGGValueWithThresholds(imputationScore, ggItemId, ardDate);
             imputedValues[ggItemId] = imputedValue;
         }
     });
