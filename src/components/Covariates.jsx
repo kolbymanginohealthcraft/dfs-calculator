@@ -14,6 +14,7 @@ export default function Covariates({
   const [searchTerm, setSearchTerm] = useState("");
 
   const formatNumber = (n) => Number(n).toFixed(2);
+  const formatNumberDetailed = (n) => Number(n).toFixed(4);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -103,7 +104,7 @@ export default function Covariates({
             <thead>
               <tr>
                 <th>Covariate</th>
-                <th style={{ textAlign: "right" }}>Value</th>
+                <th style={{ textAlign: "right" }}>Coefficient</th>
                 <th style={{ textAlign: "right" }}>Multiplier</th>
                 <th style={{ textAlign: "right" }}>Contribution</th>
               </tr>
@@ -138,8 +139,8 @@ export default function Covariates({
                       >
                         <td>{highlightMatch(key, searchTerm)}</td>
                         <td>{value}</td>
-                        <td>{formatNumber(multiplier)}</td>
-                        <td>{formatNumber(subtotal)}</td>
+                        <td>{formatNumberDetailed(multiplier)}</td>
+                        <td>{formatNumberDetailed(subtotal)}</td>
                       </tr>
                     );
                   })}

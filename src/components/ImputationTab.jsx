@@ -430,7 +430,7 @@ export default function ImputationTab({
                               <thead>
                                 <tr>
                                   <th>Covariate</th>
-                                  <th style={{ textAlign: "right" }}>Value</th>
+                                  <th style={{ textAlign: "right" }}>Coefficient</th>
                                   <th style={{ textAlign: "right" }}>Multiplier</th>
                                   <th style={{ textAlign: "right" }}>Contribution</th>
                                 </tr>
