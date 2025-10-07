@@ -53,6 +53,7 @@ fs.createReadStream(CSV_SOURCE)
     let shortLabel = row['itm_shrt_label'] || row['ITM_SHRT_LABEL'] || row['Short Label'];
     let sectionLabel = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Label'];
     const dbId = row['itm_db_id'] || row['ITM_DB_ID'] || row['DB ID'];
+    let itemType = row['itm_type_cd'] || row['ITM_TYPE_CD'] || row['Type'];
     
     // Handle filler items - extract the actual old item code
     if (sectionLabel === 'Filler' && shortLabel && shortLabel.includes('replaces old ')) {
@@ -75,6 +76,17 @@ fs.createReadStream(CSV_SOURCE)
         // Replace the label with a cleaner format using the database ID
         if (dbId) {
           shortLabel = `Deprecated: ${dbId}`;
+          
+          // Extract type from database ID suffix
+          if (dbId.endsWith('_NUM')) {
+            itemType = 'Number';
+          } else if (dbId.endsWith('_DT')) {
+            itemType = 'Date';
+          } else if (dbId.endsWith('_CD')) {
+            itemType = 'Code';
+          } else if (dbId.endsWith('_TXT')) {
+            itemType = 'Text';
+          }
         } else {
           shortLabel = `Deprecated: ${oldItemCode}`;
         }
@@ -84,10 +96,17 @@ fs.createReadStream(CSV_SOURCE)
     }
     
     if (itemId && shortLabel) {
-      lookup[itemId] = {
+      const entry = {
         itm_shrt_label: shortLabel,
         itm_sect_label: sectionLabel || 'Unknown'
       };
+      
+      // Add type field if available
+      if (itemType) {
+        entry.itm_type_cd = itemType;
+      }
+      
+      lookup[itemId] = entry;
       processedCount++;
     } else {
       skippedCount++;

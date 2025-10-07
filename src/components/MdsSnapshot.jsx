@@ -5,6 +5,7 @@ import { formatDate } from "../utils/calculations";
 import { redactName } from "../utils/redactionUtils";
 import { getHccDisplayForIcd } from "../utils/hccMapping";
 import { ClipboardList, X, ArrowLeft } from "lucide-react";
+import mdsItemLookup from "../data/mds_item_lookup.json";
 
 export default function MdsSnapshot({
   groupedSections,
@@ -100,19 +101,19 @@ export default function MdsSnapshot({
       return "REDACTED";
     }
 
-    // List of known date-related MDS items
-    const dateItems = [
-      "A0900", "A1600", "A1900", "A2000", "A2200", "A2300", "A2400B", "A2400C",
-      "TARGET_DATE", "SUBMISSION_DATE", "SUBMISSION_COMPLETE_DATE"
-    ];
-
-    // Check if this is a date item and format it
-    const isDateItem = dateItems.includes(id);
-    const isDateValue = value && value.length === 8 && /^\d{8}$/.test(value);
+    // Get item type from lookup
+    const itemType = mdsItemLookup[id]?.itm_type_cd;
     
-    if (isDateItem && isDateValue) {
+    // Format dates automatically based on item type
+    if (itemType === "Date" && value && value.length === 8 && /^\d{8}$/.test(value)) {
       const formattedDate = formatDate(value);
       return highlightMatch(formattedDate);
+    }
+    
+    // Format numbers automatically - remove leading zeros
+    if (itemType === "Number" && value && /^\d+$/.test(value)) {
+      const numericValue = parseInt(value, 10).toString();
+      return highlightMatch(numericValue);
     }
 
     const key = `${id}|${value}`;
