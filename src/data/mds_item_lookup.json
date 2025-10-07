@@ -19,12 +19,28 @@
     "itm_shrt_label": "Type of provider",
     "itm_sect_label": "A"
   },
+  "A0300A": {
+    "itm_shrt_label": "Item filler: replaces old A0300A",
+    "itm_sect_label": "A"
+  },
+  "A0300B": {
+    "itm_shrt_label": "Item filler: replaces old A0300B",
+    "itm_sect_label": "A"
+  },
   "A0310A": {
     "itm_shrt_label": "Type of assessment: OBRA",
     "itm_sect_label": "A"
   },
   "A0310B": {
     "itm_shrt_label": "Type of assessment: PPS",
+    "itm_sect_label": "A"
+  },
+  "A0310C": {
+    "itm_shrt_label": "Item filler: replaces old A0310C",
+    "itm_sect_label": "A"
+  },
+  "A0310D": {
+    "itm_shrt_label": "Item filler: replaces old A0310D",
     "itm_sect_label": "A"
   },
   "A0310E": {
@@ -79,12 +95,40 @@
     "itm_shrt_label": "Medicaid number",
     "itm_sect_label": "A"
   },
+  "A0800": {
+    "itm_shrt_label": "Item filler: replaces old A0800",
+    "itm_sect_label": "A"
+  },
   "A0810": {
     "itm_shrt_label": "Sex",
     "itm_sect_label": "A"
   },
   "A0900": {
     "itm_shrt_label": "Birthdate",
+    "itm_sect_label": "A"
+  },
+  "A1000A": {
+    "itm_shrt_label": "Item filler: replaces old A1000A",
+    "itm_sect_label": "A"
+  },
+  "A1000B": {
+    "itm_shrt_label": "Item filler: replaces old A1000B",
+    "itm_sect_label": "A"
+  },
+  "A1000C": {
+    "itm_shrt_label": "Item filler: replaces old A1000C",
+    "itm_sect_label": "A"
+  },
+  "A1000D": {
+    "itm_shrt_label": "Item filler: replaces old A1000D",
+    "itm_sect_label": "A"
+  },
+  "A1000E": {
+    "itm_shrt_label": "Item filler: replaces old A1000E",
+    "itm_sect_label": "A"
+  },
+  "A1000F": {
+    "itm_shrt_label": "Item filler: replaces old A1000F",
     "itm_sect_label": "A"
   },
   "A1005A": {
@@ -183,6 +227,14 @@
     "itm_shrt_label": "Race: None of the above",
     "itm_sect_label": "A"
   },
+  "A1100A": {
+    "itm_shrt_label": "Item filler: replaces old A1100A",
+    "itm_sect_label": "A"
+  },
+  "A1100B": {
+    "itm_shrt_label": "Item filler: replaces old A1100B",
+    "itm_sect_label": "A"
+  },
   "A1110A": {
     "itm_shrt_label": "Preferred language",
     "itm_sect_label": "A"
@@ -193,6 +245,26 @@
   },
   "A1200": {
     "itm_shrt_label": "Marital status",
+    "itm_sect_label": "A"
+  },
+  "A1250A": {
+    "itm_shrt_label": "Item filler: replaces old A1250A",
+    "itm_sect_label": "A"
+  },
+  "A1250B": {
+    "itm_shrt_label": "Item filler: replaces old A1250B",
+    "itm_sect_label": "A"
+  },
+  "A1250C": {
+    "itm_shrt_label": "Item filler: replaces old A1250C",
+    "itm_sect_label": "A"
+  },
+  "A1250X": {
+    "itm_shrt_label": "Item filler: replaces old A1250X",
+    "itm_sect_label": "A"
+  },
+  "A1250Y": {
+    "itm_shrt_label": "Item filler: replaces old A1250Y",
     "itm_sect_label": "A"
   },
   "A1255": {
@@ -263,6 +335,10 @@
     "itm_shrt_label": "Type of entry",
     "itm_sect_label": "A"
   },
+  "A1800": {
+    "itm_shrt_label": "Item filler: replaces old A1800",
+    "itm_sect_label": "A"
+  },
   "A1805": {
     "itm_shrt_label": "Admitted from",
     "itm_sect_label": "A"
@@ -273,6 +349,10 @@
   },
   "A2000": {
     "itm_shrt_label": "Discharge date",
+    "itm_sect_label": "A"
+  },
+  "A2100": {
+    "itm_shrt_label": "Item filler: replaces old A2100",
     "itm_sect_label": "A"
   },
   "A2105": {
@@ -471,6 +551,22 @@
     "itm_shrt_label": "Cognitive skills for daily decision making",
     "itm_sect_label": "C"
   },
+  "C1300A": {
+    "itm_shrt_label": "Item filler: replaces old C1300A",
+    "itm_sect_label": "C"
+  },
+  "C1300B": {
+    "itm_shrt_label": "Item filler: replaces old C1300B",
+    "itm_sect_label": "C"
+  },
+  "C1300C": {
+    "itm_shrt_label": "Item filler: replaces old C1300C",
+    "itm_sect_label": "C"
+  },
+  "C1300D": {
+    "itm_shrt_label": "Item filler: replaces old C1300D",
+    "itm_sect_label": "C"
+  },
   "C1310A": {
     "itm_shrt_label": "Acute Onset Mental Status Change",
     "itm_sect_label": "C"
@@ -485,6 +581,10 @@
   },
   "C1310D": {
     "itm_shrt_label": "Altered Level of Consciousness",
+    "itm_sect_label": "C"
+  },
+  "C1600": {
+    "itm_shrt_label": "Item filler: replaces old C1600",
     "itm_sect_label": "C"
   },
   "CALCULATED_ITEMS_FILLER1": {
@@ -627,6 +727,86 @@
     "itm_shrt_label": "Total severity score",
     "itm_sect_label": "D"
   },
+  "D0200A1": {
+    "itm_shrt_label": "Item filler: replaces old D0200A1",
+    "itm_sect_label": "D"
+  },
+  "D0200A2": {
+    "itm_shrt_label": "Item filler: replaces old D0200A2",
+    "itm_sect_label": "D"
+  },
+  "D0200B1": {
+    "itm_shrt_label": "Item filler: replaces old D0200B1",
+    "itm_sect_label": "D"
+  },
+  "D0200B2": {
+    "itm_shrt_label": "Item filler: replaces old D0200B2",
+    "itm_sect_label": "D"
+  },
+  "D0200C1": {
+    "itm_shrt_label": "Item filler: replaces old D0200C1",
+    "itm_sect_label": "D"
+  },
+  "D0200C2": {
+    "itm_shrt_label": "Item filler: replaces old D0200C2",
+    "itm_sect_label": "D"
+  },
+  "D0200D1": {
+    "itm_shrt_label": "Item filler: replaces old D0200D1",
+    "itm_sect_label": "D"
+  },
+  "D0200D2": {
+    "itm_shrt_label": "Item filler: replaces old D0200D2",
+    "itm_sect_label": "D"
+  },
+  "D0200E1": {
+    "itm_shrt_label": "Item filler: replaces old D0200E1",
+    "itm_sect_label": "D"
+  },
+  "D0200E2": {
+    "itm_shrt_label": "Item filler: replaces old D0200E2",
+    "itm_sect_label": "D"
+  },
+  "D0200F1": {
+    "itm_shrt_label": "Item filler: replaces old D0200F1",
+    "itm_sect_label": "D"
+  },
+  "D0200F2": {
+    "itm_shrt_label": "Item filler: replaces old D0200F2",
+    "itm_sect_label": "D"
+  },
+  "D0200G1": {
+    "itm_shrt_label": "Item filler: replaces old D0200G1",
+    "itm_sect_label": "D"
+  },
+  "D0200G2": {
+    "itm_shrt_label": "Item filler: replaces old D0200G2",
+    "itm_sect_label": "D"
+  },
+  "D0200H1": {
+    "itm_shrt_label": "Item filler: replaces old D0200H1",
+    "itm_sect_label": "D"
+  },
+  "D0200H2": {
+    "itm_shrt_label": "Item filler: replaces old D0200H2",
+    "itm_sect_label": "D"
+  },
+  "D0200I1": {
+    "itm_shrt_label": "Item filler: replaces old D0200I1",
+    "itm_sect_label": "D"
+  },
+  "D0200I2": {
+    "itm_shrt_label": "Item filler: replaces old D0200I2",
+    "itm_sect_label": "D"
+  },
+  "D0300": {
+    "itm_shrt_label": "Item filler: replaces old D0300",
+    "itm_sect_label": "D"
+  },
+  "D0350": {
+    "itm_shrt_label": "Item filler: replaces old D0350",
+    "itm_sect_label": "D"
+  },
   "D0500A1": {
     "itm_shrt_label": "PHQ staff: little interest or pleasure - presence",
     "itm_sect_label": "D"
@@ -711,6 +891,10 @@
     "itm_shrt_label": "PHQ staff: total mood score",
     "itm_sect_label": "D"
   },
+  "D0650": {
+    "itm_shrt_label": "Item filler: replaces old D0650",
+    "itm_sect_label": "D"
+  },
   "D0700": {
     "itm_shrt_label": "Social Isolation",
     "itm_sect_label": "D"
@@ -790,6 +974,10 @@
   "E1100": {
     "itm_shrt_label": "Change in behavioral or other symptoms",
     "itm_sect_label": "E"
+  },
+  "EFFECTIVE_DATE": {
+    "itm_shrt_label": "Item filler: replaces old EFFECTIVE_DATE",
+    "itm_sect_label": "EFFECTIVE"
   },
   "F0300": {
     "itm_shrt_label": "Conduct res interview for daily/activity prefs",
@@ -963,6 +1151,150 @@
     "itm_shrt_label": "Assigned facility/provider submission ID",
     "itm_sect_label": "Control"
   },
+  "G0110A1": {
+    "itm_shrt_label": "Item filler: replaces old G0110A1",
+    "itm_sect_label": "G"
+  },
+  "G0110A2": {
+    "itm_shrt_label": "Item filler: replaces old G0110A2",
+    "itm_sect_label": "G"
+  },
+  "G0110B1": {
+    "itm_shrt_label": "Item filler: replaces old G0110B1",
+    "itm_sect_label": "G"
+  },
+  "G0110B2": {
+    "itm_shrt_label": "Item filler: replaces old G0110B2",
+    "itm_sect_label": "G"
+  },
+  "G0110C1": {
+    "itm_shrt_label": "Item filler: replaces old G0110C1",
+    "itm_sect_label": "G"
+  },
+  "G0110C2": {
+    "itm_shrt_label": "Item filler: replaces old G0110C2",
+    "itm_sect_label": "G"
+  },
+  "G0110D1": {
+    "itm_shrt_label": "Item filler: replaces old G0110D1",
+    "itm_sect_label": "G"
+  },
+  "G0110D2": {
+    "itm_shrt_label": "Item filler: replaces old G0110D2",
+    "itm_sect_label": "G"
+  },
+  "G0110E1": {
+    "itm_shrt_label": "Item filler: replaces old G0110E1",
+    "itm_sect_label": "G"
+  },
+  "G0110E2": {
+    "itm_shrt_label": "Item filler: replaces old G0110E2",
+    "itm_sect_label": "G"
+  },
+  "G0110F1": {
+    "itm_shrt_label": "Item filler: replaces old G0110F1",
+    "itm_sect_label": "G"
+  },
+  "G0110F2": {
+    "itm_shrt_label": "Item filler: replaces old G0110F2",
+    "itm_sect_label": "G"
+  },
+  "G0110G1": {
+    "itm_shrt_label": "Item filler: replaces old G0110G1",
+    "itm_sect_label": "G"
+  },
+  "G0110G2": {
+    "itm_shrt_label": "Item filler: replaces old G0110G2",
+    "itm_sect_label": "G"
+  },
+  "G0110H1": {
+    "itm_shrt_label": "Item filler: replaces old G0110H1",
+    "itm_sect_label": "G"
+  },
+  "G0110H2": {
+    "itm_shrt_label": "Item filler: replaces old G0110H2",
+    "itm_sect_label": "G"
+  },
+  "G0110I1": {
+    "itm_shrt_label": "Item filler: replaces old G0110I1",
+    "itm_sect_label": "G"
+  },
+  "G0110I2": {
+    "itm_shrt_label": "Item filler: replaces old G0110I2",
+    "itm_sect_label": "G"
+  },
+  "G0110J1": {
+    "itm_shrt_label": "Item filler: replaces old G0110J1",
+    "itm_sect_label": "G"
+  },
+  "G0110J2": {
+    "itm_shrt_label": "Item filler: replaces old G0110J2",
+    "itm_sect_label": "G"
+  },
+  "G0120A": {
+    "itm_shrt_label": "Item filler: replaces old G0120A",
+    "itm_sect_label": "G"
+  },
+  "G0120B": {
+    "itm_shrt_label": "Item filler: replaces old G0120B",
+    "itm_sect_label": "G"
+  },
+  "G0300A": {
+    "itm_shrt_label": "Item filler: replaces old G0300A",
+    "itm_sect_label": "G"
+  },
+  "G0300B": {
+    "itm_shrt_label": "Item filler: replaces old G0300B",
+    "itm_sect_label": "G"
+  },
+  "G0300C": {
+    "itm_shrt_label": "Item filler: replaces old G0300C",
+    "itm_sect_label": "G"
+  },
+  "G0300D": {
+    "itm_shrt_label": "Item filler: replaces old G0300D",
+    "itm_sect_label": "G"
+  },
+  "G0300E": {
+    "itm_shrt_label": "Item filler: replaces old G0300E",
+    "itm_sect_label": "G"
+  },
+  "G0400A": {
+    "itm_shrt_label": "Item filler: replaces old G0400A",
+    "itm_sect_label": "G"
+  },
+  "G0400B": {
+    "itm_shrt_label": "Item filler: replaces old G0400B",
+    "itm_sect_label": "G"
+  },
+  "G0600A": {
+    "itm_shrt_label": "Item filler: replaces old G0600A",
+    "itm_sect_label": "G"
+  },
+  "G0600B": {
+    "itm_shrt_label": "Item filler: replaces old G0600B",
+    "itm_sect_label": "G"
+  },
+  "G0600C": {
+    "itm_shrt_label": "Item filler: replaces old G0600C",
+    "itm_sect_label": "G"
+  },
+  "G0600D": {
+    "itm_shrt_label": "Item filler: replaces old G0600D",
+    "itm_sect_label": "G"
+  },
+  "G0600Z": {
+    "itm_shrt_label": "Item filler: replaces old G0600Z",
+    "itm_sect_label": "G"
+  },
+  "G0900A": {
+    "itm_shrt_label": "Item filler: replaces old G0900A",
+    "itm_sect_label": "G"
+  },
+  "G0900B": {
+    "itm_shrt_label": "Item filler: replaces old G0900B",
+    "itm_sect_label": "G"
+  },
   "GG0100A": {
     "itm_shrt_label": "Prior Functioning - Self Care",
     "itm_sect_label": "GG"
@@ -1035,6 +1367,10 @@
     "itm_shrt_label": "Eating (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0130A2": {
+    "itm_shrt_label": "Item filler: replaces old GG0130A2",
+    "itm_sect_label": "GG"
+  },
   "GG0130A3": {
     "itm_shrt_label": "Eating (Dischg Perf)",
     "itm_sect_label": "GG"
@@ -1045,6 +1381,10 @@
   },
   "GG0130B1": {
     "itm_shrt_label": "Oral hygiene (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0130B2": {
+    "itm_shrt_label": "Item filler: replaces old GG0130B2",
     "itm_sect_label": "GG"
   },
   "GG0130B3": {
@@ -1059,6 +1399,10 @@
     "itm_shrt_label": "Toileting hygiene (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0130C2": {
+    "itm_shrt_label": "Item filler: replaces old GG0130C2",
+    "itm_sect_label": "GG"
+  },
   "GG0130C3": {
     "itm_shrt_label": "Toileting hygiene (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1069,6 +1413,10 @@
   },
   "GG0130E1": {
     "itm_shrt_label": "Shower/bathe self (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0130E2": {
+    "itm_shrt_label": "Item filler: replaces old GG0130E2",
     "itm_sect_label": "GG"
   },
   "GG0130E3": {
@@ -1083,6 +1431,10 @@
     "itm_shrt_label": "Upper body dressing (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0130F2": {
+    "itm_shrt_label": "Item filler: replaces old GG0130F2",
+    "itm_sect_label": "GG"
+  },
   "GG0130F3": {
     "itm_shrt_label": "Upper body dressing (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1095,6 +1447,10 @@
     "itm_shrt_label": "Lower body dressing (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0130G2": {
+    "itm_shrt_label": "Item filler: replaces old GG0130G2",
+    "itm_sect_label": "GG"
+  },
   "GG0130G3": {
     "itm_shrt_label": "Lower body dressing (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1105,6 +1461,10 @@
   },
   "GG0130H1": {
     "itm_shrt_label": "Put on/take off footwear (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0130H2": {
+    "itm_shrt_label": "Item filler: replaces old GG0130H2",
     "itm_sect_label": "GG"
   },
   "GG0130H3": {
@@ -1131,6 +1491,10 @@
     "itm_shrt_label": "Roll left and right (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170A2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170A2",
+    "itm_sect_label": "GG"
+  },
   "GG0170A3": {
     "itm_shrt_label": "Roll left and right (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1141,6 +1505,10 @@
   },
   "GG0170B1": {
     "itm_shrt_label": "Sit to lying (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170B2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170B2",
     "itm_sect_label": "GG"
   },
   "GG0170B3": {
@@ -1155,6 +1523,10 @@
     "itm_shrt_label": "Lying to sitting on bed side (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170C2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170C2",
+    "itm_sect_label": "GG"
+  },
   "GG0170C3": {
     "itm_shrt_label": "Lying to sitting on bed side (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1165,6 +1537,10 @@
   },
   "GG0170D1": {
     "itm_shrt_label": "Sit to stand (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170D2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170D2",
     "itm_sect_label": "GG"
   },
   "GG0170D3": {
@@ -1179,6 +1555,10 @@
     "itm_shrt_label": "Chair/bed-to-chair transfer (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170E2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170E2",
+    "itm_sect_label": "GG"
+  },
   "GG0170E3": {
     "itm_shrt_label": "Chair/bed-to-chair transfer (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1189,6 +1569,10 @@
   },
   "GG0170F1": {
     "itm_shrt_label": "Toilet transfer (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170F2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170F2",
     "itm_sect_label": "GG"
   },
   "GG0170F3": {
@@ -1215,12 +1599,28 @@
     "itm_shrt_label": "Car transfer (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170G2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170G2",
+    "itm_sect_label": "GG"
+  },
   "GG0170G3": {
     "itm_shrt_label": "Car transfer (Dschg Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170H1": {
+    "itm_shrt_label": "Item filler: replaces old GG0170H1",
+    "itm_sect_label": "GG"
+  },
+  "GG0170H3": {
+    "itm_shrt_label": "Item filler: replaces old GG0170H3",
+    "itm_sect_label": "GG"
+  },
   "GG0170I1": {
     "itm_shrt_label": "Walk 10 feet (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170I2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170I2",
     "itm_sect_label": "GG"
   },
   "GG0170I3": {
@@ -1235,6 +1635,10 @@
     "itm_shrt_label": "Walk 50 feet with two turns (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170J2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170J2",
+    "itm_sect_label": "GG"
+  },
   "GG0170J3": {
     "itm_shrt_label": "Walk 50 feet with two turns (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1245,6 +1649,10 @@
   },
   "GG0170K1": {
     "itm_shrt_label": "Walk 150 feet (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170K2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170K2",
     "itm_sect_label": "GG"
   },
   "GG0170K3": {
@@ -1259,12 +1667,20 @@
     "itm_shrt_label": "Walking 10 feet uneven surf (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170L2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170L2",
+    "itm_sect_label": "GG"
+  },
   "GG0170L3": {
     "itm_shrt_label": "Walking 10 feet uneven surf (Dschg Perf)",
     "itm_sect_label": "GG"
   },
   "GG0170M1": {
     "itm_shrt_label": "1 step (curb) (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170M2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170M2",
     "itm_sect_label": "GG"
   },
   "GG0170M3": {
@@ -1275,6 +1691,10 @@
     "itm_shrt_label": "4 steps (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170N2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170N2",
+    "itm_sect_label": "GG"
+  },
   "GG0170N3": {
     "itm_shrt_label": "4 steps (Dschg Perf)",
     "itm_sect_label": "GG"
@@ -1283,12 +1703,20 @@
     "itm_shrt_label": "12 steps (Start of Stay Perf)",
     "itm_sect_label": "GG"
   },
+  "GG0170O2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170O2",
+    "itm_sect_label": "GG"
+  },
   "GG0170O3": {
     "itm_shrt_label": "12 steps (Dschg Perf)",
     "itm_sect_label": "GG"
   },
   "GG0170P1": {
     "itm_shrt_label": "Picking up object (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170P2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170P2",
     "itm_sect_label": "GG"
   },
   "GG0170P3": {
@@ -1309,6 +1737,10 @@
   },
   "GG0170R1": {
     "itm_shrt_label": "Wheel 50 feet with two turns (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170R2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170R2",
     "itm_sect_label": "GG"
   },
   "GG0170R3": {
@@ -1333,6 +1765,10 @@
   },
   "GG0170S1": {
     "itm_shrt_label": "Wheel 150 feet (Start of Stay Perf)",
+    "itm_sect_label": "GG"
+  },
+  "GG0170S2": {
+    "itm_shrt_label": "Item filler: replaces old GG0170S2",
     "itm_sect_label": "GG"
   },
   "GG0170S3": {
@@ -1409,6 +1845,10 @@
   },
   "I0020": {
     "itm_shrt_label": "Primary Medical Condition Category",
+    "itm_sect_label": "I"
+  },
+  "I0020A": {
+    "itm_shrt_label": "Item filler: replaces old I0020A",
     "itm_sect_label": "I"
   },
   "I0020B": {
@@ -1687,86 +2127,6 @@
     "itm_shrt_label": "Item filler: replaces byte 15 of A0700",
     "itm_sect_label": "Filler"
   },
-  "ITEM_FILLER_002": {
-    "itm_shrt_label": "Item filler: replaces old X0600F",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_003": {
-    "itm_shrt_label": "Item filler: replaces old EFFECTIVE_DATE",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_004": {
-    "itm_shrt_label": "Item filler: replaces old K0500A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_005": {
-    "itm_shrt_label": "Item filler: replaces old K0500B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_006": {
-    "itm_shrt_label": "Item filler: replaces old K0500C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_007": {
-    "itm_shrt_label": "Item filler: replaces old K0500D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_008": {
-    "itm_shrt_label": "Item filler: replaces old K0500Z",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_009": {
-    "itm_shrt_label": "Item filler: replaces old N0400A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_010": {
-    "itm_shrt_label": "Item filler: replaces old N0400B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_011": {
-    "itm_shrt_label": "Item filler: replaces old N0400C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_012": {
-    "itm_shrt_label": "Item filler: replaces old N0400D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_013": {
-    "itm_shrt_label": "Item filler: replaces old N0400E",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_014": {
-    "itm_shrt_label": "Item filler: replaces old N0400F",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_015": {
-    "itm_shrt_label": "Item filler: replaces old N0400G",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_016": {
-    "itm_shrt_label": "Item filler: replaces old N0400Z",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_017": {
-    "itm_shrt_label": "Item filler: replaces old Q0400B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_018": {
-    "itm_shrt_label": "Item filler: replaces old Q0500A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_019": {
-    "itm_shrt_label": "Item filler: replaces old K0700A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_020": {
-    "itm_shrt_label": "Item filler: replaces old K0700B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_021": {
-    "itm_shrt_label": "Item filler: replaces old S1200Z",
-    "itm_sect_label": "Filler"
-  },
   "ITEM_FILLER_022": {
     "itm_shrt_label": "Item filler: replaces S8510A in fixed-format",
     "itm_sect_label": "Filler"
@@ -1781,878 +2141,6 @@
   },
   "ITEM_FILLER_025": {
     "itm_shrt_label": "Item filler: replaces S8512B in fixed-format",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_026": {
-    "itm_shrt_label": "Item filler: replaces old C1300A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_027": {
-    "itm_shrt_label": "Item filler: replaces old C1300B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_028": {
-    "itm_shrt_label": "Item filler: replaces old C1300C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_029": {
-    "itm_shrt_label": "Item filler: replaces old C1300D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_030": {
-    "itm_shrt_label": "Item filler: replaces old C1600",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_031": {
-    "itm_shrt_label": "Item filler: replaces old GG0170H1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_032": {
-    "itm_shrt_label": "Item filler: replaces old GG0170H3",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_033": {
-    "itm_shrt_label": "Item filler: replaces old M0300B3",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_034": {
-    "itm_shrt_label": "Item filler: replaces old M0610A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_035": {
-    "itm_shrt_label": "Item filler: replaces old M0610B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_036": {
-    "itm_shrt_label": "Item filler: replaces old M0610C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_037": {
-    "itm_shrt_label": "Item filler: replaces old M0700",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_038": {
-    "itm_shrt_label": "Item filler: replaces old M0800A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_039": {
-    "itm_shrt_label": "Item filler: replaces old M0800B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_040": {
-    "itm_shrt_label": "Item filler: replaces old M0800C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_041": {
-    "itm_shrt_label": "Item filler: replaces old M0900A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_042": {
-    "itm_shrt_label": "Item filler: replaces old M0900B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_043": {
-    "itm_shrt_label": "Item filler: replaces old M0900C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_044": {
-    "itm_shrt_label": "Item filler: replaces old M0900D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_045": {
-    "itm_shrt_label": "Item filler: replaces old A0310C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_046": {
-    "itm_shrt_label": "Item filler: replaces old A0310D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_047": {
-    "itm_shrt_label": "Item filler: replaces old D0350",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_048": {
-    "itm_shrt_label": "Item filler: replaces old D0650",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_049": {
-    "itm_shrt_label": "Item filler: replaces old K0510C1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_050": {
-    "itm_shrt_label": "Item filler: replaces old K0510D1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_051": {
-    "itm_shrt_label": "Item filler: replaces old K0710A1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_052": {
-    "itm_shrt_label": "Item filler: replaces old K0710B1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_053": {
-    "itm_shrt_label": "Item filler: replaces old O0100L2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_054": {
-    "itm_shrt_label": "Item filler: replaces old O0450B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_055": {
-    "itm_shrt_label": "Item filler: replaces old X0600C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_056": {
-    "itm_shrt_label": "Item filler: replaces old X0600D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_057": {
-    "itm_shrt_label": "Item filler: replaces old X0900E",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_058": {
-    "itm_shrt_label": "Item filler: replaces old Z0100C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_059": {
-    "itm_shrt_label": "Item filler: replaces old Z0150A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_060": {
-    "itm_shrt_label": "Item filler: replaces old Z0150B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_061": {
-    "itm_shrt_label": "Item filler: replaces old I0020A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_062": {
-    "itm_shrt_label": "Item filler: replaces old A1000A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_063": {
-    "itm_shrt_label": "Item filler: replaces old A1000B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_064": {
-    "itm_shrt_label": "Item filler: replaces old A1000C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_065": {
-    "itm_shrt_label": "Item filler: replaces old A1000D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_066": {
-    "itm_shrt_label": "Item filler: replaces old A1000E",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_067": {
-    "itm_shrt_label": "Item filler: replaces old A1000F",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_068": {
-    "itm_shrt_label": "Item filler: replaces old A1100A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_069": {
-    "itm_shrt_label": "Item filler: replaces old A1100B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_070": {
-    "itm_shrt_label": "Item filler: replaces old A1800",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_071": {
-    "itm_shrt_label": "Item filler: replaces old A2100",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_073": {
-    "itm_shrt_label": "Item filler: replaces old D0200A1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_074": {
-    "itm_shrt_label": "Item filler: replaces old D0200A2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_075": {
-    "itm_shrt_label": "Item filler: replaces old D0200B1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_076": {
-    "itm_shrt_label": "Item filler: replaces old D0200B2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_077": {
-    "itm_shrt_label": "Item filler: replaces old D0200C1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_078": {
-    "itm_shrt_label": "Item filler: replaces old D0200C2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_079": {
-    "itm_shrt_label": "Item filler: replaces old D0200D1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_080": {
-    "itm_shrt_label": "Item filler: replaces old D0200D2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_081": {
-    "itm_shrt_label": "Item filler: replaces old D0200E1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_082": {
-    "itm_shrt_label": "Item filler: replaces old D0200E2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_083": {
-    "itm_shrt_label": "Item filler: replaces old D0200F1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_084": {
-    "itm_shrt_label": "Item filler: replaces old D0200F2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_085": {
-    "itm_shrt_label": "Item filler: replaces old D0200G1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_086": {
-    "itm_shrt_label": "Item filler: replaces old D0200G2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_087": {
-    "itm_shrt_label": "Item filler: replaces old D0200H1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_088": {
-    "itm_shrt_label": "Item filler: replaces old D0200H2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_089": {
-    "itm_shrt_label": "Item filler: replaces old D0200I1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_090": {
-    "itm_shrt_label": "Item filler: replaces old D0200I2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_091": {
-    "itm_shrt_label": "Item filler: replaces old D0300",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_092": {
-    "itm_shrt_label": "Item filler: replaces old G0110A1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_093": {
-    "itm_shrt_label": "Item filler: replaces old G0110A2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_094": {
-    "itm_shrt_label": "Item filler: replaces old G0110B1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_095": {
-    "itm_shrt_label": "Item filler: replaces old G0110B2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_096": {
-    "itm_shrt_label": "Item filler: replaces old G0110C1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_097": {
-    "itm_shrt_label": "Item filler: replaces old G0110C2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_098": {
-    "itm_shrt_label": "Item filler: replaces old G0110D1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_099": {
-    "itm_shrt_label": "Item filler: replaces old G0110D2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_100": {
-    "itm_shrt_label": "Item filler: replaces old G0110E1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_101": {
-    "itm_shrt_label": "Item filler: replaces old G0110E2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_102": {
-    "itm_shrt_label": "Item filler: replaces old G0110F1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_103": {
-    "itm_shrt_label": "Item filler: replaces old G0110F2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_104": {
-    "itm_shrt_label": "Item filler: replaces old G0110G1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_105": {
-    "itm_shrt_label": "Item filler: replaces old G0110G2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_106": {
-    "itm_shrt_label": "Item filler: replaces old G0110H1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_107": {
-    "itm_shrt_label": "Item filler: replaces old G0110H2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_108": {
-    "itm_shrt_label": "Item filler: replaces old G0110I1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_109": {
-    "itm_shrt_label": "Item filler: replaces old G0110I2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_110": {
-    "itm_shrt_label": "Item filler: replaces old G0110J1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_111": {
-    "itm_shrt_label": "Item filler: replaces old G0110J2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_112": {
-    "itm_shrt_label": "Item filler: replaces old G0120A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_113": {
-    "itm_shrt_label": "Item filler: replaces old G0120B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_114": {
-    "itm_shrt_label": "Item filler: replaces old G0300A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_115": {
-    "itm_shrt_label": "Item filler: replaces old G0300B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_116": {
-    "itm_shrt_label": "Item filler: replaces old G0300C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_117": {
-    "itm_shrt_label": "Item filler: replaces old G0300D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_118": {
-    "itm_shrt_label": "Item filler: replaces old G0300E",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_119": {
-    "itm_shrt_label": "Item filler: replaces old G0400A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_120": {
-    "itm_shrt_label": "Item filler: replaces old G0400B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_121": {
-    "itm_shrt_label": "Item filler: replaces old G0600A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_122": {
-    "itm_shrt_label": "Item filler: replaces old G0600B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_123": {
-    "itm_shrt_label": "Item filler: replaces old G0600C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_124": {
-    "itm_shrt_label": "Item filler: replaces old G0600D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_125": {
-    "itm_shrt_label": "Item filler: replaces old G0600Z",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_126": {
-    "itm_shrt_label": "Item filler: replaces old G0900A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_127": {
-    "itm_shrt_label": "Item filler: replaces old G0900B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_128": {
-    "itm_shrt_label": "Item filler: replaces old J0400",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_129": {
-    "itm_shrt_label": "Item filler: replaces old J0500A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_130": {
-    "itm_shrt_label": "Item filler: replaces old J0500B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_133": {
-    "itm_shrt_label": "Item filler: replaces old K0510A1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_134": {
-    "itm_shrt_label": "Item filler: replaces old K0510A2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_135": {
-    "itm_shrt_label": "Item filler: replaces old K0510B1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_136": {
-    "itm_shrt_label": "Item filler: replaces old K0510B2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_137": {
-    "itm_shrt_label": "Item filler: replaces old K0510C2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_138": {
-    "itm_shrt_label": "Item filler: replaces old K0510D2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_139": {
-    "itm_shrt_label": "Item filler: replaces old K0510Z1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_140": {
-    "itm_shrt_label": "Item filler: replaces old K0510Z2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_141": {
-    "itm_shrt_label": "Item filler: replaces old N0410A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_142": {
-    "itm_shrt_label": "Item filler: replaces old N0410B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_143": {
-    "itm_shrt_label": "Item filler: replaces old N0410C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_144": {
-    "itm_shrt_label": "Item filler: replaces old N0410D",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_145": {
-    "itm_shrt_label": "Item filler: replaces old N0410E",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_146": {
-    "itm_shrt_label": "Item filler: replaces old N0410F",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_147": {
-    "itm_shrt_label": "Item filler: replaces old N0410G",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_148": {
-    "itm_shrt_label": "Item filler: replaces old N0410H",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_149": {
-    "itm_shrt_label": "Item filler: replaces old O0100A1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_150": {
-    "itm_shrt_label": "Item filler: replaces old O0100A2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_151": {
-    "itm_shrt_label": "Item filler: replaces old O0100B1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_152": {
-    "itm_shrt_label": "Item filler: replaces old O0100B2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_153": {
-    "itm_shrt_label": "Item filler: replaces old O0100C1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_154": {
-    "itm_shrt_label": "Item filler: replaces old O0100C2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_155": {
-    "itm_shrt_label": "Item filler: replaces old O0100D1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_156": {
-    "itm_shrt_label": "Item filler: replaces old O0100D2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_157": {
-    "itm_shrt_label": "Item filler: replaces old O0100E1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_158": {
-    "itm_shrt_label": "Item filler: replaces old O0100E2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_159": {
-    "itm_shrt_label": "Item filler: replaces old O0100F1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_160": {
-    "itm_shrt_label": "Item filler: replaces old O0100F2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_161": {
-    "itm_shrt_label": "Item filler: replaces old O0100G1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_162": {
-    "itm_shrt_label": "Item filler: replaces old O0100G2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_163": {
-    "itm_shrt_label": "Item filler: replaces old O0100H1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_164": {
-    "itm_shrt_label": "Item filler: replaces old O0100H2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_165": {
-    "itm_shrt_label": "Item filler: replaces old O0100I1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_166": {
-    "itm_shrt_label": "Item filler: replaces old O0100I2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_167": {
-    "itm_shrt_label": "Item filler: replaces old O0100J1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_168": {
-    "itm_shrt_label": "Item filler: replaces old O0100J2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_169": {
-    "itm_shrt_label": "Item filler: replaces old O0100K1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_170": {
-    "itm_shrt_label": "Item filler: replaces old O0100K2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_171": {
-    "itm_shrt_label": "Item filler: replaces old O0100M1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_172": {
-    "itm_shrt_label": "Item filler: replaces old O0100M2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_173": {
-    "itm_shrt_label": "Item filler: replaces old O0100Z1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_174": {
-    "itm_shrt_label": "Item filler: replaces old O0100Z2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_175": {
-    "itm_shrt_label": "Item filler: replaces old O0600",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_176": {
-    "itm_shrt_label": "Item filler: replaces old O0700",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_177": {
-    "itm_shrt_label": "Item filler: replaces old Q0100A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_178": {
-    "itm_shrt_label": "Item filler: replaces old Q0100B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_179": {
-    "itm_shrt_label": "Item filler: replaces old Q0100C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_180": {
-    "itm_shrt_label": "Item filler: replaces old Q0300A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_181": {
-    "itm_shrt_label": "Item filler: replaces old Q0300B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_182": {
-    "itm_shrt_label": "Item filler: replaces old Q0550B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_183": {
-    "itm_shrt_label": "Item filler: replaces old Q0600",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_184": {
-    "itm_shrt_label": "Item filler: replaces old X0570A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_185": {
-    "itm_shrt_label": "Item filler: replaces old X0570B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_186": {
-    "itm_shrt_label": "Item filler: replaces old A0300A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_187": {
-    "itm_shrt_label": "Item filler: replaces old A0300B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_188": {
-    "itm_shrt_label": "Item filler: replaces old O0450A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_189": {
-    "itm_shrt_label": "Item filler: replaces old GG0130A2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_190": {
-    "itm_shrt_label": "Item filler: replaces old GG0130B2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_191": {
-    "itm_shrt_label": "Item filler: replaces old GG0130C2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_192": {
-    "itm_shrt_label": "Item filler: replaces old GG0130E2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_193": {
-    "itm_shrt_label": "Item filler: replaces old GG0130F2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_194": {
-    "itm_shrt_label": "Item filler: replaces old GG0130G2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_195": {
-    "itm_shrt_label": "Item filler: replaces old GG0130H2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_196": {
-    "itm_shrt_label": "Item filler: replaces old GG0170A2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_197": {
-    "itm_shrt_label": "Item filler: replaces old GG0170B2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_198": {
-    "itm_shrt_label": "Item filler: replaces old GG0170C2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_199": {
-    "itm_shrt_label": "Item filler: replaces old GG0170D2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_200": {
-    "itm_shrt_label": "Item filler: replaces old GG0170E2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_201": {
-    "itm_shrt_label": "Item filler: replaces old GG0170F2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_202": {
-    "itm_shrt_label": "Item filler: replaces old GG0170G2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_203": {
-    "itm_shrt_label": "Item filler: replaces old GG0170I2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_204": {
-    "itm_shrt_label": "Item filler: replaces old GG0170J2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_205": {
-    "itm_shrt_label": "Item filler: replaces old GG0170K2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_206": {
-    "itm_shrt_label": "Item filler: replaces old GG0170L2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_207": {
-    "itm_shrt_label": "Item filler: replaces old GG0170M2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_208": {
-    "itm_shrt_label": "Item filler: replaces old GG0170N2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_209": {
-    "itm_shrt_label": "Item filler: replaces old GG0170O2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_210": {
-    "itm_shrt_label": "Item filler: replaces old GG0170P2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_211": {
-    "itm_shrt_label": "Item filler: replaces old GG0170R2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_212": {
-    "itm_shrt_label": "Item filler: replaces old GG0170S2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_213": {
-    "itm_shrt_label": "Item filler: replaces old O0400A1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_214": {
-    "itm_shrt_label": "Item filler: replaces old O0400A2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_215": {
-    "itm_shrt_label": "Item filler: replaces old O0400A3",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_216": {
-    "itm_shrt_label": "Item filler: replaces old O0400A3A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_217": {
-    "itm_shrt_label": "Item filler: replaces old O0400A4",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_218": {
-    "itm_shrt_label": "Item filler: replaces old O0400A5",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_219": {
-    "itm_shrt_label": "Item filler: replaces old O0400A6",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_220": {
-    "itm_shrt_label": "Item filler: replaces old O0400B1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_221": {
-    "itm_shrt_label": "Item filler: replaces old O0400B2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_222": {
-    "itm_shrt_label": "Item filler: replaces old O0400B3",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_223": {
-    "itm_shrt_label": "Item filler: replaces old O0400B3A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_224": {
-    "itm_shrt_label": "Item filler: replaces old O0400B4",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_225": {
-    "itm_shrt_label": "Item filler: replaces old O0400B5",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_226": {
-    "itm_shrt_label": "Item filler: replaces old O0400B6",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_227": {
-    "itm_shrt_label": "Item filler: replaces old O0400C1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_228": {
-    "itm_shrt_label": "Item filler: replaces old O0400C2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_229": {
-    "itm_shrt_label": "Item filler: replaces old O0400C3",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_230": {
-    "itm_shrt_label": "Item filler: replaces old O0400C3A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_231": {
-    "itm_shrt_label": "Item filler: replaces old O0400C4",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_232": {
-    "itm_shrt_label": "Item filler: replaces old O0400C5",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_233": {
-    "itm_shrt_label": "Item filler: replaces old O0400C6",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_234": {
-    "itm_shrt_label": "Item filler: replaces old O0400D1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_235": {
-    "itm_shrt_label": "Item filler: replaces old O0400E1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_236": {
-    "itm_shrt_label": "Item filler: replaces old O0400E2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_237": {
-    "itm_shrt_label": "Item filler: replaces old O0400F1",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_238": {
-    "itm_shrt_label": "Item filler: replaces old O0400F2",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_239": {
-    "itm_shrt_label": "Item filler: replaces old O0420",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_240": {
-    "itm_shrt_label": "Item filler: replaces old A1250A",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_241": {
-    "itm_shrt_label": "Item filler: replaces old A1250B",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_242": {
-    "itm_shrt_label": "Item filler: replaces old A1250C",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_243": {
-    "itm_shrt_label": "Item filler: replaces old A1250X",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_244": {
-    "itm_shrt_label": "Item filler: replaces old A1250Y",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_245": {
-    "itm_shrt_label": "Item filler: replaces old A0800",
-    "itm_sect_label": "Filler"
-  },
-  "ITEM_FILLER_246": {
-    "itm_shrt_label": "Item filler: replaces old X0300",
     "itm_sect_label": "Filler"
   },
   "ITEM_FILLER_247": {
@@ -2699,8 +2187,20 @@
     "itm_shrt_label": "Res pain interview: presence",
     "itm_sect_label": "J"
   },
+  "J0400": {
+    "itm_shrt_label": "Item filler: replaces old J0400",
+    "itm_sect_label": "J"
+  },
   "J0410": {
     "itm_shrt_label": "Pain Frequency",
+    "itm_sect_label": "J"
+  },
+  "J0500A": {
+    "itm_shrt_label": "Item filler: replaces old J0500A",
+    "itm_sect_label": "J"
+  },
+  "J0500B": {
+    "itm_shrt_label": "Item filler: replaces old J0500B",
     "itm_sect_label": "J"
   },
   "J0510": {
@@ -2983,6 +2483,66 @@
     "itm_shrt_label": "Weight Gain",
     "itm_sect_label": "K"
   },
+  "K0500A": {
+    "itm_shrt_label": "Item filler: replaces old K0500A",
+    "itm_sect_label": "K"
+  },
+  "K0500B": {
+    "itm_shrt_label": "Item filler: replaces old K0500B",
+    "itm_sect_label": "K"
+  },
+  "K0500C": {
+    "itm_shrt_label": "Item filler: replaces old K0500C",
+    "itm_sect_label": "K"
+  },
+  "K0500D": {
+    "itm_shrt_label": "Item filler: replaces old K0500D",
+    "itm_sect_label": "K"
+  },
+  "K0500Z": {
+    "itm_shrt_label": "Item filler: replaces old K0500Z",
+    "itm_sect_label": "K"
+  },
+  "K0510A1": {
+    "itm_shrt_label": "Item filler: replaces old K0510A1",
+    "itm_sect_label": "K"
+  },
+  "K0510A2": {
+    "itm_shrt_label": "Item filler: replaces old K0510A2",
+    "itm_sect_label": "K"
+  },
+  "K0510B1": {
+    "itm_shrt_label": "Item filler: replaces old K0510B1",
+    "itm_sect_label": "K"
+  },
+  "K0510B2": {
+    "itm_shrt_label": "Item filler: replaces old K0510B2",
+    "itm_sect_label": "K"
+  },
+  "K0510C1": {
+    "itm_shrt_label": "Item filler: replaces old K0510C1",
+    "itm_sect_label": "K"
+  },
+  "K0510C2": {
+    "itm_shrt_label": "Item filler: replaces old K0510C2",
+    "itm_sect_label": "K"
+  },
+  "K0510D1": {
+    "itm_shrt_label": "Item filler: replaces old K0510D1",
+    "itm_sect_label": "K"
+  },
+  "K0510D2": {
+    "itm_shrt_label": "Item filler: replaces old K0510D2",
+    "itm_sect_label": "K"
+  },
+  "K0510Z1": {
+    "itm_shrt_label": "Item filler: replaces old K0510Z1",
+    "itm_sect_label": "K"
+  },
+  "K0510Z2": {
+    "itm_shrt_label": "Item filler: replaces old K0510Z2",
+    "itm_sect_label": "K"
+  },
   "K0520A1": {
     "itm_shrt_label": "Nutritional Approaches (Admission): Parenteral",
     "itm_sect_label": "K"
@@ -3055,12 +2615,28 @@
     "itm_shrt_label": "Nutritional Approaches (Discharge): None",
     "itm_sect_label": "K"
   },
+  "K0700A": {
+    "itm_shrt_label": "Item filler: replaces old K0700A",
+    "itm_sect_label": "K"
+  },
+  "K0700B": {
+    "itm_shrt_label": "Item filler: replaces old K0700B",
+    "itm_sect_label": "K"
+  },
+  "K0710A1": {
+    "itm_shrt_label": "Item filler: replaces old K0710A1",
+    "itm_sect_label": "K"
+  },
   "K0710A2": {
     "itm_shrt_label": "Prop calories parenteral/tube feed: while resident",
     "itm_sect_label": "K"
   },
   "K0710A3": {
     "itm_shrt_label": "Prop calories parenteral/tube feed: 7 days",
+    "itm_sect_label": "K"
+  },
+  "K0710B1": {
+    "itm_shrt_label": "Item filler: replaces old K0710B1",
     "itm_sect_label": "K"
   },
   "K0710B2": {
@@ -3143,6 +2719,10 @@
     "itm_shrt_label": "Stage 2 pressure ulcers: number at admit/reentry",
     "itm_sect_label": "M"
   },
+  "M0300B3": {
+    "itm_shrt_label": "Item filler: replaces old M0300B3",
+    "itm_sect_label": "M"
+  },
   "M0300C1": {
     "itm_shrt_label": "Stage 3 pressure ulcers: number present",
     "itm_sect_label": "M"
@@ -3181,6 +2761,50 @@
   },
   "M0300G2": {
     "itm_shrt_label": "Unstageable - deep tissue injury:  # at adm/reent",
+    "itm_sect_label": "M"
+  },
+  "M0610A": {
+    "itm_shrt_label": "Item filler: replaces old M0610A",
+    "itm_sect_label": "M"
+  },
+  "M0610B": {
+    "itm_shrt_label": "Item filler: replaces old M0610B",
+    "itm_sect_label": "M"
+  },
+  "M0610C": {
+    "itm_shrt_label": "Item filler: replaces old M0610C",
+    "itm_sect_label": "M"
+  },
+  "M0700": {
+    "itm_shrt_label": "Item filler: replaces old M0700",
+    "itm_sect_label": "M"
+  },
+  "M0800A": {
+    "itm_shrt_label": "Item filler: replaces old M0800A",
+    "itm_sect_label": "M"
+  },
+  "M0800B": {
+    "itm_shrt_label": "Item filler: replaces old M0800B",
+    "itm_sect_label": "M"
+  },
+  "M0800C": {
+    "itm_shrt_label": "Item filler: replaces old M0800C",
+    "itm_sect_label": "M"
+  },
+  "M0900A": {
+    "itm_shrt_label": "Item filler: replaces old M0900A",
+    "itm_sect_label": "M"
+  },
+  "M0900B": {
+    "itm_shrt_label": "Item filler: replaces old M0900B",
+    "itm_sect_label": "M"
+  },
+  "M0900C": {
+    "itm_shrt_label": "Item filler: replaces old M0900C",
+    "itm_sect_label": "M"
+  },
+  "M0900D": {
+    "itm_shrt_label": "Item filler: replaces old M0900D",
     "itm_sect_label": "M"
   },
   "M1030": {
@@ -3307,6 +2931,70 @@
     "itm_shrt_label": "Insulin: orders for insulin",
     "itm_sect_label": "N"
   },
+  "N0400A": {
+    "itm_shrt_label": "Item filler: replaces old N0400A",
+    "itm_sect_label": "N"
+  },
+  "N0400B": {
+    "itm_shrt_label": "Item filler: replaces old N0400B",
+    "itm_sect_label": "N"
+  },
+  "N0400C": {
+    "itm_shrt_label": "Item filler: replaces old N0400C",
+    "itm_sect_label": "N"
+  },
+  "N0400D": {
+    "itm_shrt_label": "Item filler: replaces old N0400D",
+    "itm_sect_label": "N"
+  },
+  "N0400E": {
+    "itm_shrt_label": "Item filler: replaces old N0400E",
+    "itm_sect_label": "N"
+  },
+  "N0400F": {
+    "itm_shrt_label": "Item filler: replaces old N0400F",
+    "itm_sect_label": "N"
+  },
+  "N0400G": {
+    "itm_shrt_label": "Item filler: replaces old N0400G",
+    "itm_sect_label": "N"
+  },
+  "N0400Z": {
+    "itm_shrt_label": "Item filler: replaces old N0400Z",
+    "itm_sect_label": "N"
+  },
+  "N0410A": {
+    "itm_shrt_label": "Item filler: replaces old N0410A",
+    "itm_sect_label": "N"
+  },
+  "N0410B": {
+    "itm_shrt_label": "Item filler: replaces old N0410B",
+    "itm_sect_label": "N"
+  },
+  "N0410C": {
+    "itm_shrt_label": "Item filler: replaces old N0410C",
+    "itm_sect_label": "N"
+  },
+  "N0410D": {
+    "itm_shrt_label": "Item filler: replaces old N0410D",
+    "itm_sect_label": "N"
+  },
+  "N0410E": {
+    "itm_shrt_label": "Item filler: replaces old N0410E",
+    "itm_sect_label": "N"
+  },
+  "N0410F": {
+    "itm_shrt_label": "Item filler: replaces old N0410F",
+    "itm_sect_label": "N"
+  },
+  "N0410G": {
+    "itm_shrt_label": "Item filler: replaces old N0410G",
+    "itm_sect_label": "N"
+  },
+  "N0410H": {
+    "itm_shrt_label": "Item filler: replaces old N0410H",
+    "itm_sect_label": "N"
+  },
   "N0415A1": {
     "itm_shrt_label": "High-Risk Drug (Is Taking): Antipsychotic",
     "itm_sect_label": "N"
@@ -3430,6 +3118,114 @@
   "N2005": {
     "itm_shrt_label": "Medication Intervention",
     "itm_sect_label": "N"
+  },
+  "O0100A1": {
+    "itm_shrt_label": "Item filler: replaces old O0100A1",
+    "itm_sect_label": "O"
+  },
+  "O0100A2": {
+    "itm_shrt_label": "Item filler: replaces old O0100A2",
+    "itm_sect_label": "O"
+  },
+  "O0100B1": {
+    "itm_shrt_label": "Item filler: replaces old O0100B1",
+    "itm_sect_label": "O"
+  },
+  "O0100B2": {
+    "itm_shrt_label": "Item filler: replaces old O0100B2",
+    "itm_sect_label": "O"
+  },
+  "O0100C1": {
+    "itm_shrt_label": "Item filler: replaces old O0100C1",
+    "itm_sect_label": "O"
+  },
+  "O0100C2": {
+    "itm_shrt_label": "Item filler: replaces old O0100C2",
+    "itm_sect_label": "O"
+  },
+  "O0100D1": {
+    "itm_shrt_label": "Item filler: replaces old O0100D1",
+    "itm_sect_label": "O"
+  },
+  "O0100D2": {
+    "itm_shrt_label": "Item filler: replaces old O0100D2",
+    "itm_sect_label": "O"
+  },
+  "O0100E1": {
+    "itm_shrt_label": "Item filler: replaces old O0100E1",
+    "itm_sect_label": "O"
+  },
+  "O0100E2": {
+    "itm_shrt_label": "Item filler: replaces old O0100E2",
+    "itm_sect_label": "O"
+  },
+  "O0100F1": {
+    "itm_shrt_label": "Item filler: replaces old O0100F1",
+    "itm_sect_label": "O"
+  },
+  "O0100F2": {
+    "itm_shrt_label": "Item filler: replaces old O0100F2",
+    "itm_sect_label": "O"
+  },
+  "O0100G1": {
+    "itm_shrt_label": "Item filler: replaces old O0100G1",
+    "itm_sect_label": "O"
+  },
+  "O0100G2": {
+    "itm_shrt_label": "Item filler: replaces old O0100G2",
+    "itm_sect_label": "O"
+  },
+  "O0100H1": {
+    "itm_shrt_label": "Item filler: replaces old O0100H1",
+    "itm_sect_label": "O"
+  },
+  "O0100H2": {
+    "itm_shrt_label": "Item filler: replaces old O0100H2",
+    "itm_sect_label": "O"
+  },
+  "O0100I1": {
+    "itm_shrt_label": "Item filler: replaces old O0100I1",
+    "itm_sect_label": "O"
+  },
+  "O0100I2": {
+    "itm_shrt_label": "Item filler: replaces old O0100I2",
+    "itm_sect_label": "O"
+  },
+  "O0100J1": {
+    "itm_shrt_label": "Item filler: replaces old O0100J1",
+    "itm_sect_label": "O"
+  },
+  "O0100J2": {
+    "itm_shrt_label": "Item filler: replaces old O0100J2",
+    "itm_sect_label": "O"
+  },
+  "O0100K1": {
+    "itm_shrt_label": "Item filler: replaces old O0100K1",
+    "itm_sect_label": "O"
+  },
+  "O0100K2": {
+    "itm_shrt_label": "Item filler: replaces old O0100K2",
+    "itm_sect_label": "O"
+  },
+  "O0100L2": {
+    "itm_shrt_label": "Item filler: replaces old O0100L2",
+    "itm_sect_label": "O"
+  },
+  "O0100M1": {
+    "itm_shrt_label": "Item filler: replaces old O0100M1",
+    "itm_sect_label": "O"
+  },
+  "O0100M2": {
+    "itm_shrt_label": "Item filler: replaces old O0100M2",
+    "itm_sect_label": "O"
+  },
+  "O0100Z1": {
+    "itm_shrt_label": "Item filler: replaces old O0100Z1",
+    "itm_sect_label": "O"
+  },
+  "O0100Z2": {
+    "itm_shrt_label": "Item filler: replaces old O0100Z2",
+    "itm_sect_label": "O"
   },
   "O0110A10A": {
     "itm_shrt_label": "Treatment: Chemo - Other (Admission)",
@@ -3783,8 +3579,116 @@
     "itm_shrt_label": "None of the above",
     "itm_sect_label": "O"
   },
+  "O0400A1": {
+    "itm_shrt_label": "Item filler: replaces old O0400A1",
+    "itm_sect_label": "O"
+  },
+  "O0400A2": {
+    "itm_shrt_label": "Item filler: replaces old O0400A2",
+    "itm_sect_label": "O"
+  },
+  "O0400A3": {
+    "itm_shrt_label": "Item filler: replaces old O0400A3",
+    "itm_sect_label": "O"
+  },
+  "O0400A3A": {
+    "itm_shrt_label": "Item filler: replaces old O0400A3A",
+    "itm_sect_label": "O"
+  },
+  "O0400A4": {
+    "itm_shrt_label": "Item filler: replaces old O0400A4",
+    "itm_sect_label": "O"
+  },
+  "O0400A5": {
+    "itm_shrt_label": "Item filler: replaces old O0400A5",
+    "itm_sect_label": "O"
+  },
+  "O0400A6": {
+    "itm_shrt_label": "Item filler: replaces old O0400A6",
+    "itm_sect_label": "O"
+  },
+  "O0400B1": {
+    "itm_shrt_label": "Item filler: replaces old O0400B1",
+    "itm_sect_label": "O"
+  },
+  "O0400B2": {
+    "itm_shrt_label": "Item filler: replaces old O0400B2",
+    "itm_sect_label": "O"
+  },
+  "O0400B3": {
+    "itm_shrt_label": "Item filler: replaces old O0400B3",
+    "itm_sect_label": "O"
+  },
+  "O0400B3A": {
+    "itm_shrt_label": "Item filler: replaces old O0400B3A",
+    "itm_sect_label": "O"
+  },
+  "O0400B4": {
+    "itm_shrt_label": "Item filler: replaces old O0400B4",
+    "itm_sect_label": "O"
+  },
+  "O0400B5": {
+    "itm_shrt_label": "Item filler: replaces old O0400B5",
+    "itm_sect_label": "O"
+  },
+  "O0400B6": {
+    "itm_shrt_label": "Item filler: replaces old O0400B6",
+    "itm_sect_label": "O"
+  },
+  "O0400C1": {
+    "itm_shrt_label": "Item filler: replaces old O0400C1",
+    "itm_sect_label": "O"
+  },
+  "O0400C2": {
+    "itm_shrt_label": "Item filler: replaces old O0400C2",
+    "itm_sect_label": "O"
+  },
+  "O0400C3": {
+    "itm_shrt_label": "Item filler: replaces old O0400C3",
+    "itm_sect_label": "O"
+  },
+  "O0400C3A": {
+    "itm_shrt_label": "Item filler: replaces old O0400C3A",
+    "itm_sect_label": "O"
+  },
+  "O0400C4": {
+    "itm_shrt_label": "Item filler: replaces old O0400C4",
+    "itm_sect_label": "O"
+  },
+  "O0400C5": {
+    "itm_shrt_label": "Item filler: replaces old O0400C5",
+    "itm_sect_label": "O"
+  },
+  "O0400C6": {
+    "itm_shrt_label": "Item filler: replaces old O0400C6",
+    "itm_sect_label": "O"
+  },
+  "O0400D1": {
+    "itm_shrt_label": "Item filler: replaces old O0400D1",
+    "itm_sect_label": "O"
+  },
   "O0400D2": {
     "itm_shrt_label": "Respiratory therapy: number of days",
+    "itm_sect_label": "O"
+  },
+  "O0400E1": {
+    "itm_shrt_label": "Item filler: replaces old O0400E1",
+    "itm_sect_label": "O"
+  },
+  "O0400E2": {
+    "itm_shrt_label": "Item filler: replaces old O0400E2",
+    "itm_sect_label": "O"
+  },
+  "O0400F1": {
+    "itm_shrt_label": "Item filler: replaces old O0400F1",
+    "itm_sect_label": "O"
+  },
+  "O0400F2": {
+    "itm_shrt_label": "Item filler: replaces old O0400F2",
+    "itm_sect_label": "O"
+  },
+  "O0420": {
+    "itm_shrt_label": "Item filler: replaces old O0420",
     "itm_sect_label": "O"
   },
   "O0425A1": {
@@ -3851,6 +3755,14 @@
     "itm_shrt_label": "Distinct Calendar Days of Part A Therapy",
     "itm_sect_label": "O"
   },
+  "O0450A": {
+    "itm_shrt_label": "Item filler: replaces old O0450A",
+    "itm_sect_label": "O"
+  },
+  "O0450B": {
+    "itm_shrt_label": "Item filler: replaces old O0450B",
+    "itm_sect_label": "O"
+  },
   "O0500A": {
     "itm_shrt_label": "Range of motion (passive): number of days",
     "itm_sect_label": "O"
@@ -3889,6 +3801,14 @@
   },
   "O0500J": {
     "itm_shrt_label": "Communication training: number of days",
+    "itm_sect_label": "O"
+  },
+  "O0600": {
+    "itm_shrt_label": "Item filler: replaces old O0600",
+    "itm_sect_label": "O"
+  },
+  "O0700": {
+    "itm_shrt_label": "Item filler: replaces old O0700",
     "itm_sect_label": "O"
   },
   "ORIGINAL_ASSESSMENT_ID": {
@@ -3955,6 +3875,18 @@
     "itm_shrt_label": "Production/test indicator",
     "itm_sect_label": "Control"
   },
+  "Q0100A": {
+    "itm_shrt_label": "Item filler: replaces old Q0100A",
+    "itm_sect_label": "Q"
+  },
+  "Q0100B": {
+    "itm_shrt_label": "Item filler: replaces old Q0100B",
+    "itm_sect_label": "Q"
+  },
+  "Q0100C": {
+    "itm_shrt_label": "Item filler: replaces old Q0100C",
+    "itm_sect_label": "Q"
+  },
   "Q0110A": {
     "itm_shrt_label": "Participants: Resident",
     "itm_sect_label": "Q"
@@ -3979,6 +3911,14 @@
     "itm_shrt_label": "Participants: None of the Above",
     "itm_sect_label": "Q"
   },
+  "Q0300A": {
+    "itm_shrt_label": "Item filler: replaces old Q0300A",
+    "itm_sect_label": "Q"
+  },
+  "Q0300B": {
+    "itm_shrt_label": "Item filler: replaces old Q0300B",
+    "itm_sect_label": "Q"
+  },
   "Q0310A": {
     "itm_shrt_label": "Resident's Overall Goal",
     "itm_sect_label": "Q"
@@ -3991,8 +3931,16 @@
     "itm_shrt_label": "Active discharge planning for return to community",
     "itm_sect_label": "Q"
   },
+  "Q0400B": {
+    "itm_shrt_label": "Item filler: replaces old Q0400B",
+    "itm_sect_label": "Q"
+  },
   "Q0490": {
     "itm_shrt_label": "Resident's preference to avoid being asked",
+    "itm_sect_label": "Q"
+  },
+  "Q0500A": {
+    "itm_shrt_label": "Item filler: replaces old Q0500A",
     "itm_sect_label": "Q"
   },
   "Q0500B": {
@@ -4007,8 +3955,16 @@
     "itm_shrt_label": "Reasking resident preference",
     "itm_sect_label": "Q"
   },
+  "Q0550B": {
+    "itm_shrt_label": "Item filler: replaces old Q0550B",
+    "itm_sect_label": "Q"
+  },
   "Q0550C": {
     "itm_shrt_label": "Q0550A info source",
+    "itm_sect_label": "Q"
+  },
+  "Q0600": {
+    "itm_shrt_label": "Item filler: replaces old Q0600",
     "itm_sect_label": "Q"
   },
   "Q0610A": {
@@ -4537,6 +4493,10 @@
   },
   "S1200I": {
     "itm_shrt_label": "Primary/secondary SMI dx: major depress recurrent",
+    "itm_sect_label": "S"
+  },
+  "S1200Z": {
+    "itm_shrt_label": "Item filler: replaces old S1200Z",
     "itm_sect_label": "S"
   },
   "S1210A": {
@@ -6127,6 +6087,10 @@
     "itm_shrt_label": "Correction: resident last name",
     "itm_sect_label": "X"
   },
+  "X0300": {
+    "itm_shrt_label": "Item filler: replaces old X0300",
+    "itm_sect_label": "X"
+  },
   "X0310": {
     "itm_shrt_label": "Correction: resident sex",
     "itm_sect_label": "X"
@@ -6139,12 +6103,28 @@
     "itm_shrt_label": "Correction: resident social security number",
     "itm_sect_label": "X"
   },
+  "X0570A": {
+    "itm_shrt_label": "Item filler: replaces old X0570A",
+    "itm_sect_label": "X"
+  },
+  "X0570B": {
+    "itm_shrt_label": "Item filler: replaces old X0570B",
+    "itm_sect_label": "X"
+  },
   "X0600A": {
     "itm_shrt_label": "Correction: OBRA reason for assessment",
     "itm_sect_label": "X"
   },
   "X0600B": {
     "itm_shrt_label": "Correction: PPS reason for assessment",
+    "itm_sect_label": "X"
+  },
+  "X0600C": {
+    "itm_shrt_label": "Item filler: replaces old X0600C",
+    "itm_sect_label": "X"
+  },
+  "X0600D": {
+    "itm_shrt_label": "Item filler: replaces old X0600D",
     "itm_sect_label": "X"
   },
   "X0600F": {
@@ -6187,6 +6167,10 @@
     "itm_shrt_label": "Correction: modif reasons - item coding error",
     "itm_sect_label": "X"
   },
+  "X0900E": {
+    "itm_shrt_label": "Item filler: replaces old X0900E",
+    "itm_sect_label": "X"
+  },
   "X0900Z": {
     "itm_shrt_label": "Correction: modif reasons - other error",
     "itm_sect_label": "X"
@@ -6217,6 +6201,18 @@
   },
   "Z0100B": {
     "itm_shrt_label": "Medicare Part A: Version code",
+    "itm_sect_label": "Z"
+  },
+  "Z0100C": {
+    "itm_shrt_label": "Item filler: replaces old Z0100C",
+    "itm_sect_label": "Z"
+  },
+  "Z0150A": {
+    "itm_shrt_label": "Item filler: replaces old Z0150A",
+    "itm_sect_label": "Z"
+  },
+  "Z0150B": {
+    "itm_shrt_label": "Item filler: replaces old Z0150B",
     "itm_sect_label": "Z"
   },
   "Z0200A": {

@@ -41,15 +41,38 @@ console.log(`Reading CSV from: ${CSV_SOURCE}`);
 const lookup = {};
 let processedCount = 0;
 let skippedCount = 0;
+let fillerTransformCount = 0;
+let duplicateSkipCount = 0;
 
 // Read and parse CSV file
 fs.createReadStream(CSV_SOURCE)
   .pipe(csv())
   .on('data', (row) => {
     // Extract relevant fields from CSV (using actual column names from CSV)
-    const itemId = row['itm_id'] || row['ITM_ID'] || row['Item ID'];
+    let itemId = row['itm_id'] || row['ITM_ID'] || row['Item ID'];
     const shortLabel = row['itm_shrt_label'] || row['ITM_SHRT_LABEL'] || row['Short Label'];
-    const sectionLabel = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Label'];
+    let sectionLabel = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Label'];
+    
+    // Handle filler items - extract the actual old item code
+    if (sectionLabel === 'Filler' && shortLabel && shortLabel.includes('replaces old ')) {
+      const match = shortLabel.match(/replaces old (\w+)/);
+      if (match && match[1]) {
+        const oldItemCode = match[1];
+        
+        // Check if this code would create a duplicate
+        if (lookup[oldItemCode]) {
+          // Skip this entry - the real item already exists
+          duplicateSkipCount++;
+          return;
+        }
+        
+        itemId = oldItemCode;
+        // Extract section label from the code (letters before first digit)
+        const sectionMatch = oldItemCode.match(/^([A-Z]+)/);
+        sectionLabel = sectionMatch ? sectionMatch[1] : 'Unknown';
+        fillerTransformCount++;
+      }
+    }
     
     if (itemId && shortLabel) {
       lookup[itemId] = {
@@ -66,6 +89,12 @@ fs.createReadStream(CSV_SOURCE)
   })
   .on('end', () => {
     console.log(`Processed ${processedCount} MDS items`);
+    if (fillerTransformCount > 0) {
+      console.log(`Transformed ${fillerTransformCount} filler items to old item codes`);
+    }
+    if (duplicateSkipCount > 0) {
+      console.log(`Skipped ${duplicateSkipCount} filler items (duplicates of existing codes)`);
+    }
     if (skippedCount > 0) {
       console.log(`Skipped ${skippedCount} invalid rows`);
     }
