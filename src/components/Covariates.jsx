@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import styles from "./Covariates.module.css";
 import { BarChart3 } from "lucide-react";
 import { covariateRelatedItems } from "../utils/covariateRelatedItems";
+import { getVersionFromArdDate } from "../utils/coefficientLoader";
 
 export default function Covariates({
   hasFile,
@@ -10,8 +11,15 @@ export default function Covariates({
   onCovariateClick,
   selectedItems = [],
   selectedCovariate = null,
+  ardDate = null,
+  manualOverrides = {},
+  onManualOverrideChange = () => {},
 }) {
   const [searchTerm, setSearchTerm] = useState("");
+  
+  // Determine if we're using FY 2026 (Update ID 3) which has the discharge therapy covariate
+  const version = getVersionFromArdDate(ardDate);
+  const showDischargeTherapyToggle = version?.updateId === "3";
 
   const formatNumber = (n) => Number(n).toFixed(2);
   const formatNumberDetailed = (n) => Number(n).toFixed(4);
@@ -68,6 +76,17 @@ export default function Covariates({
     (sum, [key, value]) => sum + value * (multipliers[key] ?? 0),
     0
   );
+  
+  const dischargeTherapyKey = "No Physical or Occupational Therapy - Discharge";
+  const isDischargeTherapyActive = manualOverrides[dischargeTherapyKey] === 1;
+  
+  const handleDischargeTherapyToggle = () => {
+    const newValue = isDischargeTherapyActive ? 0 : 1;
+    onManualOverrideChange({
+      ...manualOverrides,
+      [dischargeTherapyKey]: newValue
+    });
+  };
 
   return (
     <div className={styles.covariatesPanel}>
@@ -91,10 +110,44 @@ export default function Covariates({
           </div>
         </div>
         {hasFile && (
-          <p className={styles.covariateNote}>
-            These items contributed to the expected discharge function score.
-            Click a row to view its related MDS items in the MDS Data tab.
-          </p>
+          <>
+            <p className={styles.covariateNote}>
+              These items contributed to the expected discharge function score.
+              Click a row to view its related MDS items in the MDS Data tab.
+            </p>
+            
+            {showDischargeTherapyToggle && (
+              <div className={styles.manualToggleSection}>
+                <div className={styles.toggleLabel}>
+                  <span className={styles.toggleTitle}>Manual Override (FY 2026)</span>
+                  <span className={styles.toggleDescription}>
+                    Discharge therapy data not available until patient discharge
+                  </span>
+                </div>
+                <div className={styles.toggleControl}>
+                  <label className={styles.toggleSwitch}>
+                    <input
+                      type="checkbox"
+                      checked={isDischargeTherapyActive}
+                      onChange={handleDischargeTherapyToggle}
+                    />
+                    <span className={styles.toggleSlider}></span>
+                  </label>
+                  <span className={styles.toggleText}>
+                    {isDischargeTherapyActive ? "Applied" : "Not Applied"}
+                  </span>
+                </div>
+                <div className={styles.toggleCovariateName}>
+                  No PT/OT on Discharge
+                  {isDischargeTherapyActive && multipliers[dischargeTherapyKey] && (
+                    <span className={styles.toggleImpact}>
+                      ({(multipliers[dischargeTherapyKey] > 0 ? "+" : "")}{multipliers[dischargeTherapyKey].toFixed(2)})
+                    </span>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </div>
 

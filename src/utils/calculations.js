@@ -725,7 +725,8 @@ export function getFunctionCovariates(
   summary,
   icdList,
   startScores,
-  ardDate = null
+  ardDate = null,
+  manualOverrides = {}
 ) {
   // Get the correct version of function multipliers based on ARD date
   const ardDateValue = ardDate || parsedValues['A2300'];
@@ -765,6 +766,13 @@ export function getFunctionCovariates(
   Object.assign(covariates, processHccConditions(parsedValues, icdList));
 
   // All HCC conditions are now handled by processHccConditions()
+
+  // Apply manual overrides (for covariates that can't be determined from data)
+  for (const [key, value] of Object.entries(manualOverrides)) {
+    if (value !== undefined && value !== null) {
+      covariates[key] = value;
+    }
+  }
 
   // Total weighted score based on covariates
   let weightedScore = 0;

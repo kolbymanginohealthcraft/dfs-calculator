@@ -225,3 +225,107 @@
   padding: 0.4rem;
   border: 1px solid #ccc;
 }
+
+/* Manual Toggle Section */
+.manualToggleSection {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.toggleLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.toggleTitle {
+  font-weight: 600;
+  color: #0c436a;
+  font-size: 0.95rem;
+}
+
+.toggleDescription {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+}
+
+.toggleControl {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggleSwitch input:checked + .toggleSlider {
+  background-color: #7fbc42;
+}
+
+.toggleSwitch input:checked + .toggleSlider:before {
+  transform: translateX(26px);
+}
+
+.toggleText {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0c436a;
+  min-width: 80px;
+}
+
+.toggleCovariateName {
+  font-size: 0.9rem;
+  color: #333;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+  border-left: 3px solid #ffc107;
+}
+
+.toggleImpact {
+  margin-left: 0.5rem;
+  font-weight: 600;
+  color: #d9534f;
+  font-size: 0.95rem;
+}

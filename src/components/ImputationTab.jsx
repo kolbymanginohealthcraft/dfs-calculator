@@ -50,7 +50,8 @@ export default function ImputationTab({
     }
     
     // Use the existing covariate calculation logic for general covariates
-    const result = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
+    // Note: ImputationTab doesn't use manual overrides since it's for analysis only
+    const result = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate, {});
     return result?.covariates?.[covariateName] || 0;
   };
 

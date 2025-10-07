@@ -109,6 +109,15 @@ export function getScheduleInfo(dateStr) {
 }
 
 /**
+ * Get version information for a specific date (alias for getScheduleInfo)
+ * @param {string} dateStr - ARD date
+ * @returns {Object} Schedule entry with updateId, version info, etc.
+ */
+export function getVersionFromArdDate(dateStr) {
+  return getScheduleInfo(dateStr);
+}
+
+/**
  * Get all available schedule entries
  * @returns {Array} Array of schedule entries
  */

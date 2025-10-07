@@ -52,6 +52,7 @@ function AdvancedAppNew() {
   const [versionMultipliers, setVersionMultipliers] = useState({});
   const [validationError, setValidationError] = useState(null);
   const [validationWarning, setValidationWarning] = useState(null);
+  const [manualCovariateOverrides, setManualCovariateOverrides] = useState({});
   const uploadOpenFunctionRef = useRef(null);
   const exportRef = useRef();
 
@@ -72,6 +73,7 @@ function AdvancedAppNew() {
     setVersionMultipliers({});
     setValidationError(null);
     setValidationWarning(null);
+    setManualCovariateOverrides({});
     // Force garbage collection hint for sensitive data
     if (window.gc) {
       window.gc();
@@ -169,7 +171,7 @@ function AdvancedAppNew() {
     };
   }, [clearAllPatientData]);
 
-  // Calculate covariates only once when file is loaded
+  // Calculate covariates only once when file is loaded (or when manual overrides change)
   useEffect(() => {
     if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0) {
       const icdList = Object.entries(parsedValues)
@@ -186,7 +188,8 @@ function AdvancedAppNew() {
         extractPatientSummary(parsedValues, ardDate),
         icdList,
         startScores,
-        ardDate
+        ardDate,
+        manualCovariateOverrides
       );
 
       if (result) {
@@ -194,7 +197,7 @@ function AdvancedAppNew() {
         setWeightedScore(result.weightedScore || 0);
       }
     }
-  }, [hasFile, parsedValues, startScores, ardDate]);
+  }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides]);
 
   const handleExport = () => {
     if (!fileName) return;
@@ -563,6 +566,9 @@ function AdvancedAppNew() {
                       multipliers={versionMultipliers}
                       onCovariateClick={handleCovariateClick}
                       selectedCovariate={selectedCovariate}
+                      ardDate={ardDate}
+                      manualOverrides={manualCovariateOverrides}
+                      onManualOverrideChange={setManualCovariateOverrides}
                     />
                   </Suspense>
                 </div>
