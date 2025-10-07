@@ -63,7 +63,8 @@ const PatientHeader = ({
         <div className={styles.overviewColumn}>
           <div className={styles.overviewItem}>
             <Calendar size={14} />
-            <span className={styles.overviewLabel}>Episode Start:</span>
+            <span className={styles.overviewLabel}>Episode.
+               Start:</span>
             <span className={styles.overviewValue}>
               {formatDOB(admitDate) || "Unknown"}
               {ardGapDays != null && (

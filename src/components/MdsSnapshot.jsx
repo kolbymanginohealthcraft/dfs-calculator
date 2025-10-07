@@ -146,7 +146,7 @@ export default function MdsSnapshot({
             {highlightMatch(labelDesc)}
           </span>
           {hccDisplay && (
-            <span className={styles.hccDisplay}>
+            <span className={styles.hccMappingDisplay}>
               {" "}({hccDisplay})
             </span>
           )}
@@ -165,7 +165,7 @@ export default function MdsSnapshot({
             {highlightMatch(icdDesc)}
           </span>
           {hccDisplay && (
-            <span className={styles.hccDisplay}>
+            <span className={styles.hccMappingDisplay}>
               {" "}({hccDisplay})
             </span>
           )}
@@ -181,7 +181,7 @@ export default function MdsSnapshot({
           </span>
           : <span className={styles.valueDescription}>Diagnosis not found</span>
           {hccDisplay && (
-            <span className={styles.hccDisplay}>
+            <span className={styles.hccMappingDisplay}>
               {" "}({hccDisplay})
             </span>
           )}
