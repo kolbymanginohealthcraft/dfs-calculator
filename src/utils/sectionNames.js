@@ -4,7 +4,7 @@
  * Maps section codes to their full descriptive names
  */
 
-import sectionNamesData from '../data/mds_section_names.json';
+import sectionNamesData from '../data/mds_section_names.json' with { type: "json" };
 
 /**
  * Get full section name from section code

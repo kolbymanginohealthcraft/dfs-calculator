@@ -1,12 +1,12 @@
-import mdsItemLookup from "../data/mds_item_lookup.json";
-import { GG_ITEMS, getFunctionCovariates, extractPatientSummary } from "./calculations";
-import { parseXml } from "./xmlParser"; // already used in your code
-import { getImputationMultipliersForItem } from "./coefficientLoader";
-import { getImputationThresholds } from "./imputationCalculations";
-import { getSectionName } from "./sectionNames";
+import mdsItemLookup from "../data/mds_item_lookup.json" with { type: "json" };
+import { GG_ITEMS, getFunctionCovariates, extractPatientSummary } from "./calculations.js";
+import { parseXml } from "./xmlParser.js";
+import { getImputationMultipliersForItem } from "./coefficientLoader.js";
+import { getImputationThresholds } from "./imputationCalculations.js";
+import { getSectionName } from "./sectionNames.js";
 
 // Helper function to calculate GG item-specific covariates
-const getGGItemSpecificCovariate = (covariateName, parsedValues) => {
+export const getGGItemSpecificCovariate = (covariateName, parsedValues) => {
   if (covariateName.includes(" - Valid Score") || 
       covariateName.includes(" - Not Attempted") || 
       covariateName.includes(" - Skipped")) {
@@ -34,7 +34,7 @@ const getGGItemSpecificCovariate = (covariateName, parsedValues) => {
 };
 
 // Helper function to get covariate value
-const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate) => {
+export const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate) => {
   const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues);
   if (ggItemSpecificValue !== null) {
     return ggItemSpecificValue;
@@ -45,7 +45,7 @@ const getCovariateValue = (covariateName, parsedValues, summary, icdList, startS
 };
 
 // Function to calculate imputed value for a specific GG item
-const calculateImputedValue = (ggItemId, parsedValues, summary, icdList, startScores) => {
+export const calculateImputedValue = (ggItemId, parsedValues, summary, icdList, startScores) => {
   const ardDate = parsedValues['A2300'];
   const multipliers = getImputationMultipliersForItem(ggItemId, ardDate);
   if (!multipliers || Object.keys(multipliers).length === 0) return "01"; // Default fallback

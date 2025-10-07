@@ -9,7 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node src/utils/server.js"
+    "server": "node src/utils/server.js",
+    "bulk-process": "node scripts/bulk-process.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

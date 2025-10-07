@@ -5,7 +5,7 @@
  * based on the ARD (Assessment Reference Date - A2300) from the MDS file.
  */
 
-import allVersions from '../data/coefficients-all-versions.json';
+import allVersions from '../data/coefficients-all-versions.json' with { type: "json" };
 
 /**
  * Determine which Update ID to use based on an assessment date

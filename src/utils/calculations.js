@@ -1,5 +1,5 @@
-import icdToHcc from "../data/icdToHcc.json";
-import { getFunctionMultipliers } from "./coefficientLoader";
+import icdToHcc from "../data/icdToHcc.json" with { type: "json" };
+import { getFunctionMultipliers } from "./coefficientLoader.js";
 
 // Configuration flag for I0020 dependency methodology
 // Set to true to use original CMS logic with I0020 dependencies
