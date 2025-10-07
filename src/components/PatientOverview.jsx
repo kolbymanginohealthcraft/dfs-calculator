@@ -59,7 +59,7 @@ const PatientOverview = ({
         <div className={styles.summaryCol}>
           <h3 className={styles.sectionHeading}><Calendar size={20} /> Episode Timeline</h3>
           <div className={styles.summaryItem}>
-            <strong>Admit Date</strong>
+            <strong>Medicare Start</strong>
             <span>{formatDOB(admitDate) || "Unknown"}</span>
           </div>
           <div className={styles.summaryItem}>

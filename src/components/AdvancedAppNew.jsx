@@ -524,6 +524,7 @@ function AdvancedAppNew() {
               </div>
 
               {/* Right Panel Content */}
+              <div className={styles.rightPanelContent}>
               {activeRightPanel === 'instructions' && (
                 <Suspense fallback={<div className={styles.loading}>Loading instructions...</div>}>
                   <InstructionPanel
@@ -536,7 +537,6 @@ function AdvancedAppNew() {
                 </Suspense>
               )}
 
-              <div className={styles.rightPanelContent}>
               {activeRightPanel === 'mds' && (
                 <div className={styles.mdsPanel}>
                   <Suspense fallback={<div className={styles.loading}>Loading MDS data...</div>}>

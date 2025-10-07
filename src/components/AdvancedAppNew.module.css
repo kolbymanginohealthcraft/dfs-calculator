@@ -1159,7 +1159,7 @@
   padding: 20px;
   flex: 1;
   overflow-y: auto;
-  min-height: 500px;
+  min-height: 200px;
 }
 
 /* Right Panel Content Areas */

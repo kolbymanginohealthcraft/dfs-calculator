@@ -14,7 +14,7 @@ import allVersions from '../data/coefficients-all-versions.json';
  */
 export function getUpdateIdForDate(dateStr) {
   if (!dateStr) {
-    console.warn('No ARD date (A2300) provided, using latest coefficient version');
+    // No ARD date (A2300) provided, using latest coefficient version
     return allVersions.schedule[allVersions.schedule.length - 1].updateId;
   }
   
@@ -30,7 +30,7 @@ export function getUpdateIdForDate(dateStr) {
     const day = dateStr.substring(6, 8);
     assessmentDate = new Date(`${year}-${month}-${day}`);
   } else {
-    console.warn(`Invalid ARD date format: ${dateStr}, using latest version`);
+    // Invalid ARD date format, using latest version
     return allVersions.schedule[allVersions.schedule.length - 1].updateId;
   }
   

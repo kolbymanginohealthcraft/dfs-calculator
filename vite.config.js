@@ -11,5 +11,14 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsDir: "assets",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-charts': ['recharts'],
+          'vendor-pdf': ['html2pdf.js', 'html2canvas']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 600
   },
 });

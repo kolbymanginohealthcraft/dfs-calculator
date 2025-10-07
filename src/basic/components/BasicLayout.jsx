@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, Suspense } from 'react';
 import { useLocation } from 'react-router-dom';
 import html2pdf from "html2pdf.js";
 import Navbar from '../../components/Navbar';
 import ModeBanner from '../../components/ModeBanner';
-import ExportView from '../../components/ExportView';
+import { lazy } from 'react';
+const ExportView = lazy(() => import('../../components/ExportView'));
 import '../styles/BasicLayout.css';
 
 const BasicLayout = ({ 
@@ -99,11 +100,13 @@ const BasicLayout = ({
       {isBasicEndScore && exportState && (
         <div style={{ display: "none" }}>
           <div ref={exportRef}>
-            <ExportView
-              patient={exportState.patient}
-              scores={exportState.scores}
-              mobilityType={exportState.mobilityType}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <ExportView
+                patient={exportState.patient}
+                scores={exportState.scores}
+                mobilityType={exportState.mobilityType}
+              />
+            </Suspense>
           </div>
         </div>
       )}

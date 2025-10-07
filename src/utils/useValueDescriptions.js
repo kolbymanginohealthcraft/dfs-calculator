@@ -18,7 +18,7 @@ export default function useValueDescriptions(jsonPath = "/itm_val.json") {
           setLookup(data);
         })
         .catch((error) => {
-          console.error('Error loading value descriptions:', error);
+          // Error loading value descriptions - silent fail for production
         });
     }
   }, [jsonPath]);

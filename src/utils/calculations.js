@@ -139,7 +139,7 @@ export function extractPatientSummary(parsedValues, ardDate) {
   const lastName = parsedValues["A0500C"];
   const dob = parsedValues["A0900"];
   const facility = parsedValues["A0100B"];
-  const admitDate = parsedValues["A1900"];
+  const admitDate = parsedValues["A2400B"];
   const dischargeDate = parsedValues["A2000"];
   const age = calculateAgeAtAdmission(dob, admitDate);
   const ardGapDays = calculateDateGap(admitDate, ardDate);
@@ -243,7 +243,7 @@ export function getAgeCovariate(age) {
 }
 
 export function processAgeCovariate(parsedValues, summary) {
-  const age = summary?.age ?? calculateAgeAtAdmission(parsedValues["A0900"], parsedValues["A1900"]);
+  const age = summary?.age ?? calculateAgeAtAdmission(parsedValues["A0900"], parsedValues["A1600"]);
   return getAgeCovariate(age);
 }
 

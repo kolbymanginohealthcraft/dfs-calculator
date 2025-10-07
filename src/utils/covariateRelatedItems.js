@@ -661,17 +661,17 @@ export const covariateRelatedItems = {
     group: "Prior Conditions",
   },
   "Prior Mobility Device Use: Manual Wheelchair and/or Motorized Wheelchair and/or Scooter":
-    { items: ["GG0100A", "GG0100B"], group: "Prior Conditions" },
+    { items: ["GG0110A", "GG0110B"], group: "Prior Conditions" },
   "Prior Mobility Device Use: Mechanical Lift": {
-    items: ["GG0100C"],
+    items: ["GG0110C"],
     group: "Prior Conditions",
   },
   "Prior Mobility Device Use: Orthotics/Prosthetics": {
-    items: ["GG0100E"],
+    items: ["GG0110E"],
     group: "Prior Conditions",
   },
   "Prior Mobility Device Use: Walker": {
-    items: ["GG0100D"],
+    items: ["GG0110D"],
     group: "Prior Conditions",
   },
   "Prior Surgery": { items: ["J2000"], group: "Prior Conditions" },
