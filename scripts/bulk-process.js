@@ -38,6 +38,47 @@ const VALIDATION_CONFIG = {
   VALID_DATE_PATTERN: /^\d{4}-\d{2}-\d{2}$|^\d{8}$/,
 };
 
+// Assessment type descriptions for A0310A (OBRA)
+const assessmentTypeMapA0310A = {
+  '01': '01 - Admission assessment (required by day 14)',
+  '02': '02 - Quarterly review assessment',
+  '03': '03 - Annual assessment',
+  '04': '04 - Significant change in status assessment',
+  '05': '05 - Significant correction to prior comprehensive assessment',
+  '06': '06 - Significant correction to prior quarterly assessment',
+  '99': '99 - None of the above'
+};
+
+// Assessment type descriptions for A0310B (PPS)
+const assessmentTypeMapA0310B = {
+  '01': '01 - 5-day scheduled assessment',
+  '02': '02 - 14-day scheduled assessment',
+  '03': '03 - 30-day scheduled assessment',
+  '04': '04 - 60-day scheduled assessment',
+  '05': '05 - 90-day scheduled assessment',
+  '06': '06 - Readmission/return assessment',
+  '07': '07 - Unscheduled assessment',
+  '99': '99 - None of the above'
+};
+
+// Discharge type descriptions for A0310G
+const dischargeTypeMap = {
+  '1': '1 - Planned',
+  '2': '2 - Unplanned'
+};
+
+// Discharge location descriptions for A2105
+const dischargeLocationMap = {
+  '01': '01 - Community',
+  '02': '02 - Another nursing home',
+  '03': '03 - Acute care hospital',
+  '04': '04 - Psychiatric hospital',
+  '05': '05 - Inpatient rehabilitation facility',
+  '06': '06 - Hospice',
+  '07': '07 - Long-term care hospital',
+  '08': '08 - Other'
+};
+
 /**
  * Simple XML parser for MDS format (Node.js compatible)
  * Parses the simple <TAG>value</TAG> format used in MDS files
@@ -61,11 +102,12 @@ function parseXmlNode(xmlString) {
 
 /**
  * Build start scores object from parsed MDS data with proper imputation
+ * Returns { scores, imputedCount }
  */
 function buildStartScores(parsed, summary, icdList, ardDate) {
   const validValues = ['01', '02', '03', '04', '05', '06'];
   
-  // First pass: collect raw values
+  // First pass: collect raw values for ALL GG items
   const tempStartScores = {};
   GG_ITEMS.forEach((item) => {
     const sourceId = item.id + "1";
@@ -73,12 +115,32 @@ function buildStartScores(parsed, summary, icdList, ardDate) {
     tempStartScores[item.id] = rawVal;
   });
   
-  // Second pass: apply imputation where needed
+  // Determine mobility type to know which items are used in scoring
+  const mobilityType = determineMobilityType(parsed);
+  
+  // Define which items are used in scoring based on mobility type
+  // This follows the logic in calculateFunctionScore
+  const scoringItemIds = [
+    'GG0130A', 'GG0130B', 'GG0130C',  // Self-care (always used)
+    'GG0170A', 'GG0170C', 'GG0170D', 'GG0170E', 'GG0170F',  // Mobility (always used)
+  ];
+  
+  // Add mobility-type-specific items
+  if (mobilityType === 'Wheel') {
+    scoringItemIds.push('GG0170R');  // Wheel uses R (counted twice in score)
+  } else {
+    scoringItemIds.push('GG0170I', 'GG0170J');  // Walk uses I and J
+  }
+  
+  // Second pass: apply imputation where needed and count only scoring items
   const finalStartScores = {};
+  let imputedCount = 0;
+  
   GG_ITEMS.forEach((item) => {
     const sourceId = item.id + "1";
     const rawVal = parsed[sourceId];
     const isValidValue = rawVal && validValues.includes(rawVal);
+    const isUsedInScoring = scoringItemIds.includes(item.id);
     
     let finalValue;
     if (isValidValue) {
@@ -87,12 +149,17 @@ function buildStartScores(parsed, summary, icdList, ardDate) {
       // Apply imputation if invalid/missing
       // calculateImputedValue gets ardDate from parsed internally
       finalValue = calculateImputedValue(sourceId, parsed, summary, icdList, tempStartScores);
+      
+      // Only count imputation for items actually used in scoring
+      if (isUsedInScoring) {
+        imputedCount++;
+      }
     }
     
     finalStartScores[item.id] = finalValue;
   });
   
-  return finalStartScores;
+  return { scores: finalStartScores, imputedCount };
 }
 
 /**
@@ -211,6 +278,18 @@ function processFile(filePath) {
     // Validate MDS content first
     const validationErrors = validateMdsContent(parsed, xmlContent);
     if (validationErrors.length > 0) {
+      // Get assessment types with descriptions for error case
+      const a0310aCode = parsed['A0310A'];
+      const a0310bCode = parsed['A0310B'];
+      const assessmentTypeOBRA = assessmentTypeMapA0310A[a0310aCode] || a0310aCode || '';
+      const assessmentTypePPS = assessmentTypeMapA0310B[a0310bCode] || a0310bCode || '';
+      
+      // Get discharge type and location with descriptions
+      const a0310gCode = parsed['A0310G'];
+      const a2105Code = parsed['A2105'];
+      const dischargeType = dischargeTypeMap[a0310gCode] || a0310gCode || '';
+      const dischargeLocation = dischargeLocationMap[a2105Code] || a2105Code || '';
+      
       // Return validation error result
       return {
         fileName: path.basename(filePath),
@@ -218,14 +297,17 @@ function processFile(filePath) {
         patientLastName: parsed['A0500C'] || '',
         facilityName: parsed['A0100B'] || parsed['FAC_ID'] || '',
         ard: parsed['A2300'] ? formatDate(parsed['A2300']) : '',
-        admitDate: '',
         primaryCondition: '',
         mobilityType: '',
         startScore: '',
         expectedScore: '',
         scoreDifference: '',
         age: '',
-        assessmentType: parsed['A0310F'] || '',
+        imputedCount: '',
+        assessmentTypeOBRA: assessmentTypeOBRA,
+        assessmentTypePPS: assessmentTypePPS,
+        dischargeType: dischargeType,
+        dischargeLocation: dischargeLocation,
         success: false,
         error: validationErrors[0] // Show first validation error
       };
@@ -238,8 +320,8 @@ function processFile(filePath) {
     // Get ICD codes for covariate calculation
     const icdList = getIcdList(parsed);
     
-    // Build start scores with proper imputation
-    const startScores = buildStartScores(parsed, summary, icdList, ardDate);
+    // Build start scores with proper imputation and track imputed count
+    const { scores: startScores, imputedCount } = buildStartScores(parsed, summary, icdList, ardDate);
     
     // Calculate start score
     const mobilityType = determineMobilityType(parsed);
@@ -262,8 +344,17 @@ function processFile(filePath) {
     // Get facility CCN
     const facilityCCN = parsed['A0100B'] || parsed['FAC_ID'] || 'Unknown';
     
-    // Get assessment type
-    const assessmentType = parsed['A0310F'];
+    // Get assessment types with descriptions
+    const a0310aCode = parsed['A0310A'];
+    const a0310bCode = parsed['A0310B'];
+    const assessmentTypeOBRA = assessmentTypeMapA0310A[a0310aCode] || a0310aCode || '';
+    const assessmentTypePPS = assessmentTypeMapA0310B[a0310bCode] || a0310bCode || '';
+    
+    // Get discharge type and location with descriptions
+    const a0310gCode = parsed['A0310G'];
+    const a2105Code = parsed['A2105'];
+    const dischargeType = dischargeTypeMap[a0310gCode] || a0310gCode || '';
+    const dischargeLocation = dischargeLocationMap[a2105Code] || a2105Code || '';
     
     return {
       fileName: path.basename(filePath),
@@ -271,14 +362,17 @@ function processFile(filePath) {
       patientLastName: summary.lastName || '',
       facilityName: facilityCCN, // CCN number (name lookup would require API call)
       ard: formatDate(ardDate),
-      admitDate: formatDate(summary.admitDate),
       primaryCondition: primaryCondition,
       mobilityType: mobilityType,
       startScore: startScore,
       expectedScore: expectedScore,
       scoreDifference: (expectedScore - startScore).toFixed(2),
       age: summary.age || '',
-      assessmentType: assessmentType || '',
+      imputedCount: imputedCount,
+      assessmentTypeOBRA: assessmentTypeOBRA,
+      assessmentTypePPS: assessmentTypePPS,
+      dischargeType: dischargeType,
+      dischargeLocation: dischargeLocation,
       success: true,
       error: null
     };
@@ -289,14 +383,17 @@ function processFile(filePath) {
       patientLastName: '',
       facilityName: '',
       ard: '',
-      admitDate: '',
       primaryCondition: '',
       mobilityType: '',
       startScore: '',
       expectedScore: '',
       scoreDifference: '',
       age: '',
-      assessmentType: '',
+      imputedCount: '',
+      assessmentTypeOBRA: '',
+      assessmentTypePPS: '',
+      dischargeType: '',
+      dischargeLocation: '',
       success: false,
       error: error.message
     };
@@ -313,14 +410,17 @@ function resultsToCSV(results) {
     'Patient Last Name',
     'Facility CCN',
     'ARD Date',
-    'Admit Date',
     'Age',
     'Primary Medical Condition',
     'Mobility Type',
     'Start Score',
     'Expected Score',
     'Score Difference',
-    'Assessment Type',
+    'Imputed Count',
+    'Assessment Type OBRA (A0310A)',
+    'Assessment Type PPS (A0310B)',
+    'Discharge Type (A0310G)',
+    'Discharge Location (A2105)',
     'Status',
     'Error'
   ];
@@ -331,14 +431,17 @@ function resultsToCSV(results) {
     r.patientLastName,
     r.facilityName,
     r.ard,
-    r.admitDate,
     r.age,
     r.primaryCondition,
     r.mobilityType,
     r.startScore,
     r.expectedScore,
     r.scoreDifference,
-    r.assessmentType,
+    r.imputedCount,
+    r.assessmentTypeOBRA,
+    r.assessmentTypePPS,
+    r.dischargeType,
+    r.dischargeLocation,
     r.success ? 'Success' : 'Error',
     r.error || ''
   ]);
