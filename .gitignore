@@ -30,3 +30,4 @@ test-data/examples/*.xml
 
 # Bulk processing output
 bulk-results.csv
+bulk-results-imputation-details.csv

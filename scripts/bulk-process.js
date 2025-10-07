@@ -102,7 +102,7 @@ function parseXmlNode(xmlString) {
 
 /**
  * Build start scores object from parsed MDS data with proper imputation
- * Returns { scores, imputedCount }
+ * Returns { scores, imputedCount, imputedItems }
  */
 function buildStartScores(parsed, summary, icdList, ardDate) {
   const validValues = ['01', '02', '03', '04', '05', '06'];
@@ -132,9 +132,10 @@ function buildStartScores(parsed, summary, icdList, ardDate) {
     scoringItemIds.push('GG0170I', 'GG0170J');  // Walk uses I and J
   }
   
-  // Second pass: apply imputation where needed and count only scoring items
+  // Second pass: apply imputation where needed and track details
   const finalStartScores = {};
   let imputedCount = 0;
+  const imputedItems = [];
   
   GG_ITEMS.forEach((item) => {
     const sourceId = item.id + "1";
@@ -150,16 +151,22 @@ function buildStartScores(parsed, summary, icdList, ardDate) {
       // calculateImputedValue gets ardDate from parsed internally
       finalValue = calculateImputedValue(sourceId, parsed, summary, icdList, tempStartScores);
       
-      // Only count imputation for items actually used in scoring
+      // Track imputation details for scoring items
       if (isUsedInScoring) {
         imputedCount++;
+        imputedItems.push({
+          itemName: item.label,
+          itemId: item.id,
+          originalValue: rawVal || '(missing)',
+          imputedValue: finalValue
+        });
       }
     }
     
     finalStartScores[item.id] = finalValue;
   });
   
-  return { scores: finalStartScores, imputedCount };
+  return { scores: finalStartScores, imputedCount, imputedItems };
 }
 
 /**
@@ -304,6 +311,7 @@ function processFile(filePath) {
         scoreDifference: '',
         age: '',
         imputedCount: '',
+        imputedItems: [],
         assessmentTypeOBRA: assessmentTypeOBRA,
         assessmentTypePPS: assessmentTypePPS,
         dischargeType: dischargeType,
@@ -320,8 +328,8 @@ function processFile(filePath) {
     // Get ICD codes for covariate calculation
     const icdList = getIcdList(parsed);
     
-    // Build start scores with proper imputation and track imputed count
-    const { scores: startScores, imputedCount } = buildStartScores(parsed, summary, icdList, ardDate);
+    // Build start scores with proper imputation and track imputed count and items
+    const { scores: startScores, imputedCount, imputedItems } = buildStartScores(parsed, summary, icdList, ardDate);
     
     // Calculate start score
     const mobilityType = determineMobilityType(parsed);
@@ -369,6 +377,7 @@ function processFile(filePath) {
       scoreDifference: (expectedScore - startScore).toFixed(2),
       age: summary.age || '',
       imputedCount: imputedCount,
+      imputedItems: imputedItems,
       assessmentTypeOBRA: assessmentTypeOBRA,
       assessmentTypePPS: assessmentTypePPS,
       dischargeType: dischargeType,
@@ -390,6 +399,7 @@ function processFile(filePath) {
       scoreDifference: '',
       age: '',
       imputedCount: '',
+      imputedItems: [],
       assessmentTypeOBRA: '',
       assessmentTypePPS: '',
       dischargeType: '',
@@ -398,6 +408,58 @@ function processFile(filePath) {
       error: error.message
     };
   }
+}
+
+/**
+ * Convert imputation details to CSV format
+ */
+function imputationDetailsToCSV(results) {
+  const headers = [
+    'File Name',
+    'Patient First Name',
+    'Patient Last Name',
+    'Facility CCN',
+    'ARD Date',
+    'Item Name',
+    'Item ID',
+    'Original Value',
+    'Imputed Value'
+  ];
+  
+  const rows = [];
+  results.forEach(r => {
+    if (r.success && r.imputedItems && r.imputedItems.length > 0) {
+      r.imputedItems.forEach(item => {
+        rows.push([
+          r.fileName,
+          r.patientFirstName,
+          r.patientLastName,
+          r.facilityName,
+          r.ard,
+          item.itemName,
+          item.itemId,
+          item.originalValue,
+          item.imputedValue
+        ]);
+      });
+    }
+  });
+  
+  // Escape CSV fields (handle commas and quotes)
+  const escapeCSV = (field) => {
+    const str = String(field);
+    if (str.includes(',') || str.includes('"') || str.includes('\n')) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return str;
+  };
+  
+  const csvRows = [
+    headers.map(escapeCSV).join(','),
+    ...rows.map(row => row.map(escapeCSV).join(','))
+  ];
+  
+  return csvRows.join('\n');
 }
 
 /**
@@ -531,6 +593,14 @@ function main() {
   const csv = resultsToCSV(results);
   fs.writeFileSync(outputFile, csv, 'utf8');
   
+  // Write imputation details to separate CSV
+  const imputationDetailsFile = outputFile.replace('.csv', '-imputation-details.csv');
+  const imputationCsv = imputationDetailsToCSV(results);
+  fs.writeFileSync(imputationDetailsFile, imputationCsv, 'utf8');
+  
+  // Count total imputations
+  const totalImputations = results.reduce((sum, r) => sum + (r.imputedItems?.length || 0), 0);
+  
   console.log('\n==========================');
   console.log('📊 Summary');
   console.log('==========================');
@@ -539,6 +609,8 @@ function main() {
   console.log(`⚠️  Validation Errors: ${validationErrorCount}`);
   console.log(`❌ Processing Errors: ${errorCount}`);
   console.log(`\n📄 Results saved to: ${outputFile}`);
+  console.log(`📄 Imputation details saved to: ${imputationDetailsFile}`);
+  console.log(`📊 Total imputations: ${totalImputations}`);
   
   // Display sample results
   if (successCount > 0) {
