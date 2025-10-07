@@ -139,7 +139,14 @@ export function extractPatientSummary(parsedValues, ardDate) {
   const lastName = parsedValues["A0500C"];
   const dob = parsedValues["A0900"];
   const facility = parsedValues["A0100B"];
-  const admitDate = parsedValues["A2400B"];
+  
+  // Use fallback chain: A2400B (Medicare start) → A1600 (Entry date) → A1900 (Admission date)
+  // Skip values that are blank, undefined, or "^" (skip pattern)
+  const isValidDate = (val) => val && val !== "^";
+  const admitDate = isValidDate(parsedValues["A2400B"]) ? parsedValues["A2400B"] :
+                    isValidDate(parsedValues["A1600"]) ? parsedValues["A1600"] :
+                    parsedValues["A1900"];
+  
   const dischargeDate = parsedValues["A2000"];
   const age = calculateAgeAtAdmission(dob, admitDate);
   const ardGapDays = calculateDateGap(admitDate, ardDate);
