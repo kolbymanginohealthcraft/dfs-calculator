@@ -101,8 +101,19 @@ function AdvancedAppNew() {
     );
     
     // If validation failed, clear all file data to prevent calculator from showing
+    // BUT keep the validation error message visible
     if (!uploadSuccess) {
-      clearAllPatientData();
+      setFileName("");
+      setParsedValues({});
+      setGroupedSections({});
+      setModeledValues({});
+      setStartScores({});
+      setImputedItems(new Set());
+      setCovariates({});
+      setWeightedScore(0);
+      setVersionMultipliers({});
+      setManualCovariateOverrides({});
+      // DON'T clear validationError and validationWarning - they were just set by handleFileUploadWithValidation!
     }
   }, []);
 

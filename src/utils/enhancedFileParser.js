@@ -68,8 +68,6 @@ export async function handleFileUploadWithValidation(
     return true; // Success
 
   } catch (error) {
-    // File upload error - error logging removed for HIPAA compliance
-    
     if (setValidationError) {
       setValidationError({
         title: 'Upload Failed',
