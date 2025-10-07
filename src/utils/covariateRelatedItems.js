@@ -552,6 +552,10 @@ export const covariateRelatedItems = {
     items: ["O0400B1", "O0400B2", "O0400B3", "O0400C1", "O0400C2", "O0400C3"],
     group: "Admission Status",
   },
+  "No Physical or Occupational Therapy - Discharge": {
+    items: ["O0425B1", "O0425B2", "O0425B3", "O0425C1", "O0425C2", "O0425C3"],
+    group: "Discharge Status",
+  },
   "Nutritional Approaches: Mechanically Altered Diet - Admission": {
     items: ["K0520C3"],
     group: "Admission Status",

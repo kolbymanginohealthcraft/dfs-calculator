@@ -51,6 +51,7 @@ export const covariateMapping = {
   "85–90 Years": "85-90 Years",
   "Primary Medical Condition Category: Debility, Cardiorespiratory Conditions ": "Primary Medical Condition Category: Debility, Cardiorespiratory Conditions",
   "No Physical or Occupational Therapy – Admission": "No Physical or Occupational Therapy - Admission",
+  "No Physical or Occupational Therapy – Discharge": "No Physical or Occupational Therapy - Discharge",
   "Stage 2 Pressure Ulcer – Admission": "Stage 2 Pressure Ulcer - Admission",
   "Stage 3, 4 or Unstageable Pressure Ulcer/Injury – Admission": "Stage 3, 4 or Unstageable Pressure Ulcer/Injury - Admission",
   "Cognitive Function, BIMS Score: Moderately Impaired – Admission": "Cognitive Function, BIMS Score: Moderately Impaired - Admission",

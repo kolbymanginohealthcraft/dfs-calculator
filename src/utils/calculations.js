@@ -643,6 +643,17 @@ export function processAdditionalClinicalConditions(parsedValues) {
     covariates["No Physical or Occupational Therapy - Admission"] = 1;
   }
   
+  // No PT or OT on Discharge
+  const ptSumDischarge = ["O0425B1", "O0425B2", "O0425B3"]
+    .map(k => parseInt(parsedValues[k] ?? "0"))
+    .reduce((a, b) => a + b, 0);
+  const otSumDischarge = ["O0425C1", "O0425C2", "O0425C3"]
+    .map(k => parseInt(parsedValues[k] ?? "0"))
+    .reduce((a, b) => a + b, 0);
+  if (ptSumDischarge === 0 && otSumDischarge === 0) {
+    covariates["No Physical or Occupational Therapy - Discharge"] = 1;
+  }
+  
   // Stage 2 Pressure Ulcer on Admission
   if (parseInt(parsedValues["M0300B1"] ?? "0") >= 1) {
     covariates["Stage 2 Pressure Ulcer - Admission"] = 1;
