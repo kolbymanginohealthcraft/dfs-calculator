@@ -50,13 +50,11 @@ fs.createReadStream(CSV_SOURCE)
     const itemId = row['itm_id'] || row['ITM_ID'] || row['Item ID'];
     const shortLabel = row['itm_shrt_label'] || row['ITM_SHRT_LABEL'] || row['Short Label'];
     const sectionLabel = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Label'];
-    const sectionName = row['itm_sect_label'] || row['ITM_SECT_LABEL'] || row['Section Name'];
     
     if (itemId && shortLabel) {
       lookup[itemId] = {
         itm_shrt_label: shortLabel,
-        itm_sect_label: sectionLabel || 'Unknown',
-        sect_name: sectionName || 'Unknown Section'
+        itm_sect_label: sectionLabel || 'Unknown'
       };
       processedCount++;
     } else {
