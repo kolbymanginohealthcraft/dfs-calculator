@@ -580,6 +580,7 @@ function AdvancedAppNew() {
                       ardDate={ardDate}
                       manualOverrides={manualCovariateOverrides}
                       onManualOverrideChange={setManualCovariateOverrides}
+                      parsedValues={parsedValues}
                     />
                   </Suspense>
                 </div>

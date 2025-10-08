@@ -14,12 +14,22 @@ export default function Covariates({
   ardDate = null,
   manualOverrides = {},
   onManualOverrideChange = () => {},
+  parsedValues = {},
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Determine if we're using FY 2026 (Update ID 3) which has the discharge therapy covariate
   const version = getVersionFromArdDate(ardDate);
-  const showDischargeTherapyToggle = version?.updateId === "3";
+  
+  // Check if discharge therapy data (O0425 items) is populated
+  const therapyItems = ["O0425B1", "O0425B2", "O0425B3", "O0425C1", "O0425C2", "O0425C3"];
+  const hasTherapyData = therapyItems.some(item => {
+    const value = parsedValues[item];
+    return value && value !== "^" && value !== "";
+  });
+  
+  // Only show toggle for FY 2026 AND when therapy data is NOT available
+  const showDischargeTherapyToggle = version?.updateId === "3" && !hasTherapyData;
 
   const formatNumber = (n) => Number(n).toFixed(2);
   const formatNumberDetailed = (n) => Number(n).toFixed(4);
@@ -180,6 +190,7 @@ export default function Covariates({
                     const itemsUsed = covariateRelatedItems?.[key]?.items ?? [];
                     const isClickable = itemsUsed.length > 0;
                     const isSelected = selectedCovariate === key;
+                    const isDischargeTherapyRow = key === dischargeTherapyKey;
 
                     return (
                       <tr
@@ -187,7 +198,9 @@ export default function Covariates({
                         onClick={() => isClickable && handleRowClick(key)}
                         className={`${styles.row} ${
                           isSelected ? styles.selectedRow : ""
-                        } ${!isClickable ? styles.disabledRow : ""}`}
+                        } ${!isClickable ? styles.disabledRow : ""} ${
+                          isDischargeTherapyRow ? styles.dischargeTherapyRow : ""
+                        }`}
                         title={!isClickable ? "No related MDS items" : ""}
                       >
                         <td>{highlightMatch(key, searchTerm)}</td>
