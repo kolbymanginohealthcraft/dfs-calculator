@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getScoreTypeColor } from '../utils/themeColors';
+import { usePortal } from '../contexts/PortalContext';
+import CustomerAccessModal from './CustomerAccessModal';
 import styles from './ModeBanner.module.css';
 
 const ModeBanner = ({ 
@@ -14,13 +16,22 @@ const ModeBanner = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isFromPortal } = usePortal();
+  const [showModal, setShowModal] = useState(false);
   
   const isBasicRoute = location.pathname.startsWith('/basic');
   const isAdvancedRoute = location.pathname === '/advanced';
 
+
   const handleSwitchCalculator = () => {
     if (isBasicRoute) {
-      navigate('/advanced');
+      // Only allow switching to advanced if user is from portal
+      if (isFromPortal) {
+        navigate('/advanced');
+      } else {
+        // Show modal for public users
+        setShowModal(true);
+      }
     } else if (isAdvancedRoute) {
       navigate('/basic/start-score');
     }
@@ -126,18 +137,31 @@ const ModeBanner = ({
         )}
         
         <button 
-          className={styles.switchButton}
+          className={`${styles.switchButton} ${isBasicRoute && !isFromPortal ? styles.restrictedButton : ''}`}
           onClick={handleSwitchCalculator}
-          title={isBasicRoute ? "Switch to Advanced Mode" : "Switch to Basic Mode"}
+          title={
+            isBasicRoute 
+              ? (isFromPortal ? "Switch to Advanced Mode" : "Advanced Mode - Customer Only")
+              : "Switch to Basic Mode"
+          }
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
           </svg>
           <span className={styles.buttonText}>
-            {isBasicRoute ? 'Switch to Advanced' : 'Switch to Basic'}
+            {isBasicRoute 
+              ? (isFromPortal ? 'Switch to Advanced' : 'Advanced (Customer Only)')
+              : 'Switch to Basic'
+            }
           </span>
         </button>
       </div>
+      
+      {/* Customer Access Modal */}
+      <CustomerAccessModal 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)} 
+      />
     </div>
   );
 };
