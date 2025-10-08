@@ -131,7 +131,7 @@ export default function Covariates({
                 <div className={styles.toggleLabel}>
                   <span className={styles.toggleTitle}>Manual Override (FY 2026)</span>
                   <span className={styles.toggleDescription}>
-                    Discharge therapy data not available until patient discharge
+                    New covariate as of 10/1/2025: This considers PT/OT minutes throughout the entire stay. Since this tool is to be used while patients are still on caseload, complete therapy data is not yet available. If you anticipate the patient will not receive PT or OT during their entire stay, enable this to include it in the calculation.
                   </span>
                 </div>
                 <div className={styles.toggleControl}>
@@ -148,10 +148,10 @@ export default function Covariates({
                   </span>
                 </div>
                 <div className={styles.toggleCovariateName}>
-                  No PT/OT on Discharge
+                  {dischargeTherapyKey}
                   {isDischargeTherapyActive && multipliers[dischargeTherapyKey] && (
                     <span className={styles.toggleImpact}>
-                      ({(multipliers[dischargeTherapyKey] > 0 ? "+" : "")}{multipliers[dischargeTherapyKey].toFixed(2)})
+                      ({(multipliers[dischargeTherapyKey] > 0 ? "+" : "")}{multipliers[dischargeTherapyKey].toFixed(4)})
                     </span>
                   )}
                 </div>
