@@ -129,31 +129,26 @@ export default function Covariates({
             {showDischargeTherapyToggle && (
               <div className={styles.manualToggleSection}>
                 <div className={styles.toggleLabel}>
-                  <span className={styles.toggleTitle}>Manual Override (FY 2026)</span>
+                  <span className={styles.toggleTitle}>Will the patient receive PT or OT during their stay?</span>
                   <span className={styles.toggleDescription}>
-                    New covariate as of 10/1/2025: This considers PT/OT minutes throughout the entire stay. Since this tool is to be used while patients are still on caseload, complete therapy data is not yet available. If you anticipate the patient will not receive PT or OT during their entire stay, enable this to include it in the calculation.
+                    New covariate as of 10/1/2025: This considers PT/OT minutes throughout the entire episode. Since this tool is designed to be used while patients are still on caseload, complete therapy data is not yet available. Please indicate below whether you anticipate the patient will receive therapy during their stay.
                   </span>
                 </div>
                 <div className={styles.toggleControl}>
                   <label className={styles.toggleSwitch}>
                     <input
                       type="checkbox"
-                      checked={isDischargeTherapyActive}
+                      checked={!isDischargeTherapyActive}
                       onChange={handleDischargeTherapyToggle}
                     />
                     <span className={styles.toggleSlider}></span>
                   </label>
                   <span className={styles.toggleText}>
-                    {isDischargeTherapyActive ? "Applied" : "Not Applied"}
+                    {!isDischargeTherapyActive 
+                      ? <>Yes (covariate not applied)</>
+                      : <>No (covariate applied: <span className={styles.toggleImpact}>{(multipliers[dischargeTherapyKey] > 0 ? "+" : "")}{(multipliers[dischargeTherapyKey] || 0).toFixed(4)}</span>)</>
+                    }
                   </span>
-                </div>
-                <div className={styles.toggleCovariateName}>
-                  {dischargeTherapyKey}
-                  {isDischargeTherapyActive && multipliers[dischargeTherapyKey] && (
-                    <span className={styles.toggleImpact}>
-                      ({(multipliers[dischargeTherapyKey] > 0 ? "+" : "")}{multipliers[dischargeTherapyKey].toFixed(4)})
-                    </span>
-                  )}
                 </div>
               </div>
             )}
