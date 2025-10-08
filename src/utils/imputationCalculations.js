@@ -3,6 +3,48 @@ import { getImputationMultipliers } from './coefficientLoader.js';
 import { covariateMapping } from './covariateMapping.js';
 
 /**
+ * Determines if a GG item covariate should be excluded from imputation
+ * Based on CMS guidance:
+ * - Don't use an item in its own imputation
+ * - If Uses Wheelchair = 1, don't use Walk items (I, J, K, L)
+ * - If Uses Wheelchair = 0, don't use Wheelchair items (R, S)
+ * 
+ * @param {string} covariateName - The covariate name
+ * @param {string} itemBeingImputed - The GG item ID being imputed (e.g., 'GG0170J1')
+ * @param {boolean} usesWheelchair - Whether the patient uses a wheelchair
+ * @returns {boolean} True if the covariate should be excluded
+ */
+export function shouldExcludeGGItemCovariate(covariateName, itemBeingImputed, usesWheelchair) {
+    // Extract GG item ID from covariate name (e.g., "Walk 10 Feet (GG0170I1) - Valid Score" -> "GG0170I1")
+    const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
+    if (!match) return false;
+    
+    const covariateItemId = match[0].slice(1, -1); // Remove parentheses
+    
+    // Rule 1: Don't use an item in its own imputation
+    if (covariateItemId === itemBeingImputed) {
+        return true;
+    }
+    
+    // Extract the letter from the GG item (e.g., "GG0170I1" -> "I")
+    const covariateItemLetter = covariateItemId.match(/GG[0-9]+([A-Z])[0-9]/)?.[1];
+    
+    if (!covariateItemLetter) return false;
+    
+    // Rule 2: If Uses Wheelchair = 1, exclude Walk items (I, J, K, L)
+    if (usesWheelchair && ['I', 'J', 'K', 'L'].includes(covariateItemLetter)) {
+        return true;
+    }
+    
+    // Rule 3: If Uses Wheelchair = 0, exclude Wheelchair items (R, S)
+    if (!usesWheelchair && ['R', 'S'].includes(covariateItemLetter)) {
+        return true;
+    }
+    
+    return false;
+}
+
+/**
  * Imputes missing or invalid GG items using the imputation methodology
  * @param {Object} parsedValues - The parsed MDS values
  * @param {Object} summary - Patient summary data
@@ -18,6 +60,9 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
     
     // Get the standard covariates (same as used for expected score calculation)
     const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
+    
+    // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
+    const usesWheelchair = covariates["Uses Wheelchair"] === 1;
     
     const imputedValues = {};
     
@@ -43,6 +88,12 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
                      covariateName.includes('Not Attempted') || 
                      covariateName.includes('Skipped'))) {
                     
+                    // Check if this GG item covariate should be excluded
+                    if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
+                        // Skip this covariate - don't add it to the imputation score
+                        return;
+                    }
+                    
                     // Extract GG item ID from covariate name
                     const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
                     if (match) {
@@ -55,10 +106,22 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
                                 covariateValue = parseInt(rawValue, 10);
                             }
                         } else if (covariateName.includes('Not Attempted')) {
-                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88), 0 otherwise
-                            covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88)
+                            // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
+                            const hasSkippedCovariate = Object.keys(itemMultipliers).some(key => 
+                                key.includes(itemId) && key.includes('Skipped')
+                            );
+                            
+                            if (hasSkippedCovariate) {
+                                // If item has a Skipped covariate, only count ANA values as Not Attempted
+                                covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+                            } else {
+                                // If no Skipped covariate, treat ^ as Not Attempted too
+                                covariateValue = ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
+                            }
                         } else if (covariateName.includes('Skipped')) {
                             // Skipped: 1 if value is ^ (skip pattern), 0 otherwise
+                            // Note: This covariate only exists for certain items (J1, K1, L1, N1, O1, R1, S1)
                             covariateValue = rawValue === '^' ? 1 : 0;
                         }
                     }
@@ -182,6 +245,9 @@ export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdLis
     // Get the standard covariates (same as used for expected score calculation)
     const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
     
+    // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
+    const usesWheelchair = covariates["Uses Wheelchair"] === 1;
+    
     const imputedValues = {};
     
     // Process each GG item that has imputation data
@@ -206,6 +272,12 @@ export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdLis
                      covariateName.includes('Not Attempted') || 
                      covariateName.includes('Skipped'))) {
                     
+                    // Check if this GG item covariate should be excluded
+                    if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
+                        // Skip this covariate - don't add it to the imputation score
+                        return;
+                    }
+                    
                     // Extract GG item ID from covariate name
                     const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
                     if (match) {
@@ -218,10 +290,22 @@ export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdLis
                                 covariateValue = parseInt(rawValue, 10);
                             }
                         } else if (covariateName.includes('Not Attempted')) {
-                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88), 0 otherwise
-                            covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88)
+                            // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
+                            const hasSkippedCovariate = Object.keys(itemMultipliers).some(key => 
+                                key.includes(itemId) && key.includes('Skipped')
+                            );
+                            
+                            if (hasSkippedCovariate) {
+                                // If item has a Skipped covariate, only count ANA values as Not Attempted
+                                covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+                            } else {
+                                // If no Skipped covariate, treat ^ as Not Attempted too
+                                covariateValue = ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
+                            }
                         } else if (covariateName.includes('Skipped')) {
                             // Skipped: 1 if value is ^ (skip pattern), 0 otherwise
+                            // Note: This covariate only exists for certain items (J1, K1, L1, N1, O1, R1, S1)
                             covariateValue = rawValue === '^' ? 1 : 0;
                         }
                     }

@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import styles from "./ImputationTab.module.css";
 import { Calculator } from "lucide-react";
 import { getImputationMultipliers } from "../utils/coefficientLoader";
-import { getImputationThresholds } from "../utils/imputationCalculations";
+import { getImputationThresholds, shouldExcludeGGItemCovariate } from "../utils/imputationCalculations";
 import { getFunctionCovariates, GG_ITEMS, determineMobilityType } from "../utils/calculations";
 
 export default function ImputationTab({
@@ -42,9 +42,9 @@ export default function ImputationTab({
   };
 
   // Helper function to get covariate value
-  const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate) => {
+  const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate, itemMultipliers = null) => {
     // First check for GG item-specific covariates
-    const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues);
+    const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers);
     if (ggItemSpecificValue !== null) {
       return ggItemSpecificValue;
     }
@@ -56,7 +56,7 @@ export default function ImputationTab({
   };
 
   // Helper function to calculate GG item-specific covariates
-  const getGGItemSpecificCovariate = (covariateName, parsedValues) => {
+  const getGGItemSpecificCovariate = (covariateName, parsedValues, itemMultipliers = null) => {
     // Check if this is a GG item-specific covariate (contains "Valid Score", "Not Attempted", or "Skipped")
     if (covariateName.includes(" - Valid Score") || 
         covariateName.includes(" - Not Attempted") || 
@@ -75,10 +75,24 @@ export default function ImputationTab({
           }
           return 0;
         } else if (covariateName.includes(" - Not Attempted")) {
-          // Not Attempted: return 1 if value is any ANA value (07, 08, 09, 10, 88), else 0
-          return ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+          // Not Attempted: return 1 if value is any ANA value (07, 08, 09, 10, 88)
+          // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
+          
+          // Check if this item has a Skipped covariate (only J1, K1, L1, N1, O1, R1, S1)
+          const hasSkippedCovariate = itemMultipliers && Object.keys(itemMultipliers).some(key => 
+            key.includes(ggItemId) && key.includes('Skipped')
+          );
+          
+          if (hasSkippedCovariate) {
+            // If item has a Skipped covariate, only count ANA values as Not Attempted
+            return ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+          } else {
+            // If no Skipped covariate, treat ^ as Not Attempted too
+            return ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
+          }
         } else if (covariateName.includes(" - Skipped")) {
           // Skipped: return 1 if value is ^ (skip pattern), else 0
+          // Note: This covariate only exists for certain items (J1, K1, L1, N1, O1, R1, S1)
           return rawValue === '^' ? 1 : 0;
         }
       }
@@ -132,14 +146,30 @@ export default function ImputationTab({
       const multipliers = imputationMultipliers[ggItemId];
       const thresholds = getImputationThresholds(ggItemId, ardDate);
       
+      // Get all covariates to determine Uses Wheelchair value
+      const allCovariates = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate, {});
+      const usesWheelchair = allCovariates?.covariates?.["Uses Wheelchair"] === 1;
+      
       // Get covariates for this specific GG item
       const covariates = {};
       let imputationScore = 0;
 
       // Calculate imputation score using covariate * multiplier
       for (const [covariateName, multiplier] of Object.entries(multipliers)) {
+        // Check if this is a GG item-specific covariate that should be excluded
+        if (covariateName.includes('(GG') && 
+            (covariateName.includes('Valid Score') || 
+             covariateName.includes('Not Attempted') || 
+             covariateName.includes('Skipped'))) {
+          
+          if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
+            // Skip this covariate - don't display it or add it to the imputation score
+            continue;
+          }
+        }
+        
         // Get covariate value from the main covariate calculation
-        const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate);
+        const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate, multipliers);
         
         if (covariateValue !== 0) {
           covariates[covariateName] = covariateValue;
