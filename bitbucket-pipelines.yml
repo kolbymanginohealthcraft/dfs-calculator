@@ -1,0 +1,33 @@
+image: node:20
+clone:
+  enabled: false
+pipelines:
+  branches:
+    release/*:
+      - step:
+          name: Build React App
+          clone:
+            enabled: true
+          caches:
+            - node
+          script:
+            - npm ci
+            - npm run build
+          artifacts:
+            - dist/**
+
+      - step:
+          name: Deploy to Staging
+          deployment: staging
+          trigger: automatic
+          script:
+            - npm install -g @azure/static-web-apps-cli
+            - swa deploy ./dist --deployment-token $AZURE_STATIC_WEB_APPS_API_TOKEN --env staging
+
+      - step:
+          name: Deploy to Production
+          deployment: production
+          trigger: manual
+          script:
+            - npm install -g @azure/static-web-apps-cli
+            - swa deploy ./dist --deployment-token $AZURE_STATIC_WEB_APPS_API_TOKEN --env production
