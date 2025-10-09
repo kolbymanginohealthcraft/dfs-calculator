@@ -15,7 +15,7 @@ export const PortalProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   // DEV FLAG: Set to false to disable referrer checking for development
-  const ENABLE_REFERRER_CHECK = false;
+  const ENABLE_REFERRER_CHECK = true;
 
   useEffect(() => {
     if (!ENABLE_REFERRER_CHECK) {
@@ -25,9 +25,12 @@ export const PortalProvider = ({ children }) => {
       return;
     }
 
-    // Production mode: Check if user came from myCare portal
+    // Production mode: Check if user came from myCare portal OR is on mycare subdomain (for testing)
     const referrer = document.referrer;
-    if (referrer.includes('mycare.com')) {
+    const hostname = window.location.hostname;
+    
+    // Check referrer for real portal access OR hostname for test deployment
+    if (referrer.includes('mycare.com') || hostname.includes('mycare')) {
       setIsFromPortal(true);
     }
     setIsLoading(false);
