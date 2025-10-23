@@ -1,19 +1,108 @@
-import React, { useState, useMemo } from 'react';
-import { Download, FileText, AlertCircle, CheckCircle, Eye, EyeOff, Info } from 'lucide-react';
-import { redactName } from '../utils/redactionUtils';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { Download, FileText, AlertCircle, CheckCircle, Eye, EyeOff, Info, Search, X, ChevronDown } from 'lucide-react';
+import { redactName, redactFullName, redactFacility, redactAddress } from '../utils/redactionUtils';
+import { extractPatientSummary, determineMobilityType } from '../utils/calculations';
+import { fetchFacilityInfo } from '../utils/facilityLookup';
+import html2pdf from 'html2pdf.js';
+import { lazy, Suspense } from 'react';
 import styles from './SummaryView.module.css';
+
+// Lazy load ExportView to avoid circular dependencies
+const ExportView = lazy(() => import('./ExportView'));
 
 const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction }) => {
   const [sortField, setSortField] = useState('status');
   const [sortDirection, setSortDirection] = useState('asc');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [exportData, setExportData] = useState(null);
+  const [showExportDropdown, setShowExportDropdown] = useState(false);
+  const exportRef = useRef();
+  const searchInputRef = useRef(null);
+  const dropdownRef = useRef(null);
+
+  const clearSearch = () => {
+    setSearchTerm('');
+  };
+
+  const handleSearchFocus = () => {
+    setIsSearchFocused(true);
+  };
+
+  const handleSearchBlur = () => {
+    setIsSearchFocused(false);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      if (searchTerm) {
+        // First escape: clear search
+        clearSearch();
+      } else if (isSearchFocused) {
+        // Second escape: exit search focus
+        searchInputRef.current?.blur();
+      } else if (showExportDropdown) {
+        // Third escape: close export dropdown
+        setShowExportDropdown(false);
+      }
+    }
+  };
+
+  // Close dropdown when clicking outside or pressing escape
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowExportDropdown(false);
+      }
+    };
+
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape' && showExportDropdown) {
+        setShowExportDropdown(false);
+      }
+    };
+
+    if (showExportDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [showExportDropdown]);
 
   const processedFiles = useMemo(() => {
     return uploadedFiles
       .filter(file => {
-        if (filterStatus === 'all') return true;
-        if (filterStatus === 'success') return file.status === 'processed';
-        if (filterStatus === 'error') return file.status === 'error';
+        // Status filter
+        if (filterStatus === 'all') {
+          // Continue to search filter
+        } else if (filterStatus === 'success') {
+          if (file.status !== 'processed') return false;
+        } else if (filterStatus === 'error') {
+          if (file.status !== 'error') return false;
+        }
+
+        // Search filter
+        if (searchTerm.trim()) {
+          const searchLower = searchTerm.toLowerCase();
+          
+          // Search in file name
+          const fileName = file.name.toLowerCase();
+          if (fileName.includes(searchLower)) return true;
+          
+          // Search in patient names (even if redacted, search the redacted text)
+          const patientFirstName = file.results?.patientFirstName || '';
+          const patientLastName = file.results?.patientLastName || '';
+          const fullName = `${patientFirstName} ${patientLastName}`.toLowerCase();
+          if (fullName.includes(searchLower)) return true;
+          
+          return false;
+        }
+        
         return true;
       })
       .sort((a, b) => {
@@ -64,7 +153,7 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
           return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
         }
       });
-  }, [uploadedFiles, sortField, sortDirection, filterStatus]);
+  }, [uploadedFiles, sortField, sortDirection, filterStatus, searchTerm]);
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -132,6 +221,134 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
     return actualGain - requiredGain;
   };
 
+  // Handle PDF export for individual file
+  const handlePdfExport = (file, event) => {
+    event.stopPropagation(); // Prevent row click
+    
+    if (file.status !== 'processed' || !file._rawData) {
+      console.warn('Cannot export PDF for file:', file.name, 'Status:', file.status);
+      return;
+    }
+
+    console.log('Starting PDF export for file:', file.name, file);
+
+    // Extract patient data from raw parsed values (same as detailed view)
+    const parsedValues = file._rawData?.parsedValues || {};
+    const patientSummary = extractPatientSummary(parsedValues);
+    const mobilityType = determineMobilityType(parsedValues);
+
+    // Extract patient information
+    const {
+      firstName,
+      lastName,
+      dob,
+      facility,
+      admitDate,
+      dischargeDate,
+      age,
+      ardGapDays,
+    } = patientSummary;
+
+    // Get ARD date from parsed values
+    const ardDate = parsedValues["A2300"];
+
+    // Prepare patient data with redaction
+    const patient = {
+      name: isRedacted ? redactFullName(firstName, lastName) : `${firstName} ${lastName}`,
+      dob,
+      age,
+      admitDate,
+      ard: ardDate,
+      dischargeDate,
+      facility: isRedacted ? redactFacility('') : '', // Will be updated by facility lookup
+      address: isRedacted ? redactAddress('') : '', // Will be updated by facility lookup
+    };
+
+    const scores = {
+      start: file.results?.startScore,
+      expected: file.results?.expectedScore,
+      modeled: calculateUserModeledScore(file) || file.results?.startScore
+    };
+
+    const functionItems = {
+      scores: file._rawData?.modeledValues || file._rawData?.startScores,
+      startScores: file._rawData?.startScores,
+      mobilityType: mobilityType
+    };
+
+    console.log('Export data prepared:', { patient, scores, functionItems });
+
+    // Fetch facility information and then set export data
+    const fetchAndSetExportData = async () => {
+      let facilityName = '';
+      let facilityAddress = '';
+      
+      try {
+        // Fetch facility info if we have a CCN
+        const ccn = parsedValues["A0100B"];
+        if (ccn) {
+          const response = await fetch(`/api/facility-name/${ccn}`);
+          const result = await response.json();
+          facilityName = result?.facility_name || `CCN: ${ccn}`;
+          facilityAddress = `${result?.address || ""}, ${result?.city || ""}, ${result?.state || ""} ${result?.zip || ""}`;
+        } else {
+          facilityName = `CCN: ${facility || "Unknown"}`;
+        }
+      } catch (error) {
+        console.warn('Failed to fetch facility info:', error);
+        facilityName = `CCN: ${facility || "Unknown"}`;
+      }
+
+      // Update patient data with facility information
+      const updatedPatient = {
+        ...patient,
+        facility: isRedacted ? redactFacility(facilityName) : facilityName,
+        address: isRedacted ? redactAddress(facilityAddress) : facilityAddress,
+      };
+
+      // Set the export data and trigger PDF generation
+      setExportData({
+        patient: updatedPatient,
+        scores,
+        functionItems,
+        mobilityType,
+        fileName: file.name
+      });
+    };
+
+    fetchAndSetExportData();
+  };
+
+  // Handle PDF generation when export data is set
+  React.useEffect(() => {
+    if (exportData && exportRef.current) {
+      console.log('Export data set, starting PDF generation...', exportData);
+      // Small delay to ensure the ExportView has rendered
+      setTimeout(() => {
+        console.log('Attempting to generate PDF from element:', exportRef.current);
+        html2pdf()
+          .set({
+            margin: 0.5,
+            filename: `dfs-report-${exportData.fileName.replace(/\.(xml|zip)$/i, '')}.pdf`,
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+          })
+          .from(exportRef.current)
+          .save()
+          .then(() => {
+            console.log('PDF export successful');
+            // Clear export data after successful export
+            setExportData(null);
+          })
+          .catch((error) => {
+            console.error('PDF export error:', error);
+            setExportData(null);
+          });
+      }, 500); // Give more time for rendering
+    }
+  }, [exportData]);
+
   const successfulCount = uploadedFiles.filter(f => f.status === 'processed').length;
   const errorCount = uploadedFiles.filter(f => f.status === 'error').length;
   const processingCount = uploadedFiles.filter(f => f.status === 'processing').length;
@@ -140,55 +357,126 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
     <div className={styles.summaryView}>
       {/* Enhanced Header with Analytics */}
       <div className={styles.summaryHeader}>
-        <div className={styles.headerLeft}>
-          <div className={styles.summaryTitle}>
-            <FileText size={20} />
-            <span>File Analysis Summary</span>
+        <div className={styles.headerContainer}>
+          <div className={styles.headerLeft}>
+            <div className={styles.summaryTitle}>
+              <FileText size={20} />
+              <span>File Console</span>
+            </div>
           </div>
-        </div>
-        <div className={styles.headerActions}>
-          <div className={styles.filterGroup}>
-            <label>Filter:</label>
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className={styles.filterSelect}
-            >
-              <option value="all">All Files ({uploadedFiles.length})</option>
-              <option value="success">Successful ({successfulCount})</option>
-              <option value="error">Errors ({errorCount})</option>
-            </select>
+          <div className={styles.headerActions}>
+            <div className={styles.searchGroup}>
+              <label>Search:</label>
+              <div className={styles.searchBar}>
+                <Search className={styles.searchIcon} size={20} />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search files or patients..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onFocus={handleSearchFocus}
+                  onBlur={handleSearchBlur}
+                  onKeyDown={handleKeyDown}
+                  className={styles.searchInput}
+                />
+                {searchTerm && (
+                  <button
+                    onClick={clearSearch}
+                    className={styles.clearButton}
+                    aria-label="Clear search"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className={styles.filterGroup}>
+              <label>Filter:</label>
+              <div className={styles.filterButtons}>
+                <button
+                  className={`${styles.filterButton} ${filterStatus === 'all' ? styles.filterButtonActive : ''}`}
+                  onClick={() => setFilterStatus('all')}
+                >
+                  All ({uploadedFiles.length})
+                </button>
+                <button
+                  className={`${styles.filterButton} ${filterStatus === 'success' ? styles.filterButtonActive : ''}`}
+                  onClick={() => setFilterStatus('success')}
+                >
+                  Success ({successfulCount})
+                </button>
+                <button
+                  className={`${styles.filterButton} ${filterStatus === 'error' ? styles.filterButtonActive : ''}`}
+                  onClick={() => setFilterStatus('error')}
+                >
+                  Errors ({errorCount})
+                </button>
+              </div>
+            </div>
+            {onToggleRedaction && (
+              <button
+                className={styles.redactionButton}
+                onClick={onToggleRedaction}
+                title={isRedacted ? "Show patient names" : "Hide patient names"}
+              >
+                {isRedacted ? <><EyeOff className={styles.buttonIcon} size={16} /> Names are redacted</> : <><Eye className={styles.buttonIcon} size={16} /> Names are showing</>}
+              </button>
+            )}
+            <div className={styles.exportDropdown} ref={dropdownRef}>
+              <button
+                className={styles.exportDropdownButton}
+                onClick={() => setShowExportDropdown(!showExportDropdown)}
+                disabled={successfulCount === 0}
+                title="Export options"
+              >
+                <Download size={16} />
+                Export CSV
+                <ChevronDown size={14} className={styles.chevronIcon} />
+              </button>
+              {showExportDropdown && (
+                <div className={styles.exportDropdownMenu}>
+                  <button
+                    className={styles.exportDropdownItem}
+                    onClick={() => {
+                      onExportAll();
+                      setShowExportDropdown(false);
+                    }}
+                    title="Export summary results to CSV"
+                  >
+                    <div className={styles.exportDropdownItemTitle}>
+                      <Download size={14} />
+                      Summary View
+                    </div>
+                    <div className={styles.exportDropdownItemDescription}>
+                      Same as below table
+                    </div>
+                  </button>
+                  <button
+                    className={styles.exportDropdownItem}
+                    onClick={() => {
+                      onExportDetails();
+                      setShowExportDropdown(false);
+                    }}
+                    title="Export detailed GG components to CSV"
+                  >
+                    <div className={styles.exportDropdownItemTitle}>
+                      <Download size={14} />
+                      Detailed View
+                    </div>
+                    <div className={styles.exportDropdownItemDescription}>
+                      Includes GG breakdown
+                    </div>
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-          {onToggleRedaction && (
-            <button
-              className={styles.redactionButton}
-              onClick={onToggleRedaction}
-              title={isRedacted ? "Show patient names" : "Hide patient names"}
-            >
-              {isRedacted ? <Eye size={16} /> : <EyeOff size={16} />}
-              {isRedacted ? "Show Info" : "Hide Info"}
-            </button>
-          )}
-          <button
-            className={styles.exportButton}
-            onClick={onExportAll}
-            disabled={successfulCount === 0}
-            title="Export summary results to CSV"
-          >
-            <Download size={16} />
-            Export Summary
-          </button>
-          <button
-            className={styles.exportButton}
-            onClick={onExportDetails}
-            disabled={successfulCount === 0}
-            title="Export detailed GG components to CSV"
-          >
-            <Download size={16} />
-            Export Details
-          </button>
         </div>
       </div>
+
+      {/* Separator Line */}
+      <div className={styles.separatorLine}></div>
 
       {/* Enhanced Table with Better Layout */}
       <div className={styles.tableContainer}>
@@ -273,18 +561,29 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
                   title={file.status === 'error' && file.error ? file.error : undefined}
                 >
                   <td className={styles.actionCell}>
-                    {onDeleteFile && (
-                      <button
-                        className={styles.deleteButton}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDeleteFile(file.id);
-                        }}
-                        title="Delete file"
-                      >
-                        ×
-                      </button>
-                    )}
+                    <div className={styles.actionButtons}>
+                      {onDeleteFile && (
+                        <button
+                          className={styles.deleteButton}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDeleteFile(file.id);
+                          }}
+                          title="Delete file"
+                        >
+                          ×
+                        </button>
+                      )}
+                      {file.status === 'processed' && (
+                        <button
+                          className={styles.pdfButton}
+                          onClick={(e) => handlePdfExport(file, e)}
+                          title="Export PDF"
+                        >
+                          <FileText size={14} />
+                        </button>
+                      )}
+                    </div>
                   </td>
                   <td className={styles.fileNameCell}>
                     <div className={styles.fileNameContent}>
@@ -395,6 +694,22 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
           <FileText size={48} className={styles.emptyIcon} />
           <h3>No files match the current filter</h3>
           <p>Try adjusting your filter settings or upload new files</p>
+        </div>
+      )}
+
+      {/* Hidden Export View */}
+      {exportData && (
+        <div style={{ display: "none" }}>
+          <div ref={exportRef}>
+            <Suspense fallback={<div>Loading...</div>}>
+              <ExportView
+                patient={exportData.patient}
+                scores={exportData.scores}
+                functionItems={exportData.functionItems}
+                mobilityType={exportData.mobilityType}
+              />
+            </Suspense>
+          </div>
         </div>
       )}
     </div>

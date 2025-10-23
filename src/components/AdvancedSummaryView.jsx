@@ -779,7 +779,7 @@ const AdvancedSummaryView = () => {
             <div className={styles.summaryHeader}>
               <div className={styles.headerContent}>
                 <div className={styles.headerIcon}>
-                  <FileText size={32} />
+                  <FileText size={20} />
                 </div>
                 <div className={styles.headerText}>
                   <h2>Bulk DFS Calculator</h2>

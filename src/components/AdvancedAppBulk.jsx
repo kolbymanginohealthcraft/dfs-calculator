@@ -542,8 +542,42 @@ function AdvancedAppBulk() {
     }
   }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides]);
 
-  const handleExport = () => {
+  const handleExport = async () => {
     if (!fileName) return;
+    
+    // If facility data is not yet loaded, fetch it first
+    if (!facilityName && parsedValues?.A0100B) {
+      try {
+        const response = await fetch(`/api/facility-name/${parsedValues.A0100B}`);
+        const result = await response.json();
+        const fetchedFacilityName = result?.facility_name || `CCN: ${parsedValues.A0100B}`;
+        const fetchedFacilityAddress = `${result?.address || ""}, ${result?.city || ""}, ${result?.state || ""} ${result?.zip || ""}`;
+        
+        // Update state with fetched data
+        setFacilityName(fetchedFacilityName);
+        setFacilityAddress(fetchedFacilityAddress);
+        
+        // Wait a moment for state to update, then generate PDF
+        setTimeout(() => {
+          html2pdf()
+            .set({
+              margin: 0.5,
+              filename: `dfs-report-${fileName.replace(".xml", "")}.pdf`,
+              image: { type: "jpeg", quality: 0.98 },
+              html2canvas: { scale: 2 },
+              jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+            })
+            .from(exportRef.current)
+            .save();
+        }, 100);
+        return;
+      } catch (error) {
+        console.warn('Failed to fetch facility info for export:', error);
+        // Continue with export even if facility fetch fails
+      }
+    }
+    
+    // If facility data is already available, export immediately
     html2pdf()
       .set({
         margin: 0.5,

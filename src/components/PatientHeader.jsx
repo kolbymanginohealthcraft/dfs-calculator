@@ -53,7 +53,7 @@ const PatientHeader = ({
             className={styles.toggleButton}
             onClick={() => onToggleRedaction(!isRedacted)}
           >
-            {isRedacted ? <><Eye className={styles.buttonIcon} /> Show Info</> : <><EyeOff className={styles.buttonIcon} /> Hide Info</>}
+            {isRedacted ? <><EyeOff className={styles.buttonIcon} /> Names are redacted</> : <><Eye className={styles.buttonIcon} /> Names are showing</>}
           </button>
         </div>
       </div>
