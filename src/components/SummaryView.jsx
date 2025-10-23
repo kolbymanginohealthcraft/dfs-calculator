@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { Download, FileText, AlertCircle, CheckCircle, Eye, EyeOff } from 'lucide-react';
+import { Download, FileText, AlertCircle, CheckCircle, Eye, EyeOff, Info } from 'lucide-react';
 import { redactName } from '../utils/redactionUtils';
 import styles from './SummaryView.module.css';
 
-const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction }) => {
+const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction }) => {
   const [sortField, setSortField] = useState('status');
   const [sortDirection, setSortDirection] = useState('asc');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -76,7 +76,7 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, calculateFuncti
   };
 
   const getSortIcon = (field) => {
-    if (sortField !== field) return '↕';
+    if (sortField !== field) return '';
     return sortDirection === 'asc' ? '↑' : '↓';
   };
 
@@ -173,10 +173,19 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, calculateFuncti
             className={styles.exportButton}
             onClick={onExportAll}
             disabled={successfulCount === 0}
-            title="Export all results to CSV"
+            title="Export summary results to CSV"
           >
             <Download size={16} />
-            Export CSV
+            Export Summary
+          </button>
+          <button
+            className={styles.exportButton}
+            onClick={onExportDetails}
+            disabled={successfulCount === 0}
+            title="Export detailed GG components to CSV"
+          >
+            <Download size={16} />
+            Export Details
           </button>
         </div>
       </div>
@@ -217,8 +226,13 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, calculateFuncti
                 <th 
                   className={styles.sortableHeader}
                   onClick={() => handleSort('userModeledScore')}
+                  title="This is not the patient's actual end score. This is a modeled score based on the values you have set."
                 >
-                  End Score {getSortIcon('userModeledScore')}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span>Modeled End Score</span>
+                    <Info size={14} style={{ opacity: 0.6 }} />
+                  </div>
+                  {getSortIcon('userModeledScore')}
                 </th>
                 <th 
                   className={styles.sortableHeader}

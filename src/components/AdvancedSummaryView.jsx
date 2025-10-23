@@ -7,7 +7,7 @@ import ModeBanner from './ModeBanner';
 import SummaryView from './SummaryView';
 import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../utils/zipHandler';
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
-import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType } from '../utils/calculations';
+import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
 import { getFunctionMultipliers } from '../utils/coefficientLoader';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
 import { useRedaction } from '../contexts/RedactionContext';
@@ -553,7 +553,7 @@ const AdvancedSummaryView = () => {
       'Patient Last Name',
       'Start Score',
       'Expected Score',
-      'End Score',
+      'Modeled End Score',
       'End Score vs Expected',
       'Gain',
       'Required Gain'
@@ -623,6 +623,119 @@ const AdvancedSummaryView = () => {
     URL.revokeObjectURL(url);
   }, [uploadedFiles]);
 
+  // Handle detailed export with GG items as rows
+  const handleExportDetails = useCallback(() => {
+    const successfulFiles = uploadedFiles.filter(f => f.status === 'processed');
+    if (successfulFiles.length === 0) return;
+
+    const headers = [
+      'File Name',
+      'Patient First Name', 
+      'Patient Last Name',
+      'GG Item ID',
+      'GG Item Label',
+      'Domain',
+      'Start Score',
+      'Modeled End Score',
+      'Score Change'
+    ];
+
+    const rows = [];
+    
+    successfulFiles.forEach(file => {
+      const startScores = file._rawData?.startScores || {};
+      const endScores = file.userModeledValues || startScores; // Use user modeled values if available, otherwise start scores
+      
+      // Get contributing GG items based on mobility type
+      const mobilityType = file.results?.mobilityType || 'Unknown';
+      const contributingItems = getContributingGGItemsForDetails(mobilityType);
+      
+      contributingItems.forEach(itemId => {
+        const ggItem = GG_ITEMS.find(gi => gi.id === itemId);
+        const startValue = startScores[itemId] || '';
+        const endValue = endScores[itemId] || '';
+        
+        // Calculate score change (end - start)
+        let scoreChange = '';
+        if (startValue && endValue && startValue !== '' && endValue !== '') {
+          const startNum = parseInt(startValue, 10);
+          const endNum = parseInt(endValue, 10);
+          if (!isNaN(startNum) && !isNaN(endNum)) {
+            scoreChange = (endNum - startNum).toString();
+          }
+        }
+        
+        rows.push([
+          file.name,
+          isRedacted ? redactName(file.results?.patientFirstName || '') : (file.results?.patientFirstName || ''),
+          isRedacted ? redactName(file.results?.patientLastName || '') : (file.results?.patientLastName || ''),
+          itemId,
+          ggItem?.label || itemId,
+          ggItem?.domain || 'unknown',
+          startValue,
+          endValue,
+          scoreChange
+        ]);
+      });
+    });
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(field => `"${field}"`).join(','))
+    ].join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `dfs-bulk-details-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [uploadedFiles, isRedacted]);
+
+  // Helper function to get contributing GG items for detailed export
+  const getContributingGGItemsForDetails = (mobilityType) => {
+    const contributingItems = new Set();
+    
+    // Self-care items (always contributing)
+    const selfCareItems = ['GG0130A', 'GG0130B', 'GG0130C'];
+    selfCareItems.forEach(id => contributingItems.add(id));
+    
+    // Mobility items based on type
+    if (mobilityType === 'Walk' || mobilityType === 'Unknown') {
+      const walkItems = [
+        'GG0170A', // Roll left and right
+        'GG0170C', // Lying to sitting on bed side
+        'GG0170D', // Sit to stand
+        'GG0170E', // Chair/bed-to-chair transfer
+        'GG0170F', // Toilet transfer
+        'GG0170I', // Walk 10 feet
+        'GG0170J', // Walk 50 feet with two turns
+      ];
+      walkItems.forEach(id => contributingItems.add(id));
+    } else if (mobilityType === 'Wheel') {
+      const wheelItems = [
+        'GG0170A', // Roll left and right
+        'GG0170C', // Lying to sitting on bed side
+        'GG0170D', // Sit to stand
+        'GG0170E', // Chair/bed-to-chair transfer
+        'GG0170F', // Toilet transfer
+        'GG0170R', // Wheel 50 feet with two turns
+      ];
+      wheelItems.forEach(id => contributingItems.add(id));
+    } else {
+      // Default to walk items if mobility type is unknown
+      const defaultItems = [
+        'GG0170A', 'GG0170C', 'GG0170D', 'GG0170E', 'GG0170F', 'GG0170I', 'GG0170J'
+      ];
+      defaultItems.forEach(id => contributingItems.add(id));
+    }
+    
+    return Array.from(contributingItems);
+  };
+
   // Handle clear all
   const handleClearAll = useCallback(() => {
     setUploadedFiles([]);
@@ -687,6 +800,18 @@ const AdvancedSummaryView = () => {
                     <span className={styles.statNumber}>{uploadedFiles.filter(f => f.status === 'processed' || f.status === 'error').length}</span>
                     <span className={styles.statLabel}>Completed</span>
                   </div>
+                  {(() => {
+                    const processedFiles = uploadedFiles.filter(f => f.status === 'processed' && f.results?.scoreDifference !== undefined);
+                    const avgRequiredGain = processedFiles.length > 0 
+                      ? (processedFiles.reduce((sum, f) => sum + f.results.scoreDifference, 0) / processedFiles.length).toFixed(1)
+                      : '0.0';
+                    return (
+                      <div className={styles.statCard}>
+                        <span className={styles.statNumber}>{avgRequiredGain}</span>
+                        <span className={styles.statLabel}>Avg Required Gain</span>
+                      </div>
+                    );
+                  })()}
                 </div>
               )}
             </div>
@@ -736,6 +861,7 @@ const AdvancedSummaryView = () => {
                   uploadedFiles={uploadedFiles}
                   onSelectFile={handleFileSelect}
                   onExportAll={handleExportAll}
+                  onExportDetails={handleExportDetails}
                   calculateFunctionScore={calculateFunctionScore}
                   onDeleteFile={handleDeleteFile}
                   isRedacted={isRedacted}
