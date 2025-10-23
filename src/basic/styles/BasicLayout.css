@@ -65,6 +65,8 @@
 .content-full-width {
   width: 100%;
   max-width: none;
+  display: flex;
+  justify-content: center;
 }
 
 /* Expanded right panel mode */

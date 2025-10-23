@@ -1,32 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useDropzone } from "react-dropzone";
 import { FileText, Upload } from "lucide-react";
 import styles from "./Navbar.module.css";
 
-const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
+const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick, onBackToSummary, showBackToSummary, onPreviousFile, onNextFile, canGoPrevious, canGoNext, showViewSummary, onViewSummary }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dragActive, setDragActive] = useState(false);
   
-  // Only show upload functionality on advanced route
+  // Only show upload functionality on advanced route and summary
   const isAdvancedRoute = location.pathname === '/advanced';
+  const isSummaryRoute = location.pathname === '/advanced/summary';
   const isBasicRoute = location.pathname.startsWith('/basic');
   const isBasicEndScore = location.pathname === '/basic/end-score';
 
-  const { getRootProps, getInputProps, open } = useDropzone({
-    onDrop,
-    accept: { "text/xml": [".xml"] },
-    noClick: true,
-    noKeyboard: true,
-  });
+  // Create a simple file input for the upload button
+  const fileInputRef = useRef(null);
+  const open = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Handle file input changes
+  const handleFileInputChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length > 0) {
+      // Filter files by accepted types
+      const acceptedFiles = files.filter(file => {
+        const isAccepted = file.type === 'text/xml' || 
+                         file.type === 'application/zip' ||
+                         file.name.toLowerCase().endsWith('.xml') ||
+                         file.name.toLowerCase().endsWith('.zip');
+        return isAccepted;
+      });
+      
+      if (acceptedFiles.length > 0) {
+        onDrop(acceptedFiles);
+      }
+    }
+    // Reset the input so the same file can be selected again
+    e.target.value = '';
+  };
 
   // Pass the open function to parent component
   useEffect(() => {
-    if (onUploadClick && isAdvancedRoute) {
+    if (onUploadClick && (isAdvancedRoute || isSummaryRoute)) {
       onUploadClick(open);
     }
-  }, [onUploadClick, isAdvancedRoute, open]);
+  }, [onUploadClick, isAdvancedRoute, isSummaryRoute, open]);
 
   const handleBackToHome = () => {
     navigate('/');
@@ -41,8 +63,8 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
   };
 
   useEffect(() => {
-    // Only set up drag and drop on advanced route
-    if (!isAdvancedRoute) return;
+    // Only set up drag and drop on advanced route and summary
+    if (!isAdvancedRoute && !isSummaryRoute) return;
     
     let dragCounter = 0;
 
@@ -62,8 +84,23 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
       e.preventDefault();
       dragCounter = 0;
       setDragActive(false);
+      
+      // Process files directly with the same logic as useDropzone
       const files = Array.from(e.dataTransfer.files || []);
-      if (files.length > 0) onDrop(files);
+      if (files.length > 0) {
+        // Filter files by accepted types (same as useDropzone)
+        const acceptedFiles = files.filter(file => {
+          const isAccepted = file.type === 'text/xml' || 
+                           file.type === 'application/zip' ||
+                           file.name.toLowerCase().endsWith('.xml') ||
+                           file.name.toLowerCase().endsWith('.zip');
+          return isAccepted;
+        });
+        
+        if (acceptedFiles.length > 0) {
+          onDrop(acceptedFiles);
+        }
+      }
     };
 
     const preventDefaults = (e) => {
@@ -81,20 +118,29 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
       window.removeEventListener("dragleave", handleDragLeave);
       window.removeEventListener("drop", handleDrop);
     };
-  }, [onDrop, isAdvancedRoute]);
+  }, [onDrop, isAdvancedRoute, isSummaryRoute]);
 
   return (
     <>
-      {dragActive && isAdvancedRoute && (
+      {dragActive && (isAdvancedRoute || isSummaryRoute) && (
         <div className={styles.dragOverlay}>
           <div className={styles.dragOverlayMessage}>
-            <FileText size={16} /> Drop XML to upload
+            <FileText size={16} /> Drop files to upload
           </div>
         </div>
       )}
       
-      <div className={styles.navbar} {...(isAdvancedRoute ? getRootProps() : {})}>
-        {isAdvancedRoute && <input {...getInputProps()} />}
+      <div className={styles.navbar}>
+        {(isAdvancedRoute || isSummaryRoute) && (
+          <input
+            ref={fileInputRef}
+            type="file"
+            multiple
+            accept=".xml,.zip"
+            onChange={handleFileInputChange}
+            style={{ display: 'none' }}
+          />
+        )}
         
         <div className={styles.navbarLeft}>
           <button 
@@ -104,24 +150,36 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick }) => {
             Back to Home
           </button>
           
-          {isAdvancedRoute && (
-            <button
-              className={`${styles.uploadButton} ${hasFile ? styles.clearButton : ''}`}
-              onClick={hasFile ? () => onDrop([]) : open}
-              title={hasFile ? "Clear file" : "Upload XML file"}
-            >
-              {hasFile ? (
-                <>
-                  <span>×</span>
-                  Clear File
-                </>
-              ) : (
-                <>
+          {(isAdvancedRoute || isSummaryRoute) && (
+            <>
+              {isSummaryRoute && hasFile && (
+                <button
+                  className={styles.uploadButton}
+                  onClick={open}
+                  title="Add more files"
+                >
                   <Upload size={16} />
-                  Upload XML
-                </>
+                  Add File
+                </button>
               )}
-            </button>
+              <button
+                className={`${styles.uploadButton} ${hasFile ? styles.clearButton : ''}`}
+                onClick={hasFile ? () => onDrop([]) : open}
+                title={hasFile ? "Clear files" : "Upload XML files or ZIP"}
+              >
+                {hasFile ? (
+                  <>
+                    <span>×</span>
+                    Clear Files
+                  </>
+                ) : (
+                  <>
+                    <Upload size={16} />
+                    Upload Files
+                  </>
+                )}
+              </button>
+            </>
           )}
         </div>
         

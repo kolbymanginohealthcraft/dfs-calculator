@@ -41,6 +41,100 @@
   outline-offset: 2px;
 }
 
+.backToSummaryButton {
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin-right: var(--spacing-sm);
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+}
+
+.backToSummaryButton:hover {
+  background: #1976d2;
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+  transform: translateY(-1px);
+}
+
+.backToSummaryButton:focus {
+  outline: 2px solid rgba(33, 150, 243, 0.5);
+  outline-offset: 2px;
+}
+
+.navigationButtons {
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-right: var(--spacing-sm);
+}
+
+.navButton {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  color: var(--text-white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 80px;
+}
+
+.navButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.navButton:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.navButtonDisabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.navButtonDisabled:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: none;
+}
+
+.viewSummaryButton {
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin-right: var(--spacing-sm);
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+.viewSummaryButton:hover {
+  background: #45a049;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+  transform: translateY(-1px);
+}
+
+.viewSummaryButton:focus {
+  outline: 2px solid rgba(76, 175, 80, 0.5);
+  outline-offset: 2px;
+}
+
 
 
 .navbarTitle {

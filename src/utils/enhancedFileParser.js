@@ -18,7 +18,8 @@ export async function handleFileUploadWithValidation(
   setStartScores,
   setImputedItems,
   setValidationError = null,
-  setValidationWarning = null
+  setValidationWarning = null,
+  errorCallback = null
 ) {
   try {
     // Clear any previous validation messages
@@ -42,6 +43,18 @@ export async function handleFileUploadWithValidation(
           type: userMessage.type
         });
       }
+      
+      // Pass detailed error to callback if provided
+      if (errorCallback) {
+        const fullMessage = `${userMessage.title}: ${userMessage.message}. ${userMessage.suggestion}`;
+        errorCallback({
+          message: fullMessage,
+          title: userMessage.title,
+          suggestion: userMessage.suggestion,
+          type: userMessage.type
+        });
+      }
+      
       return false; // Stop processing
     }
 

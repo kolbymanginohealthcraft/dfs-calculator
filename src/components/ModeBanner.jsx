@@ -12,7 +12,16 @@ const ModeBanner = ({
   expectedScore, 
   endTotal, 
   hasInteracted, 
-  mode = 'basic' 
+  mode = 'basic',
+  // Navigation props for advanced mode
+  showBackToSummary,
+  onBackToSummary,
+  onPreviousFile,
+  onNextFile,
+  canGoPrevious,
+  canGoNext,
+  showViewSummary,
+  onViewSummary
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -20,7 +29,8 @@ const ModeBanner = ({
   const [showModal, setShowModal] = useState(false);
   
   const isBasicRoute = location.pathname.startsWith('/basic');
-  const isAdvancedRoute = location.pathname === '/advanced';
+  const isAdvancedRoute = location.pathname.startsWith('/advanced');
+  const isSummaryRoute = location.pathname === '/advanced/summary';
 
 
   const handleSwitchCalculator = () => {
@@ -135,6 +145,51 @@ const ModeBanner = ({
             </div>
           </div>
         )}
+
+        {/* Advanced Mode Navigation */}
+        {isAdvancedRoute && (
+          <div className={styles.advancedNavigation}>
+            {showBackToSummary && (
+              <>
+                <button
+                  className={styles.navButton}
+                  onClick={onBackToSummary}
+                  title="Back to Summary"
+                >
+                  ← Back to Summary
+                </button>
+                <div className={styles.fileNavigation}>
+                  <button
+                    className={`${styles.navButton} ${!canGoPrevious ? styles.navButtonDisabled : ''}`}
+                    onClick={onPreviousFile}
+                    disabled={!canGoPrevious}
+                    title="Previous File"
+                  >
+                    ← Previous
+                  </button>
+                  <button
+                    className={`${styles.navButton} ${!canGoNext ? styles.navButtonDisabled : ''}`}
+                    onClick={onNextFile}
+                    disabled={!canGoNext}
+                    title="Next File"
+                  >
+                    Next →
+                  </button>
+                </div>
+              </>
+            )}
+            {showViewSummary && !showBackToSummary && (
+              <button
+                className={styles.navButton}
+                onClick={onViewSummary}
+                title="View Summary Table"
+              >
+                📊 View Summary
+              </button>
+            )}
+          </div>
+        )}
+
         
         <button 
           className={`${styles.switchButton} ${isBasicRoute && !isFromPortal ? styles.restrictedButton : ''}`}
