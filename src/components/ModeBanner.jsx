@@ -156,7 +156,7 @@ const ModeBanner = ({
                   onClick={onBackToSummary}
                   title="Back to Summary"
                 >
-                  ← Back to Summary
+                  Back to Summary
                 </button>
                 <div className={styles.fileNavigation}>
                   <button
@@ -165,7 +165,7 @@ const ModeBanner = ({
                     disabled={!canGoPrevious}
                     title="Previous File"
                   >
-                    ← Previous
+                    Previous
                   </button>
                   <button
                     className={`${styles.navButton} ${!canGoNext ? styles.navButtonDisabled : ''}`}
@@ -173,7 +173,7 @@ const ModeBanner = ({
                     disabled={!canGoNext}
                     title="Next File"
                   >
-                    Next →
+                    Next
                   </button>
                 </div>
               </>

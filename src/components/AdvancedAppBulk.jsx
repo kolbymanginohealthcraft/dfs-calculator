@@ -721,13 +721,13 @@ function AdvancedAppBulk() {
                       <path d="M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
-                  <h2 className={styles.uploadTitle}>Upload Your MDS XML Files</h2>
+                  <h2 className={styles.uploadTitle}>Upload Your MDS Files</h2>
                   <p className={styles.uploadDescription}>
-                    <strong>Drag and drop multiple files</strong> or <strong>click here to upload</strong> your MDS XML files or ZIP archives for bulk analysis.
+                    <strong>Drag and drop multiple files</strong> or <strong>click here to upload</strong> your MDS files in XML format or zipped folders for bulk analysis.
                   </p>
                   <div className={styles.fileTypeNote}>
                     <span className={styles.fileTypeIcon}>📄</span>
-                    <span>XML files and ZIP archives supported • Bulk processing available</span>
+                    <span>XML files and zipped folders supported • Bulk processing available</span>
                   </div>
                 </div>
 
@@ -795,6 +795,122 @@ function AdvancedAppBulk() {
                         <strong>Enhanced HIPAA Compliance</strong>
                         <p>Features comprehensive security headers, cache prevention, HTTPS enforcement, and automatic data cleanup for maximum privacy protection.</p>
                       </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* MDS Information Section */}
+                <div className={styles.mdsInfoSection}>
+                  <div className={styles.mdsInfoHeader}>
+                    <h3>What is an MDS File?</h3>
+                    <p>MDS (Minimum Data Set) files contain comprehensive patient assessment data used in healthcare facilities.</p>
+                  </div>
+                  
+                  <div className={styles.mdsInfoContent}>
+                    <div className={styles.mdsInfoText}>
+                      <div className={styles.infoItem}>
+                        <div className={styles.infoIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 3V21H21M7 16L12 11L16 15L21 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <strong>Standardized Assessment</strong>
+                          <p>Contains patient demographics, function scores, and clinical data</p>
+                        </div>
+                      </div>
+                      <div className={styles.infoItem}>
+                        <div className={styles.infoIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 21H21L20 9H4L3 21ZM5 9H19L18 7H6L5 9ZM9 13H15V15H9V13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <strong>Healthcare Compliance</strong>
+                          <p>Required documentation for Medicare and Medicaid reporting</p>
+                        </div>
+                      </div>
+                      <div className={styles.infoItem}>
+                        <div className={styles.infoIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <div>
+                          <strong>Automated Processing</strong>
+                          <p>Our system extracts key metrics automatically from your MDS files in XML format</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className={styles.xmlPreview}>
+                      <div className={styles.xmlPreviewHeader}>
+                        <span>Sample MDS File Structure (XML Format)</span>
+                      </div>
+                      <pre className={styles.xmlCode}>
+{`<MDS>
+  <A0100A>John</A0100A>
+  <A0100B>Doe</A0100B>
+  <A2300>2024-01-15</A2300>
+  <GG0130A1>06</GG0130A1>
+  <GG0130B1>05</GG0130B1>
+  <GG0130C1>04</GG0130C1>
+  <GG0170A1>03</GG0170A1>
+  <GG0170B1>02</GG0170B1>
+  <GG0170C1>01</GG0170C1>
+</MDS>`}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Analysis Overview Section */}
+                <div className={styles.mdsItemsSection}>
+                  <div className={styles.mdsItemsHeader}>
+                    <div className={styles.mdsItemsIcon}>
+                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    <h3>Why is the MDS file so important?</h3>
+                    <p>This tool processes 110+ MDS data points to transform complex patient assessments into actionable discharge predictions.</p>
+                  </div>
+                  
+                  <div className={styles.mdsItemsContent}>
+                    {/* Core Components Overview */}
+                    <div className={styles.analysisOverview}>
+                      <div className={styles.analysisCard}>
+                        <div className={styles.analysisIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <h4>Functional Abilities</h4>
+                        <p>Core mobility and self-care activities including eating, toileting, transfers, walking, and stairs</p>
+                      </div>
+
+                      <div className={styles.analysisCard}>
+                        <div className={styles.analysisIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <h4>Clinical Factors</h4>
+                        <p>Medical conditions, cognitive status, BMI, nutrition, pain levels, and therapy services</p>
+                      </div>
+
+                      <div className={styles.analysisCard}>
+                        <div className={styles.analysisIcon}>
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
+                        <h4>Medical History</h4>
+                        <p>Primary diagnoses, comorbidities, and prior functional abilities</p>
+                      </div>
+
                     </div>
                   </div>
                 </div>
