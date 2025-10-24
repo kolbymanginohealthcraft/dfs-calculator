@@ -41,7 +41,7 @@ const ExportView = lazy(() => import("./ExportView"));
 
 import "../index.css";
 import "../basic/styles/BasicLayout.css";
-import styles from "./AdvancedAppNew.module.css";
+import styles from "./AdvancedAppBulk.module.css";
 
 function AdvancedAppBulk() {
   const navigate = useNavigate();
