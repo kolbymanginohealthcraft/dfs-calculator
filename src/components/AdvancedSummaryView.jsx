@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, Upload, File, Zap } from 'lucide-react';
+import { FileText, Upload, File, Zap, AlertTriangle } from 'lucide-react';
 import BasicLayout from '../basic/components/BasicLayout';
 import Navbar from './Navbar';
 import ModeBanner from './ModeBanner';
@@ -1022,7 +1022,9 @@ const AdvancedSummaryView = () => {
               <div className={styles.summarySection}>
                 {uploadedFiles.length > 80 && (
                   <div className={styles.fileCountWarning}>
-                    <span className={styles.warningIcon}>⚠️</span>
+                    <span className={styles.warningIcon}>
+                      <AlertTriangle size={16} />
+                    </span>
                     <span>You have {uploadedFiles.length} files. For optimal performance, we recommend staying under 100 files.</span>
                   </div>
                 )}
