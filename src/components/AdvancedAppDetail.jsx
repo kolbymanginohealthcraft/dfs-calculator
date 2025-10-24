@@ -41,9 +41,9 @@ const ExportView = lazy(() => import("./ExportView"));
 
 import "../index.css";
 import "../basic/styles/BasicLayout.css";
-import styles from "./AdvancedAppBulk.module.css";
+import styles from "./AdvancedAppDetail.module.css";
 
-function AdvancedAppBulk() {
+function AdvancedAppDetail() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
@@ -1118,4 +1118,4 @@ function AdvancedAppBulk() {
   );
 }
 
-export default AdvancedAppBulk;
+export default AdvancedAppDetail;

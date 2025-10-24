@@ -7,7 +7,7 @@ import { DataLossWarningProvider } from './contexts/DataLossWarningContext';
 import RouteBasedClearer from './components/RouteBasedClearer';
 import HomeScreen from './components/HomeScreen';
 import BasicApp from './components/BasicApp';
-import AdvancedAppBulk from './components/AdvancedAppBulk';
+import AdvancedAppDetail from './components/AdvancedAppDetail';
 import AdvancedSummaryView from './components/AdvancedSummaryView';
 import FAQ from './components/FAQ';
 
@@ -41,12 +41,12 @@ function AdvancedRouteHandler() {
 
   // If no files uploaded, show the upload page
   if (!hasFiles) {
-    return <AdvancedAppBulk />;
+    return <AdvancedAppDetail />;
   }
 
   // If there's a fileId parameter, show the detail view (AdvancedAppBulk handles this)
   if (isDetailViewRequest) {
-    return <AdvancedAppBulk />;
+    return <AdvancedAppDetail />;
   }
 
   // If files are uploaded, show the summary page
