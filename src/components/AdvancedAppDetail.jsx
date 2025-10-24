@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense, useMemo } from "react";
-import { useDropzone } from "react-dropzone";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { scoreMap, GG_ITEMS, conditionMap } from "../utils/calculations";
 import {
@@ -9,12 +8,10 @@ import {
   getFunctionCovariates,
 } from "../utils/calculations";
 import { fetchFacilityInfo } from "../utils/facilityLookup";
-import { handleFileUploadWithValidation } from "../utils/enhancedFileParser";
 import { getFunctionMultipliers } from "../utils/coefficientLoader";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
-import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from "../utils/zipHandler";
 import { useBulkUpload } from "../contexts/BulkUploadContext";
 import { useRedaction } from "../contexts/RedactionContext";
 import { usePortal } from "../contexts/PortalContext";
@@ -58,8 +55,8 @@ function AdvancedAppDetail() {
   
   // Local state for current file selection
   const [currentFileIndex, setCurrentFileIndex] = useState(-1);
-  const [activeView, setActiveView] = useState('summary'); // 'files' or 'summary'
   const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+  const [showClearWarning, setShowClearWarning] = useState(false);
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   
   // Track data changes for browser refresh warnings
@@ -87,7 +84,6 @@ function AdvancedAppDetail() {
   const [validationError, setValidationError] = useState(null);
   const [validationWarning, setValidationWarning] = useState(null);
   const [manualCovariateOverrides, setManualCovariateOverrides] = useState({});
-  const uploadOpenFunctionRef = useRef(null);
   const exportRef = useRef();
 
   const icd10Descriptions = useICD10Lookup();
@@ -135,151 +131,9 @@ function AdvancedAppDetail() {
   }, []);
 
 
-  // Process a single file
-  const processFile = useCallback(async (file, fileId) => {
-    try {
-      
-      // Create a temporary file object for processing
-      const tempFile = file.file || (file instanceof File ? file : createFileFromContent(file.name, file.content, file.size));
-      
-      // Store parsed data as we process
-      let parsedData = null;
-      let groupedData = null;
-      let modeledData = null;
-      let startData = null;
-      let imputedData = null;
-      
-      // Process the file using existing validation
-      const result = await handleFileUploadWithValidation(
-        tempFile,
-        (name) => setFileName(name), // Set the file name
-        (parsed) => {
-          parsedData = parsed;
-        },
-        (grouped) => {
-          groupedData = grouped;
-        },
-        (modeled) => {
-          modeledData = modeled;
-        },
-        (start) => {
-          startData = start;
-        },
-        (imputed) => {
-          imputedData = imputed;
-        },
-        (error) => {
-          setUploadedFiles(prev => prev.map(f => 
-            f.id === fileId 
-              ? { ...f, status: 'error', error: error?.message || 'Processing failed' }
-              : f
-          ));
-        },
-        (warning) => {
-          // Store warnings if needed
-        }
-      );
+  // File processing is handled by AdvancedSummaryView - this component only displays details
 
-      // Wait a bit for all callbacks to complete
-      await new Promise(resolve => setTimeout(resolve, 200));
-      
-      if (result && parsedData && startData) {
-        // Calculate only essential results for summary view
-        const summary = extractPatientSummary(parsedData, parsedData["A2300"]);
-        const icdList = Object.entries(parsedData)
-          .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-          .map(([_, value]) => value)
-          .filter(Boolean);
-        
-        const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-        const covariateResult = getFunctionCovariates(
-          parsedData,
-          summary,
-          icdList,
-          startData,
-          parsedData["A2300"]
-        );
-
-        const startScore = calculateFunctionScore(startData);
-        const expectedScore = covariateResult?.weightedScore || 0;
-        const scoreDifference = expectedScore - startScore;
-
-        // Update file with minimal data for summary view
-        setUploadedFiles(prev => prev.map(f => 
-          f.id === fileId 
-            ? { 
-                ...f, 
-                status: 'processed',
-                // Store minimal data for summary
-                results: {
-                  patientFirstName: summary.firstName,
-                  patientLastName: summary.lastName,
-                  startScore,
-                  expectedScore,
-                  scoreDifference,
-                  mobilityType: determineMobilityType(parsedData),
-                  primaryCondition: conditionMap[parsedData["I0020"]] || 'Unknown'
-                },
-                // Store raw data for detailed view (only when needed)
-                _rawData: {
-                  parsedValues: parsedData,
-                  groupedSections: groupedData,
-                  modeledValues: modeledData,
-                  startScores: startData,
-                  imputedItems: imputedData
-                }
-              }
-            : f
-        ));
-      }
-    } catch (error) {
-      setUploadedFiles(prev => prev.map(f => 
-        f.id === fileId 
-          ? { ...f, status: 'error', error: error.message }
-          : f
-      ));
-    }
-  }, []);
-
-  // Handle file uploads (including zip files)
-  const onDrop = useCallback(async (acceptedFiles) => {
-    // If empty array is passed, clear all files
-    if (acceptedFiles.length === 0) {
-      setUploadedFiles([]);
-      setCurrentFileIndex(-1);
-      clearAllPatientData();
-      navigate('/advanced');
-      return;
-    }
-
-    const newFiles = [];
-
-    try {
-      for (const file of acceptedFiles) {
-        // Just store the file reference - let summary page handle reading
-        const fileId = `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-        newFiles.push({
-          id: fileId,
-          name: file.name,
-          file: file,
-          size: file.size,
-          status: 'pending',
-          error: null
-        });
-      }
-
-      // Add new files to the list
-      setUploadedFiles(prev => {
-        const updated = [...prev, ...newFiles];
-        return updated;
-      });
-
-      // Navigate to summary page immediately - let summary page handle processing
-      navigate('/advanced/summary');
-    } catch (error) {
-      // Handle error silently in production
-    }
-  }, [clearAllPatientData, navigate]);
+  // This component only handles detailed file view - no upload logic needed
 
   // Handle file selection
   const handleFileSelect = useCallback(async (index) => {
@@ -374,61 +228,9 @@ function AdvancedAppDetail() {
 
   // No auto-loading - start with summary view
 
-  // Clear all files
-  const handleClearAll = useCallback(() => {
-    setUploadedFiles([]);
-    setCurrentFileIndex(0);
-    clearAllPatientData();
-  }, [clearAllPatientData]);
+  // Clear all and export all functionality is handled by AdvancedSummaryView
 
-  // Export all results to CSV
-  const handleExportAll = useCallback(() => {
-    const successfulFiles = uploadedFiles.filter(f => f.status === 'processed' && f.results);
-    
-    if (successfulFiles.length === 0) return;
-
-    const headers = [
-      'File Name',
-      'Patient First Name',
-      'Patient Last Name',
-      'Start Score',
-      'Expected Score',
-      'Score Difference',
-      'Mobility Type',
-      'Primary Condition'
-    ];
-
-    const rows = successfulFiles.map(file => [
-      file.name,
-      file.results.patientFirstName || '',
-      file.results.patientLastName || '',
-      file.results.startScore || '',
-      file.results.expectedScore || '',
-      file.results.scoreDifference || '',
-      file.results.mobilityType || '',
-      file.results.primaryCondition || ''
-    ]);
-
-    const csvContent = [
-      headers.join(','),
-      ...rows.map(row => row.map(field => `"${field}"`).join(','))
-    ].join('\n');
-
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `dfs-bulk-results-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }, [uploadedFiles]);
-
-  // Callback to receive the open function from navbar
-  const handleUploadClick = useCallback((openFunction) => {
-    uploadOpenFunctionRef.current = openFunction;
-  }, []);
+  // Upload functionality is handled by AdvancedSummaryView
 
   // Handle switch to basic warning
   const handleSwitchToBasic = useCallback(() => {
@@ -667,14 +469,30 @@ function AdvancedAppDetail() {
     }
   }, [canGoNext, processedFiles, uploadedFiles, handleFileSelect]);
 
+  // Handle clear all files with confirmation
+  const handleClearAll = useCallback(() => {
+    setShowClearWarning(true);
+  }, []);
+
+  const handleConfirmClearAll = useCallback(() => {
+    setUploadedFiles([]);
+    setCurrentFileIndex(-1);
+    clearAllPatientData();
+    setShowClearWarning(false);
+    navigate('/advanced');
+  }, [setUploadedFiles, clearAllPatientData, navigate]);
+
+  const handleCancelClearAll = useCallback(() => {
+    setShowClearWarning(false);
+  }, []);
+
   const advancedNavbar = (
     <>
       <Navbar 
-        onDrop={onDrop} 
+        onDrop={handleClearAll}
         onExport={handleExport} 
         hasFile={hasFile} 
         fileName={fileName} 
-        onUploadClick={handleUploadClick}
         uploadedFiles={uploadedFiles}
       />
       <ModeBanner 
@@ -729,222 +547,9 @@ function AdvancedAppDetail() {
       />
       <BasicLayout 
         navbar={advancedNavbar}
-        fullWidth={!hasFile}
-        expandedRight={hasFile}
-        rightPanel={!hasFile ? (
-          // Welcome/Upload State - Full Width
-          <div className={styles.welcomeSection}>
-            <div className={styles.welcomeContainer}>
-              <div className={styles.welcomeContent}>
-
-                {/* Main Upload Section */}
-                <div className={styles.uploadHero} onClick={() => uploadOpenFunctionRef.current?.()} style={{ cursor: 'pointer' }}>
-                  <div className={styles.uploadIcon}>
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M16 13H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M16 17H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M10 9H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <h2 className={styles.uploadTitle}>Upload Your MDS Files</h2>
-                  <p className={styles.uploadDescription}>
-                    <strong>Drag and drop multiple files</strong> or <strong>click here to upload</strong> your MDS files in XML format or zipped folders for bulk analysis.
-                  </p>
-                  <div className={styles.fileTypeNote}>
-                    <span className={styles.fileTypeIcon}>📄</span>
-                    <span>XML files and zipped folders supported • Bulk processing available</span>
-                  </div>
-                </div>
-
-
-                {/* Upload Success Message */}
-                {uploadedFiles.length > 0 && !hasFile && (
-                  <div className={styles.uploadSuccessSection}>
-                    <div className={styles.successMessage}>
-                      <h3>✅ Files Uploaded Successfully!</h3>
-                      <p>{uploadedFiles.length} file(s) processed. Navigate to the summary page to see your results.</p>
-                    </div>
-                  </div>
-                )}
-
-
-                {/* Privacy Notice Section - same as before */}
-                <div className={styles.privacySection}>
-                  <div className={styles.privacyHeader}>
-                    <div className={styles.privacyIcon}>
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C12 22 20 16 20 10V4L12 2L4 4V10C4 16 12 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M9 12L11 14L15 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <h3 className={styles.privacyTitle}>Privacy & Data Protection</h3>
-                    <p className={styles.privacySubtitle}>
-                      This lightweight application is designed with your privacy and HIPAA compliance in mind, featuring enhanced security measures
-                    </p>
-                  </div>
-                  
-                  <div className={styles.privacyContent}>
-                    <div className={styles.privacyItem}>
-                      <div className={styles.privacyItemIcon}>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M3 3H21V21H3V3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M9 9H15V15H9V9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <strong>No Data Storage</strong>
-                        <p>Your files and patient data are never saved to our servers. Everything is processed locally in your browser.</p>
-                      </div>
-                    </div>
-                    
-                    <div className={styles.privacyItem}>
-                      <div className={styles.privacyItemIcon}>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M12 8V12L15 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <strong>Session-Based Processing</strong>
-                        <p>Upload your files, analyze the data, and export results. The moment you refresh the page or leave the site, all data is gone.</p>
-                      </div>
-                    </div>
-                    
-                    <div className={styles.privacyItem}>
-                      <div className={styles.privacyItemIcon}>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </div>
-                      <div>
-                        <strong>Enhanced HIPAA Compliance</strong>
-                        <p>Features comprehensive security headers, cache prevention, HTTPS enforcement, and automatic data cleanup for maximum privacy protection.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* MDS Information Section */}
-                <div className={styles.mdsInfoSection}>
-                  <div className={styles.mdsInfoHeader}>
-                    <h3>What is an MDS File?</h3>
-                    <p>MDS (Minimum Data Set) files contain comprehensive patient assessment data used in healthcare facilities.</p>
-                  </div>
-                  
-                  <div className={styles.mdsInfoContent}>
-                    <div className={styles.mdsInfoText}>
-                      <div className={styles.infoItem}>
-                        <div className={styles.infoIcon}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 3V21H21M7 16L12 11L16 15L21 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                        <div>
-                          <strong>Standardized Assessment</strong>
-                          <p>Contains patient demographics, function scores, and clinical data</p>
-                        </div>
-                      </div>
-                      <div className={styles.infoItem}>
-                        <div className={styles.infoIcon}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 21H21L20 9H4L3 21ZM5 9H19L18 7H6L5 9ZM9 13H15V15H9V13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                        <div>
-                          <strong>Healthcare Compliance</strong>
-                          <p>Required documentation for Medicare and Medicaid reporting</p>
-                        </div>
-                      </div>
-                      <div className={styles.infoItem}>
-                        <div className={styles.infoIcon}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                        <div>
-                          <strong>Automated Processing</strong>
-                          <p>Our system extracts key metrics automatically from your MDS files in XML format</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className={styles.xmlPreview}>
-                      <div className={styles.xmlPreviewHeader}>
-                        <span>Sample MDS File Structure (XML Format)</span>
-                      </div>
-                      <pre className={styles.xmlCode}>
-{`<MDS>
-  <A0100A>John</A0100A>
-  <A0100B>Doe</A0100B>
-  <A2300>2024-01-15</A2300>
-  <GG0130A1>06</GG0130A1>
-  <GG0130B1>05</GG0130B1>
-  <GG0130C1>04</GG0130C1>
-  <GG0170A1>03</GG0170A1>
-  <GG0170B1>02</GG0170B1>
-  <GG0170C1>01</GG0170C1>
-</MDS>`}
-                      </pre>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Analysis Overview Section */}
-                <div className={styles.mdsItemsSection}>
-                  <div className={styles.mdsItemsHeader}>
-                    <div className={styles.mdsItemsIcon}>
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                    <h3>Why is the MDS file so important?</h3>
-                    <p>This tool processes 110+ MDS data points to transform complex patient assessments into actionable discharge predictions.</p>
-                  </div>
-                  
-                  <div className={styles.mdsItemsContent}>
-                    {/* Core Components Overview */}
-                    <div className={styles.analysisOverview}>
-                      <div className={styles.analysisCard}>
-                        <div className={styles.analysisIcon}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 21V19C20 16.7909 18.2091 15 16 15H8C5.79086 15 4 16.7909 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                        <h4>Functional Abilities</h4>
-                        <p>Core mobility and self-care activities including eating, toileting, transfers, walking, and stairs</p>
-                      </div>
-
-                      <div className={styles.analysisCard}>
-                        <div className={styles.analysisIcon}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                        <h4>Clinical Factors</h4>
-                        <p>Medical conditions, cognitive status, BMI, nutrition, pain levels, and therapy services</p>
-                      </div>
-
-                      <div className={styles.analysisCard}>
-                        <div className={styles.analysisIcon}>
-                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M2 17L12 22L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                        <h4>Medical History</h4>
-                        <p>Primary diagnoses, comorbidities, and prior functional abilities</p>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ) : (
+        fullWidth={false}
+        expandedRight={true}
+        rightPanel={(
           <div className={styles.rightPanelContainer}>
             {/* Unified Tab Container */}
             <div className={styles.unifiedTabContainer}>
@@ -1113,6 +718,17 @@ function AdvancedAppDetail() {
         message="You have uploaded files that will be lost if you switch to basic mode. Are you sure you want to continue?"
         confirmText="Yes, Switch"
         cancelText="Stay in Advanced"
+      />
+      
+      {/* Data Loss Warning Modal for Clear All Files */}
+      <DataLossWarningModal
+        isOpen={showClearWarning}
+        onClose={handleCancelClearAll}
+        onConfirm={handleConfirmClearAll}
+        title="Clear All Files"
+        message="Are you sure you want to clear all uploaded files and analysis results?"
+        confirmText="Yes, Clear All Data"
+        cancelText="Cancel"
       />
     </div>
   );

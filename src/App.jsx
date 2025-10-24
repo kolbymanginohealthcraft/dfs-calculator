@@ -30,8 +30,10 @@ function AdvancedRouteHandler() {
       return;
     }
     
+    // Since AdvancedSummaryView now handles both upload and summary states,
+    // we can simplify the URL logic
     if (!hasFiles && location.pathname === '/advanced/summary') {
-      // No files but on summary URL - redirect to upload page
+      // No files but on summary URL - redirect to main advanced page
       navigate('/advanced', { replace: true });
     } else if (hasFiles && location.pathname === '/advanced' && !isDetailViewRequest) {
       // Has files but on upload URL - redirect to summary page (unless it's a detail view)
@@ -39,17 +41,13 @@ function AdvancedRouteHandler() {
     }
   }, [hasFiles, location.pathname, navigate, isDetailViewRequest]);
 
-  // If no files uploaded, show the upload page
-  if (!hasFiles) {
-    return <AdvancedAppDetail />;
-  }
-
-  // If there's a fileId parameter, show the detail view (AdvancedAppBulk handles this)
+  // If there's a fileId parameter, show the detail view (AdvancedAppDetail handles this)
   if (isDetailViewRequest) {
     return <AdvancedAppDetail />;
   }
 
-  // If files are uploaded, show the summary page
+  // For all other cases (no files or files uploaded), show the summary view
+  // AdvancedSummaryView now handles both upload state and summary view
   return <AdvancedSummaryView />;
 }
 
