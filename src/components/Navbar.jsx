@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FileText, Upload } from "lucide-react";
+import DataLossWarningModal from "./DataLossWarningModal";
+import { useDataLossWarning } from "../contexts/DataLossWarningContext";
 import styles from "./Navbar.module.css";
 
-const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick, onBackToSummary, showBackToSummary, onPreviousFile, onNextFile, canGoPrevious, canGoNext, showViewSummary, onViewSummary }) => {
+const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick, onBackToSummary, showBackToSummary, onPreviousFile, onNextFile, canGoPrevious, canGoNext, showViewSummary, onViewSummary, uploadedFiles = [] }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [dragActive, setDragActive] = useState(false);
+  const [showLeaveWarning, setShowLeaveWarning] = useState(false);
+  const { hasDataToLose: hasBasicDataToLose, clearDataStatus } = useDataLossWarning();
   
   // Only show upload functionality on advanced route and summary
   const isAdvancedRoute = location.pathname === '/advanced';
@@ -51,7 +55,22 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick, onBackToSu
   }, [onUploadClick, isAdvancedRoute, isSummaryRoute, open]);
 
   const handleBackToHome = () => {
+    // Check if there are uploaded files or basic mode data that would be lost
+    if (uploadedFiles.length > 0 || hasBasicDataToLose) {
+      setShowLeaveWarning(true);
+    } else {
+      navigate('/');
+    }
+  };
+
+  const handleConfirmLeave = () => {
+    setShowLeaveWarning(false);
+    clearDataStatus(); // Clear the data status when user confirms leaving
     navigate('/');
+  };
+
+  const handleCancelLeave = () => {
+    setShowLeaveWarning(false);
   };
 
   const handleSwitchCalculator = () => {
@@ -208,6 +227,17 @@ const Navbar = ({ onDrop, onExport, hasFile, fileName, onUploadClick, onBackToSu
           </div>
         </div>
       </div>
+      
+      {/* Data Loss Warning Modal for Back to Home */}
+      <DataLossWarningModal
+        isOpen={showLeaveWarning}
+        onClose={handleCancelLeave}
+        onConfirm={handleConfirmLeave}
+        title="Leave Calculator"
+        message="You have data that will be lost if you leave. Are you sure you want to go back to the home page?"
+        confirmText="Yes, Leave"
+        cancelText="Stay Here"
+      />
     </>
   );
 };

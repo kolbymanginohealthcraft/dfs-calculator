@@ -10,7 +10,7 @@ import styles from './SummaryView.module.css';
 // Lazy load ExportView to avoid circular dependencies
 const ExportView = lazy(() => import('./ExportView'));
 
-const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction, paginationInfo, currentPage, totalItems, onPageChange }) => {
+const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, onClearAll, isRedacted, onToggleRedaction, paginationInfo, currentPage, totalItems, onPageChange }) => {
   const [sortField, setSortField] = useState('status');
   const [sortDirection, setSortDirection] = useState('asc');
   const [filterStatus, setFilterStatus] = useState('all');

@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { calculateExpectedScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { getScoreTypeColor } from '../../utils/themeColors';
+import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
 import BasicLayout from '../components/BasicLayout';
+import DataLossWarningModal from '../../components/DataLossWarningModal';
 import { instructionContent } from '../../data/instructionContent';
 
 const ExpectedScoreScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { startScores, startTotal, expectedScore: incomingExpectedScore, mobilityType } = location.state || {};
+  const { updateDataStatus, clearDataStatus } = useDataLossWarning();
   
   const [expectedScore, setExpectedScore] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const [showSwitchWarning, setShowSwitchWarning] = useState(false);
 
   useEffect(() => {
     if (startTotal) {
@@ -35,9 +38,6 @@ const ExpectedScoreScreen = () => {
   const updateSliderPosition = (score) => {
     setExpectedScore(score);
     setSliderValue(score);
-    if (!hasInteracted) {
-      setHasInteracted(true);
-    }
   };
 
   const handleSliderChange = (e) => {
@@ -61,6 +61,16 @@ const ExpectedScoreScreen = () => {
     });
   };
 
+  // Track data changes for data loss warnings
+  useEffect(() => {
+    // Check if required gain is different from 0 (meaning user has modified the expected score)
+    const requiredGain = expectedScore - startTotal;
+    const hasModifiedExpectedScore = requiredGain > 0;
+    
+    
+    updateDataStatus('basicExpected', hasModifiedExpectedScore, 'Expected score has been modified');
+  }, [expectedScore, startTotal, updateDataStatus]);
+
   const handleBackClick = () => {
     navigate('/basic/start-score', {
       state: {
@@ -74,6 +84,21 @@ const ExpectedScoreScreen = () => {
   const handleHomeClick = () => {
     navigate('/basic');
   };
+
+  // Handle switch to advanced warning
+  const handleSwitchToAdvanced = useCallback(() => {
+    setShowSwitchWarning(true);
+  }, []);
+
+  const handleConfirmSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
+    clearDataStatus(); // Clear the data status when user confirms the switch
+    navigate('/advanced');
+  }, [navigate, clearDataStatus]);
+
+  const handleCancelSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
+  }, []);
 
   const handleStepPress = (step) => {
     if (step === 'expected') {
@@ -98,14 +123,15 @@ const ExpectedScoreScreen = () => {
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore);
 
   return (
-    <BasicLayout 
-      rightPanel={<InstructionPanel {...instructionContent.expected} />}
-      currentStep="expected"
-      onStepPress={handleStepPress}
-      startTotal={startTotal}
-      expectedScore={expectedScore}
-      hasInteracted={hasInteracted}
-    >
+    <>
+      <BasicLayout 
+        rightPanel={<InstructionPanel {...instructionContent.expected} />}
+        currentStep="expected"
+        onStepPress={handleStepPress}
+        startTotal={startTotal}
+        expectedScore={expectedScore}
+        onSwitchToAdvanced={handleSwitchToAdvanced}
+      >
       <div className="score-bar-chart-container">
         <ScoreBarChart
           startTotal={startTotal}
@@ -122,10 +148,22 @@ const ExpectedScoreScreen = () => {
         onFineAdjustment={handleFineAdjustment}
       />
 
-      <div className="action-buttons">
-        {/* Button removed - navigation happens automatically via progress indicator */}
-      </div>
-    </BasicLayout>
+        <div className="action-buttons">
+          {/* Button removed - navigation happens automatically via progress indicator */}
+        </div>
+      </BasicLayout>
+
+      {/* Data Loss Warning Modal for Switch to Advanced */}
+      <DataLossWarningModal
+        isOpen={showSwitchWarning}
+        onClose={handleCancelSwitch}
+        onConfirm={handleConfirmSwitch}
+        title="Switch to Advanced Mode"
+        message="You have entered data that will be lost if you switch to advanced mode. Are you sure you want to continue?"
+        confirmText="Yes, Switch"
+        cancelText="Stay in Basic"
+      />
+    </>
   );
 };
 

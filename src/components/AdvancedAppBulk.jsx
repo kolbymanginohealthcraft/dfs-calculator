@@ -18,6 +18,7 @@ import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from "../uti
 import { useBulkUpload } from "../contexts/BulkUploadContext";
 import { useRedaction } from "../contexts/RedactionContext";
 import { usePortal } from "../contexts/PortalContext";
+import { useDataLossWarning } from "../contexts/DataLossWarningContext";
 import html2pdf from "html2pdf.js";
 
 import Navbar from "./Navbar";
@@ -28,6 +29,7 @@ import FileManager from "./FileManager";
 import SummaryView from "./SummaryView";
 import BasicLayout from "../basic/components/BasicLayout";
 import InstructionPanel from "../basic/components/InstructionPanel";
+import DataLossWarningModal from "./DataLossWarningModal";
 import { instructionContent } from "../data/instructionContent";
 
 // Lazy load heavy components to improve initial render performance
@@ -49,6 +51,7 @@ function AdvancedAppBulk() {
   const { isFromPortal } = usePortal();
   // Use bulk upload context
   const { uploadedFiles, setUploadedFiles, loadFileData } = useBulkUpload();
+  const { updateDataStatus, clearDataStatus } = useDataLossWarning();
   
   // Use redaction context
   const { isRedacted, toggleRedaction } = useRedaction();
@@ -57,7 +60,14 @@ function AdvancedAppBulk() {
   const [currentFileIndex, setCurrentFileIndex] = useState(-1);
   const [activeView, setActiveView] = useState('summary'); // 'files' or 'summary'
   const [isNavigatingAway, setIsNavigatingAway] = useState(false);
+  const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   
+  // Track data changes for browser refresh warnings
+  useEffect(() => {
+    const hasFiles = uploadedFiles.length > 0;
+    updateDataStatus('advancedFiles', hasFiles, 'Uploaded files and analysis results');
+  }, [uploadedFiles.length, updateDataStatus]);
+
 
   // Current file state (for detailed view)
   const [parsedValues, setParsedValues] = useState({});
@@ -420,6 +430,21 @@ function AdvancedAppBulk() {
     uploadOpenFunctionRef.current = openFunction;
   }, []);
 
+  // Handle switch to basic warning
+  const handleSwitchToBasic = useCallback(() => {
+    setShowSwitchWarning(true);
+  }, []);
+
+  const handleConfirmSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
+    clearDataStatus(); // Clear the data status when user confirms the switch
+    navigate('/basic/start-score');
+  }, [navigate, clearDataStatus]);
+
+  const handleCancelSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
+  }, []);
+
   // Rest of the component logic (handleTick, subtotal, etc.) remains the same
   const handleTick = (key, delta) => {
     setModeledValues((prev) => {
@@ -650,6 +675,7 @@ function AdvancedAppBulk() {
         hasFile={hasFile} 
         fileName={fileName} 
         onUploadClick={handleUploadClick}
+        uploadedFiles={uploadedFiles}
       />
       <ModeBanner 
         showBackToSummary={isViewingFileDetail}
@@ -687,6 +713,8 @@ function AdvancedAppBulk() {
         canGoPrevious={canGoPrevious}
         canGoNext={canGoNext}
         showViewSummary={false}
+        uploadedFiles={uploadedFiles}
+        onSwitchToBasic={handleSwitchToBasic}
       />
     </>
   );
@@ -1075,6 +1103,17 @@ function AdvancedAppBulk() {
           </Suspense>
         </div>
       </div>
+      
+      {/* Data Loss Warning Modal for Switch to Basic */}
+      <DataLossWarningModal
+        isOpen={showSwitchWarning}
+        onClose={handleCancelSwitch}
+        onConfirm={handleConfirmSwitch}
+        title="Switch to Basic Mode"
+        message="You have uploaded files that will be lost if you switch to basic mode. Are you sure you want to continue?"
+        confirmText="Yes, Switch"
+        cancelText="Stay in Advanced"
+      />
     </div>
   );
 }

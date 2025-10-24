@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocat
 import { PortalProvider, usePortal } from './contexts/PortalContext';
 import { BulkUploadProvider, useBulkUpload } from './contexts/BulkUploadContext';
 import { RedactionProvider } from './contexts/RedactionContext';
+import { DataLossWarningProvider } from './contexts/DataLossWarningContext';
 import RouteBasedClearer from './components/RouteBasedClearer';
 import HomeScreen from './components/HomeScreen';
 import BasicApp from './components/BasicApp';
@@ -74,10 +75,11 @@ function AppContent() {
   return (
     <RedactionProvider>
       <BulkUploadProvider>
-        <Router>
-          <div className="App">
-            <RouteBasedClearer />
-            <Routes>
+        <DataLossWarningProvider>
+          <Router>
+            <div className="App">
+              <RouteBasedClearer />
+              <Routes>
               <Route 
                 path="/" 
                 element={<HomeScreen isFromPortal={isFromPortal} />}
@@ -104,9 +106,10 @@ function AppContent() {
                 } 
               />
               <Route path="/faq" element={<FAQ />} />
-            </Routes>
-          </div>
-        </Router>
+              </Routes>
+            </div>
+          </Router>
+        </DataLossWarningProvider>
       </BulkUploadProvider>
     </RedactionProvider>
   );

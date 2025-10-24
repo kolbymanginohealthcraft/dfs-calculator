@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getScoreTypeColor } from '../utils/themeColors';
 import { usePortal } from '../contexts/PortalContext';
+import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import CustomerAccessModal from './CustomerAccessModal';
+import DataLossWarningModal from './DataLossWarningModal';
 import styles from './ModeBanner.module.css';
 
 const ModeBanner = ({ 
@@ -11,7 +13,6 @@ const ModeBanner = ({
   startTotal, 
   expectedScore, 
   endTotal, 
-  hasInteracted, 
   mode = 'basic',
   // Navigation props for advanced mode
   showBackToSummary,
@@ -21,12 +22,18 @@ const ModeBanner = ({
   canGoPrevious,
   canGoNext,
   showViewSummary,
-  onViewSummary
+  onViewSummary,
+  // Data loss warning props
+  uploadedFiles = [],
+  onSwitchToBasic,
+  onSwitchToAdvanced
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isFromPortal } = usePortal();
+  const { hasDataToLose: hasBasicDataToLose, clearDataStatus } = useDataLossWarning();
   const [showModal, setShowModal] = useState(false);
+  const [showDataLossWarning, setShowDataLossWarning] = useState(false);
   
   const isBasicRoute = location.pathname.startsWith('/basic');
   const isAdvancedRoute = location.pathname.startsWith('/advanced');
@@ -35,16 +42,42 @@ const ModeBanner = ({
 
   const handleSwitchCalculator = () => {
     if (isBasicRoute) {
-      // Only allow switching to advanced if user is from portal
-      if (isFromPortal) {
-        navigate('/advanced');
+      // Check if there is basic mode data that would be lost when switching to advanced
+      if (hasBasicDataToLose) {
+        if (onSwitchToAdvanced) {
+          onSwitchToAdvanced();
+        } else {
+          setShowDataLossWarning(true);
+        }
       } else {
-        // Show modal for public users
-        setShowModal(true);
+        // Only allow switching to advanced if user is from portal
+        if (isFromPortal) {
+          navigate('/advanced');
+        } else {
+          // Show modal for public users
+          setShowModal(true);
+        }
       }
     } else if (isAdvancedRoute) {
-      navigate('/basic/start-score');
+      // Check if there are files that would be lost when switching to basic
+      if (uploadedFiles.length > 0 && onSwitchToBasic) {
+        onSwitchToBasic();
+      } else {
+        // No files to lose, clear data status and switch to basic
+        clearDataStatus();
+        navigate('/basic/start-score');
+      }
     }
+  };
+
+  const handleConfirmSwitch = () => {
+    setShowDataLossWarning(false);
+    clearDataStatus(); // Clear the data status when user confirms the switch
+    navigate('/advanced');
+  };
+
+  const handleCancelSwitch = () => {
+    setShowDataLossWarning(false);
   };
 
   // Don't show banner on home page
@@ -217,6 +250,7 @@ const ModeBanner = ({
         isOpen={showModal} 
         onClose={() => setShowModal(false)} 
       />
+      
     </div>
   );
 };

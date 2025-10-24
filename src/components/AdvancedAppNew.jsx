@@ -277,8 +277,8 @@ function AdvancedAppNew() {
 
   const advancedNavbar = (
     <>
-      <Navbar onDrop={onDrop} onExport={handleExport} hasFile={hasFile} fileName={fileName} onUploadClick={handleUploadClick} />
-      <ModeBanner />
+      <Navbar onDrop={onDrop} onExport={handleExport} hasFile={hasFile} fileName={fileName} onUploadClick={handleUploadClick} uploadedFiles={[]} />
+      <ModeBanner uploadedFiles={[]} onSwitchToBasic={() => navigate('/basic/start-score')} />
     </>
   );
 

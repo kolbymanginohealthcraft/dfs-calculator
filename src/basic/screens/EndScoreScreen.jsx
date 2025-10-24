@@ -1,23 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getContributingKeys, getInitialScores } from '../../utils/itemDefinitions';
 import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
+import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
+import DataLossWarningModal from '../../components/DataLossWarningModal';
 import { instructionContent } from '../../data/instructionContent';
 
 const EndScoreScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { startScores, startTotal, expectedScore, mobilityType } = location.state || {};
+  const { updateDataStatus, clearDataStatus } = useDataLossWarning();
   
   // Initialize end scores with start scores
   const [endScores, setEndScores] = useState(startScores || getInitialScores(mobilityType));
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [showSwitchWarning, setShowSwitchWarning] = useState(false);
 
   const contributingKeys = getContributingKeys(mobilityType);
 
@@ -60,9 +64,34 @@ const EndScoreScreen = () => {
     });
   };
 
+  // Track data changes for data loss warnings
+  useEffect(() => {
+    // Check if end scores are different from start scores
+    const hasModifiedEndScores = JSON.stringify(endScores) !== JSON.stringify(startScores);
+    
+    
+    updateDataStatus('basicEnd', hasModifiedEndScores, 'End scores have been modified');
+  }, [endScores, startScores, updateDataStatus]);
+
+
   const handleHomeClick = () => {
     navigate('/basic');
   };
+
+  // Handle switch to advanced warning
+  const handleSwitchToAdvanced = useCallback(() => {
+    setShowSwitchWarning(true);
+  }, []);
+
+  const handleConfirmSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
+    clearDataStatus(); // Clear the data status when user confirms the switch
+    navigate('/advanced');
+  }, [navigate, clearDataStatus]);
+
+  const handleCancelSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
+  }, []);
 
   const handleStepPress = (step) => {
     if (step === 'start') {
@@ -112,16 +141,18 @@ const EndScoreScreen = () => {
   };
 
   return (
-    <BasicLayout 
-      rightPanel={<InstructionPanel {...instructionContent.end} />}
-      currentStep="end"
-      onStepPress={handleStepPress}
-      startTotal={startTotal}
-      expectedScore={expectedScore}
-      endTotal={endTotal}
-      hasInteracted={hasInteracted}
-      exportData={exportData}
-    >
+    <>
+      <BasicLayout 
+        rightPanel={<InstructionPanel {...instructionContent.end} />}
+        currentStep="end"
+        onStepPress={handleStepPress}
+        startTotal={startTotal}
+        expectedScore={expectedScore}
+        endTotal={endTotal}
+        hasInteracted={hasInteracted}
+        onSwitchToAdvanced={handleSwitchToAdvanced}
+        exportData={exportData}
+      >
       <div 
         className="score-bar-chart-container"
         style={{
@@ -146,7 +177,19 @@ const EndScoreScreen = () => {
         mobilityType={mobilityType}
         meetsExpectedScore={meetsExpectedScore}
       />
-    </BasicLayout>
+      </BasicLayout>
+
+      {/* Data Loss Warning Modal for Switch to Advanced */}
+      <DataLossWarningModal
+        isOpen={showSwitchWarning}
+        onClose={handleCancelSwitch}
+        onConfirm={handleConfirmSwitch}
+        title="Switch to Advanced Mode"
+        message="You have entered data that will be lost if you switch to advanced mode. Are you sure you want to continue?"
+        confirmText="Yes, Switch"
+        cancelText="Stay in Basic"
+      />
+    </>
   );
 };
 

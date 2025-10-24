@@ -59,24 +59,6 @@ export const BulkUploadProvider = ({ children }) => {
     };
   }, []);
 
-  // Clear data only on actual page refresh or leaving the app
-  React.useEffect(() => {
-    const handleBeforeUnload = () => {
-      // Only clear on actual page unload (refresh or leaving)
-      setUploadedFiles([]);
-      setIsProcessing(false);
-      setTotalFilesToProcess(0);
-      setProcessedCount(0);
-      setIsCancelled(false);
-      clearAllFileData();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
 
   // Remove debug logging in production
   // React.useEffect(() => {

@@ -20,8 +20,8 @@ const BasicLayout = ({
   startTotal,
   expectedScore,
   endTotal,
-  hasInteracted,
   mode = 'basic',
+  onSwitchToAdvanced,
   // Export props
   exportData
 }) => {
@@ -71,8 +71,8 @@ const BasicLayout = ({
           startTotal={startTotal}
           expectedScore={expectedScore}
           endTotal={endTotal}
-          hasInteracted={hasInteracted}
           mode={mode}
+          onSwitchToAdvanced={onSwitchToAdvanced}
         />
       )}
       

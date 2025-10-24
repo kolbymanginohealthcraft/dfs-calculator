@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileText, Upload } from 'lucide-react';
 import BasicLayout from '../basic/components/BasicLayout';
@@ -6,11 +6,13 @@ import Navbar from './Navbar';
 import ModeBanner from './ModeBanner';
 import SummaryView from './SummaryView';
 import PaginationControls from './PaginationControls';
+import DataLossWarningModal from './DataLossWarningModal';
 import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../utils/zipHandler';
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
 import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
 import { getFunctionMultipliers } from '../utils/coefficientLoader';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
+import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import { useRedaction } from '../contexts/RedactionContext';
 import { redactName } from '../utils/redactionUtils';
 import { storeFileData } from '../utils/fileDataManager';
@@ -41,12 +43,24 @@ const AdvancedSummaryView = () => {
     // Memory
     memoryUsage
   } = useBulkUpload();
+  const { updateDataStatus, clearDataStatus } = useDataLossWarning();
   
   const { isRedacted, toggleRedaction } = useRedaction();
   const uploadOpenFunctionRef = useRef(null);
   
   const cancelledRef = useRef(false);
   const processingStartedRef = useRef(false);
+  
+  // State for data loss warning modals
+  const [showClearWarning, setShowClearWarning] = useState(false);
+  const [showSwitchWarning, setShowSwitchWarning] = useState(false);
+
+  // Track data changes for browser refresh warnings
+  useEffect(() => {
+    const hasFiles = uploadedFiles.length > 0;
+    updateDataStatus('advancedFiles', hasFiles, 'Uploaded files and analysis results');
+  }, [uploadedFiles.length, updateDataStatus]);
+
 
   // Start processing function
   const startProcessing = useCallback(async (filesToProcess) => {
@@ -102,9 +116,8 @@ const AdvancedSummaryView = () => {
   // Handle file uploads
   const onDrop = useCallback(async (acceptedFiles) => {
     if (acceptedFiles.length === 0) {
-      // Clear all files and navigate back to advanced page
-      setUploadedFiles([]);
-      navigate('/advanced');
+      // Show confirmation modal for clearing files
+      setShowClearWarning(true);
       return;
     }
 
@@ -656,9 +669,34 @@ const AdvancedSummaryView = () => {
     return Array.from(contributingItems);
   };
 
-  // Handle clear all
+  // Handle clear all with confirmation
   const handleClearAll = useCallback(() => {
+    setShowClearWarning(true);
+  }, []);
+
+  const handleConfirmClearAll = useCallback(() => {
     setUploadedFiles([]);
+    setShowClearWarning(false);
+    navigate('/advanced');
+  }, [navigate]);
+
+  const handleCancelClearAll = useCallback(() => {
+    setShowClearWarning(false);
+  }, []);
+
+  // Handle switch to basic warning
+  const handleSwitchToBasic = useCallback(() => {
+    setShowSwitchWarning(true);
+  }, []);
+
+  const handleConfirmSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
+    clearDataStatus(); // Clear the data status when user confirms the switch
+    navigate('/basic/start-score');
+  }, [navigate, clearDataStatus]);
+
+  const handleCancelSwitch = useCallback(() => {
+    setShowSwitchWarning(false);
   }, []);
 
   // Handle delete individual file
@@ -683,8 +721,12 @@ const AdvancedSummaryView = () => {
         hasFile={uploadedFiles.length > 0} 
         fileName="" 
         onUploadClick={handleUploadClick}
+        uploadedFiles={uploadedFiles}
       />
-      <ModeBanner />
+      <ModeBanner 
+        uploadedFiles={uploadedFiles} 
+        onSwitchToBasic={handleSwitchToBasic}
+      />
     </>
   );
 
@@ -790,6 +832,7 @@ const AdvancedSummaryView = () => {
                   onExportDetails={handleExportDetails}
                   calculateFunctionScore={calculateFunctionScore}
                   onDeleteFile={handleDeleteFile}
+                  onClearAll={handleClearAll}
                   isRedacted={isRedacted}
                   onToggleRedaction={toggleRedaction}
                   paginationInfo={getPaginationInfo()}
@@ -802,6 +845,27 @@ const AdvancedSummaryView = () => {
 
           </div>
         }
+      />
+      
+      {/* Data Loss Warning Modals */}
+      <DataLossWarningModal
+        isOpen={showClearWarning}
+        onClose={handleCancelClearAll}
+        onConfirm={handleConfirmClearAll}
+        title="Clear All Files"
+        message="Are you sure you want to clear all uploaded files and analysis results?"
+        confirmText="Yes, Clear All Data"
+        cancelText="Cancel"
+      />
+      
+      <DataLossWarningModal
+        isOpen={showSwitchWarning}
+        onClose={handleCancelSwitch}
+        onConfirm={handleConfirmSwitch}
+        title="Switch to Basic Mode"
+        message="You have uploaded files that will be lost if you switch to basic mode. Are you sure you want to continue?"
+        confirmText="Yes, Switch"
+        cancelText="Stay in Advanced"
       />
     </div>
   );
