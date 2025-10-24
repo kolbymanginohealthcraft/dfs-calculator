@@ -101,19 +101,7 @@ function AdvancedAppBulk() {
     [hasFile, searchParams]
   );
   
-  // Debug: Log current state (only when state changes significantly)
-  // console.log('Current state:', {
-  //   uploadedFilesCount: uploadedFiles.length,
-  //   currentFileIndex,
-  //   currentFile: currentFile?.name,
-  //   hasFile,
-  //   isViewingFileDetail,
-  //   fileIdFromUrl: searchParams.get('fileId'),
-  //   activeView,
-  //   currentFileStatus: currentFile?.status,
-  //   currentFileId: currentFile?.id,
-  //   allFiles: uploadedFiles.map(f => ({ name: f.name, status: f.status, id: f.id }))
-  // });
+  // Removed debug logging for production
 
 
   // HIPAA-compliant data cleanup function
@@ -140,7 +128,6 @@ function AdvancedAppBulk() {
   // Process a single file
   const processFile = useCallback(async (file, fileId) => {
     try {
-      console.log('Processing file:', file.name);
       
       // Create a temporary file object for processing
       const tempFile = file.file || (file instanceof File ? file : createFileFromContent(file.name, file.content, file.size));
@@ -155,7 +142,7 @@ function AdvancedAppBulk() {
       // Process the file using existing validation
       const result = await handleFileUploadWithValidation(
         tempFile,
-        (name) => {}, // We'll handle fileName separately
+        (name) => setFileName(name), // Set the file name
         (parsed) => {
           parsedData = parsed;
         },
@@ -206,8 +193,6 @@ function AdvancedAppBulk() {
         const startScore = calculateFunctionScore(startData);
         const expectedScore = covariateResult?.weightedScore || 0;
         const scoreDifference = expectedScore - startScore;
-
-        console.log('File processed successfully:', file.name);
 
         // Update file with minimal data for summary view
         setUploadedFiles(prev => prev.map(f => 
@@ -276,21 +261,18 @@ function AdvancedAppBulk() {
       // Add new files to the list
       setUploadedFiles(prev => {
         const updated = [...prev, ...newFiles];
-        console.log('Adding files to context:', newFiles.length, 'Total files:', updated.length);
         return updated;
       });
 
       // Navigate to summary page immediately - let summary page handle processing
-      console.log('Navigating to summary page immediately');
       navigate('/advanced/summary');
     } catch (error) {
-      console.error('Bulk upload error:', error);
+      // Handle error silently in production
     }
   }, [clearAllPatientData, navigate]);
 
   // Handle file selection
   const handleFileSelect = useCallback((index) => {
-    console.log('Selecting file at index:', index);
     
     // Save current modeled values to the previous file before switching
     // Only save if the user has actually made changes (userModeledValues doesn't exist or differs from original)
@@ -323,7 +305,6 @@ function AdvancedAppBulk() {
     }
     
     if (file && file.status === 'processed') {
-      console.log('Loading detailed data for:', file.name);
       
       // Load the selected file's detailed data into the current view
       setFileName(file.name);
@@ -356,34 +337,19 @@ function AdvancedAppBulk() {
       
       setValidationError(null);
       setValidationWarning(null);
-      
-      console.log('Detailed data loaded successfully');
-    } else {
-      console.log('File not processed or not found');
     }
   }, [uploadedFiles, currentFile, modeledValues, covariates, weightedScore, versionMultipliers, manualCovariateOverrides, navigate]);
 
   // Handle file parameter from URL (only once)
   useEffect(() => {
     const fileId = searchParams.get('fileId');
-    console.log('URL parameter handling:', {
-      fileId,
-      uploadedFilesLength: uploadedFiles.length,
-      currentFileIndex,
-      isNavigatingAway,
-      uploadedFileIds: uploadedFiles.map(f => f.id)
-    });
     
     // Only auto-select if we're on the detail view route and not already viewing a file
     // and not navigating away
     if (fileId !== null && uploadedFiles.length > 0 && currentFileIndex === -1 && !isNavigatingAway) {
       const index = uploadedFiles.findIndex(file => file.id === fileId);
-      console.log('File lookup result:', { index, fileId, foundFile: uploadedFiles[index]?.name });
       if (index >= 0) {
-        console.log('Auto-selecting file from URL:', index, uploadedFiles[index]?.name);
         handleFileSelect(index);
-      } else {
-        console.log('File not found in uploadedFiles array');
       }
     }
   }, [searchParams, uploadedFiles.length, currentFileIndex, handleFileSelect, isNavigatingAway]);
@@ -572,7 +538,6 @@ function AdvancedAppBulk() {
         }, 100);
         return;
       } catch (error) {
-        console.warn('Failed to fetch facility info for export:', error);
         // Continue with export even if facility fetch fails
       }
     }

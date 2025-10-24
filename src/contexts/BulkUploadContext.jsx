@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
 
 const BulkUploadContext = createContext();
 
@@ -36,10 +36,10 @@ export const BulkUploadProvider = ({ children }) => {
     };
   }, []);
 
-  // Debug: Log when context changes
-  React.useEffect(() => {
-    console.log('BulkUploadContext - uploadedFiles changed:', uploadedFiles.length, uploadedFiles);
-  }, [uploadedFiles]);
+  // Remove debug logging in production
+  // React.useEffect(() => {
+  //   console.log('BulkUploadContext - uploadedFiles changed:', uploadedFiles.length, uploadedFiles);
+  // }, [uploadedFiles]);
 
   const addFiles = useCallback((newFiles) => {
     setUploadedFiles(prev => [...prev, ...newFiles]);
@@ -78,7 +78,8 @@ export const BulkUploadProvider = ({ children }) => {
     setIsCancelled(false);
   }, []);
 
-  const value = {
+  // Memoize the context value to prevent unnecessary re-renders
+  const value = useMemo(() => ({
     uploadedFiles,
     setUploadedFiles,
     addFiles,
@@ -94,7 +95,21 @@ export const BulkUploadProvider = ({ children }) => {
     setProcessed,
     setCancelled,
     resetProgress
-  };
+  }), [
+    uploadedFiles,
+    isProcessing,
+    totalFilesToProcess,
+    processedCount,
+    isCancelled,
+    addFiles,
+    updateFile,
+    clearAllFiles,
+    setProcessing,
+    setTotalFiles,
+    setProcessed,
+    setCancelled,
+    resetProgress
+  ]);
 
   return (
     <BulkUploadContext.Provider value={value}>

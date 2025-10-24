@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Download, FileText, AlertCircle, CheckCircle, Eye, EyeOff, Info, Search, X, ChevronDown } from 'lucide-react';
 import { redactName, redactFullName, redactFacility, redactAddress } from '../utils/redactionUtils';
 import { extractPatientSummary, determineMobilityType } from '../utils/calculations';
@@ -10,7 +10,7 @@ import styles from './SummaryView.module.css';
 // Lazy load ExportView to avoid circular dependencies
 const ExportView = lazy(() => import('./ExportView'));
 
-const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction }) => {
+const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction }) => {
   const [sortField, setSortField] = useState('status');
   const [sortDirection, setSortDirection] = useState('asc');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -82,6 +82,34 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
       document.removeEventListener('keydown', handleEscapeKey);
     };
   }, [showExportDropdown, showFilterDropdown]);
+
+  // Memoize expensive calculations to prevent recalculation on every render
+  const calculateUserModeledScore = useCallback((file) => {
+    if (!file.userModeledValues || !calculateFunctionScore) return null;
+    
+    try {
+      const userEndScore = calculateFunctionScore(file.userModeledValues);
+      const startScore = file.results?.startScore || 0;
+      
+      // Only return the score if there's actual gain (end > start)
+      return userEndScore > startScore ? userEndScore : null;
+    } catch (error) {
+      return null;
+    }
+  }, [calculateFunctionScore]);
+
+  // Calculate gain vs required (actual gain - required gain)
+  const calculateGainVsRequired = useCallback((file) => {
+    const startScore = file.results?.startScore || 0;
+    const userEndScore = calculateUserModeledScore(file);
+    const expectedScore = file.results?.expectedScore || 0;
+    const requiredGain = file.results?.scoreDifference || 0;
+    
+    if (userEndScore === null) return null;
+    
+    const actualGain = userEndScore - startScore;
+    return actualGain - requiredGain;
+  }, [calculateUserModeledScore]);
 
   const processedFiles = useMemo(() => {
     return uploadedFiles
@@ -213,46 +241,13 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
     }
   };
 
-  // Calculate user's modeled end score from their modeled values
-  // Only return a score if userModeledValues exists AND there's actual gain (end > start)
-  const calculateUserModeledScore = (file) => {
-    if (!file.userModeledValues || !calculateFunctionScore) return null;
-    
-    try {
-      const userEndScore = calculateFunctionScore(file.userModeledValues);
-      const startScore = file.results?.startScore || 0;
-      
-      // Only return the score if there's actual gain (end > start)
-      return userEndScore > startScore ? userEndScore : null;
-    } catch (error) {
-      console.warn('Error calculating user modeled score:', error);
-      return null;
-    }
-  };
-
-  // Calculate gain vs required (actual gain - required gain)
-  const calculateGainVsRequired = (file) => {
-    const startScore = file.results?.startScore || 0;
-    const userEndScore = calculateUserModeledScore(file);
-    const expectedScore = file.results?.expectedScore || 0;
-    const requiredGain = file.results?.scoreDifference || 0;
-    
-    if (userEndScore === null) return null;
-    
-    const actualGain = userEndScore - startScore;
-    return actualGain - requiredGain;
-  };
-
   // Handle PDF export for individual file
   const handlePdfExport = (file, event) => {
     event.stopPropagation(); // Prevent row click
     
     if (file.status !== 'processed' || !file._rawData) {
-      console.warn('Cannot export PDF for file:', file.name, 'Status:', file.status);
       return;
     }
-
-    console.log('Starting PDF export for file:', file.name, file);
 
     // Extract patient data from raw parsed values (same as detailed view)
     const parsedValues = file._rawData?.parsedValues || {};
@@ -298,7 +293,6 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
       mobilityType: mobilityType
     };
 
-    console.log('Export data prepared:', { patient, scores, functionItems });
 
     // Fetch facility information and then set export data
     const fetchAndSetExportData = async () => {
@@ -317,7 +311,6 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
           facilityName = `CCN: ${facility || "Unknown"}`;
         }
       } catch (error) {
-        console.warn('Failed to fetch facility info:', error);
         facilityName = `CCN: ${facility || "Unknown"}`;
       }
 
@@ -344,10 +337,8 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
   // Handle PDF generation when export data is set
   React.useEffect(() => {
     if (exportData && exportRef.current) {
-      console.log('Export data set, starting PDF generation...', exportData);
       // Small delay to ensure the ExportView has rendered
       setTimeout(() => {
-        console.log('Attempting to generate PDF from element:', exportRef.current);
         html2pdf()
           .set({
             margin: 0.5,
@@ -359,12 +350,10 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
           .from(exportRef.current)
           .save()
           .then(() => {
-            console.log('PDF export successful');
             // Clear export data after successful export
             setExportData(null);
           })
           .catch((error) => {
-            console.error('PDF export error:', error);
             setExportData(null);
           });
       }, 500); // Give more time for rendering
@@ -383,7 +372,7 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
           <div className={styles.headerLeft}>
             <div className={styles.summaryTitle}>
               <FileText size={20} />
-              <span>File Console</span>
+              <span>File Summary</span>
             </div>
           </div>
           <div className={styles.headerActions}>
@@ -585,13 +574,6 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
               {processedFiles.map((file, index) => {
                 // Find the correct index in the original uploadedFiles array
                 const originalIndex = uploadedFiles.findIndex(f => f.id === file.id);
-                console.log('SummaryView - File mapping:', {
-                  displayIndex: index,
-                  originalIndex,
-                  fileId: file.id,
-                  fileName: file.name,
-                  status: file.status
-                });
                 // Determine if this row should have success or error styling
                 const userEndScore = calculateUserModeledScore(file);
                 const hasSuccessStyling = userEndScore !== null && file.results?.startScore !== undefined && file.results?.expectedScore !== undefined && 
@@ -759,6 +741,6 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
       )}
     </div>
   );
-};
+});
 
 export default SummaryView;

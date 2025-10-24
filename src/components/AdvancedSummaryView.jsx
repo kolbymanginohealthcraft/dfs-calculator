@@ -44,29 +44,22 @@ const AdvancedSummaryView = () => {
     resetProgress();
     cancelledRef.current = false;
 
-    console.log('Starting processing for', filesToProcess.length, 'files');
     setTotalFiles(filesToProcess.length);
-    console.log('Set total files to:', filesToProcess.length);
 
     for (let i = 0; i < filesToProcess.length; i++) {
-      console.log(`Checking cancellation before file ${i + 1}, cancelledRef:`, cancelledRef.current);
       if (cancelledRef.current) {
-        console.log('Processing cancelled by user');
         break;
       }
       const fileObj = filesToProcess[i];
-      console.log(`Processing file ${i + 1} of ${filesToProcess.length}:`, fileObj.name);
       
       // Check if file is still pending (not already processed)
       const currentFiles = uploadedFiles;
       const existingFile = currentFiles.find(f => f.id === fileObj.id);
       if (existingFile && existingFile.status !== 'pending') {
-        console.log('File already processed, skipping:', fileObj.id);
         continue;
       }
       
       await processFile(fileObj);
-      console.log(`Setting processed count to: ${i + 1}`);
       setProcessed(i + 1);
     }
     setProcessing(false);
@@ -74,17 +67,13 @@ const AdvancedSummaryView = () => {
     processingStartedRef.current = false;
   }, [setProcessing, setCancelled, resetProgress, setTotalFiles, setProcessed, uploadedFiles]);
 
-  // Debug: Log files when component mounts
-  React.useEffect(() => {
-    console.log('AdvancedSummaryView mounted, files:', uploadedFiles.length, uploadedFiles);
-  }, [uploadedFiles]);
+  // Removed debug logging for production
   
   // Auto-start processing when component mounts with pending files
   // Only process files that haven't been processed yet
   React.useEffect(() => {
     const pendingFiles = uploadedFiles.filter(f => f.status === 'pending');
     if (pendingFiles.length > 0 && !isProcessing && !cancelledRef.current && !processingStartedRef.current) {
-      console.log('Auto-starting processing for', pendingFiles.length, 'pending files');
       processingStartedRef.current = true;
       startProcessing(pendingFiles);
     }
@@ -92,19 +81,12 @@ const AdvancedSummaryView = () => {
 
   // Cancel processing
   const handleCancelProcessing = useCallback(() => {
-    console.log('Cancel processing requested - current state:', {
-      cancelledRef: cancelledRef.current,
-      isProcessing,
-      totalFilesToProcess,
-      processedCount
-    });
     cancelledRef.current = true;
     setCancelled(true);
     setProcessing(false);
     resetProgress();
     processingStartedRef.current = false;
-    console.log('Cancel processing completed - cancelledRef set to:', cancelledRef.current);
-  }, [setProcessing, setCancelled, resetProgress, isProcessing, totalFilesToProcess, processedCount]);
+  }, [setProcessing, setCancelled, resetProgress]);
 
   // Handle file uploads
   const onDrop = useCallback(async (acceptedFiles) => {
@@ -134,16 +116,13 @@ const AdvancedSummaryView = () => {
     }
 
     // Add new files to the list
-    console.log('Adding new files to context:', newFiles.map(f => ({ id: f.id, name: f.name })));
     setUploadedFiles(prev => {
       const updated = [...prev, ...newFiles];
-      console.log('Updated uploadedFiles:', updated.map(f => ({ id: f.id, name: f.name, status: f.status })));
       return updated;
     });
 
     // Set total files to process
     const filesToProcess = newFiles.filter(f => f.status === 'pending');
-    console.log('Files to process:', filesToProcess.length, filesToProcess.map(f => f.name));
     
     // Start processing the new files
     if (filesToProcess.length > 0) {
@@ -156,11 +135,9 @@ const AdvancedSummaryView = () => {
 
   // Process a single file
   const processFile = useCallback(async (fileObj) => {
-    console.log('Starting to process file:', fileObj.id, fileObj.name);
     
     // Check if processing was cancelled
     if (cancelledRef.current) {
-      console.log('Processing cancelled, skipping file:', fileObj.name);
       return;
     }
     
@@ -168,14 +145,12 @@ const AdvancedSummaryView = () => {
     const currentFiles = uploadedFiles;
     const existingFile = currentFiles.find(f => f.id === fileObj.id);
     if (existingFile && (existingFile.status === 'processing' || existingFile.status === 'processed')) {
-      console.log('File already processed or processing, skipping:', fileObj.id);
       return;
     }
     
     try {
       // Check if this is a zip file and extract it first
       if (isZipFile(fileObj.file || fileObj)) {
-        console.log('Processing zip file:', fileObj.name);
         
         // Mark the zip file as processing immediately to prevent double processing
         setUploadedFiles(prev => prev.map(f => 
@@ -187,7 +162,6 @@ const AdvancedSummaryView = () => {
           const fileToRead = fileObj.file || fileObj;
           const arrayBuffer = await fileToRead.arrayBuffer();
           const extractedFiles = await extractXmlFilesFromZip(arrayBuffer);
-          console.log('Extracted', extractedFiles.length, 'XML files from zip');
           
           // Update the total file count to reflect the extracted files
           setTotalFiles(extractedFiles.length);
@@ -198,7 +172,6 @@ const AdvancedSummaryView = () => {
           for (const extractedFile of extractedFiles) {
             // Check for cancellation before processing each extracted file
             if (cancelledRef.current) {
-              console.log('Processing cancelled during zip extraction');
               break;
             }
             
@@ -224,7 +197,6 @@ const AdvancedSummaryView = () => {
               null, // setValidationWarning - not used in summary view
               (error) => {
                 if (error && error !== null) {
-                  console.error('File processing error:', error);
                   // Store the detailed error message for later use
                   validationError = error;
                 }
@@ -236,11 +208,8 @@ const AdvancedSummaryView = () => {
 
             // Check for cancellation after file validation
             if (cancelledRef.current) {
-              console.log('Processing cancelled during file validation:', extractedFile.name);
               return;
             }
-
-            console.log('Processing result:', { result, startData: !!startData, parsedData: !!parsedData, groupedData: !!groupedData, modeledData: !!modeledData });
             
             if (result && parsedData && startData) {
               // Calculate scores
@@ -269,44 +238,16 @@ const AdvancedSummaryView = () => {
                 );
                 
                 expectedScore = covariateResult?.weightedScore || 0;
-                console.log('Expected score calculation:', { 
-                  summary, 
-                  icdList, 
-                  multipliers, 
-                  covariateResult,
-                  expectedScoreFromResult: covariateResult?.weightedScore,
-                  hasWeightedScore: 'weightedScore' in (covariateResult || {}),
-                  covariateResultKeys: covariateResult ? Object.keys(covariateResult) : 'null'
-                });
               } catch (error) {
-                console.error('Error calculating expected score:', error);
                 expectedScore = 0;
               }
               
               // Check for cancellation before continuing
               if (cancelledRef.current) {
-                console.log('Processing cancelled during file processing:', extractedFile.name);
                 return;
               }
               
               const scoreDifference = expectedScore - startScore;
-
-              console.log('Score calculation details:', {
-                startScore,
-                expectedScore,
-                scoreDifference,
-                patientFirstName: parsedData?.["A0500A"],
-                patientLastName: parsedData?.["A0500C"],
-                covariateResult,
-                summary,
-                icdList,
-                rawParsedData: {
-                  A0500A: parsedData?.["A0500A"],
-                  A0500C: parsedData?.["A0500C"],
-                  A2300: parsedData?.["A2300"]
-                },
-                allParsedData: parsedData
-              });
 
               // Create a new file entry for this extracted XML file
               const extractedFileEntry = {
@@ -340,7 +281,6 @@ const AdvancedSummaryView = () => {
                 return [...withoutZip, extractedFileEntry];
               });
             } else {
-              console.log('Processing failed - result:', result, 'parsedData:', !!parsedData, 'startData:', !!startData);
               // Create error entry for failed extraction
               const errorMessage = validationError ? validationError.message : 'Failed to process file - missing or invalid data';
               const errorFileEntry = {
@@ -360,14 +300,12 @@ const AdvancedSummaryView = () => {
             // Update progress for each processed file
             processedCount++;
             setProcessed(processedCount);
-            console.log(`Processed ${processedCount} of ${extractedFiles.length} extracted files`);
           }
           
           // Remove the original zip file (extracted files are already added above)
           setUploadedFiles(prev => prev.filter(f => f.id !== fileObj.id));
           
         } catch (error) {
-          console.error('Failed to extract zip file:', error);
           setUploadedFiles(prev => prev.map(f => 
             f.id === fileObj.id 
               ? { ...f, status: 'error', error: error.message }
@@ -402,7 +340,6 @@ const AdvancedSummaryView = () => {
         (error) => {
           // Only handle actual errors, not null values
           if (error && error !== null) {
-            console.error('File processing error:', error);
             // Store the detailed error message for later use
             validationError = error;
           }
@@ -411,8 +348,6 @@ const AdvancedSummaryView = () => {
 
       // Wait a bit for all callbacks to complete
       await new Promise(resolve => setTimeout(resolve, 200));
-
-      console.log('Processing result:', { result, startData: !!startData, parsedData: !!parsedData, groupedData: !!groupedData, modeledData: !!modeledData });
       
       if (result && parsedData && startData) {
         // Calculate scores
@@ -441,44 +376,16 @@ const AdvancedSummaryView = () => {
           );
           
           expectedScore = covariateResult?.weightedScore || 0;
-          console.log('Expected score calculation:', { 
-            summary, 
-            icdList, 
-            multipliers, 
-            covariateResult,
-            expectedScoreFromResult: covariateResult?.weightedScore,
-            hasWeightedScore: 'weightedScore' in (covariateResult || {}),
-            covariateResultKeys: covariateResult ? Object.keys(covariateResult) : 'null'
-          });
         } catch (error) {
-          console.error('Error calculating expected score:', error);
           expectedScore = 0;
         }
         
         // Check for cancellation before continuing
         if (cancelledRef.current) {
-          console.log('Processing cancelled during file processing:', fileObj.name);
           return;
         }
         
         const scoreDifference = expectedScore - startScore;
-
-        console.log('Score calculation details:', {
-          startScore,
-          expectedScore,
-          scoreDifference,
-          patientFirstName: parsedData?.["A0500A"],
-          patientLastName: parsedData?.["A0500C"],
-          covariateResult,
-          summary,
-          icdList,
-          rawParsedData: {
-            A0500A: parsedData?.["A0500A"],
-            A0500C: parsedData?.["A0500C"],
-            A2300: parsedData?.["A2300"]
-          },
-          allParsedData: parsedData
-        });
 
         // Update file with results
         setUploadedFiles(prev => {
@@ -505,18 +412,15 @@ const AdvancedSummaryView = () => {
               }
             : f
           );
-          console.log('Updated file after processing:', updated.find(f => f.id === fileObj.id));
           return updated;
         });
       } else {
-        console.log('Processing failed - result:', result, 'parsedData:', !!parsedData, 'startData:', !!startData);
         const errorMessage = validationError ? validationError.message : 'Processing failed - missing data';
         setUploadedFiles(prev => prev.map(f => 
           f.id === fileObj.id ? { ...f, status: 'error', error: errorMessage } : f
         ));
       }
     } catch (error) {
-      console.error('Error processing file:', fileObj.name, error);
       setUploadedFiles(prev => prev.map(f => 
         f.id === fileObj.id ? { ...f, status: 'error', error: error.message } : f
       ));
@@ -526,19 +430,9 @@ const AdvancedSummaryView = () => {
   // Handle file selection (navigate to detailed view)
   const handleFileSelect = useCallback((index) => {
     const file = uploadedFiles[index];
-    console.log('AdvancedSummaryView - File selection:', {
-      index,
-      fileId: file?.id,
-      fileName: file?.name,
-      status: file?.status,
-      allFileIds: uploadedFiles.map(f => ({ id: f.id, name: f.name, status: f.status }))
-    });
     if (file && file.status === 'processed') {
       // Navigate to the detailed view with the selected file using its unique ID
-      console.log('Navigating to:', `/advanced?fileId=${file.id}`);
       navigate(`/advanced?fileId=${file.id}`);
-    } else {
-      console.log('Cannot navigate to file - status is not processed:', file?.status);
     }
   }, [navigate, uploadedFiles]);
 

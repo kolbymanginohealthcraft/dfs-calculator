@@ -11,7 +11,6 @@ const RouteBasedClearer = () => {
     const isAdvancedRoute = location.pathname.startsWith('/advanced');
     
     if (!isAdvancedRoute && uploadedFiles.length > 0) {
-      console.log('Clearing files - left /advanced route');
       setUploadedFiles([]);
       setProcessing(false);
     }
