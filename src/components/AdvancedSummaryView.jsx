@@ -5,6 +5,7 @@ import BasicLayout from '../basic/components/BasicLayout';
 import Navbar from './Navbar';
 import ModeBanner from './ModeBanner';
 import SummaryView from './SummaryView';
+import PaginationControls from './PaginationControls';
 import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../utils/zipHandler';
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
 import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
@@ -12,6 +13,7 @@ import { getFunctionMultipliers } from '../utils/coefficientLoader';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
 import { useRedaction } from '../contexts/RedactionContext';
 import { redactName } from '../utils/redactionUtils';
+import { storeFileData } from '../utils/fileDataManager';
 import '../basic/styles/BasicLayout.css';
 import styles from './AdvancedSummaryView.module.css';
 
@@ -28,7 +30,16 @@ const AdvancedSummaryView = () => {
     setTotalFiles,
     setProcessed,
     setCancelled,
-    resetProgress
+    resetProgress,
+    // Pagination
+    currentPage,
+    itemsPerPage,
+    goToPage,
+    setItemsPerPageValue,
+    getPaginatedFiles,
+    getPaginationInfo,
+    // Memory
+    memoryUsage
   } = useBulkUpload();
   
   const { isRedacted, toggleRedaction } = useRedaction();
@@ -249,30 +260,37 @@ const AdvancedSummaryView = () => {
               
               const scoreDifference = expectedScore - startScore;
 
+              // Create summary data for lazy loading
+              const summaryData = {
+                startScore,
+                expectedScore,
+                scoreDifference,
+                patientFirstName: parsedData?.["A0500A"] || '',
+                patientLastName: parsedData?.["A0500C"] || '',
+                mobilityType: determineMobilityType(startData),
+                primaryCondition: summary?.primaryCondition || ''
+              };
+
+              // Store raw data for lazy loading (only when needed)
+              const rawData = {
+                parsedValues: parsedData,
+                groupedSections: groupedData,
+                modeledValues: modeledData,
+                startScores: startData,
+                imputedItems: imputedData
+              };
+
               // Create a new file entry for this extracted XML file
+              const fileId = `extracted-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
               const extractedFileEntry = {
-                id: `extracted-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                id: fileId,
                 name: extractedFile.name,
                 file: xmlFileObj,
                 content: extractedFile.content,
                 size: extractedFile.size,
                 status: 'processed',
-                results: {
-                  startScore,
-                  expectedScore,
-                  scoreDifference,
-                  patientFirstName: parsedData?.["A0500A"] || '',
-                  patientLastName: parsedData?.["A0500C"] || '',
-                  mobilityType: determineMobilityType(startData),
-                  primaryCondition: summary?.primaryCondition || ''
-                },
-                _rawData: {
-                  parsedValues: parsedData,
-                  groupedSections: groupedData,
-                  modeledValues: modeledData,
-                  startScores: startData,
-                  imputedItems: imputedData
-                }
+                results: summaryData,
+                _rawData: rawData // Store the data directly for now
               };
               
               // Add successful file to uploadedFiles immediately so cards update in real-time
@@ -387,6 +405,25 @@ const AdvancedSummaryView = () => {
         
         const scoreDifference = expectedScore - startScore;
 
+        // Create summary data for lazy loading
+        const summaryData = {
+          startScore,
+          expectedScore,
+          scoreDifference,
+          patientFirstName: parsedData?.["A0500A"] || 'Unknown',
+          patientLastName: parsedData?.["A0500C"] || 'Patient',
+          mobilityType: 'Unknown' // This would need to be calculated
+        };
+
+        // Store raw data for lazy loading
+        const rawData = {
+          parsedValues: parsedData,
+          groupedSections: groupedData,
+          modeledValues: modeledData,
+          startScores: startData,
+          imputedItems: imputedData
+        };
+
         // Update file with results
         setUploadedFiles(prev => {
           const updated = prev.map(f => 
@@ -394,22 +431,9 @@ const AdvancedSummaryView = () => {
               ? { 
                   ...f, 
                   status: 'processed',
-                  results: {
-                    startScore,
-                    expectedScore,
-                    scoreDifference,
-                    patientFirstName: parsedData?.["A0500A"] || 'Unknown',
-                  patientLastName: parsedData?.["A0500C"] || 'Patient',
-                  mobilityType: 'Unknown' // This would need to be calculated
-                },
-                _rawData: {
-                  parsedValues: parsedData,
-                  groupedSections: groupedData,
-                  modeledValues: modeledData,
-                  startScores: startData,
-                  imputedItems: imputedData
+                  results: summaryData,
+                  _rawData: rawData // Store the data directly for now
                 }
-              }
             : f
           );
           return updated;
@@ -437,8 +461,9 @@ const AdvancedSummaryView = () => {
   }, [navigate, uploadedFiles]);
 
   // Handle export all
-  const handleExportAll = useCallback(() => {
-    const successfulFiles = uploadedFiles.filter(f => f.status === 'processed');
+  const handleExportAll = useCallback((filesToExport = null) => {
+    const filesToUse = filesToExport || uploadedFiles;
+    const successfulFiles = filesToUse.filter(f => f.status === 'processed');
     if (successfulFiles.length === 0) return;
 
     const headers = [
@@ -515,11 +540,12 @@ const AdvancedSummaryView = () => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  }, [uploadedFiles]);
+  }, [uploadedFiles, isRedacted]);
 
   // Handle detailed export with GG items as rows
-  const handleExportDetails = useCallback(() => {
-    const successfulFiles = uploadedFiles.filter(f => f.status === 'processed');
+  const handleExportDetails = useCallback((filesToExport = null) => {
+    const filesToUse = filesToExport || uploadedFiles;
+    const successfulFiles = filesToUse.filter(f => f.status === 'processed');
     if (successfulFiles.length === 0) return;
 
     const headers = [
@@ -766,6 +792,10 @@ const AdvancedSummaryView = () => {
                   onDeleteFile={handleDeleteFile}
                   isRedacted={isRedacted}
                   onToggleRedaction={toggleRedaction}
+                  paginationInfo={getPaginationInfo()}
+                  currentPage={currentPage}
+                  totalItems={uploadedFiles.length}
+                  onPageChange={goToPage}
                 />
               </div>
             )}

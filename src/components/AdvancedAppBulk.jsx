@@ -48,7 +48,7 @@ function AdvancedAppBulk() {
   // Debug: Check portal context
   const { isFromPortal } = usePortal();
   // Use bulk upload context
-  const { uploadedFiles, setUploadedFiles } = useBulkUpload();
+  const { uploadedFiles, setUploadedFiles, loadFileData } = useBulkUpload();
   
   // Use redaction context
   const { isRedacted, toggleRedaction } = useRedaction();
@@ -272,7 +272,7 @@ function AdvancedAppBulk() {
   }, [clearAllPatientData, navigate]);
 
   // Handle file selection
-  const handleFileSelect = useCallback((index) => {
+  const handleFileSelect = useCallback(async (index) => {
     
     // Save current modeled values to the previous file before switching
     // Only save if the user has actually made changes (userModeledValues doesn't exist or differs from original)
@@ -309,7 +309,7 @@ function AdvancedAppBulk() {
       // Load the selected file's detailed data into the current view
       setFileName(file.name);
       
-      // Load detailed data from _rawData if available
+      // Load detailed data from _rawData
       if (file._rawData) {
         setParsedValues(file._rawData.parsedValues || {});
         setGroupedSections(file._rawData.groupedSections || {});
@@ -323,7 +323,7 @@ function AdvancedAppBulk() {
         setVersionMultipliers(file.userVersionMultipliers || {});
         setManualCovariateOverrides(file.userManualCovariateOverrides || {});
       } else {
-        // Fallback to empty data if _rawData not available
+        // Fallback to empty data if no data available
         setParsedValues({});
         setGroupedSections({});
         setModeledValues({});

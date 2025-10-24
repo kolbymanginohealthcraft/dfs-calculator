@@ -10,7 +10,7 @@ import styles from './SummaryView.module.css';
 // Lazy load ExportView to avoid circular dependencies
 const ExportView = lazy(() => import('./ExportView'));
 
-const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction }) => {
+const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, isRedacted, onToggleRedaction, paginationInfo, currentPage, totalItems, onPageChange }) => {
   const [sortField, setSortField] = useState('status');
   const [sortDirection, setSortDirection] = useState('asc');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -23,6 +23,11 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
   const searchInputRef = useRef(null);
   const dropdownRef = useRef(null);
   const filterDropdownRef = useRef(null);
+
+  // Reset to page 1 when search or filter changes
+  React.useEffect(() => {
+    onPageChange(1);
+  }, [searchTerm, filterStatus, onPageChange]);
 
   const clearSearch = () => {
     setSearchTerm('');
@@ -111,7 +116,8 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
     return actualGain - requiredGain;
   }, [calculateUserModeledScore]);
 
-  const processedFiles = useMemo(() => {
+  // First, filter and sort all files
+  const filteredAndSortedFiles = useMemo(() => {
     return uploadedFiles
       .filter(file => {
         // Status filter
@@ -190,7 +196,14 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
           return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
         }
       });
-  }, [uploadedFiles, sortField, sortDirection, filterStatus, searchTerm]);
+  }, [uploadedFiles, sortField, sortDirection, filterStatus, searchTerm, calculateUserModeledScore]);
+
+  // Then apply pagination to the filtered and sorted files
+  const processedFiles = useMemo(() => {
+    const startIndex = (currentPage - 1) * 20;
+    const endIndex = startIndex + 20;
+    return filteredAndSortedFiles.slice(startIndex, endIndex);
+  }, [filteredAndSortedFiles, currentPage]);
 
   const handleSort = (field) => {
     if (sortField === field) {
@@ -372,7 +385,48 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
           <div className={styles.headerLeft}>
             <div className={styles.summaryTitle}>
               <FileText size={20} />
-              <span>Processed Files</span>
+              <div className={styles.titleContent}>
+                <span>Processed Files</span>
+                {paginationInfo && (
+                  <div className={styles.paginationInfoContainer}>
+                    <div className={styles.paginationInfo}>
+                      {(() => {
+                        const startIndex = (currentPage - 1) * 20;
+                        const endIndex = Math.min(currentPage * 20, filteredAndSortedFiles.length);
+                        const actualStart = Math.min(startIndex + 1, filteredAndSortedFiles.length);
+                        const actualEnd = Math.min(endIndex, filteredAndSortedFiles.length);
+                        
+                        if (actualStart > filteredAndSortedFiles.length) {
+                          return `No results found`;
+                        }
+                        
+                        return `Showing ${actualStart}-${actualEnd} of ${filteredAndSortedFiles.length} files`;
+                      })()}
+                    </div>
+                    {filteredAndSortedFiles.length > 0 && (
+                      <div className={styles.inlinePaginationControls}>
+                        <button
+                          className={styles.inlinePageButton}
+                          onClick={() => onPageChange(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          title="Previous page"
+                        >
+                          Previous
+                        </button>
+                        
+                        <button
+                          className={styles.inlinePageButton}
+                          onClick={() => onPageChange(currentPage + 1)}
+                          disabled={currentPage === Math.ceil(filteredAndSortedFiles.length / 20)}
+                          title="Next page"
+                        >
+                          Next
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div className={styles.headerActions}>
@@ -469,7 +523,7 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                   <button
                     className={styles.exportDropdownItem}
                     onClick={() => {
-                      onExportAll();
+                      onExportAll(filteredAndSortedFiles);
                       setShowExportDropdown(false);
                     }}
                     title="Export summary results to CSV"
@@ -485,7 +539,7 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                   <button
                     className={styles.exportDropdownItem}
                     onClick={() => {
-                      onExportDetails();
+                      onExportDetails(filteredAndSortedFiles);
                       setShowExportDropdown(false);
                     }}
                     title="Export detailed GG components to CSV"
@@ -719,8 +773,18 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
       {processedFiles.length === 0 && (
         <div className={styles.emptyState}>
           <FileText size={48} className={styles.emptyIcon} />
-          <h3>No files match the current filter</h3>
-          <p>Try adjusting your filter settings or upload new files</p>
+          <h3>
+            {filteredAndSortedFiles.length === 0 
+              ? "No files match the current filter" 
+              : "No files on this page"
+            }
+          </h3>
+          <p>
+            {filteredAndSortedFiles.length === 0 
+              ? "Try adjusting your filter settings or upload new files" 
+              : "Try going to the previous page or adjusting your search"
+            }
+          </p>
         </div>
       )}
 
