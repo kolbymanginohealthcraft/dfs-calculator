@@ -372,7 +372,7 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
           <div className={styles.headerLeft}>
             <div className={styles.summaryTitle}>
               <FileText size={20} />
-              <span>File Summary</span>
+              <span>Processed Files</span>
             </div>
           </div>
           <div className={styles.headerActions}>

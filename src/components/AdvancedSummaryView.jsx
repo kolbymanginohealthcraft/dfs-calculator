@@ -676,8 +676,8 @@ const AdvancedSummaryView = () => {
                   <FileText size={20} />
                 </div>
                 <div className={styles.headerText}>
-                  <h2>Bulk DFS Calculator</h2>
-                  <p>Upload and analyze multiple MDS files to compare function scores across patients</p>
+                  <h2>Analysis Console</h2>
+                  <p>Upload and analyze MDS files to compare function scores across patients</p>
                 </div>
               </div>
               {uploadedFiles.length > 0 && (
