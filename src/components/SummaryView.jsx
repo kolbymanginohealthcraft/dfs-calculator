@@ -18,9 +18,11 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [exportData, setExportData] = useState(null);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
+  const [showFilterDropdown, setShowFilterDropdown] = useState(false);
   const exportRef = useRef();
   const searchInputRef = useRef(null);
   const dropdownRef = useRef(null);
+  const filterDropdownRef = useRef(null);
 
   const clearSearch = () => {
     setSearchTerm('');
@@ -55,15 +57,22 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowExportDropdown(false);
       }
-    };
-
-    const handleEscapeKey = (event) => {
-      if (event.key === 'Escape' && showExportDropdown) {
-        setShowExportDropdown(false);
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(event.target)) {
+        setShowFilterDropdown(false);
       }
     };
 
-    if (showExportDropdown) {
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape') {
+        if (showExportDropdown) {
+          setShowExportDropdown(false);
+        } else if (showFilterDropdown) {
+          setShowFilterDropdown(false);
+        }
+      }
+    };
+
+    if (showExportDropdown || showFilterDropdown) {
       document.addEventListener('mousedown', handleClickOutside);
       document.addEventListener('keydown', handleEscapeKey);
     }
@@ -72,7 +81,7 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscapeKey);
     };
-  }, [showExportDropdown]);
+  }, [showExportDropdown, showFilterDropdown]);
 
   const processedFiles = useMemo(() => {
     return uploadedFiles
@@ -185,10 +194,23 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
   };
 
   const getStatusText = (file) => {
-    if (file.status === 'processed') return 'Ready';
+    if (file.status === 'processed') return 'Success';
     if (file.status === 'error') return 'Error';
     if (file.status === 'processing') return 'Processing';
     return 'Pending';
+  };
+
+  const getFilterDisplayText = () => {
+    switch (filterStatus) {
+      case 'all':
+        return `All Files (${uploadedFiles.length})`;
+      case 'success':
+        return `Success (${successfulCount})`;
+      case 'error':
+        return `Errors (${errorCount})`;
+      default:
+        return 'All Files';
+    }
   };
 
   // Calculate user's modeled end score from their modeled values
@@ -366,7 +388,6 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
           </div>
           <div className={styles.headerActions}>
             <div className={styles.searchGroup}>
-              <label>Search:</label>
               <div className={styles.searchBar}>
                 <Search className={styles.searchIcon} size={20} />
                 <input
@@ -392,26 +413,46 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
               </div>
             </div>
             <div className={styles.filterGroup}>
-              <label>Filter:</label>
-              <div className={styles.filterButtons}>
+              <div className={styles.filterDropdown} ref={filterDropdownRef}>
                 <button
-                  className={`${styles.filterButton} ${filterStatus === 'all' ? styles.filterButtonActive : ''}`}
-                  onClick={() => setFilterStatus('all')}
+                  className={styles.filterDropdownButton}
+                  onClick={() => setShowFilterDropdown(!showFilterDropdown)}
+                  title="Filter files by status"
                 >
-                  All ({uploadedFiles.length})
+                  {getFilterDisplayText()}
+                  <ChevronDown size={14} className={styles.chevronIcon} />
                 </button>
-                <button
-                  className={`${styles.filterButton} ${filterStatus === 'success' ? styles.filterButtonActive : ''}`}
-                  onClick={() => setFilterStatus('success')}
-                >
-                  Success ({successfulCount})
-                </button>
-                <button
-                  className={`${styles.filterButton} ${filterStatus === 'error' ? styles.filterButtonActive : ''}`}
-                  onClick={() => setFilterStatus('error')}
-                >
-                  Errors ({errorCount})
-                </button>
+                {showFilterDropdown && (
+                  <div className={styles.filterDropdownMenu}>
+                    <button
+                      className={`${styles.filterDropdownItem} ${filterStatus === 'all' ? styles.filterDropdownItemActive : ''}`}
+                      onClick={() => {
+                        setFilterStatus('all');
+                        setShowFilterDropdown(false);
+                      }}
+                    >
+                      All Files ({uploadedFiles.length})
+                    </button>
+                    <button
+                      className={`${styles.filterDropdownItem} ${filterStatus === 'success' ? styles.filterDropdownItemActive : ''}`}
+                      onClick={() => {
+                        setFilterStatus('success');
+                        setShowFilterDropdown(false);
+                      }}
+                    >
+                      Success ({successfulCount})
+                    </button>
+                    <button
+                      className={`${styles.filterDropdownItem} ${filterStatus === 'error' ? styles.filterDropdownItemActive : ''}`}
+                      onClick={() => {
+                        setFilterStatus('error');
+                        setShowFilterDropdown(false);
+                      }}
+                    >
+                      Errors ({errorCount})
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
             {onToggleRedaction && (
@@ -420,7 +461,7 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
                 onClick={onToggleRedaction}
                 title={isRedacted ? "Show patient names" : "Hide patient names"}
               >
-                {isRedacted ? <><EyeOff className={styles.buttonIcon} size={16} /> Names are redacted</> : <><Eye className={styles.buttonIcon} size={16} /> Names are showing</>}
+                {isRedacted ? <><EyeOff className={styles.buttonIcon} size={16} /> Redaction On</> : <><Eye className={styles.buttonIcon} size={16} /> Redaction Off</>}
               </button>
             )}
             <div className={styles.exportDropdown} ref={dropdownRef}>
@@ -500,32 +541,36 @@ const SummaryView = ({ uploadedFiles, onSelectFile, onExportAll, onExportDetails
                   Patient {getSortIcon('patientName')}
                 </th>
                 <th 
-                  className={styles.sortableHeader}
+                  className={`${styles.sortableHeader} ${styles.startScoreHeader}`}
                   onClick={() => handleSort('startScore')}
                 >
+                  <span className={`${styles.scoreDot} ${styles.startDot}`}></span>
                   Start Score {getSortIcon('startScore')}
                 </th>
                 <th 
-                  className={styles.sortableHeader}
+                  className={`${styles.sortableHeader} ${styles.expectedScoreHeader}`}
                   onClick={() => handleSort('expectedScore')}
                 >
+                  <span className={`${styles.scoreDot} ${styles.expectedDot}`}></span>
                   Expected Score {getSortIcon('expectedScore')}
                 </th>
                 <th 
-                  className={styles.sortableHeader}
+                  className={`${styles.sortableHeader} ${styles.endScoreHeader}`}
                   onClick={() => handleSort('userModeledScore')}
                   title="This is not the patient's actual end score. This is a modeled score based on the values you have set."
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span className={`${styles.scoreDot} ${styles.endDot}`}></span>
                     <span>Modeled End Score</span>
                     <Info size={14} style={{ opacity: 0.6 }} />
                   </div>
                   {getSortIcon('userModeledScore')}
                 </th>
                 <th 
-                  className={styles.sortableHeader}
+                  className={`${styles.sortableHeader} ${styles.gainHeader}`}
                   onClick={() => handleSort('gainVsRequired')}
                 >
+                  <span className={`${styles.scoreDot} ${styles.gainDot}`}></span>
                   Gain {getSortIcon('gainVsRequired')}
                 </th>
                 <th 

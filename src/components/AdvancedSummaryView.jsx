@@ -789,16 +789,20 @@ const AdvancedSummaryView = () => {
               {uploadedFiles.length > 0 && (
                 <div className={styles.headerStats}>
                   <div className={styles.statCard}>
-                    <span className={styles.statNumber}>{uploadedFiles.filter(f => f.status === 'processed').length}</span>
-                    <span className={styles.statLabel}>Ready</span>
-                  </div>
-                  <div className={styles.statCard}>
-                    <span className={styles.statNumber}>{uploadedFiles.filter(f => f.status === 'error').length}</span>
-                    <span className={styles.statLabel}>Errors</span>
-                  </div>
-                  <div className={styles.statCard}>
-                    <span className={styles.statNumber}>{uploadedFiles.filter(f => f.status === 'processed' || f.status === 'error').length}</span>
-                    <span className={styles.statLabel}>Completed</span>
+                    <div className={styles.statMainContent}>
+                      <span className={styles.statNumber}>{uploadedFiles.filter(f => f.status === 'processed' || f.status === 'error').length}</span>
+                      <span className={styles.statLabel}>Files Analyzed</span>
+                    </div>
+                    <div className={styles.statBreakdown}>
+                      <span className={styles.breakdownItem}>
+                        <span className={styles.breakdownNumber}>{uploadedFiles.filter(f => f.status === 'processed').length}</span>
+                        <span className={styles.breakdownLabel}>Success</span>
+                      </span>
+                      <span className={styles.breakdownItem}>
+                        <span className={styles.breakdownNumber}>{uploadedFiles.filter(f => f.status === 'error').length}</span>
+                        <span className={styles.breakdownLabel}>Errors</span>
+                      </span>
+                    </div>
                   </div>
                   {(() => {
                     const processedFiles = uploadedFiles.filter(f => f.status === 'processed' && f.results?.scoreDifference !== undefined);
@@ -807,8 +811,10 @@ const AdvancedSummaryView = () => {
                       : '0.0';
                     return (
                       <div className={styles.statCard}>
-                        <span className={styles.statNumber}>{avgRequiredGain}</span>
-                        <span className={styles.statLabel}>Avg Required Gain</span>
+                        <div className={styles.statMainContent}>
+                          <span className={styles.statNumber}>{avgRequiredGain}</span>
+                          <span className={styles.statLabel}>Avg Required Gain</span>
+                        </div>
                       </div>
                     );
                   })()}

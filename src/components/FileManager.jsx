@@ -32,7 +32,7 @@ const FileManager = ({
   const getStatusText = (file) => {
     if (file.status === 'processing') return 'Processing...';
     if (file.status === 'error') return 'Error';
-    if (file.status === 'processed') return 'Ready';
+    if (file.status === 'processed') return 'Success';
     return 'Pending';
   };
 
@@ -94,7 +94,7 @@ const FileManager = ({
           <div className={styles.summaryStats}>
             <div className={styles.statItem}>
               <CheckCircle size={14} className={styles.successIcon} />
-              <span>{successfulFiles.length} Ready</span>
+              <span>{successfulFiles.length} Success</span>
             </div>
             {processingFiles.length > 0 && (
               <div className={styles.statItem}>
