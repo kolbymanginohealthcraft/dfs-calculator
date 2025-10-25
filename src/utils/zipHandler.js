@@ -23,7 +23,7 @@ export async function extractXmlFilesFromZip(zipFile) {
     const xmlFiles = [];
     
     // Security limits
-    const MAX_FILES = 50; // Maximum number of files to extract
+    const MAX_FILES = 150; // Maximum number of files to extract
     const MAX_FILE_SIZE = 1024 * 1024; // 1MB per file
     const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB total
     

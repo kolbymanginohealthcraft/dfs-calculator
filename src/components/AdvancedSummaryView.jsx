@@ -548,7 +548,7 @@ const AdvancedSummaryView = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `dfs-bulk-results-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `dfs-summary-${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -621,7 +621,7 @@ const AdvancedSummaryView = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `dfs-bulk-details-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `dfs-details-${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
