@@ -474,6 +474,58 @@ function AdvancedAppDetail() {
     setShowClearWarning(true);
   }, []);
 
+  // Handle file drops from detail view - process files and redirect to summary
+  const handleFileDrop = useCallback(async (acceptedFiles) => {
+    if (acceptedFiles.length === 0) {
+      // Empty array means clear button was clicked - show warning
+      setShowClearWarning(true);
+      return;
+    }
+
+    // Save current modeled values to the current file before processing new files
+    if (currentFile && currentFile.status === 'processed') {
+      const originalModeledValues = currentFile._rawData?.modeledValues || {};
+      const hasChanges = JSON.stringify(modeledValues) !== JSON.stringify(originalModeledValues);
+      
+      if (hasChanges || currentFile.userModeledValues) {
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === currentFile.id 
+            ? { 
+                ...f, 
+                userModeledValues: { ...modeledValues },
+                userCovariates: { ...covariates },
+                userWeightedScore: weightedScore,
+                userVersionMultipliers: { ...versionMultipliers },
+                userManualCovariateOverrides: { ...manualCovariateOverrides }
+              }
+            : f
+        ));
+      }
+    }
+
+    // Create new file entries and add them to uploadedFiles
+    const newFiles = [];
+    for (const file of acceptedFiles) {
+      newFiles.push({
+        id: `file-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        name: file.name,
+        file: file,
+        size: file.size,
+        status: 'pending',
+        error: null
+      });
+    }
+
+    // Add new files to the list
+    setUploadedFiles(prev => {
+      const updated = [...prev, ...newFiles];
+      return updated;
+    });
+    
+    // Navigate to summary page - the summary view will auto-process the pending files
+    navigate('/advanced/summary');
+  }, [currentFile, modeledValues, covariates, weightedScore, versionMultipliers, manualCovariateOverrides, setUploadedFiles, navigate]);
+
   const handleConfirmClearAll = useCallback(() => {
     setUploadedFiles([]);
     setCurrentFileIndex(-1);
@@ -489,7 +541,7 @@ function AdvancedAppDetail() {
   const advancedNavbar = (
     <>
       <Navbar 
-        onDrop={handleClearAll}
+        onDrop={handleFileDrop}
         onExport={handleExport} 
         hasFile={hasFile} 
         fileName={fileName} 
