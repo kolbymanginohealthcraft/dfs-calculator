@@ -42,7 +42,14 @@ const ModeBanner = ({
 
   const handleSwitchCalculator = () => {
     if (isBasicRoute) {
-      // Check if there is basic mode data that would be lost when switching to advanced
+      // First check if user has access to advanced mode
+      if (!isFromPortal) {
+        // Show modal for public users (no access to advanced mode)
+        setShowModal(true);
+        return;
+      }
+      
+      // User has portal access, now check for data loss
       if (hasBasicDataToLose) {
         if (onSwitchToAdvanced) {
           onSwitchToAdvanced();
@@ -50,13 +57,8 @@ const ModeBanner = ({
           setShowDataLossWarning(true);
         }
       } else {
-        // Only allow switching to advanced if user is from portal
-        if (isFromPortal) {
-          navigate('/advanced');
-        } else {
-          // Show modal for public users
-          setShowModal(true);
-        }
+        // No data to lose, proceed to advanced mode
+        navigate('/advanced');
       }
     } else if (isAdvancedRoute) {
       // Check if there are files that would be lost when switching to basic
@@ -249,6 +251,17 @@ const ModeBanner = ({
       <CustomerAccessModal 
         isOpen={showModal} 
         onClose={() => setShowModal(false)} 
+      />
+      
+      {/* Data Loss Warning Modal */}
+      <DataLossWarningModal
+        isOpen={showDataLossWarning}
+        onClose={handleCancelSwitch}
+        onConfirm={handleConfirmSwitch}
+        title="Switch to Advanced Mode"
+        message="You have entered data that will be lost if you switch to advanced mode. Are you sure you want to continue?"
+        confirmText="Yes, Switch"
+        cancelText="Stay in Basic"
       />
       
     </div>
