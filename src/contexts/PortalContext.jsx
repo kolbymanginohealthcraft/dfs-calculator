@@ -15,7 +15,7 @@ export const PortalProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   // DEV FLAG: Set to false to disable referrer checking for development
-  const ENABLE_REFERRER_CHECK = false;
+  const ENABLE_REFERRER_CHECK = true;
 
   useEffect(() => {
     if (!ENABLE_REFERRER_CHECK) {
