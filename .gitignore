@@ -28,6 +28,16 @@ dist-ssr
 # Test data files (MDS XML files for testing)
 test-data/examples/*.xml
 
+# Batch test files (zipped folders for demonstrations)
+**/test-data/**/*.zip
+**/test-data/**/*.7z
+**/test-data/**/*.tar
+**/test-data/**/*.tar.gz
+*.zip
+*.7z
+*.tar
+*.tar.gz
+
 # Bulk processing output
 bulk-results.csv
 bulk-results-imputation-details.csv

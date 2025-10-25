@@ -23,15 +23,28 @@ function AdvancedRouteHandler() {
   const fileId = urlParams.get('fileId');
   const isDetailViewRequest = fileId !== null;
 
-  // Synchronize URL with the actual state, but not if it's a detail view request
+  // Handle redirect logic for detail view requests
   useEffect(() => {
     if (isDetailViewRequest) {
-      // Don't redirect if this is a detail view request
+      // If there's a fileId but no files (e.g., after refresh), redirect to /advanced
+      if (!hasFiles) {
+        navigate('/advanced', { replace: true });
+        return;
+      }
+      
+      // If there's a fileId and files exist, check if the file exists
+      const fileExists = uploadedFiles.some(file => file.id === fileId);
+      if (!fileExists) {
+        // File doesn't exist, redirect to /advanced
+        navigate('/advanced', { replace: true });
+        return;
+      }
+      
+      // File exists and we have files, let AdvancedAppDetail handle it
       return;
     }
     
-    // Since AdvancedSummaryView now handles both upload and summary states,
-    // we can simplify the URL logic
+    // Handle other routing logic
     if (!hasFiles && location.pathname === '/advanced/summary') {
       // No files but on summary URL - redirect to main advanced page
       navigate('/advanced', { replace: true });
@@ -39,10 +52,10 @@ function AdvancedRouteHandler() {
       // Has files but on upload URL - redirect to summary page (unless it's a detail view)
       navigate('/advanced/summary', { replace: true });
     }
-  }, [hasFiles, location.pathname, navigate, isDetailViewRequest]);
+  }, [hasFiles, location.pathname, navigate, isDetailViewRequest, uploadedFiles, fileId]);
 
-  // If there's a fileId parameter, show the detail view (AdvancedAppDetail handles this)
-  if (isDetailViewRequest) {
+  // If there's a fileId parameter and we have files, show the detail view
+  if (isDetailViewRequest && hasFiles) {
     return <AdvancedAppDetail />;
   }
 
