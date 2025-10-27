@@ -311,6 +311,27 @@
   margin: 0;
 }
 
+.faq-answer ul {
+  margin: var(--spacing-sm) 0;
+  padding-left: var(--spacing-md);
+}
+
+.faq-answer li {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-xs);
+}
+
+.faq-answer li:last-child {
+  margin-bottom: 0;
+}
+
+.faq-answer strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;

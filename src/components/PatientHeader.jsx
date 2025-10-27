@@ -21,6 +21,7 @@ const PatientHeader = ({
   facilityAddress,
   conditionCategory,
   mobilityType,
+  fileName,
 }) => {
   if (!hasFile) {
     return (
@@ -57,6 +58,13 @@ const PatientHeader = ({
           </button>
         </div>
       </div>
+      
+      {/* File Name Display */}
+      {fileName && (
+        <div className={styles.fileNameRow}>
+          <span className={styles.fileNameText}>File: {fileName}</span>
+        </div>
+      )}
       
       {/* Compact Overview Information */}
       <div className={styles.compactOverview}>

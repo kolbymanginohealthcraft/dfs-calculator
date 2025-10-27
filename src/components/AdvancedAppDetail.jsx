@@ -624,6 +624,7 @@ function AdvancedAppDetail() {
                     facilityAddress={facilityAddress}
                     conditionCategory={conditionCategory}
                     mobilityType={mobilityType}
+                    fileName={fileName}
                   />
                 </Suspense>
               </div>

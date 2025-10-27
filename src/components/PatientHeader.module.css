@@ -46,6 +46,24 @@
   color: #666;
 }
 
+/* File Name Display */
+.fileNameRow {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.fileNameText {
+  font-size: 0.7rem;
+  color: #4a5568;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
 
 .placeholder {
   font-style: italic;

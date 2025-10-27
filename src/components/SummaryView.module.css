@@ -179,6 +179,12 @@
   color: #ef4444;
 }
 
+.errorDetail {
+  font-size: 0.85em;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
 .pendingIcon {
   color: var(--accent-color);
 }

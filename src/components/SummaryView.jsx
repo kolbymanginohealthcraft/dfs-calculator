@@ -236,7 +236,61 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
 
   const getStatusText = (file) => {
     if (file.status === 'processed') return 'Success';
-    if (file.status === 'error') return 'Error';
+    if (file.status === 'error') {
+      // Extract concise error label from error message
+      const error = file.error || '';
+      
+      // Debug: log the actual error message to see what we're working with
+      if (error) {
+        console.log('Error message:', error);
+      }
+      
+      // Assessment type errors - match the actual error message format
+      if (error.includes('This is an ND')) return <span>Error: <span className={styles.errorDetail}>Discharge Assessment</span></span>;
+      if (error.includes('This is an NQ')) return <span>Error: <span className={styles.errorDetail}>Quarterly Assessment</span></span>;
+      if (error.includes('This is an NT')) return <span>Error: <span className={styles.errorDetail}>Tracking Record</span></span>;
+      if (error.includes('This is an SP')) return <span>Error: <span className={styles.errorDetail}>Swing Bed PPS</span></span>;
+      if (error.includes('This is an SD')) return <span>Error: <span className={styles.errorDetail}>Swing Bed Discharge</span></span>;
+      if (error.includes('This is an ST')) return <span>Error: <span className={styles.errorDetail}>Swing Bed Tracking</span></span>;
+      if (error.includes('This is an XX')) return <span>Error: <span className={styles.errorDetail}>Inactivation Record</span></span>;
+      if (error.includes('This is an NPE')) return <span>Error: <span className={styles.errorDetail}>PPS Part A Discharge</span></span>;
+      if (error.includes('This is an IPA')) return <span>Error: <span className={styles.errorDetail}>Interim Payment</span></span>;
+      if (error.includes('This is an OSA')) return <span>Error: <span className={styles.errorDetail}>Other State Assessment</span></span>;
+      
+      // A0310A assessment type errors
+      if (error.includes('A0310A: \'02\'')) return <span>Error: <span className={styles.errorDetail}>Quarterly Review</span></span>;
+      if (error.includes('A0310A: \'03\'')) return <span>Error: <span className={styles.errorDetail}>Annual Assessment</span></span>;
+      if (error.includes('A0310A: \'04\'')) return <span>Error: <span className={styles.errorDetail}>Significant Change</span></span>;
+      if (error.includes('A0310A: \'05\'')) return <span>Error: <span className={styles.errorDetail}>Significant Correction</span></span>;
+      if (error.includes('A0310A: \'06\'')) return <span>Error: <span className={styles.errorDetail}>Quarterly Correction</span></span>;
+      
+      // File format errors
+      if (error.includes('PDF conversion') || error.includes('iText conversion') || error.includes('converted from a PDF')) return <span>Error: <span className={styles.errorDetail}>PDF Converted</span></span>;
+      if (error.includes('form field') || error.includes('checkbox symbols') || error.includes('form field indicators')) return <span>Error: <span className={styles.errorDetail}>Form Converted</span></span>;
+      if (error.includes('File size') && error.includes('exceeds')) return <span>Error: <span className={styles.errorDetail}>File Too Large</span></span>;
+      if (error.includes('File extension') && error.includes('not allowed')) return <span>Error: <span className={styles.errorDetail}>Wrong File Type</span></span>;
+      
+      // XML structure errors
+      if (error.includes('Invalid XML syntax')) return <span>Error: <span className={styles.errorDetail}>Invalid XML</span></span>;
+      if (error.includes('root element') && error.includes('instead of')) return <span>Error: <span className={styles.errorDetail}>Wrong Root Element</span></span>;
+      if (error.includes('XML structure')) return <span>Error: <span className={styles.errorDetail}>Invalid XML Structure</span></span>;
+      
+      // MDS content errors
+      if (error.includes('Missing required MDS elements')) return <span>Error: <span className={styles.errorDetail}>Missing MDS Data</span></span>;
+      if (error.includes('Missing required GG function elements')) return <span>Error: <span className={styles.errorDetail}>Missing Function Data</span></span>;
+      if (error.includes('Invalid GG function values')) return <span>Error: <span className={styles.errorDetail}>Invalid Function Scores</span></span>;
+      if (error.includes('Invalid date format')) return <span>Error: <span className={styles.errorDetail}>Invalid Date Format</span></span>;
+      if (error.includes('proper MDS elements')) return <span>Error: <span className={styles.errorDetail}>Not MDS File</span></span>;
+      
+      // Discharge assessment detection
+      if (error.includes('discharge assessment file')) return <span>Error: <span className={styles.errorDetail}>Discharge Assessment</span></span>;
+      
+      // Generic processing errors
+      if (error.includes('failed to process file') || error.includes('missing or invalid data')) return <span>Error: <span className={styles.errorDetail}>Missing or Invalid Data</span></span>;
+      
+      // Default fallback
+      return 'Error';
+    }
     if (file.status === 'processing') return 'Processing';
     return 'Pending';
   };

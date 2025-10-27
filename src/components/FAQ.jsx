@@ -310,6 +310,63 @@ const FAQ = () => {
       ]
     },
     {
+      category: "File Upload Issues",
+      questions: [
+        {
+          question: "What file format errors might I encounter?",
+          answer: (
+            <div>
+              <p><strong>Common file format errors include:</strong></p>
+              <ul>
+                <li><strong>PDF Converted:</strong> File was converted from PDF to XML instead of being exported from EMR</li>
+                <li><strong>Form Converted:</strong> Contains form field indicators instead of data</li>
+                <li><strong>File Too Large:</strong> Exceeds 10MB limit</li>
+                <li><strong>Wrong File Type:</strong> Not an XML file</li>
+                <li><strong>Invalid XML:</strong> Syntax errors in the XML structure</li>
+                <li><strong>Wrong Root Element:</strong> Missing ASSESSMENT or MDS root element</li>
+                <li><strong>Invalid XML Structure:</strong> Improper XML format</li>
+              </ul>
+              <p><strong>Solution:</strong> Always export your MDS data directly as XML from your EMR system, not from converted PDFs or other formats.</p>
+            </div>
+          )
+        },
+        {
+          question: "What assessment type errors might I see?",
+          answer: (
+            <div>
+              <p><strong>Accepted assessment types:</strong> Only NC (Nursing home comprehensive) and NP (Nursing home PPS) assessments are supported.</p>
+              <p><strong>Common errors include:</strong></p>
+              <ul>
+                <li><strong>Discharge Assessment:</strong> ND, SD, NPE assessments</li>
+                <li><strong>Quarterly Assessment:</strong> NQ assessments</li>
+                <li><strong>Tracking Record:</strong> NT, ST assessments</li>
+                <li><strong>Swing Bed assessments:</strong> SP, SD, ST assessments</li>
+                <li><strong>Incorrect A0310A (Type of Assessment) values:</strong> Only 01 (admission) or 99 ('none of the above') are accepted</li>
+              </ul>
+              <p><strong>Solution:</strong> Upload only NC or NP assessments with proper assessment types.</p>
+            </div>
+          )
+        },
+        {
+          question: "What data content errors might occur?",
+          answer: (
+            <div>
+              <p><strong>Data content errors include:</strong></p>
+              <ul>
+                <li><strong>Missing MDS Data:</strong> Missing required elements like A0100A (NPI), A0100B (CCN), A2300 (ARD), I0020 (Primary Medical Condition Category)</li>
+                <li><strong>Insufficient Function Data:</strong> Not enough GG function assessment elements for reliable imputation (minimum 5 required)</li>
+                <li><strong>Invalid Function Scores:</strong> GG values must be 01-06, 07, 09, 10, 88, ^, or -</li>
+                <li><strong>Invalid Date Format:</strong> A2300 (Assessment Reference Date) must be YYYY-MM-DD or YYYYMMDD</li>
+                <li><strong>Not MDS File:</strong> Insufficient MDS elements</li>
+                <li><strong>Missing or Invalid Data:</strong> General processing failures</li>
+              </ul>
+              <p><strong>Solution:</strong> Ensure your MDS file contains complete, valid data for all required elements.</p>
+            </div>
+          )
+        }
+      ]
+    },
+    {
       category: "Technical Support",
       questions: [
         {
@@ -319,6 +376,10 @@ const FAQ = () => {
         {
           question: "What if I encounter an error?",
           answer: "If you encounter technical issues, try refreshing the page or clearing your browser cache. For file upload issues, ensure your MDS file is in the correct XML format. Contact your IT support if problems persist."
+        },
+        {
+          question: "How do I know if my MDS file is correct?",
+          answer: "A correct MDS file should be: 1) Exported directly from your EMR system as XML, 2) Be an NC (comprehensive) or NP (PPS) assessment type, 3) Contain complete function assessment data (GG items), 4) Have proper XML structure with ASSESSMENT or MDS root element, and 5) Be under 10MB in size."
         }
         // {
         //   question: "Is there a mobile version?",

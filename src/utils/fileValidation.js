@@ -9,16 +9,13 @@ const VALIDATION_CONFIG = {
   ALLOWED_MIME_TYPES: ['text/xml', 'application/xml'],
   ALLOWED_EXTENSIONS: ['.xml'],
   REQUIRED_MDS_ELEMENTS: [
-    'A0100A', // First name
-    'A0100B', // Last name
+    'A0100A', // National Provider Identifier (NPI)
+    'A0100B', // CMS Certification Number (CCN)
     'A2300',  // Assessment reference date
-    'I0020',  // Primary reason for assessment
+    'I0020',  // Primary medical condition category
   ],
-  REQUIRED_GG_ELEMENTS: [
-    'GG0130A1', 'GG0130B1', 'GG0130C1', // Self-care items
-    'GG0170A1', 'GG0170B1', 'GG0170C1', // Mobility items
-  ],
-  VALID_GG_VALUES: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '88', '^', '-'],
+  MIN_GG_ELEMENTS_REQUIRED: 5, // Minimum number of GG elements needed for reliable imputation
+  VALID_GG_VALUES: ['01', '02', '03', '04', '05', '06', '07', '09', '10', '88', '^', '-'],
   VALID_DATE_PATTERN: /^\d{4}-\d{2}-\d{2}$|^\d{8}$/,
 };
 
@@ -238,34 +235,36 @@ export function validateMdsContent(parsedData) {
     );
   }
 
-  // Check for required GG elements
-  const missingGG = VALIDATION_CONFIG.REQUIRED_GG_ELEMENTS.filter(
-    element => !parsedData[element]
-  );
-
-  if (missingGG.length > 0) {
-    // Check if this is a discharge assessment (contains "3" suffix elements)
-    const dischargeElements = Object.keys(parsedData).filter(key => 
-      key.startsWith('GG0130') && key.endsWith('3') || 
-      key.startsWith('GG0170') && key.endsWith('3')
+  // Check if this is a discharge assessment based on ITM_SBST_CD
+  if (itemSetCode === 'ND') {
+    result.addError(
+      'This is a discharge assessment file. Discharge assessments are not accepted for function score calculations.',
+      'DISCHARGE_ASSESSMENT_DETECTED'
     );
-    
-    if (dischargeElements.length > 0) {
-      result.addError(
-        'This appears to be a discharge assessment file. Discharge assessments are not accepted for function score calculations.',
-        'DISCHARGE_ASSESSMENT_DETECTED'
-      );
-    } else {
-      result.addError(
-        `Missing required GG function elements: ${missingGG.join(', ')}. This file cannot be used for function score calculations.`,
-        'MISSING_GG_ELEMENTS'
-      );
-    }
   }
 
-  // Validate GG element values
+  // Check for minimum number of GG elements needed for reliable imputation
+  const ggElements = Object.keys(parsedData).filter(key => 
+    (key.startsWith('GG0130') || key.startsWith('GG0170')) && 
+    key.endsWith('1')
+  );
+  
+  if (ggElements.length < VALIDATION_CONFIG.MIN_GG_ELEMENTS_REQUIRED) {
+    result.addError(
+      `Insufficient GG function elements found (${ggElements.length} of minimum ${VALIDATION_CONFIG.MIN_GG_ELEMENTS_REQUIRED} required). This file may not have enough data for reliable function score calculations.`,
+      'INSUFFICIENT_GG_ELEMENTS'
+    );
+  }
+
+  // Validate GG element values for the elements that are present
+  // Exclude wheelchair/scooter items (Q, RR, SS) as they use different scales
   const invalidGGValues = [];
-  VALIDATION_CONFIG.REQUIRED_GG_ELEMENTS.forEach(element => {
+  ggElements.forEach(element => {
+    // Skip wheelchair/scooter items that don't use the 01-06 scale
+    if (element.includes('Q') || element.includes('RR') || element.includes('SS')) {
+      return;
+    }
+    
     const value = parsedData[element];
     if (value && !VALIDATION_CONFIG.VALID_GG_VALUES.includes(value)) {
       invalidGGValues.push(`${element}: ${value}`);
@@ -274,7 +273,7 @@ export function validateMdsContent(parsedData) {
 
   if (invalidGGValues.length > 0) {
     result.addError(
-      `Invalid GG function values found: ${invalidGGValues.join(', ')}. Values must be 01-10, 88, ^ (not applicable), or - (dash).`,
+      `Invalid GG function values found: ${invalidGGValues.join(', ')}. Values must be 01-06, 07, 09, 10, 88, ^ (not applicable), or - (dash).`,
       'INVALID_GG_VALUES'
     );
   }
@@ -500,17 +499,17 @@ export function generateUserFriendlyMessage(validationResult) {
       message: 'This file is missing required MDS data elements.',
       suggestion: 'Please ensure you are uploading a complete MDS assessment file exported from your EMR system.'
     },
-    MISSING_GG_ELEMENTS: {
+    INSUFFICIENT_GG_ELEMENTS: {
       type: 'error',
-      title: 'Missing Function Assessment Data',
-      message: 'This file is missing required function assessment (GG) elements.',
-      suggestion: 'Please ensure your MDS file includes complete function assessments for self-care and mobility items.'
+      title: 'Insufficient Function Data',
+      message: 'This file does not have enough function assessment (GG) elements for reliable calculations.',
+      suggestion: 'Please ensure your MDS file includes sufficient function assessments. The imputation system requires a minimum number of GG elements to work effectively.'
     },
     INVALID_GG_VALUES: {
       type: 'error',
       title: 'Invalid Function Scores',
       message: 'The file contains invalid function assessment scores.',
-      suggestion: 'Please check that all GG items have valid scores (01-10, 88, ^ for not applicable, or - for dash) in your EMR system.'
+      suggestion: 'Please check that all GG items have valid scores (01-06, 07, 09, 10, 88, ^ for not applicable, or - for dash) in your EMR system.'
     },
     INVALID_DATE_FORMAT: {
       type: 'error',

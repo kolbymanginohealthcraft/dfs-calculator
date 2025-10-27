@@ -46,7 +46,10 @@ export async function handleFileUploadWithValidation(
       
       // Pass detailed error to callback if provided
       if (errorCallback) {
-        const fullMessage = `${userMessage.title}: ${userMessage.message}. ${userMessage.suggestion}`;
+        // Clean up double periods by ensuring proper spacing
+        const cleanMessage = userMessage.message.endsWith('.') ? userMessage.message : `${userMessage.message}.`;
+        const cleanSuggestion = userMessage.suggestion.endsWith('.') ? userMessage.suggestion : `${userMessage.suggestion}.`;
+        const fullMessage = `${userMessage.title}: ${cleanMessage} ${cleanSuggestion}`;
         errorCallback({
           message: fullMessage,
           title: userMessage.title,
