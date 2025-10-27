@@ -673,8 +673,15 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                 <th 
                   className={styles.sortableHeader}
                   onClick={() => handleSort('status')}
+                  title={filteredAndSortedFiles.some(f => f.status === 'error') ? "Hover over error rows to see detailed error descriptions" : undefined}
                 >
-                  Status {getSortIcon('status')}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <span>Status</span>
+                    {filteredAndSortedFiles.some(f => f.status === 'error') && (
+                      <Info size={14} style={{ opacity: 0.6 }} />
+                    )}
+                    <span>{getSortIcon('status')}</span>
+                  </div>
                 </th>
               </tr>
             </thead>
