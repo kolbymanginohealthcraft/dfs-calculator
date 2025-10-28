@@ -26,7 +26,7 @@ export const updateScore = (scores, category, key, value) => {
  * @param {Object} startScores - Start scores object for validation (optional)
  * @returns {Object} - Updated scores object
  */
-import { clampScore } from './scoreCalculations';
+import { clampScore } from './scoreCalculations.js';
 
 export const adjustScore = (scores, key, delta, startScores = null) => {
   const category = getCategoryForKey(key);
@@ -50,8 +50,8 @@ export const adjustScore = (scores, key, delta, startScores = null) => {
  * @param {string} key - Item key
  * @returns {string|null} - Category name or null if not found
  */
-import { GG_TO_BASIC_MAPPING } from './itemAdapters';
-import { GG_ITEMS } from './calculations';
+import { GG_TO_BASIC_MAPPING } from './itemAdapters.js';
+import { GG_ITEMS } from './calculations.js';
 
 export const getCategoryForKey = (key) => {
   // Handle the duplicate wheelchair R item
@@ -75,7 +75,7 @@ export const getCategoryForKey = (key) => {
  * @param {string} key - Item key
  * @returns {boolean} - True if score is at minimum
  */
-import { SCORE_CONSTANTS } from './itemDefinitions';
+import { SCORE_CONSTANTS } from './itemDefinitions.js';
 
 export const isScoreAtMin = (scores, key) => {
   const category = getCategoryForKey(key);
@@ -120,7 +120,7 @@ export const getScoreValue = (scores, key) => {
  * @param {Object} scores - Current scores object
  * @returns {Object} - Reset scores object
  */
-import { getInitialScores } from './itemDefinitions';
+import { getInitialScores } from './itemDefinitions.js';
 
 export const resetScoresToDefault = (scores, mobilityType = 'Walk') => {
   return getInitialScores(mobilityType);

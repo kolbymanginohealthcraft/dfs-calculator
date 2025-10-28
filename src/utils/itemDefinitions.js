@@ -2,8 +2,8 @@
 // This file now uses the unified GG_ITEMS structure from the advanced version
 // while maintaining backward compatibility with the basic version
 
-import { GG_ITEMS } from './calculations';
-import { convertBasicItemsToGG, getBasicContributingKeys } from './itemAdapters';
+import { GG_ITEMS } from './calculations.js';
+import { convertBasicItemsToGG, getBasicContributingKeys } from './itemAdapters.js';
 
 // Note: itemDefs has been removed - basic mode now uses unified GG_ITEMS descriptions
 // via getBasicContributingItems() function in itemAdapters.js

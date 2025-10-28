@@ -11,6 +11,7 @@ import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../uti
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
 import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
 import { getFunctionMultipliers } from '../utils/coefficientLoader';
+import { AdvancedAPIService, isPortalContext, getAuthToken } from '../utils/apiService';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
 import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import { useRedaction } from '../contexts/RedactionContext';
@@ -47,6 +48,10 @@ const AdvancedSummaryView = () => {
   
   const { isRedacted, toggleRedaction } = useRedaction();
   const uploadOpenFunctionRef = useRef(null);
+  
+  // Initialize API service for advanced mode
+  const authToken = getAuthToken();
+  const apiService = authToken ? new AdvancedAPIService(authToken) : null;
   
   const cancelledRef = useRef(false);
   const processingStartedRef = useRef(false);
@@ -236,24 +241,52 @@ const AdvancedSummaryView = () => {
             }
             
             if (result && parsedData && startData) {
-              // Calculate scores
-              const startScore = calculateFunctionScore(startData);
+              // Calculate scores using API service if available, otherwise fallback to client-side
+              let startScore, expectedScore, summary, mobilityType;
               
-              // Calculate expected score using the same logic as AdvancedAppBulk
-              let expectedScore = 0;
-              let summary = null;
-              let icdList = [];
-              let covariateResult = null;
-              
-              try {
+              if (apiService) {
+                try {
+                  // Use API service for calculations
+                  const xmlContent = extractedFile.content;
+                  const apiResult = await apiService.calculateAdvancedScore(xmlContent);
+                  
+                  startScore = apiResult.result.functionScore;
+                  expectedScore = apiResult.result.weightedScore;
+                  summary = apiResult.result.summary;
+                  mobilityType = apiResult.result.mobilityType;
+                } catch (error) {
+                  console.error('API calculation failed, falling back to client-side:', error);
+                  // Fallback to client-side calculation
+                  startScore = calculateFunctionScore(startData);
+                  summary = extractPatientSummary(parsedData);
+                  const icdList = Object.entries(parsedData)
+                    .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+                    .map(([_, value]) => value)
+                    .filter(Boolean);
+                  
+                  const multipliers = getFunctionMultipliers(parsedData["A2300"]);
+                  const covariateResult = getFunctionCovariates(
+                    parsedData,
+                    summary,
+                    icdList,
+                    startData,
+                    parsedData["A2300"]
+                  );
+                  
+                  expectedScore = covariateResult?.weightedScore || 0;
+                  mobilityType = 'Unknown';
+                }
+              } else {
+                // Client-side calculation (fallback)
+                startScore = calculateFunctionScore(startData);
                 summary = extractPatientSummary(parsedData);
-                icdList = Object.entries(parsedData)
+                const icdList = Object.entries(parsedData)
                   .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
                   .map(([_, value]) => value)
                   .filter(Boolean);
                 
                 const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-                covariateResult = getFunctionCovariates(
+                const covariateResult = getFunctionCovariates(
                   parsedData,
                   summary,
                   icdList,
@@ -262,8 +295,7 @@ const AdvancedSummaryView = () => {
                 );
                 
                 expectedScore = covariateResult?.weightedScore || 0;
-              } catch (error) {
-                expectedScore = 0;
+                mobilityType = 'Unknown';
               }
               
               // Check for cancellation before continuing
@@ -381,24 +413,52 @@ const AdvancedSummaryView = () => {
       await new Promise(resolve => setTimeout(resolve, 200));
       
       if (result && parsedData && startData) {
-        // Calculate scores
-        const startScore = calculateFunctionScore(startData);
+        // Calculate scores using API service if available, otherwise fallback to client-side
+        let startScore, expectedScore, summary, mobilityType;
         
-        // Calculate expected score using the same logic as AdvancedAppBulk
-        let expectedScore = 0;
-        let summary = null;
-        let icdList = [];
-        let covariateResult = null;
-        
-        try {
+        if (apiService) {
+          try {
+            // Use API service for calculations
+            const xmlContent = await tempFile.text();
+            const apiResult = await apiService.calculateAdvancedScore(xmlContent);
+            
+            startScore = apiResult.result.functionScore;
+            expectedScore = apiResult.result.weightedScore;
+            summary = apiResult.result.summary;
+            mobilityType = apiResult.result.mobilityType;
+          } catch (error) {
+            console.error('API calculation failed, falling back to client-side:', error);
+            // Fallback to client-side calculation
+            startScore = calculateFunctionScore(startData);
+            summary = extractPatientSummary(parsedData, parsedData["A2300"]);
+            const icdList = Object.entries(parsedData)
+              .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+              .map(([_, value]) => value)
+              .filter(Boolean);
+            
+            const multipliers = getFunctionMultipliers(parsedData["A2300"]);
+            const covariateResult = getFunctionCovariates(
+              parsedData,
+              summary,
+              icdList,
+              startData,
+              parsedData["A2300"]
+            );
+            
+            expectedScore = covariateResult?.weightedScore || 0;
+            mobilityType = 'Unknown';
+          }
+        } else {
+          // Client-side calculation (fallback)
+          startScore = calculateFunctionScore(startData);
           summary = extractPatientSummary(parsedData, parsedData["A2300"]);
-          icdList = Object.entries(parsedData)
+          const icdList = Object.entries(parsedData)
             .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
             .map(([_, value]) => value)
             .filter(Boolean);
           
           const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-          covariateResult = getFunctionCovariates(
+          const covariateResult = getFunctionCovariates(
             parsedData,
             summary,
             icdList,
@@ -407,8 +467,7 @@ const AdvancedSummaryView = () => {
           );
           
           expectedScore = covariateResult?.weightedScore || 0;
-        } catch (error) {
-          expectedScore = 0;
+          mobilityType = 'Unknown';
         }
         
         // Check for cancellation before continuing
@@ -423,9 +482,9 @@ const AdvancedSummaryView = () => {
           startScore,
           expectedScore,
           scoreDifference,
-          patientFirstName: parsedData?.["A0500A"] || 'Unknown',
-          patientLastName: parsedData?.["A0500C"] || 'Patient',
-          mobilityType: 'Unknown' // This would need to be calculated
+          patientFirstName: summary?.firstName || parsedData?.["A0500A"] || 'Unknown',
+          patientLastName: summary?.lastName || parsedData?.["A0500C"] || 'Patient',
+          mobilityType: mobilityType || 'Unknown'
         };
 
         // Store raw data for lazy loading

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getContributingKeys, getInitialScores } from '../../utils/itemDefinitions';
 import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
+import { BasicAPIService } from '../../utils/apiService';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
@@ -22,8 +23,36 @@ const EndScoreScreen = () => {
   const [endScores, setEndScores] = useState(startScores || getInitialScores(mobilityType));
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [endTotal, setEndTotal] = useState(0);
+  
+  // Initialize API service (memoized to prevent infinite loops)
+  const apiService = useMemo(() => new BasicAPIService(), []);
 
   const contributingKeys = getContributingKeys(mobilityType);
+
+  // Update end total when scores change
+  useEffect(() => {
+    const updateEndTotal = async () => {
+      try {
+        setIsCalculating(true);
+        console.log('EndScoreScreen: Using API for calculation');
+        const result = await apiService.calculateScore(endScores, mobilityType);
+        console.log('EndScoreScreen: API result:', result.result.functionScore);
+        setEndTotal(result.result.functionScore);
+      } catch (error) {
+        console.error('API calculation failed, falling back to client-side:', error);
+        // Fallback to client-side calculation
+        const fallbackTotal = calculateTotalScore(endScores, mobilityType);
+        console.log('EndScoreScreen: Using client-side fallback:', fallbackTotal);
+        setEndTotal(fallbackTotal);
+      } finally {
+        setIsCalculating(false);
+      }
+    };
+    
+    updateEndTotal();
+  }, [endScores, mobilityType, apiService]);
 
   const handleScoreAdjustment = (key, delta) => {
     if (!hasInteracted) {
@@ -35,18 +64,16 @@ const EndScoreScreen = () => {
   };
 
   const calcEndTotal = () => {
-    return calculateTotalScore(endScores, mobilityType);
+    return endTotal; // Use state value instead of calculating
   };
 
   const getLocalComparisonColor = () => {
-    const endTotal = calcEndTotal();
     if (endTotal >= expectedScore) return '#28a745';
     if (endTotal >= expectedScore * 0.9) return '#fd7e14';
     return '#dc3545';
   };
 
   const getLocalComparisonIcon = () => {
-    const endTotal = calcEndTotal();
     if (endTotal >= expectedScore) return '✓';
     if (endTotal >= expectedScore * 0.9) return '⚠';
     return '✗';
@@ -109,7 +136,6 @@ const EndScoreScreen = () => {
   };
 
 
-  const endTotal = calcEndTotal();
   const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
   
   // Determine if end score meets expected score for accent border styling

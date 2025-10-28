@@ -1,7 +1,7 @@
 // Adapter functions to bridge basic version itemDefs with advanced version GG_ITEMS
 // This allows the basic version to use the unified GG_ITEMS structure while maintaining compatibility
 
-import { GG_ITEMS, scoreMap } from './calculations';
+import { GG_ITEMS, scoreMap } from './calculations.js';
 
 // Mapping from basic version keys to GG_ITEMS IDs
 export const BASIC_TO_GG_MAPPING = {

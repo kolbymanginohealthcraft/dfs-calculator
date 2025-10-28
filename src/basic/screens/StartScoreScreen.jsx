@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../../utils/itemDefinitions';
 import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
+import { BasicAPIService } from '../../utils/apiService';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
@@ -22,8 +23,47 @@ const StartScoreScreen = () => {
   const [scores, setScores] = useState(startScores || getInitialScores(mobilityType));
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [startTotal, setStartTotal] = useState(0);
+  
+  // Initialize API service (memoized to prevent infinite loops)
+  const apiService = useMemo(() => new BasicAPIService(), []);
 
   const contributingKeys = getContributingKeys(mobilityType);
+
+  // Define calcTotal function before it's used in useEffect
+  const calcTotal = useCallback(async () => {
+    try {
+      setIsCalculating(true);
+      const result = await apiService.calculateScore(scores, mobilityType);
+      return result.result.functionScore;
+    } catch (error) {
+      console.error('API calculation failed, falling back to client-side:', error);
+      // Fallback to client-side calculation if API fails
+      return calculateTotalScore(scores, mobilityType);
+    } finally {
+      setIsCalculating(false);
+    }
+  }, [scores, mobilityType, apiService]);
+
+  // Update total when scores or mobility type changes
+  useEffect(() => {
+    const updateTotal = async () => {
+      try {
+        const total = await calcTotal();
+        setStartTotal(total);
+      } catch (error) {
+        console.error('Error updating total:', error);
+        // Fallback to client-side calculation
+        const fallbackTotal = calculateTotalScore(scores, mobilityType);
+        setStartTotal(fallbackTotal);
+      }
+    };
+    
+    // Add a small delay to prevent rapid API calls
+    const timeoutId = setTimeout(updateTotal, 100);
+    return () => clearTimeout(timeoutId);
+  }, [scores, mobilityType, calcTotal]);
 
   // Handle mobility type changes - update scores to include new contributing items
   const handleMobilityTypeChange = (newMobilityType) => {
@@ -63,16 +103,11 @@ const StartScoreScreen = () => {
     setScores(newScores);
   };
 
-  const calcTotal = useCallback(() => {
-    return calculateTotalScore(scores, mobilityType);
-  }, [scores, mobilityType]);
-
   const handleSubmit = () => {
-    const total = calcTotal();
     navigate('/basic/expected-score', {
       state: {
         startScores: scores,
-        startTotal: total,
+        startTotal: startTotal,
         mobilityType: mobilityType,
       }
     });
@@ -81,13 +116,12 @@ const StartScoreScreen = () => {
   // Track data changes for data loss warnings
   useEffect(() => {
     // Check if total start score is different from default total
-    const currentTotal = calcTotal();
     const defaultScores = getInitialScores(mobilityType);
     const defaultTotal = calculateTotalScore(defaultScores, mobilityType);
-    const hasDataToLose = currentTotal !== defaultTotal;
+    const hasDataToLose = startTotal !== defaultTotal;
     
     updateDataStatus('basicStart', hasDataToLose, 'Start scores have been modified');
-  }, [scores, mobilityType, updateDataStatus, calcTotal]);
+  }, [startTotal, mobilityType, updateDataStatus]);
 
 
   const handleHomeClick = () => {
@@ -116,11 +150,10 @@ const StartScoreScreen = () => {
     }
     
     if (step === 'expected') {
-      const total = calcTotal();
       navigate('/basic/expected-score', {
         state: {
           startScores: scores,
-          startTotal: total,
+          startTotal: startTotal,
           mobilityType: mobilityType,
         }
       });
@@ -128,7 +161,6 @@ const StartScoreScreen = () => {
   };
 
 
-  const startTotal = calcTotal();
   const hasDataToPreserve = hasMeaningfulData(scores, startTotal, null);
 
   return (

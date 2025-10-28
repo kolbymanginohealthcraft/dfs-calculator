@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { calculateExpectedScore, hasMeaningfulData } from '../../utils/scoreCalculations';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
+import { BasicAPIService } from '../../utils/apiService';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
@@ -19,21 +20,44 @@ const ExpectedScoreScreen = () => {
   const [expectedScore, setExpectedScore] = useState(0);
   const [sliderValue, setSliderValue] = useState(0);
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
+  const [isCalculating, setIsCalculating] = useState(false);
+  
+  // Initialize API service (memoized to prevent infinite loops)
+  const apiService = useMemo(() => new BasicAPIService(), []);
 
   useEffect(() => {
-    if (startTotal) {
-      if (incomingExpectedScore) {
-        // Use the incoming expected score if available
-        setExpectedScore(incomingExpectedScore);
-        setSliderValue(incomingExpectedScore);
-      } else {
-        // Calculate new expected score if none provided
-        const calculatedExpected = calculateExpectedScore(startTotal, mobilityType);
-        setExpectedScore(calculatedExpected);
-        setSliderValue(calculatedExpected);
+    const updateExpectedScore = async () => {
+      if (startTotal) {
+        if (incomingExpectedScore) {
+          // Use the incoming expected score if available
+          setExpectedScore(incomingExpectedScore);
+          setSliderValue(incomingExpectedScore);
+        } else {
+          // Calculate new expected score using API
+          try {
+            setIsCalculating(true);
+            console.log('ExpectedScoreScreen: Using API for calculation');
+            const result = await apiService.calculateScore(startScores, mobilityType);
+            const calculatedExpected = result.result.functionScore; // Use function score as expected
+            console.log('ExpectedScoreScreen: API result:', calculatedExpected);
+            setExpectedScore(calculatedExpected);
+            setSliderValue(calculatedExpected);
+          } catch (error) {
+            console.error('API calculation failed, falling back to client-side:', error);
+            // Fallback to client-side calculation
+            const calculatedExpected = calculateExpectedScore(startTotal, mobilityType);
+            console.log('ExpectedScoreScreen: Using client-side fallback:', calculatedExpected);
+            setExpectedScore(calculatedExpected);
+            setSliderValue(calculatedExpected);
+          } finally {
+            setIsCalculating(false);
+          }
+        }
       }
-    }
-  }, [startTotal, mobilityType, incomingExpectedScore]);
+    };
+    
+    updateExpectedScore();
+  }, [startTotal, mobilityType, incomingExpectedScore, startScores, apiService]);
 
   const updateSliderPosition = (score) => {
     setExpectedScore(score);
