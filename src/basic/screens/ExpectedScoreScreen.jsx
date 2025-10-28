@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { calculateExpectedScore, hasMeaningfulData } from '../../utils/scoreCalculations';
+import { hasMeaningfulData } from '../../utils/scoreCalculations';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
-import { BasicAPIService } from '../../utils/apiService';
+import { createOptimizedBasicAPIService } from '../../utils/optimizedApiService';
+import { calculateOptimisticExpected } from '../../utils/optimisticCalculations';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
@@ -17,46 +18,49 @@ const ExpectedScoreScreen = () => {
   const { startScores, startTotal, expectedScore: incomingExpectedScore, mobilityType } = location.state || {};
   const { updateDataStatus, clearDataStatus } = useDataLossWarning();
   
-  const [expectedScore, setExpectedScore] = useState(0);
-  const [sliderValue, setSliderValue] = useState(0);
+  const [expectedScore, setExpectedScore] = useState(() => {
+    // Initialize with optimistic expected score
+    return incomingExpectedScore || calculateOptimisticExpected(startTotal, mobilityType || 'Walk');
+  });
+  const [sliderValue, setSliderValue] = useState(() => {
+    // Initialize slider with same value
+    return incomingExpectedScore || calculateOptimisticExpected(startTotal, mobilityType || 'Walk');
+  });
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
   
   // Initialize API service (memoized to prevent infinite loops)
-  const apiService = useMemo(() => new BasicAPIService(), []);
+  const apiService = useMemo(() => createOptimizedBasicAPIService(150), []);
 
   useEffect(() => {
     const updateExpectedScore = async () => {
-      if (startTotal) {
-        if (incomingExpectedScore) {
-          // Use the incoming expected score if available
-          setExpectedScore(incomingExpectedScore);
-          setSliderValue(incomingExpectedScore);
-        } else {
-          // Calculate new expected score using API
-          try {
-            setIsCalculating(true);
-            console.log('ExpectedScoreScreen: Using API for calculation');
-            const result = await apiService.calculateScore(startScores, mobilityType);
-            const calculatedExpected = result.result.functionScore; // Use function score as expected
-            console.log('ExpectedScoreScreen: API result:', calculatedExpected);
+      if (startTotal && !incomingExpectedScore) {
+        // Only run API call if we don't have an incoming expected score
+        try {
+          setIsCalculating(true);
+          console.log('ExpectedScoreScreen: Using API for calculation');
+          const result = await apiService.calculateScore(startScores, mobilityType);
+          const calculatedExpected = result.result.functionScore;
+          console.log('ExpectedScoreScreen: API result:', calculatedExpected);
+          
+          // Only update if significantly different from optimistic calculation
+          const optimisticExpected = calculateOptimisticExpected(startTotal, mobilityType);
+          if (Math.abs(calculatedExpected - optimisticExpected) > 1) {
             setExpectedScore(calculatedExpected);
             setSliderValue(calculatedExpected);
-          } catch (error) {
-            console.error('API calculation failed, falling back to client-side:', error);
-            // Fallback to client-side calculation
-            const calculatedExpected = calculateExpectedScore(startTotal, mobilityType);
-            console.log('ExpectedScoreScreen: Using client-side fallback:', calculatedExpected);
-            setExpectedScore(calculatedExpected);
-            setSliderValue(calculatedExpected);
-          } finally {
-            setIsCalculating(false);
           }
+        } catch (error) {
+          console.error('API calculation failed:', error);
+          // Keep the optimistic value if API fails
+        } finally {
+          setIsCalculating(false);
         }
       }
     };
     
-    updateExpectedScore();
+    // Only run API call after a delay to avoid excessive calls
+    const timeoutId = setTimeout(updateExpectedScore, 500);
+    return () => clearTimeout(timeoutId);
   }, [startTotal, mobilityType, incomingExpectedScore, startScores, apiService]);
 
   const updateSliderPosition = (score) => {
@@ -66,12 +70,16 @@ const ExpectedScoreScreen = () => {
 
   const handleSliderChange = (e) => {
     const value = parseFloat(e.target.value);
-    updateSliderPosition(value);
+    // Update immediately for instant feedback
+    setExpectedScore(value);
+    setSliderValue(value);
   };
 
   const handleFineAdjustment = (delta) => {
     const newScore = Math.max(startTotal, Math.min(60, expectedScore + delta));
-    updateSliderPosition(newScore);
+    // Update immediately for instant feedback
+    setExpectedScore(newScore);
+    setSliderValue(newScore);
   };
 
   const handleSubmit = () => {

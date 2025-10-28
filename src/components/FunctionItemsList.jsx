@@ -14,6 +14,7 @@ const FunctionItemsList = ({
   scores = {}, // Current scores
   startScores = {}, // For end/advanced modes
   onScoreAdjustment, // Callback for score changes
+  onResetAll, // Callback for reset all functionality
   mobilityType = 'Walk', // For basic mode
   onMobilityTypeChange, // Callback for mobility type changes in basic mode
   contributingIds = new Set(), // For advanced mode
@@ -139,47 +140,10 @@ const FunctionItemsList = ({
     }
   };
 
-  // Handle reset all - determine reset state based on variant
+  // Handle reset all - use the provided onResetAll callback
   const handleResetAll = () => {
-    if (!onScoreAdjustment) return;
-
-    // Determine what the reset state should be based on variant
-    let resetState;
-    if (variant === 'start') {
-      // Start mode: reset all to default scores (1)
-      resetState = getInitialScores(mobilityType);
-    } else {
-      // End/Advanced modes: reset to start scores (green nodes back to blue nodes)
-      resetState = startScores;
-    }
-
-    // Apply the reset by calling onScoreAdjustment for each item
-    if (mode === 'advanced') {
-      // For advanced mode, reset each GG item
-      Object.keys(resetState).forEach(itemId => {
-        const currentScore = scoreMap[scores[itemId]] || 0;
-        const targetScore = scoreMap[resetState[itemId]] || 0;
-        if (currentScore !== targetScore) {
-          const delta = targetScore - currentScore;
-          if (delta !== 0) {
-            onScoreAdjustment(itemId, delta);
-          }
-        }
-      });
-    } else {
-      // For basic mode, reset each category
-      Object.keys(resetState).forEach(category => {
-        Object.keys(resetState[category]).forEach(key => {
-          const currentScore = scores[category]?.[key] || 0;
-          const targetScore = resetState[category][key];
-          if (currentScore !== targetScore) {
-            const delta = targetScore - currentScore;
-            if (delta !== 0) {
-              onScoreAdjustment(key, delta);
-            }
-          }
-        });
-      });
+    if (onResetAll) {
+      onResetAll();
     }
   };
 
@@ -281,7 +245,7 @@ const FunctionItemsList = ({
           <h2 className={styles.categoryTitle}>{getDomainTitle()}</h2>
           <div className={styles.headerControls}>
             {getMobilityFootnote()}
-            {domain === 'selfCare' && onScoreAdjustment && (
+            {domain === 'selfCare' && onResetAll && (
               <button
                 className={styles.resetAllBtn}
                 onClick={handleResetAll}

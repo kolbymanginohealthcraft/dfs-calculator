@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../../utils/itemDefinitions';
-import { calculateTotalScore, hasMeaningfulData } from '../../utils/scoreCalculations';
+import { hasMeaningfulData } from '../../utils/scoreCalculations';
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
-import { BasicAPIService } from '../../utils/apiService';
+import { createOptimizedBasicAPIService } from '../../utils/optimizedApiService';
+import { calculateOptimisticTotal, isOptimisticCloseEnough } from '../../utils/optimisticCalculations';
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
@@ -24,12 +25,18 @@ const StartScoreScreen = () => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
-  const [startTotal, setStartTotal] = useState(0);
+  const [startTotal, setStartTotal] = useState(() => {
+    // Initialize with optimistic calculation of initial scores
+    const initialScores = startScores || getInitialScores(incomingMobilityType || 'Walk');
+    return calculateOptimisticTotal(initialScores, incomingMobilityType || 'Walk');
+  });
   
-  // Initialize API service (memoized to prevent infinite loops)
-  const apiService = useMemo(() => new BasicAPIService(), []);
+  // Initialize optimized API service (memoized to prevent infinite loops)
+  const apiService = useMemo(() => createOptimizedBasicAPIService(150), []);
 
   const contributingKeys = getContributingKeys(mobilityType);
+
+  // Use imported optimistic calculation function
 
   // Define calcTotal function before it's used in useEffect
   const calcTotal = useCallback(async () => {
@@ -38,32 +45,35 @@ const StartScoreScreen = () => {
       const result = await apiService.calculateScore(scores, mobilityType);
       return result.result.functionScore;
     } catch (error) {
-      console.error('API calculation failed, falling back to client-side:', error);
-      // Fallback to client-side calculation if API fails
-      return calculateTotalScore(scores, mobilityType);
+      console.error('API calculation failed:', error);
+      // Show user-friendly error instead of fallback
+      throw new Error('Unable to calculate score. Please check your connection and try again.');
     } finally {
       setIsCalculating(false);
     }
   }, [scores, mobilityType, apiService]);
 
-  // Update total when scores or mobility type changes
+  // Update total when scores or mobility type changes (debounced for API calls)
   useEffect(() => {
     const updateTotal = async () => {
       try {
-        const total = await calcTotal();
-        setStartTotal(total);
+        // Use regular API call (not optimistic) for background sync
+        const result = await apiService.calculateScore(scores, mobilityType);
+        // Only update if the optimistic calculation was significantly different
+        const optimisticTotal = calculateOptimisticTotal(scores, mobilityType);
+        if (!isOptimisticCloseEnough(optimisticTotal, result.result.functionScore)) {
+          setStartTotal(result.result.functionScore);
+        }
       } catch (error) {
         console.error('Error updating total:', error);
-        // Fallback to client-side calculation
-        const fallbackTotal = calculateTotalScore(scores, mobilityType);
-        setStartTotal(fallbackTotal);
+        // Keep the optimistic total if API fails
       }
     };
     
-    // Add a small delay to prevent rapid API calls
-    const timeoutId = setTimeout(updateTotal, 100);
+    // Only run API call after a delay to avoid excessive calls
+    const timeoutId = setTimeout(updateTotal, 500);
     return () => clearTimeout(timeoutId);
-  }, [scores, mobilityType, calcTotal]);
+  }, [scores, mobilityType, apiService]);
 
   // Handle mobility type changes - update scores to include new contributing items
   const handleMobilityTypeChange = (newMobilityType) => {
@@ -92,6 +102,10 @@ const StartScoreScreen = () => {
     });
     
     setScores(newScores);
+    
+    // Immediately update UI with optimistic calculation
+    const optimisticTotal = calculateOptimisticTotal(newScores, newMobilityType);
+    setStartTotal(optimisticTotal);
   };
 
   const handleScoreAdjustment = (key, delta) => {
@@ -101,6 +115,18 @@ const StartScoreScreen = () => {
     
     const newScores = adjustScore(scores, key, delta);
     setScores(newScores);
+    
+    // Immediately update UI with optimistic calculation
+    const optimisticTotal = calculateOptimisticTotal(newScores, mobilityType);
+    setStartTotal(optimisticTotal);
+  };
+
+  const handleResetAll = () => {
+    const defaultScores = getInitialScores(mobilityType);
+    setScores(defaultScores);
+    // Immediately update UI with optimistic calculation
+    const optimisticTotal = calculateOptimisticTotal(defaultScores, mobilityType);
+    setStartTotal(optimisticTotal);
   };
 
   const handleSubmit = () => {
@@ -116,8 +142,9 @@ const StartScoreScreen = () => {
   // Track data changes for data loss warnings
   useEffect(() => {
     // Check if total start score is different from default total
-    const defaultScores = getInitialScores(mobilityType);
-    const defaultTotal = calculateTotalScore(defaultScores, mobilityType);
+    // Since we removed client-side calculations, we'll use a simple heuristic
+    // Default total is typically 10 (all scores at minimum value)
+    const defaultTotal = 10;
     const hasDataToLose = startTotal !== defaultTotal;
     
     updateDataStatus('basicStart', hasDataToLose, 'Start scores have been modified');
@@ -186,6 +213,7 @@ const StartScoreScreen = () => {
           scores={scores}
           startScores={scores}
           onScoreAdjustment={handleScoreAdjustment}
+          onResetAll={handleResetAll}
           mobilityType={mobilityType}
           onMobilityTypeChange={handleMobilityTypeChange}
         />
