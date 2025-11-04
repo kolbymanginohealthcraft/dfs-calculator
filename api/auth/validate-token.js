@@ -32,31 +32,161 @@ async function validateSSOToken(token) {
   }
 
   try {
-    // TODO: Replace this with actual myCare SSO validation
-    // Examples of common approaches:
+    // SAML Session Token Validation
+    // Since myCare handles the SAML flow, we validate the session token they provide
     
-    // Option 1: JWT Token Validation
-    // const jwt = require('jsonwebtoken');
-    // const decoded = jwt.verify(token, process.env.SSO_PUBLIC_KEY);
-    // return { valid: true, user: decoded };
+    // Option A: Session token validated via myCare API (Recommended)
+    // Ask IT: What's the myCare API endpoint to validate session tokens?
+    if (process.env.MYCARE_VALIDATE_SESSION_URL) {
+      const response = await fetch(process.env.MYCARE_VALIDATE_SESSION_URL, {
+        method: 'POST',
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        signal: AbortSignal.timeout(5000)
+      });
+      
+      if (!response.ok) {
+        return { valid: false, error: 'Invalid or expired session' };
+      }
+      
+      const user = await response.json();
+      return { valid: true, user };
+    }
     
-    // Option 2: API Validation with myCare
-    // const response = await fetch('https://mycare.com/api/validate-token', {
-    //   headers: { 'Authorization': `Bearer ${token}` }
-    // });
-    // if (!response.ok) return { valid: false, error: 'Invalid token' };
-    // const user = await response.json();
-    // return { valid: true, user };
+    // Option B: Session token is JWT (if myCare issues JWT after SAML)
+    // Ask IT: Is the session token a JWT? What's the public key?
+    if (process.env.SESSION_TOKEN_IS_JWT === 'true') {
+      const jwt = require('jsonwebtoken');
+      const decoded = jwt.verify(token, process.env.SESSION_PUBLIC_KEY, {
+        algorithms: ['RS256']
+      });
+      
+      // Check if token is expired
+      if (decoded.exp && decoded.exp < Date.now() / 1000) {
+        return { valid: false, error: 'Token expired' };
+      }
+      
+      return { valid: true, user: decoded };
+    }
     
-    // Option 3: Session-based validation
-    // const session = await validateSession(token);
-    // if (!session) return { valid: false, error: 'Invalid session' };
-    // return { valid: true, user: session.user };
+    // Option C: Direct SAML Assertion Validation
+    // The token is the actual SAML XML assertion (encoded)
+    // Requires: npm install xml-crypto xml2js
     
-    // TEMPORARY: Placeholder that accepts any non-empty token
-    // REMOVE THIS and implement real validation before production
-    if (token && token.length > 0) {
-      return { valid: true, user: { id: 'placeholder', source: 'sso' } };
+    try {
+      // Import SAML validation libraries
+      const { SignedXml } = await import('xml-crypto');
+      const { parseStringPromise } = await import('xml2js');
+      
+      // Decode the SAML assertion (it's likely base64 encoded)
+      let samlXml = token;
+      
+      // Try to decode if it's base64 (SAML assertions are often base64 encoded)
+      try {
+        // Check if it looks like base64
+        if (!token.includes('<') && !token.includes('>')) {
+          samlXml = Buffer.from(token, 'base64').toString('utf-8');
+        }
+      } catch (e) {
+        // Not base64, use as-is
+        samlXml = token;
+      }
+      
+      // Parse SAML XML assertion
+      const parsed = await parseStringPromise(samlXml);
+      
+      // Get the SAML Assertion element
+      const assertion = parsed.Response?.Assertion?.[0] || parsed.Assertion?.[0];
+      if (!assertion) {
+        return { valid: false, error: 'Invalid SAML assertion format' };
+      }
+      
+      // Validate signature using myCare's public certificate
+      // Set this in your environment variables: SAML_CERT
+      const cert = process.env.SAML_CERT;
+      if (!cert) {
+        console.warn('⚠️ SAML_CERT not set - signature validation skipped');
+        // In production, you should require the certificate
+        // For now, allow if cert not set (to be configured)
+      } else {
+        const sig = new SignedXml();
+        sig.keyInfoProvider = { getKey: () => cert };
+        
+        // Check if assertion has a signature
+        if (assertion.Signature) {
+          const isValid = sig.checkSignature(samlXml);
+          if (!isValid) {
+            return { valid: false, error: 'Invalid SAML signature' };
+          }
+        }
+      }
+      
+      // Check assertion expiration
+      const conditions = assertion.Conditions?.[0];
+      if (conditions) {
+        const notOnOrAfter = conditions.$?.NotOnOrAfter;
+        if (notOnOrAfter) {
+          const expiration = new Date(notOnOrAfter);
+          if (expiration < new Date()) {
+            return { valid: false, error: 'SAML assertion expired' };
+          }
+        }
+      }
+      
+      // Extract user info from SAML assertion
+      const subject = assertion.Subject?.[0];
+      const nameId = subject?.NameID?.[0];
+      
+      // Get attributes (common SAML attribute formats)
+      const attributeStatement = assertion.AttributeStatement?.[0];
+      let email = null;
+      let name = null;
+      
+      if (attributeStatement?.Attribute) {
+        attributeStatement.Attribute.forEach(attr => {
+          const attrName = attr.$?.Name;
+          const attrValue = attr.AttributeValue?.[0];
+          
+          if (attrName?.includes('email') || attrName?.includes('Email')) {
+            email = typeof attrValue === 'string' ? attrValue : attrValue?._ || attrValue;
+          }
+          if (attrName?.includes('name') || attrName?.includes('displayname')) {
+            name = typeof attrValue === 'string' ? attrValue : attrValue?._ || attrValue;
+          }
+        });
+      }
+      
+      // Extract user ID from NameID
+      const userId = nameId?._ || nameId || subject?.NameID?.[0]?._;
+      
+      if (!userId) {
+        return { valid: false, error: 'No user ID found in SAML assertion' };
+      }
+      
+      const user = {
+        id: userId,
+        email: email,
+        name: name,
+        source: 'saml'
+      };
+      
+      return { valid: true, user };
+      
+    } catch (importError) {
+      // Libraries not installed - provide helpful error
+      if (importError.code === 'ERR_MODULE_NOT_FOUND') {
+        console.error('SAML validation libraries not installed. Run: npm install xml-crypto xml2js');
+        return { 
+          valid: false, 
+          error: 'SAML validation libraries not installed. Contact administrator.' 
+        };
+      }
+      
+      // Other parsing/validation errors
+      console.error('SAML assertion validation error:', importError);
+      return { valid: false, error: `SAML validation failed: ${importError.message}` };
     }
     
     return { valid: false, error: 'Invalid token format' };

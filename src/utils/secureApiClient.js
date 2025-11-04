@@ -35,29 +35,23 @@ function getSSOToken() {
     return devToken;
   }
 
-  // TODO: Implement actual token retrieval from myCare
-  // Example implementations:
+  // SAML assertion token retrieval from cookie
+  // myCare stores the SAML XML assertion (encoded) in a cookie after authentication
+  const cookieName = import.meta.env.VITE_SAML_SESSION_COOKIE || 'mycare_session_token';
   
-  // Option 1: Token in localStorage
-  // return localStorage.getItem('mycare_sso_token');
+  const cookies = document.cookie.split(';');
+  const tokenCookie = cookies.find(c => {
+    const trimmed = c.trim();
+    return trimmed.startsWith(`${cookieName}=`);
+  });
   
-  // Option 2: Token in cookie
-  // const cookies = document.cookie.split(';');
-  // const tokenCookie = cookies.find(c => c.trim().startsWith('mycare_token='));
-  // return tokenCookie ? tokenCookie.split('=')[1] : null;
+  if (tokenCookie) {
+    // Extract and decode the cookie value
+    const tokenValue = decodeURIComponent(tokenCookie.split('=').slice(1).join('='));
+    return tokenValue;
+  }
   
-  // Option 3: Token passed via URL
-  // const urlParams = new URLSearchParams(window.location.search);
-  // return urlParams.get('sso_token');
-  
-  // Option 4: Token from parent window (if embedded in iframe)
-  // return window.parent?.myCareSSOToken || null;
-  
-  // Production: Try multiple common locations
-  return localStorage.getItem('mycare_sso_token') 
-    || localStorage.getItem('sso_token')
-    || new URLSearchParams(window.location.search).get('sso_token')
-    || null;
+  return null;
 }
 
 /**
