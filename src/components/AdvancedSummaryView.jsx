@@ -9,8 +9,8 @@ import PaginationControls from './PaginationControls';
 import DataLossWarningModal from './DataLossWarningModal';
 import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../utils/zipHandler';
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
-import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
-import { getFunctionMultipliers } from '../utils/coefficientLoader';
+import { calculateFunctionScore, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
+import { calculateFunctionScore as calculateFunctionScoreSecure } from '../utils/secureApiClient';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
 import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import { useRedaction } from '../contexts/RedactionContext';
@@ -252,17 +252,24 @@ const AdvancedSummaryView = () => {
                   .map(([_, value]) => value)
                   .filter(Boolean);
                 
-                const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-                covariateResult = getFunctionCovariates(
-                  parsedData,
+                covariateResult = await calculateFunctionScoreSecure({
+                  parsedValues: parsedData,
                   summary,
                   icdList,
-                  startData,
-                  parsedData["A2300"]
-                );
+                  startScores: startData,
+                  ardDate: parsedData["A2300"],
+                  manualOverrides: {}
+                });
                 
                 expectedScore = covariateResult?.weightedScore || 0;
+                console.log('Expected score calculated (bulk):', expectedScore, 'from result:', covariateResult);
               } catch (error) {
+                console.error('Calculation failed (bulk):', error);
+                console.error('Error details:', {
+                  message: error.message,
+                  status: error.status,
+                  data: error.data
+                });
                 expectedScore = 0;
               }
               
@@ -397,17 +404,24 @@ const AdvancedSummaryView = () => {
             .map(([_, value]) => value)
             .filter(Boolean);
           
-          const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-          covariateResult = getFunctionCovariates(
-            parsedData,
+          covariateResult = await calculateFunctionScoreSecure({
+            parsedValues: parsedData,
             summary,
             icdList,
-            startData,
-            parsedData["A2300"]
-          );
+            startScores: startData,
+            ardDate: parsedData["A2300"],
+            manualOverrides: {}
+          });
           
           expectedScore = covariateResult?.weightedScore || 0;
+          console.log('Expected score calculated:', expectedScore, 'from result:', covariateResult);
         } catch (error) {
+          console.error('Calculation failed:', error);
+          console.error('Error details:', {
+            message: error.message,
+            status: error.status,
+            data: error.data
+          });
           expectedScore = 0;
         }
         

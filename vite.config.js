@@ -17,6 +17,14 @@ export default defineConfig({
           'vendor-charts': ['recharts'],
           'vendor-pdf': ['html2pdf.js', 'html2canvas']
         }
+      },
+      // Explicitly exclude server-only API files from client bundle
+      external: (id) => {
+        // Exclude api/ directory files from client bundle
+        if (id.includes('/api/') || id.includes('\\api\\')) {
+          return true;
+        }
+        return false;
       }
     },
     chunkSizeWarningLimit: 600

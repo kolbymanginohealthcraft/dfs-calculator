@@ -5,10 +5,9 @@ import {
   extractPatientSummary,
   determineMobilityType,
   calculateFunctionScore,
-  getFunctionCovariates,
 } from "../utils/calculations";
 import { fetchFacilityInfo } from "../utils/facilityLookup";
-import { getFunctionMultipliers } from "../utils/coefficientLoader";
+import { calculateFunctionScore as calculateFunctionScoreSecure } from "../utils/secureApiClient";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
@@ -315,23 +314,28 @@ function AdvancedAppDetail() {
         .map(([_, value]) => value)
         .filter(Boolean);
 
-      // Get version-specific multipliers
-      const multipliers = getFunctionMultipliers(ardDate);
-      setVersionMultipliers(multipliers);
+      const calculateScores = async () => {
+        try {
+          const result = await calculateFunctionScoreSecure({
+            parsedValues,
+            summary: extractPatientSummary(parsedValues, ardDate),
+            icdList,
+            startScores,
+            ardDate,
+            manualOverrides: manualCovariateOverrides
+          });
 
-      const result = getFunctionCovariates(
-        parsedValues,
-        extractPatientSummary(parsedValues, ardDate),
-        icdList,
-        startScores,
-        ardDate,
-        manualCovariateOverrides
-      );
+          setVersionMultipliers(result.multipliers || {});
+          setCovariates(result.covariates || {});
+          setWeightedScore(result.weightedScore || 0);
+        } catch (error) {
+          console.error('Calculation failed:', error);
+          // Set error state or show user-friendly message
+          // For now, just log - you may want to add a user-visible error state
+        }
+      };
 
-      if (result) {
-        setCovariates(result.covariates || {});
-        setWeightedScore(result.weightedScore || 0);
-      }
+      calculateScores();
     }
   }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides]);
 

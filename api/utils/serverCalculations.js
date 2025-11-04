@@ -1,60 +1,28 @@
-import icdToHcc from "../data/icdToHcc.json" with { type: "json" };
-import { getFunctionMultipliers } from "./coefficientLoader.js";
+/**
+ * Server-Only Calculation Functions
+ * 
+ * ⚠️ PROPRIETARY IP - NEVER BUNDLE INTO CLIENT CODE ⚠️
+ * 
+ * This module contains the complete implementation of proprietary calculation
+ * algorithms. These functions are ONLY available server-side and will NEVER
+ * be included in the client bundle.
+ * 
+ * All proprietary calculation logic has been copied here from src/utils/calculations.js
+ * to ensure it cannot be reverse-engineered from client-side code.
+ */
+
+import icdToHcc from "../../src/data/icdToHcc.json" with { type: "json" };
+import { getFunctionMultipliers } from "./serverCoefficientLoader.js";
 
 // Configuration flag for I0020 dependency methodology
-// Set to true to use original CMS logic with I0020 dependencies
-// Set to false to use modified logic without I0020 dependencies
 const USE_I0020_DEPENDENCIES = true;
 
-export const scoreMap = {
-  "01": 1,
-  "02": 2,
-  "03": 3,
-  "04": 4,
-  "05": 5,
-  "06": 6,
-  "07": 1,
-  "08": 1,
-  "09": 1,
-  10: 1,
-  "10": 1,
-  88: 1,
-  "88": 1,
-  "^": 1,
-};
+// Sets used for determining mobility type
+const ANA = new Set(["07", "09", "10", "88"]);
+const valid = new Set(["01", "02", "03", "04", "05", "06"]);
 
-export const GG_ITEMS = [
-  { id: "GG0130A", label: "Eating", domain: "selfCare" },
-  { id: "GG0130B", label: "Oral hygiene", domain: "selfCare" },
-  { id: "GG0130C", label: "Toileting hygiene", domain: "selfCare" },
-  { id: "GG0130E", label: "Shower/bathe self", domain: "selfCare" },
-  { id: "GG0130F", label: "Upper body dressing", domain: "selfCare" },
-  { id: "GG0130G", label: "Lower body dressing", domain: "selfCare" },
-  { id: "GG0130H", label: "Put on/take off footwear", domain: "selfCare" },
-  { id: "GG0170A", label: "Roll left and right", domain: "mobility" },
-  { id: "GG0170B", label: "Sit to lying", domain: "mobility" },
-  { id: "GG0170C", label: "Lying to sitting on bed side", domain: "mobility" },
-  { id: "GG0170D", label: "Sit to stand", domain: "mobility" },
-  { id: "GG0170E", label: "Chair/bed-to-chair transfer", domain: "mobility" },
-  { id: "GG0170F", label: "Toilet transfer", domain: "mobility" },
-  { id: "GG0170G", label: "Car transfer", domain: "mobility" },
-  { id: "GG0170I", label: "Walk 10 feet", domain: "mobility" },
-  { id: "GG0170J", label: "Walk 50 feet with two turns", domain: "mobility" },
-  { id: "GG0170K", label: "Walk 150 feet", domain: "mobility" },
-  {
-    id: "GG0170L",
-    label: "Walking 10 feet uneven surface",
-    domain: "mobility",
-  },
-  { id: "GG0170M", label: "1 step (curb)", domain: "mobility" },
-  { id: "GG0170N", label: "4 steps", domain: "mobility" },
-  { id: "GG0170O", label: "12 steps", domain: "mobility" },
-  { id: "GG0170P", label: "Picking up object", domain: "mobility" },
-  { id: "GG0170R", label: "Wheel 50 feet with two turns", domain: "mobility" },
-  { id: "GG0170S", label: "Wheel 150 feet", domain: "mobility" },
-];
-
-export const conditionMap = {
+// Condition map (public data, but included here for completeness)
+const conditionMap = {
   "01": "Stroke",
   "02": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
   "03": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
@@ -70,23 +38,8 @@ export const conditionMap = {
   13: "Medically Complex Conditions",
 };
 
-export function formatDOB(dobStr) {
-  if (!dobStr || dobStr.length !== 8) return "Unknown";
-  const year = dobStr.substring(0, 4);
-  const month = dobStr.substring(4, 6);
-  const day = dobStr.substring(6, 8);
-  return `${month}/${day}/${year}`;
-}
-
-export function formatDate(dateStr) {
-  if (!dateStr || dateStr.length !== 8) return dateStr;
-  const year = dateStr.substring(0, 4);
-  const month = dateStr.substring(4, 6);
-  const day = dateStr.substring(6, 8);
-  return `${month}/${day}/${year}`;
-}
-
-export function calculateAgeAtAdmission(dobStr, admitStr) {
+// Helper functions
+function calculateAgeAtAdmission(dobStr, admitStr) {
   if (!dobStr || dobStr.length !== 8 || !admitStr || admitStr.length !== 8)
     return null;
   const dob = new Date(
@@ -113,61 +66,7 @@ export function calculateAgeAtAdmission(dobStr, admitStr) {
   return age;
 }
 
-export function calculateDateGap(startStr, endStr) {
-  if (!startStr || !endStr || startStr.length !== 8 || endStr.length !== 8)
-    return null;
-
-  const start = new Date(
-    `${startStr.substring(0, 4)}-${startStr.substring(
-      4,
-      6
-    )}-${startStr.substring(6, 8)}`
-  );
-  const end = new Date(
-    `${endStr.substring(0, 4)}-${endStr.substring(4, 6)}-${endStr.substring(
-      6,
-      8
-    )}`
-  );
-
-  const diffMs = end - start;
-  return Math.round(diffMs / (1000 * 60 * 60 * 24)); // days
-}
-
-export function extractPatientSummary(parsedValues, ardDate) {
-  const firstName = parsedValues["A0500A"];
-  const lastName = parsedValues["A0500C"];
-  const dob = parsedValues["A0900"];
-  const facility = parsedValues["A0100B"];
-  
-  // Use fallback chain: A2400B (Medicare start) → A1600 (Entry date) → A1900 (Admission date)
-  // Skip values that are blank, undefined, or "^" (skip pattern)
-  const isValidDate = (val) => val && val !== "^";
-  const admitDate = isValidDate(parsedValues["A2400B"]) ? parsedValues["A2400B"] :
-                    isValidDate(parsedValues["A1600"]) ? parsedValues["A1600"] :
-                    parsedValues["A1900"];
-  
-  const dischargeDate = parsedValues["A2000"];
-  const age = calculateAgeAtAdmission(dob, admitDate);
-  const ardGapDays = calculateDateGap(admitDate, ardDate);
-
-  return {
-    firstName,
-    lastName,
-    dob,
-    facility,
-    admitDate,
-    dischargeDate,
-    age,
-    ardGapDays,
-  };
-}
-
-// Sets used for determining mobility type
-export const ANA = new Set(["07", "09", "10", "88"]);
-export const valid = new Set(["01", "02", "03", "04", "05", "06"]);
-
-export function determineMobilityType(parsedValues) {
+function determineMobilityType(parsedValues) {
   if (!parsedValues["GG0170I1"]) return "Unknown";
 
   const i1 = parsedValues["GG0170I1"];
@@ -184,7 +83,7 @@ export function determineMobilityType(parsedValues) {
     : "Walk";
 }
 
-export function calculateFunctionScore(values, mobilityType = null) {
+function calculateFunctionScore(values, mobilityType = null) {
   const safe = (key) => {
     const v = values[key];
     return valid.has(v) ? parseInt(v, 10) : 1;
@@ -213,33 +112,7 @@ export function calculateFunctionScore(values, mobilityType = null) {
   }
 }
 
-export function getContributingItemIds(values) {
-  const mobilityType = determineMobilityType(values);
-
-  const base = [
-    "GG0130A",
-    "GG0130B",
-    "GG0130C",
-    "GG0170A",
-    "GG0170C",
-    "GG0170D",
-    "GG0170E",
-    "GG0170F",
-  ];
-
-  if (mobilityType === "Wheel") {
-    return new Set([...base, "GG0170R"]);
-  } else {
-    return new Set([...base, "GG0170I", "GG0170J"]);
-  }
-}
-
-// ============================================================================
-// CORE DATA PROCESSING FUNCTIONS
-// ============================================================================
-
-// Age processing functions
-export function getAgeCovariate(age) {
+function getAgeCovariate(age) {
   if (age == null) return null;
   if (age <= 54) return "≤54 Years";
   if (age <= 64) return "55-64 Years";
@@ -249,18 +122,12 @@ export function getAgeCovariate(age) {
   return ">90 Years";
 }
 
-export function processAgeCovariate(parsedValues, summary) {
+function processAgeCovariate(parsedValues, summary) {
   const age = summary?.age ?? calculateAgeAtAdmission(parsedValues["A0900"], parsedValues["A1600"]);
   return getAgeCovariate(age);
 }
 
-// Mobility type processing
-export function processMobilityType(parsedValues) {
-  return determineMobilityType(parsedValues);
-}
-
-// Uses Wheelchair covariate processing
-export function processUsesWheelchair(parsedValues) {
+function processUsesWheelchair(parsedValues) {
   const covariates = {};
   
   // Determine if patient uses wheelchair based on mobility type
@@ -272,8 +139,7 @@ export function processUsesWheelchair(parsedValues) {
   return covariates;
 }
 
-// BMI processing
-export function processBMICovariates(parsedValues) {
+function processBMICovariates(parsedValues) {
   const height = parseFloat(parsedValues["K0200A"]);
   const weight = parseFloat(parsedValues["K0200B"]);
   const bmi = height && weight ? Math.round(((weight * 703) / (height * height)) * 10) / 10 : null;
@@ -285,8 +151,7 @@ export function processBMICovariates(parsedValues) {
   return covariates;
 }
 
-// Cognitive function processing
-export function processCognitiveFunction(parsedValues) {
+function processCognitiveFunction(parsedValues) {
   const bims = parsedValues["C0500"];
   const c0900 = ["C0900A", "C0900B", "C0900C", "C0900D"].map(k => parsedValues[k]);
   const c0900z = parsedValues["C0900Z"];
@@ -310,8 +175,7 @@ export function processCognitiveFunction(parsedValues) {
   return covariates;
 }
 
-// Communication impairment processing
-export function processCommunicationImpairment(parsedValues) {
+function processCommunicationImpairment(parsedValues) {
   const b0700 = parsedValues["B0700"];
   const b0800 = parsedValues["B0800"];
   
@@ -329,8 +193,7 @@ export function processCommunicationImpairment(parsedValues) {
   return covariates;
 }
 
-// Continence processing
-export function processContinenceCovariates(parsedValues) {
+function processContinenceCovariates(parsedValues) {
   const bowelMap = { 1: "Occasionally", 2: "Frequently", 3: "Always", 9: "Not Rated" };
   const urineMap = { 1: "Occasionally", 2: "Frequently", 3: "Always", 9: "Not Rated" };
   
@@ -356,8 +219,7 @@ export function processContinenceCovariates(parsedValues) {
   return covariates;
 }
 
-// Prior functioning processing
-export function processPriorFunctioning(parsedValues) {
+function processPriorFunctioning(parsedValues) {
   const covariates = {};
   
   // Prior Functioning: Self-Care
@@ -393,8 +255,7 @@ export function processPriorFunctioning(parsedValues) {
   return covariates;
 }
 
-// Prior mobility device processing
-export function processPriorMobilityDevices(parsedValues) {
+function processPriorMobilityDevices(parsedValues) {
   const covariates = {};
   
   if (["1"].includes(parsedValues["GG0110A"]) || ["1"].includes(parsedValues["GG0110B"])) {
@@ -413,8 +274,7 @@ export function processPriorMobilityDevices(parsedValues) {
   return covariates;
 }
 
-// Medical condition category processing
-export function processMedicalConditionCategory(parsedValues, startScore) {
+function processMedicalConditionCategory(parsedValues, startScore) {
   const covariates = {};
   
   const conditionCode = parsedValues["I0020"];
@@ -430,8 +290,7 @@ export function processMedicalConditionCategory(parsedValues, startScore) {
   return covariates;
 }
 
-// HCC condition processing
-export function processHccConditions(parsedValues, icdList) {
+function processHccConditions(parsedValues, icdList) {
   const covariates = {};
   
   // Helper functions for querying comorbidities
@@ -448,8 +307,6 @@ export function processHccConditions(parsedValues, icdList) {
   );
   
   // Amputations (new combined)
-  // Original CMS logic: = 1 if GG0120D = [1] or O0500I ≥ [1] or I8000 or I0020B = see Crosswalk ICD-10 codes to HCC173, HCC189;
-  // = 0 if I0020 = [08]; else = 0
   if (USE_I0020_DEPENDENCIES) {
     if (parsedValues["I0020"] !== "08") {
       if (
@@ -630,8 +487,7 @@ export function processHccConditions(parsedValues, icdList) {
   return covariates;
 }
 
-// Additional clinical conditions processing
-export function processAdditionalClinicalConditions(parsedValues) {
+function processAdditionalClinicalConditions(parsedValues) {
   const covariates = {};
   
   // Prior Surgery
@@ -698,47 +554,11 @@ export function processAdditionalClinicalConditions(parsedValues) {
 // Safely square a number
 const squared = (n) => (typeof n === "number" ? n * n : 0);
 
-// Map ICD codes to HCCs
-export function getHccCount(parsedValues) {
-  const icdFields = [
-    "I0020B",
-    "I8000A",
-    "I8000B",
-    "I8000C",
-    "I8000D",
-    "I8000E",
-    "I8000F",
-    "I8000G",
-    "I8000H",
-    "I8000I",
-    "I8000J",
-  ];
-
-  const icdCodes = icdFields
-    .map((field) => parsedValues[field])
-    .filter(Boolean)
-    .map((code) => code.replace(/\^|\./g, "").toUpperCase());
-
-  const uniqueHccs = new Set(
-    icdCodes.map((code) => icdToHcc[code]).filter((hcc) => hcc !== undefined)
-  );
-
-  return uniqueHccs.size;
-}
-
-// Main function - PROPRIETARY ALGORITHM REMOVED
 /**
- * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
+ * PROPRIETARY FUNCTION: getFunctionCovariates
  * 
- * This function contains proprietary calculation logic and has been moved
- * to api/utils/serverCalculations.js to prevent reverse engineering.
- * 
- * Use the secure API client instead:
- * 
- * import { calculateFunctionScore } from '../utils/secureApiClient';
- * const result = await calculateFunctionScore({ ... });
- * 
- * This function is ONLY available server-side and will NEVER be bundled into client code.
+ * This is the core proprietary algorithm that combines all covariates
+ * and calculates the weighted score. This function MUST remain server-only.
  */
 export function getFunctionCovariates(
   parsedValues,
@@ -748,10 +568,61 @@ export function getFunctionCovariates(
   ardDate = null,
   manualOverrides = {}
 ) {
-  // This function has been removed from client bundle to protect proprietary IP
-  // All implementation is in api/utils/serverCalculations.js
-  throw new Error(
-    'getFunctionCovariates() is server-only. Use calculateFunctionScore() from secureApiClient.js instead. ' +
-    'This function has been removed from the client bundle to protect proprietary intellectual property.'
-  );
+  // Get the correct version of function multipliers based on ARD date
+  const ardDateValue = ardDate || parsedValues['A2300'];
+  const functionMultipliers = getFunctionMultipliers(ardDateValue);
+  
+  const covariates = {};
+
+  // 1. Intercept and Entry terms
+  covariates["Model Intercept"] = 1;
+  // covariates["Entry"] = 1;
+
+  // 2. Admission Function score + squared
+  const startScore = calculateFunctionScore(startScores);
+  covariates["Admission Function - Continuous Form"] = startScore;
+  covariates["Admission Function - Squared Form"] = squared(startScore);
+
+  // 3. Age group logic
+  const ageCov = processAgeCovariate(parsedValues, summary);
+  if (ageCov) covariates[ageCov] = 1;
+
+  // 4-9. Use extracted processing functions
+  Object.assign(covariates, processContinenceCovariates(parsedValues));
+  Object.assign(covariates, processBMICovariates(parsedValues));
+  Object.assign(covariates, processCognitiveFunction(parsedValues));
+  Object.assign(covariates, processCommunicationImpairment(parsedValues));
+  Object.assign(covariates, processUsesWheelchair(parsedValues));
+
+  // 10-16. Use extracted processing functions
+  Object.assign(covariates, processAdditionalClinicalConditions(parsedValues));
+  Object.assign(covariates, processMedicalConditionCategory(parsedValues, startScore));
+  Object.assign(covariates, processPriorFunctioning(parsedValues));
+  Object.assign(covariates, processPriorMobilityDevices(parsedValues));
+
+  // 17-21. Additional clinical conditions (already handled by processAdditionalClinicalConditions)
+
+  // 22-42. HCC conditions processing
+  Object.assign(covariates, processHccConditions(parsedValues, icdList));
+
+  // All HCC conditions are now handled by processHccConditions()
+
+  // Apply manual overrides (for covariates that can't be determined from data)
+  for (const [key, value] of Object.entries(manualOverrides)) {
+    if (value !== undefined && value !== null) {
+      covariates[key] = value;
+    }
+  }
+
+  // Total weighted score based on covariates
+  let weightedScore = 0;
+  for (const [key, value] of Object.entries(covariates)) {
+    const multiplier = functionMultipliers[key] ?? 0;
+    weightedScore += value * multiplier;
+  }
+
+  return { covariates, weightedScore };
 }
+
+// Export determineMobilityType for use in imputation calculations
+export { determineMobilityType };

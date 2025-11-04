@@ -1,6 +1,16 @@
-import { getFunctionCovariates } from './calculations.js';
+// Note: getFunctionCovariates is now server-only (removed from client bundle)
+// This file still needs to import determineMobilityType for client-side use (non-proprietary)
+import { determineMobilityType } from './calculations.js';
 import { getImputationMultipliers } from './coefficientLoader.js';
 import { covariateMapping } from './covariateMapping.js';
+
+// Server-only function - will throw if called client-side
+// Implementation is in api/utils/serverCalculations.js
+function getFunctionCovariates() {
+  throw new Error(
+    'getFunctionCovariates() is server-only. This function has been removed from the client bundle to protect proprietary intellectual property.'
+  );
+}
 
 /**
  * Determines if a GG item covariate should be excluded from imputation
@@ -45,103 +55,25 @@ export function shouldExcludeGGItemCovariate(covariateName, itemBeingImputed, us
 }
 
 /**
- * Imputes missing or invalid GG items using the imputation methodology
- * @param {Object} parsedValues - The parsed MDS values
- * @param {Object} summary - Patient summary data
- * @param {Array} icdList - List of ICD codes
- * @param {Object} startScores - Start scores for admission function calculation
- * @param {Object} targetGGItems - Object with GG item IDs as keys and their current values
- * @returns {Object} Object with imputed values for missing/invalid GG items
+ * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
+ * 
+ * This function contains proprietary imputation logic and has been moved
+ * to api/utils/serverImputation.js to prevent reverse engineering.
+ * 
+ * Use the secure API client instead:
+ * 
+ * import { batchImputeValues } from '../utils/secureApiClient';
+ * const result = await batchImputeValues({ ... });
+ * 
+ * This function is ONLY available server-side and will NEVER be bundled into client code.
  */
 export function imputeMissingGGItems(parsedValues, summary, icdList, startScores, targetGGItems) {
-    // Get ARD date and correct version of multipliers
-    const ardDate = parsedValues['A2300'];
-    const imputationMultipliers = getImputationMultipliers(ardDate);
-    
-    // Get the standard covariates (same as used for expected score calculation)
-    const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
-    
-    // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
-    const usesWheelchair = covariates["Uses Wheelchair"] === 1;
-    
-    const imputedValues = {};
-    
-    // Process each GG item that has imputation data
-    Object.keys(imputationMultipliers).forEach(ggItemId => {
-        const currentValue = targetGGItems[ggItemId];
-        
-        // Check if the item needs imputation (missing, invalid, or not 1-6)
-        const needsImputation = !currentValue || 
-                               !['01', '02', '03', '04', '05', '06'].includes(currentValue);
-        
-        if (needsImputation) {
-            const itemMultipliers = imputationMultipliers[ggItemId];
-            let imputationScore = 0;
-            
-            // Calculate imputation score using all covariates
-            Object.entries(itemMultipliers).forEach(([covariateName, multiplier]) => {
-                let covariateValue = 0;
-                
-                // Handle GG item-specific covariates
-                if (covariateName.includes('(GG') && 
-                    (covariateName.includes('Valid Score') || 
-                     covariateName.includes('Not Attempted') || 
-                     covariateName.includes('Skipped'))) {
-                    
-                    // Check if this GG item covariate should be excluded
-                    if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
-                        // Skip this covariate - don't add it to the imputation score
-                        return;
-                    }
-                    
-                    // Extract GG item ID from covariate name
-                    const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
-                    if (match) {
-                        const itemId = match[0].slice(1, -1);
-                        const rawValue = targetGGItems[itemId];
-                        
-                        if (covariateName.includes('Valid Score')) {
-                            // Valid score: return the actual score value (1-6) if valid
-                            if (rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue)) {
-                                covariateValue = parseInt(rawValue, 10);
-                            }
-                        } else if (covariateName.includes('Not Attempted')) {
-                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88)
-                            // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
-                            const hasSkippedCovariate = Object.keys(itemMultipliers).some(key => 
-                                key.includes(itemId) && key.includes('Skipped')
-                            );
-                            
-                            if (hasSkippedCovariate) {
-                                // If item has a Skipped covariate, only count ANA values as Not Attempted
-                                covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
-                            } else {
-                                // If no Skipped covariate, treat ^ as Not Attempted too
-                                covariateValue = ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
-                            }
-                        } else if (covariateName.includes('Skipped')) {
-                            // Skipped: 1 if value is ^ (skip pattern), 0 otherwise
-                            // Note: This covariate only exists for certain items (J1, K1, L1, N1, O1, R1, S1)
-                            covariateValue = rawValue === '^' ? 1 : 0;
-                        }
-                    }
-                } else {
-                    // Handle standard covariates
-                    const mappedCovariateName = covariateMapping[covariateName] || covariateName;
-                    covariateValue = covariates[mappedCovariateName] || 0;
-                }
-                
-                imputationScore += covariateValue * multiplier;
-            });
-            
-            // Convert imputation score to GG item value (1-6)
-            // This uses the threshold values from the Excel file
-            const imputedValue = convertImputationScoreToGGValue(imputationScore);
-            imputedValues[ggItemId] = imputedValue;
-        }
-    });
-    
-    return imputedValues;
+  // This function has been removed from client bundle to protect proprietary IP
+  // All implementation is in api/utils/serverImputation.js
+  throw new Error(
+    'imputeMissingGGItems() is server-only. Use batchImputeValues() from secureApiClient.js instead. ' +
+    'This function has been removed from the client bundle to protect proprietary intellectual property.'
+  );
 }
 
 /**
@@ -178,35 +110,16 @@ function convertImputationScoreToGGValue(score) {
 }
 
 /**
- * Gets imputation thresholds for a specific GG item based on ARD date
- * @param {string} ggItemId - The GG item ID (e.g., 'GG0130A1')
- * @param {string} ardDate - The ARD date to determine which Update ID to use
- * @returns {Array} Array of threshold values for that item
+ * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
+ * 
+ * This function has been moved to api/utils/serverImputation.js to prevent reverse engineering.
  */
 export function getImputationThresholds(ggItemId, ardDate = null) {
-    // Get the correct imputation multipliers based on ARD date
-    const itemMultipliers = ardDate 
-        ? getImputationMultipliers(ardDate)[ggItemId]
-        : null;
-    
-    // Extract Model Threshold 1-5 from the multipliers
-    if (itemMultipliers) {
-        const thresholds = [
-            itemMultipliers["Model Threshold 1"],
-            itemMultipliers["Model Threshold 2"],
-            itemMultipliers["Model Threshold 3"],
-            itemMultipliers["Model Threshold 4"],
-            itemMultipliers["Model Threshold 5"]
-        ];
-        
-        // Only return if we have all 5 thresholds
-        if (thresholds.every(t => typeof t === 'number')) {
-            return thresholds;
-        }
-    }
-    
-    // Fallback to default thresholds if not found
-    return [-0.5, 0.5, 1.5, 2.5, 3.5];
+  // This function has been removed from client bundle to protect proprietary IP
+  // Implementation is in api/utils/serverImputation.js
+  throw new Error(
+    'getImputationThresholds() is server-only. This function has been removed from the client bundle to protect proprietary intellectual property.'
+  );
 }
 
 /**
@@ -282,7 +195,9 @@ export function imputeMissingGGItemsWithThresholds(parsedValues, summary, icdLis
                     const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
                     if (match) {
                         const itemId = match[0].slice(1, -1);
-                        const rawValue = targetGGItems[itemId];
+                        // Use parsedValues for GG item-specific covariates (original MDS values)
+                        // This matches what ImputationTab does and ensures consistency
+                        const rawValue = parsedValues[itemId];
                         
                         if (covariateName.includes('Valid Score')) {
                             // Valid score: return the actual score value (1-6) if valid

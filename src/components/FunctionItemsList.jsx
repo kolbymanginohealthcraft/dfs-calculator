@@ -14,6 +14,7 @@ const FunctionItemsList = ({
   scores = {}, // Current scores
   startScores = {}, // For end/advanced modes
   onScoreAdjustment, // Callback for score changes
+  onResetAll, // Optional callback to reset all scores at once (for basic mode)
   mobilityType = 'Walk', // For basic mode
   onMobilityTypeChange, // Callback for mobility type changes in basic mode
   contributingIds = new Set(), // For advanced mode
@@ -141,8 +142,6 @@ const FunctionItemsList = ({
 
   // Handle reset all - determine reset state based on variant
   const handleResetAll = () => {
-    if (!onScoreAdjustment) return;
-
     // Determine what the reset state should be based on variant
     let resetState;
     if (variant === 'start') {
@@ -150,8 +149,21 @@ const FunctionItemsList = ({
       resetState = getInitialScores(mobilityType);
     } else {
       // End/Advanced modes: reset to start scores (green nodes back to blue nodes)
-      resetState = startScores;
+      // Create a deep copy to avoid mutations
+      resetState = {
+        selfCare: { ...(startScores.selfCare || {}) },
+        mobility: { ...(startScores.mobility || {}) }
+      };
     }
+
+    // For basic mode, if onResetAll is provided, use it to set all scores at once
+    if (mode === 'basic' && onResetAll) {
+      onResetAll(resetState);
+      return;
+    }
+
+    // Fallback to individual adjustments (for advanced mode or if onResetAll not provided)
+    if (!onScoreAdjustment) return;
 
     // Apply the reset by calling onScoreAdjustment for each item
     if (mode === 'advanced') {
@@ -167,7 +179,8 @@ const FunctionItemsList = ({
         }
       });
     } else {
-      // For basic mode, reset each category
+      // For basic mode without onResetAll, reset each category
+      // This should rarely be used, but kept for backwards compatibility
       Object.keys(resetState).forEach(category => {
         Object.keys(resetState[category]).forEach(key => {
           const currentScore = scores[category]?.[key] || 0;

@@ -1,9 +1,10 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styles from "./ImputationTab.module.css";
 import { Calculator } from "lucide-react";
 import { getImputationMultipliers } from "../utils/coefficientLoader";
-import { getImputationThresholds, shouldExcludeGGItemCovariate } from "../utils/imputationCalculations";
-import { getFunctionCovariates, GG_ITEMS, determineMobilityType } from "../utils/calculations";
+import { shouldExcludeGGItemCovariate } from "../utils/imputationCalculations";
+import { GG_ITEMS, determineMobilityType, extractPatientSummary } from "../utils/calculations";
+import { calculateFunctionScore } from "../utils/secureApiClient";
 
 export default function ImputationTab({
   hasFile,
@@ -14,6 +15,8 @@ export default function ImputationTab({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGGItem, setSelectedGGItem] = useState(null);
+  const [allCovariatesCache, setAllCovariatesCache] = useState(null);
+  const [isLoadingCovariates, setIsLoadingCovariates] = useState(false);
 
   const formatNumber = (n) => Number(n).toFixed(4);
 
@@ -41,6 +44,51 @@ export default function ImputationTab({
     );
   };
 
+  // Load covariates once when data changes
+  useEffect(() => {
+    if (!hasFile || !parsedValues || !startScores || Object.keys(parsedValues).length === 0) {
+      setAllCovariatesCache(null);
+      return;
+    }
+
+    const loadCovariates = async () => {
+      setIsLoadingCovariates(true);
+      try {
+        const ardDate = parsedValues['A2300'];
+        const currentIcdList = Object.entries(parsedValues)
+          .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+          .map(([_, value]) => value)
+          .filter(Boolean);
+
+        const result = await calculateFunctionScore({
+          parsedValues,
+          summary: summary && Object.keys(summary).length > 0 
+            ? summary 
+            : extractPatientSummary(parsedValues, ardDate),
+          icdList: icdList.length > 0 ? icdList : currentIcdList,
+          startScores,
+          ardDate,
+          manualOverrides: {}
+        });
+
+        setAllCovariatesCache(result.covariates || {});
+        console.log('ImputationTab: Loaded covariates:', Object.keys(result.covariates || {}).length);
+      } catch (error) {
+        console.error('Failed to load covariates for imputation tab:', error);
+        console.error('Error details:', {
+          message: error.message,
+          status: error.status,
+          data: error.data
+        });
+        setAllCovariatesCache(null);
+      } finally {
+        setIsLoadingCovariates(false);
+      }
+    };
+
+    loadCovariates();
+  }, [hasFile, parsedValues, startScores, summary, icdList]);
+
   // Helper function to get covariate value
   const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate, itemMultipliers = null) => {
     // First check for GG item-specific covariates
@@ -49,10 +97,9 @@ export default function ImputationTab({
       return ggItemSpecificValue;
     }
     
-    // Use the existing covariate calculation logic for general covariates
+    // Use cached covariates from API call
     // Note: ImputationTab doesn't use manual overrides since it's for analysis only
-    const result = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate, {});
-    return result?.covariates?.[covariateName] || 0;
+    return allCovariatesCache?.[covariateName] || 0;
   };
 
   // Helper function to calculate GG item-specific covariates
@@ -118,7 +165,7 @@ export default function ImputationTab({
 
   // Calculate imputation data for each GG item
   const imputationData = useMemo(() => {
-    if (!hasFile || !parsedValues || !startScores) return {};
+    if (!hasFile || !parsedValues || !startScores || !allCovariatesCache) return {};
 
     // Get ARD date and version-specific multipliers
     const ardDate = parsedValues['A2300'];
@@ -144,11 +191,19 @@ export default function ImputationTab({
       }
       
       const multipliers = imputationMultipliers[ggItemId];
-      const thresholds = getImputationThresholds(ggItemId, ardDate);
       
-      // Get all covariates to determine Uses Wheelchair value
-      const allCovariates = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate, {});
-      const usesWheelchair = allCovariates?.covariates?.["Uses Wheelchair"] === 1;
+      // Extract thresholds from multipliers (they're public data, not proprietary logic)
+      // Thresholds are stored in the multipliers object as "Model Threshold 1-5"
+      const thresholds = multipliers ? [
+        multipliers["Model Threshold 1"],
+        multipliers["Model Threshold 2"],
+        multipliers["Model Threshold 3"],
+        multipliers["Model Threshold 4"],
+        multipliers["Model Threshold 5"]
+      ].filter(t => typeof t === 'number') : [-0.5, 0.5, 1.5, 2.5, 3.5]; // Fallback to defaults
+      
+      // Use cached covariates to determine Uses Wheelchair value
+      const usesWheelchair = allCovariatesCache["Uses Wheelchair"] === 1;
       
       // Get covariates for this specific GG item
       const covariates = {};
@@ -202,7 +257,7 @@ export default function ImputationTab({
     }
 
     return data;
-  }, [hasFile, parsedValues, startScores, summary, icdList]);
+  }, [hasFile, parsedValues, startScores, summary, icdList, allCovariatesCache]);
 
   // Filter GG items based on search term
   const filteredGGItems = Object.entries(imputationData)

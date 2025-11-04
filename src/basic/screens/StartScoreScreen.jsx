@@ -154,6 +154,12 @@ const StartScoreScreen = () => {
           scores={scores}
           startScores={scores}
           onScoreAdjustment={handleScoreAdjustment}
+          onResetAll={(resetState) => {
+            setScores(resetState);
+            if (!hasInteracted) {
+              setHasInteracted(true);
+            }
+          }}
           mobilityType={mobilityType}
           onMobilityTypeChange={handleMobilityTypeChange}
         />

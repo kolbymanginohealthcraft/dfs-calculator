@@ -174,6 +174,12 @@ const EndScoreScreen = () => {
         scores={endScores}
         startScores={startScores}
         onScoreAdjustment={handleScoreAdjustment}
+        onResetAll={(resetState) => {
+          setEndScores(resetState);
+          if (!hasInteracted) {
+            setHasInteracted(true);
+          }
+        }}
         mobilityType={mobilityType}
         meetsExpectedScore={meetsExpectedScore}
       />

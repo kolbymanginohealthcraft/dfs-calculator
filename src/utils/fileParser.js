@@ -1,9 +1,8 @@
 import mdsItemLookup from "../data/mds_item_lookup.json" with { type: "json" };
-import { GG_ITEMS, getFunctionCovariates, extractPatientSummary } from "./calculations.js";
+import { GG_ITEMS, extractPatientSummary } from "./calculations.js";
 import { parseXml } from "./xmlParser.js";
-import { getImputationMultipliersForItem } from "./coefficientLoader.js";
-import { getImputationThresholds, shouldExcludeGGItemCovariate } from "./imputationCalculations.js";
 import { getSectionName } from "./sectionNames.js";
+import { batchImputeValues } from "./secureApiClient.js";
 
 // Helper function to calculate GG item-specific covariates
 export const getGGItemSpecificCovariate = (covariateName, parsedValues, itemMultipliers = null) => {
@@ -47,61 +46,39 @@ export const getGGItemSpecificCovariate = (covariateName, parsedValues, itemMult
   return null;
 };
 
-// Helper function to get covariate value
+/**
+ * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
+ * 
+ * This function has been moved to api/utils/serverImputation.js to prevent reverse engineering.
+ */
 export const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate, itemMultipliers = null) => {
-  const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers);
-  if (ggItemSpecificValue !== null) {
-    return ggItemSpecificValue;
-  }
-  
-  const result = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
-  return result?.covariates?.[covariateName] || 0;
+  // This function has been removed from client bundle to protect proprietary IP
+  throw new Error(
+    'getCovariateValue() is server-only. This function has been removed from the client bundle to protect proprietary intellectual property.'
+  );
 };
 
-// Function to calculate imputed value for a specific GG item
+/**
+ * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
+ * 
+ * This function contains proprietary imputation logic and has been moved
+ * to api/utils/serverImputation.js to prevent reverse engineering.
+ * 
+ * Use the secure API client instead:
+ * 
+ * import { calculateImputedValue } from '../utils/secureApiClient';
+ * const result = await calculateImputedValue({ ... });
+ */
 export const calculateImputedValue = (ggItemId, parsedValues, summary, icdList, startScores) => {
-  const ardDate = parsedValues['A2300'];
-  const multipliers = getImputationMultipliersForItem(ggItemId, ardDate);
-  if (!multipliers || Object.keys(multipliers).length === 0) return "01"; // Default fallback
-  
-  // Get covariates to determine Uses Wheelchair value
-  const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
-  const usesWheelchair = covariates["Uses Wheelchair"] === 1;
-  
-  const thresholds = getImputationThresholds(ggItemId, ardDate);
-  let imputationScore = 0;
-
-  // Calculate imputation score using covariate * multiplier
-  for (const [covariateName, multiplier] of Object.entries(multipliers)) {
-    // Check if this is a GG item-specific covariate that should be excluded
-    if (covariateName.includes('(GG') && 
-        (covariateName.includes('Valid Score') || 
-         covariateName.includes('Not Attempted') || 
-         covariateName.includes('Skipped'))) {
-      
-      if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
-        // Skip this covariate
-        continue;
-      }
-    }
-    
-    const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate, multipliers);
-    imputationScore += covariateValue * multiplier;
-  }
-
-  // Determine which threshold range the score falls into
-  let imputedValue = 1; // Default to 1
-  for (let i = 0; i < thresholds.length; i++) {
-    if (imputationScore > thresholds[i]) {
-      imputedValue = i + 2; // 2, 3, 4, 5, 6
-    }
-  }
-
-  // Convert imputed value back to GG item format (01-06)
-  return imputedValue.toString().padStart(2, '0');
+  // This function has been removed from client bundle to protect proprietary IP
+  // All implementation is in api/utils/serverImputation.js
+  throw new Error(
+    'calculateImputedValue() is server-only. Use calculateImputedValue() from secureApiClient.js instead. ' +
+    'This function has been removed from the client bundle to protect proprietary intellectual property.'
+  );
 };
 
-export function handleFileUpload(
+export async function handleFileUpload(
   file,
   setFileName,
   setParsedValues,
@@ -112,80 +89,114 @@ export function handleFileUpload(
 ) {
   setFileName(file.name);
 
-  file.text().then((text) => {
-    const parsed = parseXml(text);
-    
-    // HIPAA compliance: Clear the file text from memory immediately after parsing
-    text = null;
-    
-    setParsedValues(parsed);
+  const text = await file.text();
+  const parsed = parseXml(text);
+  
+  // HIPAA compliance: Clear the file text from memory immediately after parsing
+  // Note: text is a const, so we can't reassign it, but it will be garbage collected
+  
+  setParsedValues(parsed);
 
-    const grouped = {};
-    Object.entries(parsed).forEach(([key, val]) => {
-      const item = mdsItemLookup[key];
-      if (!item) return;
+  const grouped = {};
+  Object.entries(parsed).forEach(([key, val]) => {
+    const item = mdsItemLookup[key];
+    if (!item) return;
 
-      const sectLabel = item.itm_sect_label || "Other";
-      const fullName = getSectionName(sectLabel);
+    const sectLabel = item.itm_sect_label || "Other";
+    const fullName = getSectionName(sectLabel);
 
-      if (!grouped[sectLabel]) {
-        grouped[sectLabel] = {
-          label: sectLabel,
-          fullName,
-          items: [],
-        };
-      }
+    if (!grouped[sectLabel]) {
+      grouped[sectLabel] = {
+        label: sectLabel,
+        fullName,
+        items: [],
+      };
+    }
 
-      grouped[sectLabel].items.push({
-        id: key,
-        label: item.itm_shrt_label,
-        value: val,
-      });
+    grouped[sectLabel].items.push({
+      id: key,
+      label: item.itm_shrt_label,
+      value: val,
     });
-
-    setGroupedSections(grouped);
-
-    const initModeled = {};
-    const initStart = {};
-    const imputedItems = new Set();
-    
-    // First pass: set up initial values and collect data for imputation
-    const tempStartScores = {};
-    GG_ITEMS.forEach((item) => {
-      const sourceId = item.id + "1";
-      const rawVal = parsed[sourceId] || "01";
-      tempStartScores[item.id] = rawVal;
-    });
-    
-    // Second pass: apply imputation where needed and set both start and modeled scores
-    const summary = extractPatientSummary(parsed, parsed["A2300"]);
-    const icdList = Object.entries(parsed)
-      .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-      .map(([_, value]) => value)
-      .filter(Boolean);
-    
-    GG_ITEMS.forEach((item) => {
-      const sourceId = item.id + "1";
-      const rawVal = parsed[sourceId];
-      const isValidValue = rawVal && ['01', '02', '03', '04', '05', '06'].includes(rawVal);
-      
-      let finalValue;
-      if (isValidValue) {
-        // Use raw value if valid
-        finalValue = rawVal;
-      } else {
-        // Apply imputation if invalid/missing
-        finalValue = calculateImputedValue(sourceId, parsed, summary, icdList, tempStartScores);
-        imputedItems.add(item.id); // Track that this item was imputed
-      }
-      
-      // Set both start and modeled scores to the same value (start scores)
-      initStart[item.id] = finalValue;
-      initModeled[item.id] = finalValue;
-    });
-
-    setModeledValues(initModeled);
-    setStartScores(initStart);
-    setImputedItems(imputedItems);
   });
+
+  setGroupedSections(grouped);
+
+  const initModeled = {};
+  const initStart = {};
+  const imputedItems = new Set();
+  
+  // First pass: set up initial values and collect data for imputation
+  const tempStartScores = {};
+  const targetGGItems = {}; // ALL GG items (needed for GG item-specific covariates)
+  const itemsNeedingImputation = [];
+  
+  GG_ITEMS.forEach((item) => {
+    const sourceId = item.id + "1";
+    const rawVal = parsed[sourceId] || "01";
+    tempStartScores[item.id] = rawVal;
+    
+    // Include ALL items in targetGGItems (server needs them for GG item-specific covariates)
+    targetGGItems[sourceId] = rawVal;
+    
+    // Check if this item needs imputation
+    const isValidValue = rawVal && ['01', '02', '03', '04', '05', '06'].includes(rawVal);
+    if (!isValidValue) {
+      itemsNeedingImputation.push(sourceId);
+    }
+  });
+  
+  // If we have items needing imputation, call the secure API
+  let imputedValues = {};
+  if (itemsNeedingImputation.length > 0) {
+    try {
+      const summary = extractPatientSummary(parsed, parsed["A2300"]);
+      const icdList = Object.entries(parsed)
+        .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+        .map(([_, value]) => value)
+        .filter(Boolean);
+      
+      const result = await batchImputeValues({
+        targetGGItems,
+        parsedValues: parsed,
+        summary,
+        icdList,
+        startScores: tempStartScores,
+        ardDate: parsed["A2300"]
+      });
+      
+      imputedValues = result.imputedValues || {};
+    } catch (error) {
+      console.error('Imputation failed during file upload:', error);
+      // Fallback: use default value "01" for items that failed imputation
+      itemsNeedingImputation.forEach(itemId => {
+        imputedValues[itemId] = "01";
+      });
+    }
+  }
+  
+  // Second pass: set both start and modeled scores
+  GG_ITEMS.forEach((item) => {
+    const sourceId = item.id + "1";
+    const rawVal = parsed[sourceId];
+    const isValidValue = rawVal && ['01', '02', '03', '04', '05', '06'].includes(rawVal);
+    
+    let finalValue;
+    if (isValidValue) {
+      // Use raw value if valid
+      finalValue = rawVal;
+    } else {
+      // Use imputed value from API
+      finalValue = imputedValues[sourceId] || "01"; // Fallback to "01" if imputation failed
+      imputedItems.add(item.id); // Track that this item was imputed
+    }
+    
+    // Set both start and modeled scores to the same value (start scores)
+    initStart[item.id] = finalValue;
+    initModeled[item.id] = finalValue;
+  });
+
+  setModeledValues(initModeled);
+  setStartScores(initStart);
+  setImputedItems(imputedItems);
 }
