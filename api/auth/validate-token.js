@@ -32,48 +32,10 @@ async function validateSSOToken(token) {
   }
 
   try {
-    // SAML Session Token Validation
-    // Since myCare handles the SAML flow, we validate the session token they provide
-    
-    // Option A: Session token validated via myCare API (Recommended)
-    // Ask IT: What's the myCare API endpoint to validate session tokens?
-    if (process.env.MYCARE_VALIDATE_SESSION_URL) {
-      const response = await fetch(process.env.MYCARE_VALIDATE_SESSION_URL, {
-        method: 'POST',
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        signal: AbortSignal.timeout(5000)
-      });
-      
-      if (!response.ok) {
-        return { valid: false, error: 'Invalid or expired session' };
-      }
-      
-      const user = await response.json();
-      return { valid: true, user };
-    }
-    
-    // Option B: Session token is JWT (if myCare issues JWT after SAML)
-    // Ask IT: Is the session token a JWT? What's the public key?
-    if (process.env.SESSION_TOKEN_IS_JWT === 'true') {
-      const jwt = require('jsonwebtoken');
-      const decoded = jwt.verify(token, process.env.SESSION_PUBLIC_KEY, {
-        algorithms: ['RS256']
-      });
-      
-      // Check if token is expired
-      if (decoded.exp && decoded.exp < Date.now() / 1000) {
-        return { valid: false, error: 'Token expired' };
-      }
-      
-      return { valid: true, user: decoded };
-    }
-    
-    // Option C: Direct SAML Assertion Validation
-    // The token is the actual SAML XML assertion (encoded)
-    // Requires: npm install xml-crypto xml2js
+    // SAML Assertion Validation (Primary Method)
+    // myCare stores the SAML XML assertion in the UPN cookie after authentication
+    // The token is the actual SAML XML assertion (may be base64 encoded)
+    // Requires: npm install xml-crypto xml2js (already installed)
     
     try {
       // Import SAML validation libraries
@@ -106,11 +68,22 @@ async function validateSSOToken(token) {
       // Validate signature using myCare's public certificate
       // Set this in your environment variables: SAML_CERT
       const cert = process.env.SAML_CERT;
+      const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production';
+      
       if (!cert) {
-        console.warn('⚠️ SAML_CERT not set - signature validation skipped');
-        // In production, you should require the certificate
-        // For now, allow if cert not set (to be configured)
+        if (isProduction) {
+          // In production, certificate is required for security
+          console.error('❌ SAML_CERT not set in production - signature validation cannot proceed');
+          return { 
+            valid: false, 
+            error: 'SAML certificate not configured. Please contact administrator.' 
+          };
+        } else {
+          // In development, allow without certificate for testing
+          console.warn('⚠️ SAML_CERT not set - signature validation skipped (development mode)');
+        }
       } else {
+        // Validate signature if certificate is provided
         const sig = new SignedXml();
         sig.keyInfoProvider = { getKey: () => cert };
         
@@ -119,6 +92,14 @@ async function validateSSOToken(token) {
           const isValid = sig.checkSignature(samlXml);
           if (!isValid) {
             return { valid: false, error: 'Invalid SAML signature' };
+          }
+        } else {
+          // In production, require signed assertions
+          if (isProduction) {
+            return { 
+              valid: false, 
+              error: 'SAML assertion is not signed' 
+            };
           }
         }
       }
@@ -159,7 +140,18 @@ async function validateSSOToken(token) {
       }
       
       // Extract user ID from NameID
-      const userId = nameId?._ || nameId || subject?.NameID?.[0]?._;
+      // Handle different SAML NameID formats
+      let userId = null;
+      if (nameId) {
+        // NameID can be a string or object with _ property
+        userId = typeof nameId === 'string' ? nameId : nameId._ || nameId;
+      }
+      
+      // Also check in subject if not found in nameId
+      if (!userId && subject?.NameID) {
+        const subjNameId = Array.isArray(subject.NameID) ? subject.NameID[0] : subject.NameID;
+        userId = typeof subjNameId === 'string' ? subjNameId : subjNameId?._ || subjNameId;
+      }
       
       if (!userId) {
         return { valid: false, error: 'No user ID found in SAML assertion' };
@@ -188,8 +180,6 @@ async function validateSSOToken(token) {
       console.error('SAML assertion validation error:', importError);
       return { valid: false, error: `SAML validation failed: ${importError.message}` };
     }
-    
-    return { valid: false, error: 'Invalid token format' };
   } catch (error) {
     return { valid: false, error: `Token validation failed: ${error.message}` };
   }

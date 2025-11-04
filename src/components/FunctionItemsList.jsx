@@ -149,11 +149,16 @@ const FunctionItemsList = ({
       resetState = getInitialScores(mobilityType);
     } else {
       // End/Advanced modes: reset to start scores (green nodes back to blue nodes)
-      // Create a deep copy to avoid mutations
-      resetState = {
-        selfCare: { ...(startScores.selfCare || {}) },
-        mobility: { ...(startScores.mobility || {}) }
-      };
+      if (mode === 'advanced') {
+        // Advanced mode: startScores is a flat object with GG item IDs as keys
+        resetState = { ...startScores };
+      } else {
+        // Basic mode: startScores is nested with selfCare and mobility
+        resetState = {
+          selfCare: { ...(startScores.selfCare || {}) },
+          mobility: { ...(startScores.mobility || {}) }
+        };
+      }
     }
 
     // For basic mode, if onResetAll is provided, use it to set all scores at once
@@ -167,16 +172,26 @@ const FunctionItemsList = ({
 
     // Apply the reset by calling onScoreAdjustment for each item
     if (mode === 'advanced') {
-      // For advanced mode, reset each GG item
-      Object.keys(resetState).forEach(itemId => {
-        const currentScore = scoreMap[scores[itemId]] || 0;
-        const targetScore = scoreMap[resetState[itemId]] || 0;
-        if (currentScore !== targetScore) {
-          const delta = targetScore - currentScore;
-          if (delta !== 0) {
-            onScoreAdjustment(itemId, delta);
+      // For advanced mode, iterate over displayed items and reset each to its start score
+      const itemsData = getItems();
+      itemsData.forEach(({ items: domainItems }) => {
+        domainItems.forEach(item => {
+          const itemId = item.id;
+          const currentRaw = scores[itemId];
+          const targetRaw = resetState[itemId];
+          
+          if (targetRaw !== undefined) {
+            const currentScore = currentRaw in scoreMap ? scoreMap[currentRaw] : 0;
+            const targetScore = targetRaw in scoreMap ? scoreMap[targetRaw] : 0;
+            
+            if (currentScore !== targetScore) {
+              const delta = targetScore - currentScore;
+              if (delta !== 0) {
+                onScoreAdjustment(itemId, delta);
+              }
+            }
           }
-        }
+        });
       });
     } else {
       // For basic mode without onResetAll, reset each category

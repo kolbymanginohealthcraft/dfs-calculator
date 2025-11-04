@@ -36,8 +36,8 @@ function getSSOToken() {
   }
 
   // SAML assertion token retrieval from cookie
-  // myCare stores the SAML XML assertion (encoded) in a cookie after authentication
-  const cookieName = import.meta.env.VITE_SAML_SESSION_COOKIE || 'mycare_session_token';
+  // myCare stores the SAML XML assertion in the UPN cookie after authentication
+  const cookieName = import.meta.env.VITE_SAML_SESSION_COOKIE || 'UPN';
   
   const cookies = document.cookie.split(';');
   const tokenCookie = cookies.find(c => {
@@ -47,6 +47,7 @@ function getSSOToken() {
   
   if (tokenCookie) {
     // Extract and decode the cookie value
+    // SAML assertions may be base64 encoded or plain XML
     const tokenValue = decodeURIComponent(tokenCookie.split('=').slice(1).join('='));
     return tokenValue;
   }
