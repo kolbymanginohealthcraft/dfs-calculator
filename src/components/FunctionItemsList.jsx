@@ -2,9 +2,10 @@ import React from 'react';
 import BarbellChart from './BarbellChart';
 import ScoreButton from './ScoreButton';
 import { getScoreTypeColor } from '../utils/themeColors';
-import { GG_ITEMS, scoreMap } from '../utils/calculations';
+// All calculations now handled server-side
 import { getContributingKeys, getInitialScores } from '../utils/itemDefinitions';
 import { getBasicContributingItems } from '../utils/itemAdapters';
+import { scoreMap } from '../utils/clientConstants';
 import styles from './FunctionItemsList.module.css';
 
 const FunctionItemsList = ({

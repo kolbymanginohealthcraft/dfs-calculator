@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import styles from "./Covariates.module.css";
 import { BarChart3 } from "lucide-react";
 import { covariateRelatedItems } from "../utils/covariateRelatedItems";
-import { getVersionFromArdDate } from "../utils/coefficientLoader";
+// All calculations now handled server-side
 
 export default function Covariates({
   hasFile,
@@ -15,11 +15,12 @@ export default function Covariates({
   manualOverrides = {},
   onManualOverrideChange = () => {},
   parsedValues = {},
+  results = null,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   
-  // Determine if we're using FY 2026 (Update ID 3) which has the discharge therapy covariate
-  const version = getVersionFromArdDate(ardDate);
+  // Version now provided by server
+  const version = results?.version || '3';
   
   // Check if discharge therapy data (O0425 items) is populated
   const therapyItems = ["O0425B1", "O0425B2", "O0425B3", "O0425C1", "O0425C2", "O0425C3"];

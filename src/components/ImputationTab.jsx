@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styles from "./ImputationTab.module.css";
 import { Calculator } from "lucide-react";
-import { getImputationMultipliers } from "../utils/coefficientLoader";
-import { getImputationThresholds, shouldExcludeGGItemCovariate } from "../utils/imputationCalculations";
-import { getFunctionCovariates, GG_ITEMS, determineMobilityType } from "../utils/calculations";
+// All calculations now handled server-side
+import { determineMobilityType } from "../utils/clientCalculations";
+import { GG_ITEMS } from "../utils/clientConstants";
+import { AdvancedAPIService, getAuthToken } from "../utils/apiService";
+// All calculations now handled server-side
 
 export default function ImputationTab({
   hasFile,
@@ -11,9 +13,13 @@ export default function ImputationTab({
   startScores = {},
   summary = {},
   icdList = [],
+  results = null,
+  currentFile = null,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGGItem, setSelectedGGItem] = useState(null);
+  const [imputationData, setImputationData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const formatNumber = (n) => Number(n).toFixed(4);
 
@@ -41,18 +47,16 @@ export default function ImputationTab({
     );
   };
 
-  // Helper function to get covariate value
-  const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate, itemMultipliers = null) => {
+  // Helper function to get covariate value (now uses data from API)
+  const getCovariateValue = (covariateName, parsedValues, itemMultipliers = null) => {
     // First check for GG item-specific covariates
     const ggItemSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers);
     if (ggItemSpecificValue !== null) {
       return ggItemSpecificValue;
     }
     
-    // Use the existing covariate calculation logic for general covariates
-    // Note: ImputationTab doesn't use manual overrides since it's for analysis only
-    const result = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate, {});
-    return result?.covariates?.[covariateName] || 0;
+    // Covariates provided by server (from results)
+    return results?.covariates?.[covariateName] || 0;
   };
 
   // Helper function to calculate GG item-specific covariates
@@ -116,93 +120,37 @@ export default function ImputationTab({
     return ggItemId;
   };
 
-  // Calculate imputation data for each GG item
-  const imputationData = useMemo(() => {
-    if (!hasFile || !parsedValues || !startScores) return {};
-
-    // Get ARD date and version-specific multipliers
-    const ardDate = parsedValues['A2300'];
-    const imputationMultipliers = getImputationMultipliers(ardDate);
-
-    // Determine mobility type
-    const mobilityType = determineMobilityType(parsedValues);
-    
-    // Define which items are walker-specific vs wheelchair-specific
-    const walkerItems = new Set(['GG0170I1', 'GG0170J1', 'GG0170K1', 'GG0170L1', 'GG0170M1', 'GG0170N1', 'GG0170O1']);
-    const wheelchairItems = new Set(['GG0170R1', 'GG0170S1']);
-    
-    const data = {};
-    const ggItems = Object.keys(imputationMultipliers);
-
-    for (const ggItemId of ggItems) {
-      // Filter items based on mobility type
-      if (walkerItems.has(ggItemId) && mobilityType !== 'Walk') {
-        continue; // Skip walker items if not a walker
+  // Fetch imputation details from API (replaces client-side calculation)
+  useEffect(() => {
+    const fetchImputationDetails = async () => {
+      if (!hasFile || !parsedValues || !startScores || !currentFile?._rawData?.xmlContent) {
+        return;
       }
-      if (wheelchairItems.has(ggItemId) && mobilityType !== 'Wheel') {
-        continue; // Skip wheelchair items if not a wheelchair user
-      }
-      
-      const multipliers = imputationMultipliers[ggItemId];
-      const thresholds = getImputationThresholds(ggItemId, ardDate);
-      
-      // Get all covariates to determine Uses Wheelchair value
-      const allCovariates = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate, {});
-      const usesWheelchair = allCovariates?.covariates?.["Uses Wheelchair"] === 1;
-      
-      // Get covariates for this specific GG item
-      const covariates = {};
-      let imputationScore = 0;
 
-      // Calculate imputation score using covariate * multiplier
-      for (const [covariateName, multiplier] of Object.entries(multipliers)) {
-        // Check if this is a GG item-specific covariate that should be excluded
-        if (covariateName.includes('(GG') && 
-            (covariateName.includes('Valid Score') || 
-             covariateName.includes('Not Attempted') || 
-             covariateName.includes('Skipped'))) {
-          
-          if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
-            // Skip this covariate - don't display it or add it to the imputation score
-            continue;
-          }
-        }
+      setIsLoading(true);
+      try {
+        const authToken = getAuthToken();
+        const apiService = authToken ? new AdvancedAPIService(authToken) : null;
         
-        // Get covariate value from the main covariate calculation
-        const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate, multipliers);
-        
-        if (covariateValue !== 0) {
-          covariates[covariateName] = covariateValue;
-          imputationScore += covariateValue * multiplier;
+        if (!apiService) {
+          console.warn('No API service available for imputation details');
+          setIsLoading(false);
+          return;
         }
+
+        const apiResult = await apiService.getImputationDetails(currentFile._rawData.xmlContent);
+        setImputationData(apiResult.result.imputationData || {});
+      } catch (error) {
+        console.error('Failed to fetch imputation details:', error);
+        // Fall back to empty data
+        setImputationData({});
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      // Determine which threshold range the score falls into
-      let imputedValue = 1; // Default to 1
-      for (let i = 0; i < thresholds.length; i++) {
-        if (imputationScore > thresholds[i]) {
-          imputedValue = i + 2; // 2, 3, 4, 5, 6
-        }
-      }
-
-      // Check raw MDS value to determine if imputation is needed
-      const rawValue = parsedValues[ggItemId];
-      const isValidValue = rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue);
-      const needsImputation = !rawValue || !isValidValue;
-
-      data[ggItemId] = {
-        covariates,
-        multipliers,
-        imputationScore,
-        thresholds,
-        imputedValue: needsImputation ? imputedValue : null,
-        originalValue: rawValue || null,
-        needsImputation
-      };
-    }
-
-    return data;
-  }, [hasFile, parsedValues, startScores, summary, icdList]);
+    fetchImputationDetails();
+  }, [hasFile, parsedValues, startScores, currentFile]);
 
   // Filter GG items based on search term
   const filteredGGItems = Object.entries(imputationData)
@@ -501,6 +449,10 @@ export default function ImputationTab({
               })}
             </tbody>
           </table>
+        ) : isLoading ? (
+          <div className={styles.placeholder}>
+            <p>Loading imputation analysis...</p>
+          </div>
         ) : (
           <div className={styles.placeholder}>
             <p>Upload an MDS XML file to see imputation analysis</p>

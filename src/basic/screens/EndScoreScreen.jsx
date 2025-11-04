@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getContributingKeys, getInitialScores } from '../../utils/itemDefinitions';
-import { hasMeaningfulData } from '../../utils/scoreCalculations';
+// Score calculations now handled server-side
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
 import { createOptimizedBasicAPIService } from '../../utils/optimizedApiService';
-import { calculateOptimisticTotal, isOptimisticCloseEnough } from '../../utils/optimisticCalculations';
+// Optimistic calculations removed for security
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
@@ -25,10 +25,7 @@ const EndScoreScreen = () => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
-  const [endTotal, setEndTotal] = useState(() => {
-    // Initialize with optimistic calculation of end scores
-    return calculateOptimisticTotal(endScores, mobilityType);
-  });
+  const [endTotal, setEndTotal] = useState(0);
   
   // Initialize API service (memoized to prevent infinite loops)
   const apiService = useMemo(() => createOptimizedBasicAPIService(150), []);
@@ -46,14 +43,10 @@ const EndScoreScreen = () => {
         const result = await apiService.calculateScore(endScores, mobilityType);
         console.log('EndScoreScreen: API result:', result.result.functionScore);
         
-        // Only update if the optimistic calculation was significantly different
-        const optimisticTotal = calculateOptimisticTotal(endScores, mobilityType);
-        if (!isOptimisticCloseEnough(optimisticTotal, result.result.functionScore)) {
-          setEndTotal(result.result.functionScore);
-        }
+        setEndTotal(result.result.functionScore);
       } catch (error) {
         console.error('API calculation failed:', error);
-        // Keep the optimistic total if API fails
+        throw new Error('Unable to calculate end score. Please check your connection and try again.');
       } finally {
         setIsCalculating(false);
       }
@@ -72,16 +65,12 @@ const EndScoreScreen = () => {
     const newScores = adjustScore(endScores, key, delta, startScores);
     setEndScores(newScores);
     
-    // Immediately update UI with optimistic calculation
-    const optimisticTotal = calculateOptimisticTotal(newScores, mobilityType);
-    setEndTotal(optimisticTotal);
+    // UI will update when API call completes
   };
 
   const handleResetAll = () => {
     setEndScores(startScores);
-    // Immediately update UI with optimistic calculation
-    const optimisticTotal = calculateOptimisticTotal(startScores, mobilityType);
-    setEndTotal(optimisticTotal);
+    // UI will update when API call completes
   };
 
   const calcEndTotal = () => {
@@ -157,7 +146,8 @@ const EndScoreScreen = () => {
   };
 
 
-  const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore, endScores, endTotal);
+  // Data preservation check simplified for server-side calculations
+  const hasDataToPreserve = startTotal > 0 || endTotal > 0;
   
   // Determine if end score meets expected score for accent border styling
   const meetsExpectedScore = endTotal >= expectedScore;

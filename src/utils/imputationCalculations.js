@@ -1,5 +1,6 @@
-import { getFunctionCovariates } from './calculations.js';
-import { getImputationMultipliers } from './coefficientLoader.js';
+// All calculations now handled server-side
+// coefficientLoader is server-only - import directly (this file is server-only via server.js)
+import { getImputationMultipliers } from './server/coefficientLoader.js';
 import { covariateMapping } from './covariateMapping.js';
 
 /**

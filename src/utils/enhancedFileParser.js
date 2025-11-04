@@ -4,7 +4,7 @@
  */
 
 import { validateMdsFile, generateUserFriendlyMessage } from './fileValidation';
-import { handleFileUpload as originalHandleFileUpload } from './fileParser';
+// File parsing now handled server-side
 
 /**
  * Enhanced file upload handler with validation
@@ -70,16 +70,12 @@ export async function handleFileUploadWithValidation(
       });
     }
 
-    // If validation passes, proceed with original file processing
-    await originalHandleFileUpload(
-      file,
-      setFileName,
-      setParsedValues,
-      setGroupedSections,
-      setModeledValues,
-      setStartScores,
-      setImputedItems
-    );
+    // File processing now handled server-side
+    // Just set the file name for display
+    // Note: Parsing is done separately via parseFileForClient
+    if (setFileName) {
+      setFileName(file.name);
+    }
 
     return true; // Success
 

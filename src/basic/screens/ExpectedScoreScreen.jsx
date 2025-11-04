@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { hasMeaningfulData } from '../../utils/scoreCalculations';
+// Score calculations now handled server-side
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
 import { createOptimizedBasicAPIService } from '../../utils/optimizedApiService';
-import { calculateOptimisticExpected } from '../../utils/optimisticCalculations';
+// Optimistic calculations removed for security
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
@@ -19,12 +19,12 @@ const ExpectedScoreScreen = () => {
   const { updateDataStatus, clearDataStatus } = useDataLossWarning();
   
   const [expectedScore, setExpectedScore] = useState(() => {
-    // Initialize with optimistic expected score
-    return incomingExpectedScore || calculateOptimisticExpected(startTotal, mobilityType || 'Walk');
+    // Initialize with incoming expected score or fallback
+    return incomingExpectedScore || startTotal;
   });
   const [sliderValue, setSliderValue] = useState(() => {
     // Initialize slider with same value
-    return incomingExpectedScore || calculateOptimisticExpected(startTotal, mobilityType || 'Walk');
+    return incomingExpectedScore || startTotal;
   });
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -43,15 +43,11 @@ const ExpectedScoreScreen = () => {
           const calculatedExpected = result.result.functionScore;
           console.log('ExpectedScoreScreen: API result:', calculatedExpected);
           
-          // Only update if significantly different from optimistic calculation
-          const optimisticExpected = calculateOptimisticExpected(startTotal, mobilityType);
-          if (Math.abs(calculatedExpected - optimisticExpected) > 1) {
-            setExpectedScore(calculatedExpected);
-            setSliderValue(calculatedExpected);
-          }
+          setExpectedScore(calculatedExpected);
+          setSliderValue(calculatedExpected);
         } catch (error) {
           console.error('API calculation failed:', error);
-          // Keep the optimistic value if API fails
+          throw new Error('Unable to calculate expected score. Please check your connection and try again.');
         } finally {
           setIsCalculating(false);
         }
@@ -152,7 +148,8 @@ const ExpectedScoreScreen = () => {
   };
 
   const scoreDifference = expectedScore - startTotal;
-  const hasDataToPreserve = hasMeaningfulData(startScores, startTotal, expectedScore);
+  // Data preservation check simplified for server-side calculations
+  const hasDataToPreserve = startTotal > 0 || expectedScore > 0;
 
   return (
     <>

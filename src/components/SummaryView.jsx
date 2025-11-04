@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Download, FileText, AlertCircle, CheckCircle, Eye, EyeOff, Info, Search, X, ChevronDown } from 'lucide-react';
 import { redactName, redactFullName, redactFacility, redactAddress } from '../utils/redactionUtils';
-import { extractPatientSummary, determineMobilityType } from '../utils/calculations';
+// Calculations now handled server-side
 import { fetchFacilityInfo } from '../utils/facilityLookup';
 import html2pdf from 'html2pdf.js';
 import { lazy, Suspense } from 'react';
@@ -10,7 +10,7 @@ import styles from './SummaryView.module.css';
 // Lazy load ExportView to avoid circular dependencies
 const ExportView = lazy(() => import('./ExportView'));
 
-const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, calculateFunctionScore, onDeleteFile, onClearAll, isRedacted, onToggleRedaction, paginationInfo, currentPage, totalItems, onPageChange }) => {
+const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onExportDetails, onDeleteFile, onClearAll, isRedacted, onToggleRedaction, paginationInfo, currentPage, totalItems, onPageChange }) => {
   const [sortField, setSortField] = useState('status');
   const [sortDirection, setSortDirection] = useState('asc');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -88,20 +88,11 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
     };
   }, [showExportDropdown, showFilterDropdown]);
 
-  // Memoize expensive calculations to prevent recalculation on every render
+  // User modeled scores now calculated server-side
   const calculateUserModeledScore = useCallback((file) => {
-    if (!file.userModeledValues || !calculateFunctionScore) return null;
-    
-    try {
-      const userEndScore = calculateFunctionScore(file.userModeledValues);
-      const startScore = file.results?.startScore || 0;
-      
-      // Only return the score if there's actual gain (end > start)
-      return userEndScore > startScore ? userEndScore : null;
-    } catch (error) {
-      return null;
-    }
-  }, [calculateFunctionScore]);
+    // Return server-calculated values if available
+    return file.userModeledResults || null;
+  }, []);
 
   // Calculate gain vs required (actual gain - required gain)
   const calculateGainVsRequired = useCallback((file) => {
@@ -316,10 +307,9 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
       return;
     }
 
-    // Extract patient data from raw parsed values (same as detailed view)
-    const parsedValues = file._rawData?.parsedValues || {};
-    const patientSummary = extractPatientSummary(parsedValues);
-    const mobilityType = determineMobilityType(parsedValues);
+    // Patient data now provided by server
+    const patientSummary = file.results?.summary || {};
+    const mobilityType = file.results?.mobilityType || 'Unknown';
 
     // Extract patient information
     const {

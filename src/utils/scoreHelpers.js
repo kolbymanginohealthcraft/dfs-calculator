@@ -26,7 +26,8 @@ export const updateScore = (scores, category, key, value) => {
  * @param {Object} startScores - Start scores object for validation (optional)
  * @returns {Object} - Updated scores object
  */
-import { clampScore } from './scoreCalculations.js';
+// clampScore function moved to server-side utilities
+const clampScore = (value, min = 0, max = 6) => Math.max(min, Math.min(max, value));
 
 export const adjustScore = (scores, key, delta, startScores = null) => {
   const category = getCategoryForKey(key);
@@ -51,7 +52,8 @@ export const adjustScore = (scores, key, delta, startScores = null) => {
  * @returns {string|null} - Category name or null if not found
  */
 import { GG_TO_BASIC_MAPPING } from './itemAdapters.js';
-import { GG_ITEMS } from './calculations.js';
+import { GG_ITEMS } from './clientConstants.js';
+// All calculations now handled server-side
 
 export const getCategoryForKey = (key) => {
   // Handle the duplicate wheelchair R item

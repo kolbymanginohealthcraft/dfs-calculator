@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getContributingKeys, getInitialScores, SCORE_CONSTANTS } from '../../utils/itemDefinitions';
-import { hasMeaningfulData } from '../../utils/scoreCalculations';
+// Score calculations now handled server-side
 import { adjustScore, isScoreAtMin, isScoreAtMax } from '../../utils/scoreHelpers';
 import { getScoreTypeColor } from '../../utils/themeColors';
 import { useDataLossWarning } from '../../contexts/DataLossWarningContext';
 import { createOptimizedBasicAPIService } from '../../utils/optimizedApiService';
-import { calculateOptimisticTotal, isOptimisticCloseEnough } from '../../utils/optimisticCalculations';
+// Optimistic calculations removed for security
 import ScoreBarChart from '../../components/ScoreBarChart';
 import InstructionPanel from '../components/InstructionPanel';
 import BasicLayout from '../components/BasicLayout';
@@ -25,11 +25,7 @@ const StartScoreScreen = () => {
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   const [isCalculating, setIsCalculating] = useState(false);
-  const [startTotal, setStartTotal] = useState(() => {
-    // Initialize with optimistic calculation of initial scores
-    const initialScores = startScores || getInitialScores(incomingMobilityType || 'Walk');
-    return calculateOptimisticTotal(initialScores, incomingMobilityType || 'Walk');
-  });
+  const [startTotal, setStartTotal] = useState(0);
   
   // Initialize optimized API service (memoized to prevent infinite loops)
   const apiService = useMemo(() => createOptimizedBasicAPIService(150), []);
@@ -59,14 +55,11 @@ const StartScoreScreen = () => {
       try {
         // Use regular API call (not optimistic) for background sync
         const result = await apiService.calculateScore(scores, mobilityType);
-        // Only update if the optimistic calculation was significantly different
-        const optimisticTotal = calculateOptimisticTotal(scores, mobilityType);
-        if (!isOptimisticCloseEnough(optimisticTotal, result.result.functionScore)) {
-          setStartTotal(result.result.functionScore);
-        }
+        setStartTotal(result.result.functionScore);
       } catch (error) {
         console.error('Error updating total:', error);
-        // Keep the optimistic total if API fails
+        // Show error to user
+        throw new Error('Unable to calculate score. Please check your connection and try again.');
       }
     };
     
@@ -103,9 +96,7 @@ const StartScoreScreen = () => {
     
     setScores(newScores);
     
-    // Immediately update UI with optimistic calculation
-    const optimisticTotal = calculateOptimisticTotal(newScores, newMobilityType);
-    setStartTotal(optimisticTotal);
+    // UI will update when API call completes
   };
 
   const handleScoreAdjustment = (key, delta) => {
@@ -116,17 +107,13 @@ const StartScoreScreen = () => {
     const newScores = adjustScore(scores, key, delta);
     setScores(newScores);
     
-    // Immediately update UI with optimistic calculation
-    const optimisticTotal = calculateOptimisticTotal(newScores, mobilityType);
-    setStartTotal(optimisticTotal);
+    // UI will update when API call completes
   };
 
   const handleResetAll = () => {
     const defaultScores = getInitialScores(mobilityType);
     setScores(defaultScores);
-    // Immediately update UI with optimistic calculation
-    const optimisticTotal = calculateOptimisticTotal(defaultScores, mobilityType);
-    setStartTotal(optimisticTotal);
+    // UI will update when API call completes
   };
 
   const handleSubmit = () => {
@@ -188,7 +175,8 @@ const StartScoreScreen = () => {
   };
 
 
-  const hasDataToPreserve = hasMeaningfulData(scores, startTotal, null);
+  // Data preservation check simplified for server-side calculations
+  const hasDataToPreserve = startTotal > 0;
 
   return (
     <>

@@ -16,16 +16,34 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid filename' });
   }
 
-  // Only allow specific data files
-  const allowedFiles = [
+  // Only allow non-sensitive data files (public access)
+  // Sensitive files (coefficients, icdToHcc) are server-only
+  const publicAllowedFiles = [
     'mds_item_lookup.json',
-    'mds_section_names.json',
+    'mds_section_names.json'
+  ];
+
+  // Sensitive files require authentication
+  const protectedFiles = [
     'icdToHcc.json',
     'coefficients-all-versions.json',
     'end-score-coefficients.json'
   ];
 
-  if (!allowedFiles.includes(filename)) {
+  // Check if file is in protected list
+  if (protectedFiles.includes(filename)) {
+    // Require SSO token for sensitive data
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token || !token.startsWith('sso_')) {
+      return res.status(401).json({ 
+        error: 'Unauthorized', 
+        message: 'SSO token required for sensitive data files' 
+      });
+    }
+  }
+
+  // Check if file is allowed
+  if (!publicAllowedFiles.includes(filename) && !protectedFiles.includes(filename)) {
     return res.status(404).json({ error: 'File not found' });
   }
 

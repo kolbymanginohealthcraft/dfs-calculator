@@ -1,5 +1,12 @@
 import React from "react";
-import { formatDOB } from "../utils/calculations";
+// Simple date formatter for patient header display
+const formatDOB = (dateStr) => {
+  if (!dateStr || dateStr.length !== 8) return dateStr;
+  const year = dateStr.substring(0, 4);
+  const month = dateStr.substring(4, 6);
+  const day = dateStr.substring(6, 8);
+  return `${month}/${day}/${year}`;
+};
 import { redactName, redactFacility, redactAddress } from "../utils/redactionUtils";
 import styles from "./PatientHeader.module.css";
 import { Eye, EyeOff, User, Building2, Calendar, ClipboardList } from "lucide-react";

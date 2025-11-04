@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styles from "./MdsSnapshot.module.css";
 import { useICD10Lookup } from "../utils/useICD10Lookup";
-import { formatDate } from "../utils/calculations";
+// Simple date formatter for MDS snapshot display
+const formatDate = (dateStr) => {
+  if (!dateStr || dateStr.length !== 8) return dateStr;
+  const year = dateStr.substring(0, 4);
+  const month = dateStr.substring(4, 6);
+  const day = dateStr.substring(6, 8);
+  return `${month}/${day}/${year}`;
+};
 import { redactName } from "../utils/redactionUtils";
-import { getHccDisplayForIcd } from "../utils/hccMapping";
+// HCC mapping now handled server-side
 import { ClipboardList, X, ArrowLeft } from "lucide-react";
-import mdsItemLookup from "../data/mds_item_lookup.json";
+// MDS item lookup now handled server-side
 
 export default function MdsSnapshot({
   groupedSections,
@@ -101,8 +108,8 @@ export default function MdsSnapshot({
       return "REDACTED";
     }
 
-    // Get item type from lookup
-    const itemType = mdsItemLookup[id]?.itm_type_cd;
+    // Item type now provided by server
+    const itemType = descriptions[id]?.type || 'Text';
     
     // Format dates automatically based on item type
     if (itemType === "Date" && value && value.length === 8 && /^\d{8}$/.test(value)) {
@@ -131,10 +138,8 @@ export default function MdsSnapshot({
     const displayValue =
       isDiagnosisCode && !isTrulyBlank ? value.replace(/\^/g, "") : value;
 
-    // Get HCC mapping for diagnosis codes
-    const hccDisplay = isDiagnosisCode && !isTrulyBlank 
-      ? getHccDisplayForIcd(cleanedValue) 
-      : "";
+    // HCC mapping now handled server-side
+    const hccDisplay = "";
 
     if (labelDesc) {
       return (

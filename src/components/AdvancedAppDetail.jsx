@@ -1,14 +1,8 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { scoreMap, GG_ITEMS, conditionMap } from "../utils/calculations";
-import {
-  extractPatientSummary,
-  determineMobilityType,
-  calculateFunctionScore,
-  getFunctionCovariates,
-} from "../utils/calculations";
+// All calculations now handled server-side
 import { fetchFacilityInfo } from "../utils/facilityLookup";
-import { getFunctionMultipliers } from "../utils/coefficientLoader";
+// All calculations now handled server-side
 import { useICD10Lookup } from "../utils/useICD10Lookup";
 import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
@@ -17,6 +11,10 @@ import { useRedaction } from "../contexts/RedactionContext";
 import { usePortal } from "../contexts/PortalContext";
 import { useDataLossWarning } from "../contexts/DataLossWarningContext";
 import html2pdf from "html2pdf.js";
+import { AdvancedAPIService, getAuthToken } from "../utils/apiService";
+import { conditionMap } from "../utils/clientConstants";
+import { calculateFunctionScore } from "../utils/clientCalculations";
+import { buildGroupedSections } from "../utils/clientFileParser";
 
 import Navbar from "./Navbar";
 import ModeBanner from "./ModeBanner";
@@ -84,6 +82,7 @@ function AdvancedAppDetail() {
   const [validationError, setValidationError] = useState(null);
   const [validationWarning, setValidationWarning] = useState(null);
   const [manualCovariateOverrides, setManualCovariateOverrides] = useState({});
+  const [results, setResults] = useState(null); // Store full API results
   const exportRef = useRef();
 
   const icd10Descriptions = useICD10Lookup();
@@ -180,8 +179,8 @@ function AdvancedAppDetail() {
         setStartScores(file._rawData.startScores || {});
         setImputedItems(file._rawData.imputedItems || new Set());
         
-        // Load user's saved modeled values, or fall back to original modeled values
-        setModeledValues(file.userModeledValues || file._rawData.modeledValues || {});
+        // Load user's saved modeled values, or fall back to start scores (end scores default to start scores)
+        setModeledValues(file.userModeledValues || file._rawData.modeledValues || file._rawData.startScores || {});
         setCovariates(file.userCovariates || {});
         setWeightedScore(file.userWeightedScore || 0);
         setVersionMultipliers(file.userVersionMultipliers || {});
@@ -273,9 +272,19 @@ function AdvancedAppDetail() {
       0
     );
 
-  const startTotal = calculateFunctionScore(startScores);
-  const modeledTotal = calculateFunctionScore(modeledValues);
+  // Scores now provided by server
+  // Calculate start total from actual startScores if available, otherwise use API result
+  const startTotal = useMemo(() => {
+    if (Object.keys(startScores).length > 0 && results?.mobilityType) {
+      // Calculate from actual start scores using client-side calculation
+      return calculateFunctionScore(startScores, results.mobilityType);
+    }
+    return results?.startScore || results?.functionScore || 0;
+  }, [startScores, results?.startScore, results?.functionScore, results?.mobilityType]);
+  
+  const modeledTotal = results?.modeledScore || results?.weightedScore || 0;
 
+  // Patient data now provided by server
   const {
     firstName,
     lastName,
@@ -285,11 +294,22 @@ function AdvancedAppDetail() {
     dischargeDate,
     age,
     ardGapDays,
-  } = extractPatientSummary(parsedValues, ardDate);
+  } = results?.summary || {};
 
-  const mobilityType = determineMobilityType(parsedValues);
+  const mobilityType = results?.mobilityType || 'Unknown';
   const conditionCode = parsedValues["I0020"];
   const conditionCategory = conditionMap[conditionCode] || "Unknown";
+
+  // Lazy-load grouped sections when MDS tab is opened
+  useEffect(() => {
+    if (activeRightPanel === 'mds' && Object.keys(groupedSections).length === 0 && Object.keys(parsedValues).length > 0) {
+      buildGroupedSections(parsedValues).then(sections => {
+        setGroupedSections(sections);
+      }).catch(err => {
+        console.warn('Failed to build grouped sections:', err);
+      });
+    }
+  }, [activeRightPanel, parsedValues, groupedSections]);
 
   useEffect(() => {
     fetchFacilityInfo(
@@ -307,33 +327,99 @@ function AdvancedAppDetail() {
     };
   }, [clearAllPatientData]);
 
-  // Calculate covariates only once when file is loaded (or when manual overrides change)
+  // Fetch API results when file is loaded
   useEffect(() => {
-    if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0) {
-      const icdList = Object.entries(parsedValues)
-        .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-        .map(([_, value]) => value)
-        .filter(Boolean);
+    const fetchResults = async () => {
+      if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0 && currentFile) {
+        // Check if we already have results stored in the file
+        if (currentFile._apiResults) {
+          setResults(currentFile._apiResults);
+          return;
+        }
 
-      // Get version-specific multipliers
-      const multipliers = getFunctionMultipliers(ardDate);
-      setVersionMultipliers(multipliers);
+        // Try to get XML content from file or reconstruct it
+        let xmlContent = null;
+        if (currentFile._rawData?.xmlContent) {
+          xmlContent = currentFile._rawData.xmlContent;
+        } else if (currentFile.originalFile) {
+          xmlContent = await currentFile.originalFile.text();
+        }
 
-      const result = getFunctionCovariates(
-        parsedValues,
-        extractPatientSummary(parsedValues, ardDate),
-        icdList,
-        startScores,
-        ardDate,
-        manualCovariateOverrides
-      );
+        if (!xmlContent) {
+          // If no XML, we can't recalculate - try to use stored data
+          if (currentFile._rawData?.summaryData) {
+            // Reconstruct minimal results from stored data
+            setResults({
+              functionScore: currentFile.results?.startScore || 0,
+              weightedScore: currentFile.results?.expectedScore || 0,
+              summary: currentFile._rawData.summaryData || {},
+              mobilityType: currentFile.results?.mobilityType || 'Unknown',
+              covariates: currentFile.userCovariates || {},
+              multipliers: currentFile.userVersionMultipliers || {}
+            });
+          }
+          return;
+        }
 
-      if (result) {
-        setCovariates(result.covariates || {});
-        setWeightedScore(result.weightedScore || 0);
+        // Fetch fresh results from API
+        try {
+          const authToken = getAuthToken();
+          const apiService = authToken ? new AdvancedAPIService(authToken) : null;
+          
+          if (!apiService) {
+            console.warn('No API service available - using stored data');
+            return;
+          }
+
+          const apiResult = await apiService.calculateAdvancedScore(xmlContent, manualCovariateOverrides);
+          
+          // Store full results
+          const fullResults = {
+            functionScore: apiResult.result.functionScore,
+            weightedScore: apiResult.result.weightedScore,
+            summary: apiResult.result.summary,
+            mobilityType: apiResult.result.mobilityType,
+            covariates: apiResult.result.covariates || {},
+            multipliers: apiResult.result.multipliers || {},
+            imputationMultipliers: apiResult.result.imputationMultipliers || {},
+            startScore: apiResult.result.functionScore, // Start score = function score
+            modeledScore: apiResult.result.weightedScore // Modeled score = weighted score
+          };
+          
+          setResults(fullResults);
+          
+          // Also store in file object for future use
+          setUploadedFiles(prev => prev.map(f =>
+            f.id === currentFile.id ? { ...f, _apiResults: fullResults } : f
+          ));
+        } catch (error) {
+          console.error('Failed to fetch API results:', error);
+          // Use stored data if available
+          if (currentFile.userCovariates) {
+            setResults({
+              functionScore: currentFile.results?.startScore || 0,
+              weightedScore: currentFile.results?.expectedScore || 0,
+              summary: currentFile._rawData?.summaryData || {},
+              mobilityType: currentFile.results?.mobilityType || 'Unknown',
+              covariates: currentFile.userCovariates || {},
+              multipliers: currentFile.userVersionMultipliers || {}
+            });
+          }
+        }
       }
+    };
+
+    fetchResults();
+  }, [hasFile, parsedValues, startScores, currentFile, manualCovariateOverrides]);
+
+  // Update state when results change
+  useEffect(() => {
+    if (results) {
+      setVersionMultipliers(results.multipliers || {});
+      setCovariates(results.covariates || {});
+      setWeightedScore(results.weightedScore || 0);
     }
-  }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides]);
+  }, [results]);
 
   const handleExport = async () => {
     if (!fileName) return;
@@ -686,6 +772,7 @@ function AdvancedAppDetail() {
                       manualOverrides={manualCovariateOverrides}
                       onManualOverrideChange={setManualCovariateOverrides}
                       parsedValues={parsedValues}
+                      results={results}
                     />
                   </Suspense>
                 </div>
@@ -698,11 +785,13 @@ function AdvancedAppDetail() {
                       hasFile={hasFile}
                       parsedValues={parsedValues}
                       startScores={startScores}
-                      summary={extractPatientSummary(parsedValues, ardDate)}
+                      summary={results?.summary || {}}
                       icdList={Object.entries(parsedValues)
                         .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
                         .map(([_, value]) => value)
                         .filter(Boolean)}
+                      results={results}
+                      currentFile={currentFile}
                     />
                   </Suspense>
                 </div>
@@ -727,6 +816,7 @@ function AdvancedAppDetail() {
               weightedScore={weightedScore}
               mobilityType={mobilityType}
               imputedItems={imputedItems}
+              results={results}
             />
           </Suspense>
         ) : null}

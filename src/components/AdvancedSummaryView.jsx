@@ -9,9 +9,12 @@ import PaginationControls from './PaginationControls';
 import DataLossWarningModal from './DataLossWarningModal';
 import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../utils/zipHandler';
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
-import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
-import { getFunctionMultipliers } from '../utils/coefficientLoader';
+import { parseFileForClient } from '../utils/clientFileParser';
+// All calculations now handled server-side
 import { AdvancedAPIService, isPortalContext, getAuthToken } from '../utils/apiService';
+// Import calculateFunctionScore for client-side calculation of userModeledValues (simple arithmetic)
+// Using clientCalculations to avoid importing server-side dependencies
+import { calculateFunctionScore, determineMobilityType } from '../utils/clientCalculations';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
 import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import { useRedaction } from '../contexts/RedactionContext';
@@ -204,7 +207,15 @@ const AdvancedSummaryView = () => {
               break;
             }
             
-            const xmlFileObj = createFileFromContent(extractedFile.name, extractedFile.content, extractedFile.size);
+            // Create a File-like object for validation (avoiding File constructor issues)
+            const xmlContent = extractedFile.content;
+            const fileForValidation = {
+              name: extractedFile.name,
+              size: extractedFile.size || xmlContent.length,
+              type: 'text/xml',
+              lastModified: Date.now(),
+              text: async () => xmlContent
+            };
             
             // Process the XML file
             let parsedData = null;
@@ -215,7 +226,7 @@ const AdvancedSummaryView = () => {
             let validationError = null;
 
             const result = await handleFileUploadWithValidation(
-              xmlFileObj,
+              fileForValidation,
               (name) => {}, // fileName callback - not used in summary view
               (data) => { parsedData = data; },
               (data) => { groupedData = data; },
@@ -232,8 +243,20 @@ const AdvancedSummaryView = () => {
               }
             );
 
-            // Wait a bit for all callbacks to complete
-            await new Promise(resolve => setTimeout(resolve, 200));
+            // Parse the file after validation passes
+            if (result) {
+              try {
+                const parsedResult = await parseFileForClient(xmlContent);
+                parsedData = parsedResult.parsedValues;
+                groupedData = parsedResult.groupedSections;
+                modeledData = parsedResult.modeledValues;
+                startData = parsedResult.startScores;
+                imputedData = parsedResult.imputedItems;
+              } catch (parseError) {
+                console.error('File parsing error:', parseError);
+                validationError = { message: 'Failed to parse file data' };
+              }
+            }
 
             // Check for cancellation after file validation
             if (cancelledRef.current) {
@@ -247,7 +270,6 @@ const AdvancedSummaryView = () => {
               if (apiService) {
                 try {
                   // Use API service for calculations
-                  const xmlContent = extractedFile.content;
                   const apiResult = await apiService.calculateAdvancedScore(xmlContent);
                   
                   startScore = apiResult.result.functionScore;
@@ -255,47 +277,11 @@ const AdvancedSummaryView = () => {
                   summary = apiResult.result.summary;
                   mobilityType = apiResult.result.mobilityType;
                 } catch (error) {
-                  console.error('API calculation failed, falling back to client-side:', error);
-                  // Fallback to client-side calculation
-                  startScore = calculateFunctionScore(startData);
-                  summary = extractPatientSummary(parsedData);
-                  const icdList = Object.entries(parsedData)
-                    .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-                    .map(([_, value]) => value)
-                    .filter(Boolean);
-                  
-                  const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-                  const covariateResult = getFunctionCovariates(
-                    parsedData,
-                    summary,
-                    icdList,
-                    startData,
-                    parsedData["A2300"]
-                  );
-                  
-                  expectedScore = covariateResult?.weightedScore || 0;
-                  mobilityType = 'Unknown';
+                  console.error('API calculation failed:', error);
+                  throw new Error('Unable to calculate scores. Please check your connection and try again.');
                 }
               } else {
-                // Client-side calculation (fallback)
-                startScore = calculateFunctionScore(startData);
-                summary = extractPatientSummary(parsedData);
-                const icdList = Object.entries(parsedData)
-                  .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-                  .map(([_, value]) => value)
-                  .filter(Boolean);
-                
-                const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-                const covariateResult = getFunctionCovariates(
-                  parsedData,
-                  summary,
-                  icdList,
-                  startData,
-                  parsedData["A2300"]
-                );
-                
-                expectedScore = covariateResult?.weightedScore || 0;
-                mobilityType = 'Unknown';
+                throw new Error('API service not available. Please refresh the page and try again.');
               }
               
               // Check for cancellation before continuing
@@ -322,7 +308,8 @@ const AdvancedSummaryView = () => {
                 groupedSections: groupedData,
                 modeledValues: modeledData,
                 startScores: startData,
-                imputedItems: imputedData
+                imputedItems: imputedData,
+                xmlContent: xmlContent // Store XML for API calls later
               };
 
               // Create a new file entry for this extracted XML file
@@ -383,7 +370,23 @@ const AdvancedSummaryView = () => {
         f.id === fileObj.id ? { ...f, status: 'processing' } : f
       ));
       
-      const tempFile = fileObj.file || (fileObj instanceof File ? fileObj : createFileFromContent(fileObj.name, fileObj.content, fileObj.size));
+      // Get the file object - if it's already a File, use it; otherwise create a File-like object
+      let tempFile;
+      if (fileObj.file) {
+        tempFile = fileObj.file;
+      } else if (fileObj instanceof File || (fileObj.constructor && fileObj.constructor.name === 'File')) {
+        tempFile = fileObj;
+      } else {
+        // Create a File-like object without using File constructor
+        const content = fileObj.content || '';
+        tempFile = {
+          name: fileObj.name,
+          size: fileObj.size || content.length,
+          type: 'text/xml',
+          lastModified: Date.now(),
+          text: async () => content
+        };
+      }
       
       let parsedData = null;
       let groupedData = null;
@@ -392,14 +395,26 @@ const AdvancedSummaryView = () => {
       let imputedData = null;
       let validationError = null;
 
-      const result = await handleFileUploadWithValidation(
-        tempFile,
+      // Read file content first (file.text() can only be called once)
+      const xmlText = await tempFile.text();
+      
+      // Create a File-like object for validation that can be read multiple times
+      const fileForValidation = {
+        name: tempFile.name,
+        size: tempFile.size,
+        type: tempFile.type || 'text/xml',
+        lastModified: tempFile.lastModified || Date.now(),
+        text: async () => xmlText
+      };
+      
+      // Validate the file
+      const validationResult = await handleFileUploadWithValidation(
+        fileForValidation,
         (name) => {}, // fileName callback - not used in summary view
-        (data) => { parsedData = data; },
-        (data) => { groupedData = data; },
-        (data) => { modeledData = data; },
-        (data) => { startData = data; },
-        (data) => { imputedData = data; },
+        (data) => {}, // These callbacks won't be called by handleFileUploadWithValidation
+        (data) => {},
+        (data) => {},
+        (data) => {},
         (error) => {
           // Only handle actual errors, not null values
           if (error && error !== null) {
@@ -409,65 +424,51 @@ const AdvancedSummaryView = () => {
         }
       );
 
-      // Wait a bit for all callbacks to complete
-      await new Promise(resolve => setTimeout(resolve, 200));
+      // If validation failed, stop processing
+      if (!validationResult) {
+        const errorMessage = validationError ? validationError.message : 'File validation failed';
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === fileObj.id ? { ...f, status: 'error', error: errorMessage } : f
+        ));
+        return;
+      }
+
+      // Parse the file after validation passes
+      // Use client-side parser that doesn't require server-side data files
+      try {
+        const parsedResult = await parseFileForClient(xmlText);
+        parsedData = parsedResult.parsedValues;
+        groupedData = parsedResult.groupedSections;
+        modeledData = parsedResult.modeledValues;
+        startData = parsedResult.startScores;
+        imputedData = parsedResult.imputedItems;
+      } catch (parseError) {
+        console.error('File parsing error:', parseError);
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === fileObj.id ? { ...f, status: 'error', error: 'Failed to parse file data' } : f
+        ));
+        return;
+      }
       
-      if (result && parsedData && startData) {
+      if (parsedData && startData) {
         // Calculate scores using API service if available, otherwise fallback to client-side
         let startScore, expectedScore, summary, mobilityType;
         
         if (apiService) {
           try {
-            // Use API service for calculations
-            const xmlContent = await tempFile.text();
-            const apiResult = await apiService.calculateAdvancedScore(xmlContent);
+            // Use API service for calculations (use the already-read xmlText)
+            const apiResult = await apiService.calculateAdvancedScore(xmlText);
             
             startScore = apiResult.result.functionScore;
             expectedScore = apiResult.result.weightedScore;
             summary = apiResult.result.summary;
             mobilityType = apiResult.result.mobilityType;
           } catch (error) {
-            console.error('API calculation failed, falling back to client-side:', error);
-            // Fallback to client-side calculation
-            startScore = calculateFunctionScore(startData);
-            summary = extractPatientSummary(parsedData, parsedData["A2300"]);
-            const icdList = Object.entries(parsedData)
-              .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-              .map(([_, value]) => value)
-              .filter(Boolean);
-            
-            const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-            const covariateResult = getFunctionCovariates(
-              parsedData,
-              summary,
-              icdList,
-              startData,
-              parsedData["A2300"]
-            );
-            
-            expectedScore = covariateResult?.weightedScore || 0;
-            mobilityType = 'Unknown';
+            console.error('API calculation failed:', error);
+            throw new Error('Unable to calculate scores. Please check your connection and try again.');
           }
         } else {
-          // Client-side calculation (fallback)
-          startScore = calculateFunctionScore(startData);
-          summary = extractPatientSummary(parsedData, parsedData["A2300"]);
-          const icdList = Object.entries(parsedData)
-            .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-            .map(([_, value]) => value)
-            .filter(Boolean);
-          
-          const multipliers = getFunctionMultipliers(parsedData["A2300"]);
-          const covariateResult = getFunctionCovariates(
-            parsedData,
-            summary,
-            icdList,
-            startData,
-            parsedData["A2300"]
-          );
-          
-          expectedScore = covariateResult?.weightedScore || 0;
-          mobilityType = 'Unknown';
+          throw new Error('API service not available. Please refresh the page and try again.');
         }
         
         // Check for cancellation before continuing
@@ -493,7 +494,8 @@ const AdvancedSummaryView = () => {
           groupedSections: groupedData,
           modeledValues: modeledData,
           startScores: startData,
-          imputedItems: imputedData
+          imputedItems: imputedData,
+          xmlContent: xmlText // Store XML for API calls later
         };
 
         // Update file with results
@@ -554,7 +556,8 @@ const AdvancedSummaryView = () => {
       // Only calculate user end score if userModeledValues exists AND there's actual gain (end > start)
       let userEndScore = null;
       if (file.userModeledValues && calculateFunctionScore) {
-        const endScore = calculateFunctionScore(file.userModeledValues);
+        const mobilityType = file.results?.mobilityType || null;
+        const endScore = calculateFunctionScore(file.userModeledValues, mobilityType);
         const startScore = file.results?.startScore || 0;
         // Only use the score if there's actual gain (end > start)
         userEndScore = endScore > startScore ? endScore : null;
@@ -1092,7 +1095,6 @@ const AdvancedSummaryView = () => {
                   onSelectFile={handleFileSelect}
                   onExportAll={handleExportAll}
                   onExportDetails={handleExportDetails}
-                  calculateFunctionScore={calculateFunctionScore}
                   onDeleteFile={handleDeleteFile}
                   onClearAll={handleClearAll}
                   isRedacted={isRedacted}

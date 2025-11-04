@@ -1,7 +1,38 @@
 // Adapter functions to bridge basic version itemDefs with advanced version GG_ITEMS
 // This allows the basic version to use the unified GG_ITEMS structure while maintaining compatibility
 
-import { GG_ITEMS, scoreMap } from './calculations.js';
+// Client-side constants (calculations.js is server-side only)
+export const GG_ITEMS = [
+  { id: "GG0130A", label: "Eating", domain: "selfCare" },
+  { id: "GG0130B", label: "Oral hygiene", domain: "selfCare" },
+  { id: "GG0130C", label: "Toileting hygiene", domain: "selfCare" },
+  { id: "GG0130E", label: "Shower/bathe self", domain: "selfCare" },
+  { id: "GG0130F", label: "Upper body dressing", domain: "selfCare" },
+  { id: "GG0130G", label: "Lower body dressing", domain: "selfCare" },
+  { id: "GG0130H", label: "Put on/take off footwear", domain: "selfCare" },
+  { id: "GG0170A", label: "Roll left and right", domain: "mobility" },
+  { id: "GG0170B", label: "Sit to lying", domain: "mobility" },
+  { id: "GG0170C", label: "Lying to sitting on bed side", domain: "mobility" },
+  { id: "GG0170D", label: "Sit to stand", domain: "mobility" },
+  { id: "GG0170E", label: "Chair/bed-to-chair transfer", domain: "mobility" },
+  { id: "GG0170F", label: "Toilet transfer", domain: "mobility" },
+  { id: "GG0170G", label: "Car transfer", domain: "mobility" },
+  { id: "GG0170I", label: "Walk 10 feet", domain: "mobility" },
+  { id: "GG0170J", label: "Walk 50 feet with two turns", domain: "mobility" },
+  { id: "GG0170K", label: "Walk 150 feet", domain: "mobility" },
+  { id: "GG0170L", label: "Walking 10 feet uneven surface", domain: "mobility" },
+  { id: "GG0170M", label: "1 step (curb)", domain: "mobility" },
+  { id: "GG0170N", label: "4 steps", domain: "mobility" },
+  { id: "GG0170O", label: "12 steps", domain: "mobility" },
+  { id: "GG0170P", label: "Picking up object", domain: "mobility" },
+  { id: "GG0170R", label: "Wheel 50 feet with two turns", domain: "mobility" },
+  { id: "GG0170S", label: "Wheel 150 feet", domain: "mobility" }
+];
+
+export const scoreMap = {
+  "01": 1, "02": 2, "03": 3, "04": 4, "05": 5, "06": 6,
+  "07": 1, "08": 1, "09": 1, "10": 1, "88": 1, "^": 1
+};
 
 // Mapping from basic version keys to GG_ITEMS IDs
 export const BASIC_TO_GG_MAPPING = {

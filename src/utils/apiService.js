@@ -166,6 +166,23 @@ export class AdvancedAPIService extends BaseAPIService {
       })
     });
   }
+
+  /**
+   * Get detailed imputation analysis
+   * @param {string} mdsXmlData - Raw MDS XML data
+   * @returns {Promise<Object>} Imputation details results
+   */
+  async getImputationDetails(mdsXmlData) {
+    return this.makeRequest('/imputation-details', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.token}`
+      },
+      body: JSON.stringify({
+        mdsXmlData
+      })
+    });
+  }
 }
 
 /**
@@ -203,9 +220,23 @@ export function isPortalContext() {
  * @returns {string|null} Authentication token
  */
 export function getAuthToken() {
-  // For now, return null - this will be implemented when SSO is integrated
+  // For development: return a development SSO token
   // In production, this would get the token from the portal or SSO system
-  return null;
+  // TODO: Replace with actual SSO token integration when IT provides it
+  const devToken = import.meta.env?.VITE_DEV_SSO_TOKEN || 'sso_dev_token_2024';
+  
+  // Check if we're in development mode (not production)
+  const isDevelopment = import.meta.env?.DEV || import.meta.env?.MODE === 'development';
+  
+  if (isDevelopment) {
+    // Return development token for local testing
+    return devToken;
+  }
+  
+  // In production, get token from SSO system
+  // This is where IT's SSO integration would go
+  // For now, return dev token as fallback (remove this in production)
+  return devToken;
 }
 
 /**

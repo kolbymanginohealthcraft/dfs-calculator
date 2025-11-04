@@ -1,7 +1,8 @@
-import mdsItemLookup from "../data/mds_item_lookup.json" with { type: "json" };
-import { GG_ITEMS, getFunctionCovariates, extractPatientSummary } from "./calculations.js";
+import mdsItemLookup from "../../api/data/mds_item_lookup.json" with { type: "json" };
+// All calculations now handled server-side
 import { parseXml } from "./xmlParser.js";
-import { getImputationMultipliersForItem } from "./coefficientLoader.js";
+// coefficientLoader is server-only - import directly (fileParser is server-only via server.js)
+import { getImputationMultipliersForItem } from './server/coefficientLoader.js';
 import { getImputationThresholds, shouldExcludeGGItemCovariate } from "./imputationCalculations.js";
 import { getSectionName } from "./sectionNames.js";
 

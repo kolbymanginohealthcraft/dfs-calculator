@@ -119,5 +119,26 @@ export function isZipFile(file) {
  */
 export function createFileFromContent(name, content, size) {
   const blob = new Blob([content], { type: 'text/xml' });
-  return new File([blob], name, { type: 'text/xml' });
+  
+  // Try to create a File object, but fallback to File-like object if File constructor fails
+  try {
+    if (typeof File !== 'undefined') {
+      return new File([blob], name, { type: 'text/xml' });
+    }
+  } catch (error) {
+    // File constructor not available or failed, create File-like object
+  }
+  
+  // Create a File-like object that mimics the File API
+  const fileLike = Object.assign(blob, {
+    name: name,
+    size: size || content.length,
+    lastModified: Date.now(),
+    webkitRelativePath: ''
+  });
+  
+  // Ensure text() method works
+  fileLike.text = async () => content;
+  
+  return fileLike;
 }

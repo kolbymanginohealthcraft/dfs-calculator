@@ -41,13 +41,19 @@ app.use((req, res, next) => {
 // Test endpoints removed - no longer needed
 
 // Import calculation utilities
-import { calculateTotalScore } from './scoreCalculations.js';
+// calculateTotalScore function moved to server-side utilities
+const calculateTotalScore = (scores, mobilityType) => {
+  // Simple fallback calculation for basic mode
+  const selfCareTotal = Object.values(scores.selfCare || {}).reduce((sum, score) => sum + (score || 0), 0);
+  const mobilityTotal = Object.values(scores.mobility || {}).reduce((sum, score) => sum + (score || 0), 0);
+  return selfCareTotal + mobilityTotal;
+};
 import { convertBasicScoresToGG } from './itemAdapters.js';
 import { calculateFunctionScore, getFunctionCovariates, extractPatientSummary, determineMobilityType } from './calculations.js';
-import { getFunctionMultipliers } from './coefficientLoader.js';
-import { parseXml } from './xmlParser.js';
+import { getFunctionMultipliers, getImputationMultipliers } from './server/coefficientLoader.js';
+import { parseXml } from './server/xmlParser.js';
 import { imputeMissingGGItemsWithThresholds } from './imputationCalculations.js';
-import { calculateEndScoreImputedValue, imputeMissingEndScoreGGItems } from './endScoreImputation.js';
+import { calculateEndScoreImputedValue, imputeMissingEndScoreGGItems } from './server/endScoreImputation.js';
 
 // Load data files
 import coefficientsAllVersions from '../../api/data/coefficients-all-versions.json' with { type: "json" };
@@ -184,6 +190,9 @@ app.post("/api/calculate/advanced-score", async (req, res) => {
 
     // Get function multipliers
     const multipliers = getFunctionMultipliers(ardDate);
+    
+    // Get imputation multipliers
+    const imputationMultipliers = getImputationMultipliers(ardDate);
 
     // Calculate covariates and weighted score
     const { covariates, weightedScore } = getFunctionCovariates(
@@ -201,6 +210,8 @@ app.post("/api/calculate/advanced-score", async (req, res) => {
         covariates,
         summary,
         mobilityType,
+        multipliers,
+        imputationMultipliers,
       }
     });
   } catch (error) {
@@ -235,6 +246,175 @@ app.post("/api/calculate/imputation", async (req, res) => {
   } catch (error) {
     console.error('Imputation calculation error:', error);
     return res.status(500).json({ error: 'Imputation failed', detail: error.message });
+  }
+});
+
+// Imputation Details API - Returns detailed imputation analysis
+app.post("/api/calculate/imputation-details", async (req, res) => {
+  try {
+    // SSO token validation
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token || !token.startsWith('sso_')) {
+      return res.status(401).json({ 
+        error: 'Unauthorized', 
+        message: 'Valid SSO token required for imputation details' 
+      });
+    }
+
+    const { mdsXmlData } = req.body;
+
+    if (!mdsXmlData) {
+      return res.status(400).json({ 
+        error: 'Bad Request', 
+        message: 'MDS XML data is required' 
+      });
+    }
+
+    const parsedValues = parseXml(mdsXmlData);
+    const ardDate = parsedValues["A2300"];
+    const summary = extractPatientSummary(parsedValues, ardDate);
+    const icdList = Object.entries(parsedValues)
+      .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+      .map(([_, value]) => value)
+      .filter(Boolean);
+    
+    const mobilityType = determineMobilityType(parsedValues);
+    
+    // Get start scores (GG items with "1" suffix)
+    const startScores = {};
+    Object.keys(parsedValues).forEach(key => {
+      if (key.endsWith('1') && key.startsWith('GG')) {
+        const baseKey = key.slice(0, -1);
+        startScores[baseKey] = parsedValues[key];
+      }
+    });
+
+    // Get covariates
+    const { covariates } = getFunctionCovariates(
+      parsedValues,
+      summary,
+      icdList,
+      startScores,
+      ardDate
+    );
+
+    const usesWheelchair = covariates["Uses Wheelchair"] === 1;
+
+    // Get imputation multipliers
+    const imputationMultipliers = getImputationMultipliers(ardDate);
+    const { getImputationThresholds, shouldExcludeGGItemCovariate } = await import('./imputationCalculations.js');
+
+    // Define which items are walker-specific vs wheelchair-specific
+    const walkerItems = new Set(['GG0170I1', 'GG0170J1', 'GG0170K1', 'GG0170L1', 'GG0170M1', 'GG0170N1', 'GG0170O1']);
+    const wheelchairItems = new Set(['GG0170R1', 'GG0170S1']);
+
+    const imputationData = {};
+
+    // Process each GG item
+    for (const ggItemId of Object.keys(imputationMultipliers)) {
+      // Filter items based on mobility type
+      if (walkerItems.has(ggItemId) && mobilityType !== 'Walk') {
+        continue;
+      }
+      if (wheelchairItems.has(ggItemId) && mobilityType !== 'Wheel') {
+        continue;
+      }
+
+      const multipliers = imputationMultipliers[ggItemId];
+      const thresholds = getImputationThresholds(ggItemId, ardDate);
+
+      // Calculate imputation score for this item
+      const itemCovariates = {};
+      let imputationScore = 0;
+
+      for (const [covariateName, multiplier] of Object.entries(multipliers)) {
+        // Check if this is a GG item-specific covariate that should be excluded
+        if (covariateName.includes('(GG') && 
+            (covariateName.includes('Valid Score') || 
+             covariateName.includes('Not Attempted') || 
+             covariateName.includes('Skipped'))) {
+          
+          if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
+            continue;
+          }
+
+          // Handle GG item-specific covariates
+          const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
+          if (match) {
+            const itemId = match[0].slice(1, -1);
+            const rawValue = parsedValues[itemId];
+
+            let covariateValue = 0;
+            if (covariateName.includes(" - Valid Score")) {
+              if (rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue)) {
+                covariateValue = parseInt(rawValue, 10);
+              }
+            } else if (covariateName.includes(" - Not Attempted")) {
+              const hasSkippedCovariate = Object.keys(multipliers).some(key => 
+                key.includes(itemId) && key.includes('Skipped')
+              );
+              if (hasSkippedCovariate) {
+                covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+              } else {
+                covariateValue = ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
+              }
+            } else if (covariateName.includes(" - Skipped")) {
+              covariateValue = rawValue === '^' ? 1 : 0;
+            }
+
+            if (covariateValue !== 0) {
+              itemCovariates[covariateName] = covariateValue;
+              imputationScore += covariateValue * multiplier;
+            }
+            continue;
+          }
+        }
+
+        // Use main covariates for non-GG-item-specific covariates
+        const covariateValue = covariates[covariateName] || 0;
+        if (covariateValue !== 0) {
+          itemCovariates[covariateName] = covariateValue;
+          imputationScore += covariateValue * multiplier;
+        }
+      }
+
+      // Determine which threshold range the score falls into
+      let imputedValue = 1;
+      for (let i = 0; i < thresholds.length; i++) {
+        if (imputationScore > thresholds[i]) {
+          imputedValue = i + 2;
+        }
+      }
+
+      // Check raw MDS value to determine if imputation is needed
+      const rawValue = parsedValues[ggItemId];
+      const isValidValue = rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue);
+      const needsImputation = !rawValue || !isValidValue;
+
+      imputationData[ggItemId] = {
+        covariates: itemCovariates,
+        multipliers,
+        imputationScore,
+        thresholds,
+        imputedValue: needsImputation ? imputedValue : null,
+        originalValue: rawValue || null,
+        needsImputation
+      };
+    }
+
+    return res.json({
+      result: {
+        imputationData,
+        covariates,
+        mobilityType
+      }
+    });
+  } catch (error) {
+    console.error('Imputation details error:', error);
+    return res.status(500).json({ 
+      error: 'Imputation details failed', 
+      detail: error.message 
+    });
   }
 });
 

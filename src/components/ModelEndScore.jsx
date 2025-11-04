@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import styles from "./ModelEndScore.module.css";
-import {
-  GG_ITEMS,
-  scoreMap,
-  calculateFunctionScore,
-  getContributingItemIds,
-} from "../utils/calculations";
+// All calculations now handled server-side
 import ScoreBarChart from "./ScoreBarChart";
 import FunctionItemsList from "./FunctionItemsList";
 import { getScoreTypeColor } from "../utils/themeColors";
+import { GG_ITEMS } from "../utils/clientConstants";
+import { getContributingGGItemsForDisplay } from "../utils/itemAdapters";
 import { Wrench, BarChart3, Target, HandHeart, User, Settings } from "lucide-react";
 
 const ModelEndScore = ({
@@ -23,10 +20,17 @@ const ModelEndScore = ({
   weightedScore,
   mobilityType,
   imputedItems = new Set(),
+  results = null,
 }) => {
   const [filterContributing, setFilterContributing] = useState(false);
-  const startTotal = calculateFunctionScore(startScores);
-  const contributingIds = getContributingItemIds(modeledValues);
+  // Scores now provided by server
+  const startTotal = results?.startScore || results?.functionScore || 0;
+  // Calculate contributingIds from mobility type if not provided by API
+  // Use results.mobilityType first, then prop mobilityType, then default to 'Walk'
+  const actualMobilityType = results?.mobilityType || mobilityType || 'Walk';
+  const contributingIds = results?.contributingIds 
+    ? new Set(Array.isArray(results.contributingIds) ? results.contributingIds : [])
+    : getContributingGGItemsForDisplay(actualMobilityType);
 
   // Determine if end score meets expected score for accent border styling
   const meetsExpectedScore = modeledTotal >= weightedScore;

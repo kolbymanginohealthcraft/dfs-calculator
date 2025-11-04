@@ -1,74 +1,46 @@
-import icdToHcc from "../data/icdToHcc.json" with { type: "json" };
-import { getFunctionMultipliers } from "./coefficientLoader.js";
+// icdToHcc data now loaded server-side only
+// coefficientLoader is server-only - import directly (calculations.js is server-only via server.js)
+import { getFunctionMultipliers } from './server/coefficientLoader.js';
+// Import constants needed for calculations
+import { conditionMap } from './clientConstants.js';
+
+// Dynamic import for icdToHcc - only loads on server-side
+// Use a lazy loader to avoid top-level await issues
+let icdToHcc = {};
+let icdToHccPromise = null;
+
+function loadIcdToHcc() {
+  if (icdToHccPromise) return icdToHccPromise;
+  if (typeof window !== 'undefined') {
+    // Client-side: return resolved promise with empty object
+    icdToHccPromise = Promise.resolve({});
+    return icdToHccPromise;
+  }
+  // Server-side: load the actual data
+  icdToHccPromise = import("../../api/data/icdToHcc.json", { with: { type: "json" } })
+    .then(module => {
+      icdToHcc = module.default || module;
+      return icdToHcc;
+    })
+    .catch(error => {
+      console.warn('Could not load icdToHcc data:', error);
+      return {};
+    });
+  return icdToHccPromise;
+}
+
+// Initialize on server-side
+if (typeof window === 'undefined') {
+  loadIcdToHcc();
+}
 
 // Configuration flag for I0020 dependency methodology
 // Set to true to use original CMS logic with I0020 dependencies
 // Set to false to use modified logic without I0020 dependencies
 const USE_I0020_DEPENDENCIES = true;
 
-export const scoreMap = {
-  "01": 1,
-  "02": 2,
-  "03": 3,
-  "04": 4,
-  "05": 5,
-  "06": 6,
-  "07": 1,
-  "08": 1,
-  "09": 1,
-  10: 1,
-  "10": 1,
-  88: 1,
-  "88": 1,
-  "^": 1,
-};
-
-export const GG_ITEMS = [
-  { id: "GG0130A", label: "Eating", domain: "selfCare" },
-  { id: "GG0130B", label: "Oral hygiene", domain: "selfCare" },
-  { id: "GG0130C", label: "Toileting hygiene", domain: "selfCare" },
-  { id: "GG0130E", label: "Shower/bathe self", domain: "selfCare" },
-  { id: "GG0130F", label: "Upper body dressing", domain: "selfCare" },
-  { id: "GG0130G", label: "Lower body dressing", domain: "selfCare" },
-  { id: "GG0130H", label: "Put on/take off footwear", domain: "selfCare" },
-  { id: "GG0170A", label: "Roll left and right", domain: "mobility" },
-  { id: "GG0170B", label: "Sit to lying", domain: "mobility" },
-  { id: "GG0170C", label: "Lying to sitting on bed side", domain: "mobility" },
-  { id: "GG0170D", label: "Sit to stand", domain: "mobility" },
-  { id: "GG0170E", label: "Chair/bed-to-chair transfer", domain: "mobility" },
-  { id: "GG0170F", label: "Toilet transfer", domain: "mobility" },
-  { id: "GG0170G", label: "Car transfer", domain: "mobility" },
-  { id: "GG0170I", label: "Walk 10 feet", domain: "mobility" },
-  { id: "GG0170J", label: "Walk 50 feet with two turns", domain: "mobility" },
-  { id: "GG0170K", label: "Walk 150 feet", domain: "mobility" },
-  {
-    id: "GG0170L",
-    label: "Walking 10 feet uneven surface",
-    domain: "mobility",
-  },
-  { id: "GG0170M", label: "1 step (curb)", domain: "mobility" },
-  { id: "GG0170N", label: "4 steps", domain: "mobility" },
-  { id: "GG0170O", label: "12 steps", domain: "mobility" },
-  { id: "GG0170P", label: "Picking up object", domain: "mobility" },
-  { id: "GG0170R", label: "Wheel 50 feet with two turns", domain: "mobility" },
-  { id: "GG0170S", label: "Wheel 150 feet", domain: "mobility" },
-];
-
-export const conditionMap = {
-  "01": "Stroke",
-  "02": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
-  "03": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
-  "04": "Non-Traumatic Spinal Cord Dysfunction",
-  "05": "Traumatic Spinal Cord Dysfunction",
-  "06": "Progressive Neurological Conditions",
-  "07": "Other Neurological Conditions",
-  "08": "Amputation",
-  "09": "Hip and Knee Replacements",
-  10: "Fractures and Other Multiple Trauma",
-  11: "Other Orthopedic Conditions",
-  12: "Debility, Cardiorespiratory Conditions",
-  13: "Medically Complex Conditions",
-};
+// Re-export constants from client-safe module (for backward compatibility)
+export { scoreMap, GG_ITEMS, conditionMap } from './clientConstants.js';
 
 export function formatDOB(dobStr) {
   if (!dobStr || dobStr.length !== 8) return "Unknown";
