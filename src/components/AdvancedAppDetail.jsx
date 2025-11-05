@@ -182,7 +182,11 @@ function AdvancedAppDetail() {
         // Load user's saved modeled values, or fall back to original modeled values
         setModeledValues(file.userModeledValues || file._rawData.modeledValues || {});
         setCovariates(file.userCovariates || {});
-        setWeightedScore(file.userWeightedScore || 0);
+        // Use pre-calculated expected score from summary if available (unless user has overrides)
+        // This makes the expected score appear immediately instead of waiting for recalculation
+        const initialWeightedScore = file.userWeightedScore ?? 
+          (file.results?.expectedScore !== undefined ? file.results.expectedScore : 0);
+        setWeightedScore(initialWeightedScore);
         setVersionMultipliers(file.userVersionMultipliers || {});
         setManualCovariateOverrides(file.userManualCovariateOverrides || {});
       } else {
@@ -266,14 +270,28 @@ function AdvancedAppDetail() {
     });
   };
 
-  const subtotal = (domain) =>
-    GG_ITEMS.filter((i) => i.domain === domain).reduce(
-      (sum, i) => sum + (scoreMap[modeledValues[i.id]] || 0),
-      0
-    );
+  // Memoize subtotals per domain to avoid recalculating on every render
+  const subtotals = useMemo(() => {
+    const domains = ['selfCare', 'mobility'];
+    const result = {};
+    domains.forEach(domain => {
+      result[domain] = GG_ITEMS
+        .filter((i) => i.domain === domain)
+        .reduce((sum, i) => sum + (scoreMap[modeledValues[i.id]] || 0), 0);
+    });
+    return result;
+  }, [modeledValues]);
+
+  const subtotal = useCallback((domain) => subtotals[domain] || 0, [subtotals]);
 
   const startTotal = calculateFunctionScore(startScores);
   const modeledTotal = calculateFunctionScore(modeledValues);
+
+  // Memoize patient summary to avoid recalculating with same parameters
+  const patientSummary = useMemo(() => 
+    extractPatientSummary(parsedValues, ardDate), 
+    [parsedValues, ardDate]
+  );
 
   const {
     firstName,
@@ -284,7 +302,7 @@ function AdvancedAppDetail() {
     dischargeDate,
     age,
     ardGapDays,
-  } = extractPatientSummary(parsedValues, ardDate);
+  } = patientSummary;
 
   const mobilityType = determineMobilityType(parsedValues);
   const conditionCode = parsedValues["I0020"];
@@ -306,36 +324,53 @@ function AdvancedAppDetail() {
     };
   }, [clearAllPatientData]);
 
-  // Calculate covariates only once when file is loaded (or when manual overrides change)
+  // Calculate covariates when file is loaded (or when manual overrides change)
+  // The expected score (weightedScore) is already set from file.results.expectedScore for immediate display
+  // We still need to fetch covariates/multipliers for the detailed view
   useEffect(() => {
     if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0) {
-      const icdList = Object.entries(parsedValues)
-        .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-        .map(([_, value]) => value)
-        .filter(Boolean);
+      // Check if we have manual overrides - if so, we need to recalculate everything
+      const hasManualOverrides = Object.keys(manualCovariateOverrides).length > 0;
+      
+      // Check if we already have cached covariates from user saved data
+      const hasCachedCovariates = Object.keys(covariates).length > 0 && Object.keys(versionMultipliers).length > 0;
+      
+      // Only recalculate if we have manual overrides or don't have cached covariates
+      // Note: weightedScore is already set from file.results.expectedScore, so it appears immediately
+      // We just need to fetch covariates/multipliers in the background
+      if (hasManualOverrides || !hasCachedCovariates) {
+        const icdList = Object.entries(parsedValues)
+          .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+          .map(([_, value]) => value)
+          .filter(Boolean);
 
-      const calculateScores = async () => {
-        try {
-          const result = await calculateFunctionScoreSecure({
-            parsedValues,
-            summary: extractPatientSummary(parsedValues, ardDate),
-            icdList,
-            startScores,
-            ardDate,
-            manualOverrides: manualCovariateOverrides
-          });
+        const calculateScores = async () => {
+          try {
+            const result = await calculateFunctionScoreSecure({
+              parsedValues,
+              summary: extractPatientSummary(parsedValues, ardDate),
+              icdList,
+              startScores,
+              ardDate,
+              manualOverrides: manualCovariateOverrides
+            });
 
-          setVersionMultipliers(result.multipliers || {});
-          setCovariates(result.covariates || {});
-          setWeightedScore(result.weightedScore || 0);
-        } catch (error) {
-          // Silently handle calculation errors - they're already shown in UI if needed
-        }
-      };
+            setVersionMultipliers(result.multipliers || {});
+            setCovariates(result.covariates || {});
+            // Only update weightedScore if we have manual overrides (which change the calculation)
+            // Otherwise, keep the pre-calculated value for immediate display
+            if (hasManualOverrides) {
+              setWeightedScore(result.weightedScore || 0);
+            }
+          } catch (error) {
+            // Silently handle calculation errors - they're already shown in UI if needed
+          }
+        };
 
-      calculateScores();
+        calculateScores();
+      }
     }
-  }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides]);
+  }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides, covariates, versionMultipliers]);
 
   const handleExport = async () => {
     if (!fileName) return;
@@ -700,7 +735,7 @@ function AdvancedAppDetail() {
                       hasFile={hasFile}
                       parsedValues={parsedValues}
                       startScores={startScores}
-                      summary={extractPatientSummary(parsedValues, ardDate)}
+                      summary={patientSummary}
                       icdList={Object.entries(parsedValues)
                         .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
                         .map(([_, value]) => value)

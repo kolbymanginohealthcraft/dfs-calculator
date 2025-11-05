@@ -116,6 +116,17 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
     return actualGain - requiredGain;
   }, [calculateUserModeledScore]);
 
+  // Memoize file scores to avoid recalculating multiple times per render
+  const fileScores = useMemo(() => {
+    const scores = new Map();
+    uploadedFiles.forEach(file => {
+      const userEndScore = calculateUserModeledScore(file);
+      const gainVsRequired = userEndScore !== null ? calculateGainVsRequired(file) : null;
+      scores.set(file.id, { userEndScore, gainVsRequired });
+    });
+    return scores;
+  }, [uploadedFiles, calculateUserModeledScore, calculateGainVsRequired]);
+
   // First, filter and sort all files
   const filteredAndSortedFiles = useMemo(() => {
     return uploadedFiles
@@ -169,16 +180,16 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
             bValue = b.results?.expectedScore || 0;
             break;
           case 'userModeledScore':
-            aValue = calculateUserModeledScore(a) || 0;
-            bValue = calculateUserModeledScore(b) || 0;
+            aValue = fileScores.get(a.id)?.userEndScore || 0;
+            bValue = fileScores.get(b.id)?.userEndScore || 0;
             break;
           case 'scoreDifference':
             aValue = a.results?.scoreDifference || 0;
             bValue = b.results?.scoreDifference || 0;
             break;
           case 'gainVsRequired':
-            aValue = calculateGainVsRequired(a);
-            bValue = calculateGainVsRequired(b);
+            aValue = fileScores.get(a.id)?.gainVsRequired ?? 0;
+            bValue = fileScores.get(b.id)?.gainVsRequired ?? 0;
             break;
           case 'status':
             // Custom status ordering: processed (READY) first, then others
@@ -196,7 +207,7 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
           return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
         }
       });
-  }, [uploadedFiles, sortField, sortDirection, filterStatus, searchTerm, calculateUserModeledScore]);
+  }, [uploadedFiles, sortField, sortDirection, filterStatus, searchTerm, fileScores]);
 
   // Then apply pagination to the filtered and sorted files
   const processedFiles = useMemo(() => {
@@ -343,10 +354,11 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
       address: isRedacted ? redactAddress('') : '', // Will be updated by facility lookup
     };
 
+    const fileScoreData = fileScores.get(file.id);
     const scores = {
       start: file.results?.startScore,
       expected: file.results?.expectedScore,
-      modeled: calculateUserModeledScore(file) || file.results?.startScore
+      modeled: fileScoreData?.userEndScore || file.results?.startScore
     };
 
     const functionItems = {
@@ -422,9 +434,16 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
     }
   }, [exportData]);
 
-  const successfulCount = uploadedFiles.filter(f => f.status === 'processed').length;
-  const errorCount = uploadedFiles.filter(f => f.status === 'error').length;
-  const processingCount = uploadedFiles.filter(f => f.status === 'processing').length;
+  // Memoize counts to avoid recalculating on every render
+  const counts = useMemo(() => ({
+    successful: uploadedFiles.filter(f => f.status === 'processed').length,
+    error: uploadedFiles.filter(f => f.status === 'error').length,
+    processing: uploadedFiles.filter(f => f.status === 'processing').length
+  }), [uploadedFiles]);
+
+  const successfulCount = counts.successful;
+  const errorCount = counts.error;
+  const processingCount = counts.processing;
 
   return (
     <div className={styles.summaryView}>
@@ -684,8 +703,9 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
               {processedFiles.map((file, index) => {
                 // Find the correct index in the original uploadedFiles array
                 const originalIndex = uploadedFiles.findIndex(f => f.id === file.id);
+                // Get memoized scores to avoid recalculating
+                const { userEndScore, gainVsRequired } = fileScores.get(file.id) || { userEndScore: null, gainVsRequired: null };
                 // Determine if this row should have success or error styling
-                const userEndScore = calculateUserModeledScore(file);
                 const hasSuccessStyling = userEndScore !== null && file.results?.startScore !== undefined && file.results?.expectedScore !== undefined && 
                   (userEndScore - file.results.startScore) >= (file.results.expectedScore - file.results.startScore);
                 const hasErrorStyling = file.status === 'error';
@@ -744,9 +764,8 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                     {file.results?.expectedScore !== undefined ? file.results.expectedScore.toFixed(2) : '—'}
                   </td>
                   <td className={styles.scoreCell}>
-                    {calculateUserModeledScore(file) !== null ? (
+                    {userEndScore !== null ? (
                       <span className={`${styles.userScore} ${(() => {
-                        const userEndScore = calculateUserModeledScore(file);
                         const expectedScore = file.results?.expectedScore;
                         if (expectedScore !== undefined && userEndScore !== null) {
                           const diff = userEndScore - expectedScore;
@@ -755,7 +774,6 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                         return '';
                       })()}`}>
                         {(() => {
-                          const userEndScore = calculateUserModeledScore(file);
                           const expectedScore = file.results?.expectedScore;
                           if (userEndScore !== null) {
                             const endScore = Math.round(userEndScore);
@@ -786,7 +804,6 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                   </td>
                   <td className={styles.differenceCell}>
                     {(() => {
-                      const userEndScore = calculateUserModeledScore(file);
                       const startScore = file.results?.startScore;
                       const expectedScore = file.results?.expectedScore;
                       

@@ -4,7 +4,7 @@ import { BarChart3 } from "lucide-react";
 import { covariateRelatedItems } from "../utils/covariateRelatedItems";
 import { getVersionFromArdDate } from "../utils/coefficientLoader";
 
-export default function Covariates({
+function Covariates({
   hasFile,
   covariates = {},
   multipliers = {},
@@ -18,18 +18,23 @@ export default function Covariates({
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   
-  // Determine if we're using FY 2026 (Update ID 3) which has the discharge therapy covariate
-  const version = getVersionFromArdDate(ardDate);
+  // Memoize version calculation to avoid recalculating on every render
+  const version = useMemo(() => getVersionFromArdDate(ardDate), [ardDate]);
   
-  // Check if discharge therapy data (O0425 items) is populated
-  const therapyItems = ["O0425B1", "O0425B2", "O0425B3", "O0425C1", "O0425C2", "O0425C3"];
-  const hasTherapyData = therapyItems.some(item => {
-    const value = parsedValues[item];
-    return value && value !== "^" && value !== "";
-  });
+  // Memoize therapy data check
+  const therapyItems = useMemo(() => ["O0425B1", "O0425B2", "O0425B3", "O0425C1", "O0425C2", "O0425C3"], []);
+  const hasTherapyData = useMemo(() => {
+    return therapyItems.some(item => {
+      const value = parsedValues[item];
+      return value && value !== "^" && value !== "";
+    });
+  }, [therapyItems, parsedValues]);
   
   // Only show toggle for FY 2026 AND when therapy data is NOT available
-  const showDischargeTherapyToggle = version?.updateId === "3" && !hasTherapyData;
+  const showDischargeTherapyToggle = useMemo(() => 
+    version?.updateId === "3" && !hasTherapyData, 
+    [version, hasTherapyData]
+  );
 
   const formatNumber = (n) => Number(n).toFixed(2);
   const formatNumberDetailed = (n) => Number(n).toFixed(4);
@@ -60,18 +65,25 @@ export default function Covariates({
     );
   };
 
-  const activeCovariates = Object.entries(covariates)
-    .filter(
-      ([_, value]) => value !== 0 && value !== undefined && value !== null
-    )
-    .filter(([key]) => key.toLowerCase().includes(searchTerm.toLowerCase()));
+  // Memoize filtered covariates to avoid recalculating on every render
+  const activeCovariates = useMemo(() => {
+    return Object.entries(covariates)
+      .filter(
+        ([_, value]) => value !== 0 && value !== undefined && value !== null
+      )
+      .filter(([key]) => key.toLowerCase().includes(searchTerm.toLowerCase()));
+  }, [covariates, searchTerm]);
 
-  const groupedCovariates = {};
-  for (const [key, value] of activeCovariates) {
-    const group = covariateRelatedItems[key]?.group || "Other";
-    if (!groupedCovariates[group]) groupedCovariates[group] = [];
-    groupedCovariates[group].push([key, value]);
-  }
+  // Memoize grouped covariates
+  const groupedCovariates = useMemo(() => {
+    const grouped = {};
+    for (const [key, value] of activeCovariates) {
+      const group = covariateRelatedItems[key]?.group || "Other";
+      if (!grouped[group]) grouped[group] = [];
+      grouped[group].push([key, value]);
+    }
+    return grouped;
+  }, [activeCovariates]);
 
   const handleRowClick = (key) => {
     const itemsUsed = covariateRelatedItems?.[key]?.items ?? [];
@@ -82,10 +94,13 @@ export default function Covariates({
     }
   };
 
-  const total = activeCovariates.reduce(
-    (sum, [key, value]) => sum + value * (multipliers[key] ?? 0),
-    0
-  );
+  // Memoize total calculation
+  const total = useMemo(() => {
+    return activeCovariates.reduce(
+      (sum, [key, value]) => sum + value * (multipliers[key] ?? 0),
+      0
+    );
+  }, [activeCovariates, multipliers]);
   
   const dischargeTherapyKey = "No Physical or Occupational Therapy - Discharge";
   const isDischargeTherapyActive = manualOverrides[dischargeTherapyKey] === 1;
@@ -227,3 +242,6 @@ export default function Covariates({
     </div>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders
+export default React.memo(Covariates);
