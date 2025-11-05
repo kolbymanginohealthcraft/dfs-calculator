@@ -313,3 +313,100 @@ export function getImputationThresholds(ggItemId, ardDate = null) {
 
 // Re-export shouldExcludeGGItemCovariate for convenience
 export { shouldExcludeGGItemCovariate };
+
+/**
+ * PROPRIETARY FUNCTION: getImputationAnalysisData
+ * 
+ * Calculates imputation analysis data for all GG items for display purposes.
+ * This reuses existing functions to avoid code duplication and ensures
+ * the proprietary algorithm remains server-only.
+ * 
+ * @param {Object} parsedValues - Parsed MDS data
+ * @param {Object} summary - Patient summary data
+ * @param {Array} icdList - List of ICD codes
+ * @param {Object} startScores - Start scores for GG items
+ * @returns {Object} Analysis data for all GG items with covariates, multipliers, scores, thresholds, and imputed values
+ */
+export function getImputationAnalysisData(parsedValues, summary, icdList, startScores) {
+  const ardDate = parsedValues['A2300'];
+  const imputationMultipliers = getImputationMultipliers(ardDate);
+
+  // Get the standard covariates (reused from existing calculation)
+  const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
+  const usesWheelchair = covariates["Uses Wheelchair"] === 1;
+
+  // Determine mobility type (reused from existing function)
+  const mobilityType = determineMobilityType(parsedValues);
+
+  // Define which items are walker-specific vs wheelchair-specific
+  const walkerItems = new Set(['GG0170I1', 'GG0170J1', 'GG0170K1', 'GG0170L1', 'GG0170M1', 'GG0170N1', 'GG0170O1']);
+  const wheelchairItems = new Set(['GG0170R1', 'GG0170S1']);
+
+  const data = {};
+  const ggItems = Object.keys(imputationMultipliers);
+
+  for (const ggItemId of ggItems) {
+    // Filter items based on mobility type (same logic as imputeMissingGGItems)
+    if (walkerItems.has(ggItemId) && mobilityType !== 'Walk') {
+      continue; // Skip walker items if not a walker
+    }
+    if (wheelchairItems.has(ggItemId) && mobilityType !== 'Wheel') {
+      continue; // Skip wheelchair items if not a wheelchair user
+    }
+
+    const multipliers = imputationMultipliers[ggItemId];
+    const thresholds = getImputationThresholds(ggItemId, ardDate);
+
+    // Get covariates for this specific GG item (reused logic)
+    const itemCovariates = {};
+    let imputationScore = 0;
+
+    // Calculate imputation score using covariate * multiplier (reused logic)
+    for (const [covariateName, multiplier] of Object.entries(multipliers)) {
+      // Check if this is a GG item-specific covariate that should be excluded
+      if (covariateName.includes('(GG') &&
+          (covariateName.includes('Valid Score') ||
+           covariateName.includes('Not Attempted') ||
+           covariateName.includes('Skipped'))) {
+
+        if (shouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair)) {
+          // Skip this covariate - don't display it or add it to the imputation score
+          continue;
+        }
+      }
+
+      // Get covariate value (reused function)
+      const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate, multipliers);
+
+      if (covariateValue !== 0) {
+        itemCovariates[covariateName] = covariateValue;
+        imputationScore += covariateValue * multiplier;
+      }
+    }
+
+    // Determine which threshold range the score falls into (reused logic)
+    let imputedValue = 1; // Default to 1
+    for (let i = 0; i < thresholds.length; i++) {
+      if (imputationScore > thresholds[i]) {
+        imputedValue = i + 2; // 2, 3, 4, 5, 6
+      }
+    }
+
+    // Check raw MDS value to determine if imputation is needed
+    const rawValue = parsedValues[ggItemId];
+    const isValidValue = rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue);
+    const needsImputation = !rawValue || !isValidValue;
+
+    data[ggItemId] = {
+      covariates: itemCovariates,
+      multipliers: multipliers,
+      imputationScore: imputationScore,
+      thresholds: thresholds,
+      imputedValue: needsImputation ? imputedValue.toString().padStart(2, '0') : null,
+      originalValue: rawValue || null,
+      needsImputation: needsImputation
+    };
+  }
+
+  return data;
+}

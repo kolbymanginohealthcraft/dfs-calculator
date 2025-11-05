@@ -240,11 +240,6 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
       // Extract concise error label from error message
       const error = file.error || '';
       
-      // Debug: log the actual error message to see what we're working with
-      if (error) {
-        console.log('Error message:', error);
-      }
-      
       // Assessment type errors - match the actual error message format
       if (error.includes('This is an ND')) return <span>Error: <span className={styles.errorDetail}>Discharge Assessment</span></span>;
       if (error.includes('This is an NQ')) return <span>Error: <span className={styles.errorDetail}>Quarterly Assessment</span></span>;

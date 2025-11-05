@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
 import { storeFileData, getFileData, getFileSummary, clearAllFileData, getMemoryStats } from '../utils/fileDataManager';
 import { createPaginationManager } from '../utils/paginationManager';
-import { startMemoryMonitoring, addCleanupCallback, removeCleanupCallback, getMemoryUsage } from '../utils/memoryMonitor';
+import { startMemoryMonitoring, addCleanupCallback, removeCleanupCallback, getMemoryUsage, stopMemoryMonitoring } from '../utils/memoryMonitor';
 
 const BulkUploadContext = createContext();
 
@@ -30,7 +30,13 @@ export const BulkUploadProvider = ({ children }) => {
   const [memoryUsage, setMemoryUsage] = useState(null);
 
   // Initialize memory monitoring and cleanup
+  // Only enable in production to reduce dev overhead
   React.useEffect(() => {
+    const isProduction = import.meta.env.PROD;
+    
+    // Only run memory monitoring in production (or if explicitly needed)
+    // Disabled in dev to reduce hot reload overhead
+    if (isProduction) {
     // Start memory monitoring
     startMemoryMonitoring(30000, 0.7, 0.85);
     
@@ -56,14 +62,13 @@ export const BulkUploadProvider = ({ children }) => {
     return () => {
       clearInterval(memoryInterval);
       removeCleanupCallback(cleanupCallback);
+        stopMemoryMonitoring();
     };
+    }
+    
+    // In dev, return empty cleanup
+    return () => {};
   }, []);
-
-
-  // Remove debug logging in production
-  // React.useEffect(() => {
-  //   console.log('BulkUploadContext - uploadedFiles changed:', uploadedFiles.length, uploadedFiles);
-  // }, [uploadedFiles]);
 
   const addFiles = useCallback((newFiles) => {
     setUploadedFiles(prev => [...prev, ...newFiles]);

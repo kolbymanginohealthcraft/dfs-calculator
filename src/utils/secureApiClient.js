@@ -36,7 +36,6 @@ function getSSOToken() {
     if (!devToken) {
       devToken = 'dev-bypass-token';
       localStorage.setItem('dev-sso-token', devToken);
-      console.log('[DEV] Auto-set dev SSO token for development mode');
     }
     return devToken;
   }
@@ -210,6 +209,40 @@ export async function batchImputeValues(params) {
     method: 'POST',
     body: JSON.stringify({
       targetGGItems,
+      parsedValues,
+      summary,
+      icdList,
+      startScores,
+      ardDate
+    })
+  });
+}
+
+/**
+ * Get imputation analysis data for display (protected)
+ * This returns pre-calculated imputation data for UI display without exposing the algorithm
+ * 
+ * @param {Object} params
+ * @param {Object} params.parsedValues - Parsed MDS data
+ * @param {Object} params.summary - Patient summary data
+ * @param {Array} params.icdList - List of ICD codes
+ * @param {Object} params.startScores - Start scores for GG items
+ * @param {string} params.ardDate - Assessment Reference Date (optional)
+ * 
+ * @returns {Promise<{imputationData: Object}>}
+ */
+export async function getImputationAnalysisData(params) {
+  const {
+    parsedValues,
+    summary,
+    icdList,
+    startScores,
+    ardDate
+  } = params;
+
+  return authenticatedFetch('/api/calculate/imputation-analysis', {
+    method: 'POST',
+    body: JSON.stringify({
       parsedValues,
       summary,
       icdList,

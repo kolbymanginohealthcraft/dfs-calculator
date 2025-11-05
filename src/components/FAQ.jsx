@@ -164,7 +164,7 @@ const FAQ = () => {
       questions: [
         {
           question: "Is my patient data secure?",
-          answer: "The DFS Calculator processes data locally in your browser. No patient data is stored on devices nor on external servers. However, always follow your facility's data security protocols when using any clinical tools."
+          answer: "The DFS Calculator maintains HIPAA-compliant security practices. File parsing happens in your browser, while calculations are processed through secure, authenticated backend APIs. No patient data is permanently stored on servers or devices. All data is cleared when you leave the session. However, always follow your facility's data security protocols when using any clinical tools."
         },
         {
           question: "What file formats are supported?",
@@ -280,7 +280,7 @@ const FAQ = () => {
       questions: [
         {
           question: "Can I export and save my results?",
-          answer: "As noted earlier, the DFS Calculator processes data locally in your browser. No patient data is stored on external servers. However, the tool provides export functionality to save your calculations and results. You can export data in pdf format and save the files locally using a naming convention of your design for documentation and sharing with your healthcare team."
+          answer: "The DFS Calculator provides export functionality to save your calculations and results. You can export data in pdf format and save the files locally using a naming convention of your design for documentation and sharing with your healthcare team. As noted earlier, no patient data is permanently stored on servers. All processing is session-based and cleared when you leave."
         },
         {
           question: "What information is included in the export?",

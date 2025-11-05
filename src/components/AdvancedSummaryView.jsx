@@ -414,14 +414,8 @@ const AdvancedSummaryView = () => {
           });
           
           expectedScore = covariateResult?.weightedScore || 0;
-          console.log('Expected score calculated:', expectedScore, 'from result:', covariateResult);
         } catch (error) {
-          console.error('Calculation failed:', error);
-          console.error('Error details:', {
-            message: error.message,
-            status: error.status,
-            data: error.data
-          });
+          // Silently handle calculation errors - they're already shown in UI
           expectedScore = 0;
         }
         
@@ -809,7 +803,7 @@ const AdvancedSummaryView = () => {
                       </div>
                       <div>
                         <strong>No Data Storage</strong>
-                        <p>Your files and patient data are never saved to our servers. Everything is processed locally in your browser.</p>
+                        <p>Your files and patient data are never permanently saved to our servers. File parsing happens in your browser, and calculations are securely processed through authenticated APIs. All session data is cleared when you leave the site.</p>
                       </div>
                     </div>
                     

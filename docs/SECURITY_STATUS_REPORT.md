@@ -82,29 +82,11 @@ Your application has **good infrastructure** for protecting proprietary business
 
 ## Remaining Vulnerabilities
 
-### 🔴 CRITICAL: End Score Imputation Still Uses Client-Side Calculations
+### ✅ End Score Imputation Removed
 
-**Location**: `src/utils/endScoreImputation.js` (lines 99, 157)
+**Status**: Removed January 2025
 
-**Issue**: This file still tries to import and call `getFunctionCovariates()` from the client-side `calculations.js`, which will throw an error. This means end score imputation functionality is broken.
-
-**Code**:
-```javascript
-// Line 99 and 157
-const { getFunctionCovariates } = await import('./calculations.js');
-const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
-```
-
-**Impact**: 
-- End score imputation will fail when called
-- If this feature is used, it needs to be migrated to use the secure API
-
-**Fix Required**:
-1. Create an API endpoint for end score imputation (or extend existing imputation endpoint)
-2. Update `endScoreImputation.js` to use `secureApiClient.js` instead
-3. Or move the logic to server-only and create an API endpoint
-
-**Priority**: HIGH (if end score imputation is used) / MEDIUM (if not actively used)
+**Reason**: End score imputation feature was incomplete and not needed for the app's primary purpose (planning for discharge, not analyzing actual discharge). The feature has been completely removed from the codebase.
 
 ### 🟡 MEDIUM: Token Validation May Not Work Without Configuration
 
@@ -163,10 +145,9 @@ const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, sta
 - **Protection**: Requires valid SSO token
 - **Vulnerabilities**: None - properly protected, but token validation needs configuration
 
-### ⚠️ End Score Imputation
-- **Status**: Uses client-side calculation (will fail)
-- **Protection**: None (functionality broken)
-- **Vulnerabilities**: Feature doesn't work, needs migration to API
+### ✅ End Score Imputation
+- **Status**: Removed (January 2025)
+- **Reason**: Feature was incomplete and not needed for app purpose
 
 ### ✅ Proprietary Calculation Functions
 - **Status**: Moved to server-only (`api/utils/serverCalculations.js`)
@@ -190,10 +171,9 @@ const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, sta
      - Verify signature validation works
    - See `docs/SAML_CONFIGURATION.md` for detailed instructions
 
-2. **Fix End Score Imputation** (HIGH - if used)
-   - Create API endpoint for end score imputation OR extend existing imputation endpoint
-   - Update `src/utils/endScoreImputation.js` to use secure API client
-   - Test end score imputation functionality
+2. ~~**Fix End Score Imputation**~~ ✅ **COMPLETED** - Removed January 2025
+   - Feature was incomplete and not needed for app's purpose
+   - All related code and data files have been removed
 
 3. **Verify Production Environment Variables**
    - Ensure `NODE_ENV=production` or `VERCEL_ENV=production`
@@ -237,7 +217,7 @@ Before deploying to production, verify:
 - [ ] Development bypass is disabled in production environment
 - [ ] Basic mode is accessible without authentication
 - [ ] Advanced mode redirects to home if no SSO token
-- [ ] End score imputation works (if applicable) OR is disabled
+- [x] End score imputation removed (January 2025)
 - [ ] Error messages don't expose internal details in production
 - [ ] HTTPS is enforced in production
 - [ ] CORS is properly configured (if needed)
@@ -270,18 +250,17 @@ Before deploying to production, verify:
 
 **Critical Issues**:
 1. Token validation needs configuration (CRITICAL - blocks production)
-2. End score imputation broken (HIGH - if feature is used)
+2. ~~End score imputation broken~~ ✅ **RESOLVED** - Feature removed (January 2025)
 
 **Security Posture**: 
 - ✅ Proprietary algorithms are protected (server-only)
 - ✅ API endpoints are protected (require authentication)
 - ✅ Access control is properly implemented
 - ⚠️ Token validation needs completion
-- ⚠️ One feature (end score imputation) needs migration
+- ✅ End score imputation feature removed (not needed)
 
 **Recommendation**: 
-- Complete token validation configuration before production deployment
-- Fix end score imputation if it's a required feature
+- Complete token validation configuration before production deployment  
 - Test thoroughly with real myCare SSO tokens
 - Once configured, the security implementation will be solid
 
@@ -292,7 +271,6 @@ Before deploying to production, verify:
 1. **Contact myCare IT** to get the information listed in "Questions for myCare IT Team"
 2. **Configure environment variables** based on myCare's setup
 3. **Test token validation** with real tokens
-4. **Fix end score imputation** if needed
-5. **Deploy to staging** and test thoroughly
+4. **Deploy to staging** and test thoroughly
 6. **Deploy to production** once all tests pass
 

@@ -63,7 +63,7 @@ Output will be in `dist/` directory.
 
 - **Static-First:** All coefficient data bundled at build time (no backend database)
 - **Multi-Version Support:** Automatic selection of correct CMS coefficients by date
-- **Client-Side Processing:** All calculations happen in browser for speed and privacy
+- **Hybrid Processing:** File parsing happens in browser; calculations use secure, authenticated backend APIs
 
 See `docs/ARCHITECTURE.md` for detailed architecture information.
 

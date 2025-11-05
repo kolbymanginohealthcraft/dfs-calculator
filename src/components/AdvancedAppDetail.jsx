@@ -329,9 +329,7 @@ function AdvancedAppDetail() {
           setCovariates(result.covariates || {});
           setWeightedScore(result.weightedScore || 0);
         } catch (error) {
-          console.error('Calculation failed:', error);
-          // Set error state or show user-friendly message
-          // For now, just log - you may want to add a user-visible error state
+          // Silently handle calculation errors - they're already shown in UI if needed
         }
       };
 

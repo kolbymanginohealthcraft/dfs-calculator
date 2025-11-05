@@ -169,8 +169,8 @@ async function getCoefficientLoader() {
 }
 
 async function getImputationFunctions() {
-  const { calculateImputedValue, imputeMissingGGItems } = await import('../../api/utils/serverImputation.js');
-  return { calculateImputedValue, imputeMissingGGItems };
+  const { calculateImputedValue, imputeMissingGGItems, getImputationAnalysisData } = await import('../../api/utils/serverImputation.js');
+  return { calculateImputedValue, imputeMissingGGItems, getImputationAnalysisData };
 }
 
 /**
@@ -308,6 +308,47 @@ app.post('/api/calculate/imputation', protectExpressRoute(async (req, res) => {
     return res.status(500).json({
       error: 'Imputation calculation failed',
       message: process.env.NODE_ENV === 'development' ? error.message : 'An error occurred during imputation'
+    });
+  }
+}));
+
+/**
+ * POST /api/calculate/imputation-analysis
+ * Protected endpoint for imputation analysis data
+ */
+app.post('/api/calculate/imputation-analysis', protectExpressRoute(async (req, res) => {
+  try {
+    const { parsedValues, summary, icdList, startScores, ardDate } = req.body;
+
+    // Validate required fields
+    if (!parsedValues || !summary || !Array.isArray(icdList) || !startScores) {
+      return res.status(400).json({
+        error: 'Missing required fields',
+        required: ['parsedValues', 'summary', 'icdList', 'startScores']
+      });
+    }
+
+    // Load imputation functions
+    const { getImputationAnalysisData } = await getImputationFunctions();
+
+    // Get imputation analysis data for all GG items
+    const imputationData = getImputationAnalysisData(
+      parsedValues,
+      summary,
+      icdList,
+      startScores
+    );
+
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    return res.status(200).json({
+      imputationData
+    });
+
+  } catch (error) {
+    console.error('Imputation analysis error:', error);
+    return res.status(500).json({
+      error: 'Imputation analysis failed',
+      message: process.env.NODE_ENV === 'development' ? error.message : 'An error occurred during imputation analysis'
     });
   }
 }));

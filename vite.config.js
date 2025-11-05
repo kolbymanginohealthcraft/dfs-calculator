@@ -9,6 +9,15 @@ export default defineConfig({
     proxy: {
       "/api": "http://localhost:3001", // your Express server (for npm run dev)
     },
+    // Optimize HMR for better dev performance
+    hmr: {
+      overlay: true,
+    },
+    // Reduce watcher overhead
+    watch: {
+      // Ignore large data files that don't need hot reload
+      ignored: ['**/node_modules/**', '**/dist/**', '**/public/**/*.json']
+    }
   },
   build: {
     outDir: "dist",
