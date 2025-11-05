@@ -9,7 +9,7 @@ The Discharge Function Score (DFS) Viewer is a React-based web application that 
 - **Frontend:** React 19 + React Router
 - **Build Tool:** Vite
 - **Styling:** CSS Modules [[memory:4277039]]
-- **Data Processing:** PapaParse (CSV), xlsx (Excel)
+- **Data Processing:** xlsx (Excel), JSON (replaced CSV parsing)
 - **Charts:** Recharts
 - **Deployment:** Vercel
 

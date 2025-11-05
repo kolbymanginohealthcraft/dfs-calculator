@@ -52,7 +52,7 @@
 ## Dependencies Status
 
 ### Kept (Required)
-- ✅ `csv-parser` - Used in transformers and server
+- ✅ `csv-parser` - Used in transformers and dev server (moved to devDependencies)
 - ✅ `xlsx` - Used in transformers
 - ✅ `html2canvas` - PDF export
 - ✅ `recharts` - Data visualization

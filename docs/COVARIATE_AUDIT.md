@@ -1,6 +1,8 @@
 # Covariate Related Items Audit
 
-Comparing `calculations.js` logic vs `covariateRelatedItems.js` mappings.
+**Status:** ⚠️ In Progress - Issues Identified  
+**Date:** Unknown  
+**Purpose:** Comparing `calculations.js` logic vs `covariateRelatedItems.js` mappings
 
 ## Analysis in Progress...
 
