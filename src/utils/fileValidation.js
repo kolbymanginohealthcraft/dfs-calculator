@@ -3,6 +3,8 @@
  * Provides comprehensive validation to ensure only proper MDS files are processed
  */
 
+import { parseXml } from './xmlParser.js';
+
 // Configuration constants
 const VALIDATION_CONFIG = {
   MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
@@ -419,22 +421,8 @@ export async function validateMdsFile(file) {
     }
 
     // Step 4: Parse XML and validate MDS content
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
-    
-    // Convert to parsed data format
-    const parsedData = {};
-    const walker = xmlDoc.createTreeWalker(xmlDoc.documentElement, NodeFilter.SHOW_ELEMENT);
-    
-    while (walker.nextNode()) {
-      const node = walker.currentNode;
-      const tag = node.nodeName;
-      const value = node.textContent.trim();
-      
-      if (value && node.children.length === 0) {
-        parsedData[tag] = value;
-      }
-    }
+    // Use shared parseXml utility to avoid code duplication
+    const parsedData = parseXml(xmlString);
 
     // Step 5: MDS content validation
     const mdsResult = validateMdsContent(parsedData);
