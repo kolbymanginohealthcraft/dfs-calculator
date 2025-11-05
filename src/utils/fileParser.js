@@ -4,52 +4,11 @@ import { parseXml } from "./xmlParser.js";
 import { getSectionName } from "./sectionNames.js";
 import { batchImputeValues } from "./secureApiClient.js";
 
-// Helper function to calculate GG item-specific covariates
-export const getGGItemSpecificCovariate = (covariateName, parsedValues, itemMultipliers = null) => {
-  if (covariateName.includes(" - Valid Score") || 
-      covariateName.includes(" - Not Attempted") || 
-      covariateName.includes(" - Skipped")) {
-    
-    const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
-    if (match) {
-      const ggItemId = match[0].slice(1, -1);
-      const rawValue = parsedValues[ggItemId];
-      
-      if (covariateName.includes(" - Valid Score")) {
-        if (rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue)) {
-          return parseInt(rawValue, 10);
-        }
-        return 0;
-      } else if (covariateName.includes(" - Not Attempted")) {
-        // Not Attempted: return 1 if value is any ANA value (07, 08, 09, 10, 88)
-        // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
-        
-        // Check if this item has a Skipped covariate (only J1, K1, L1, N1, O1, R1, S1)
-        const hasSkippedCovariate = itemMultipliers && Object.keys(itemMultipliers).some(key => 
-          key.includes(ggItemId) && key.includes('Skipped')
-        );
-        
-        if (hasSkippedCovariate) {
-          // If item has a Skipped covariate, only count ANA values as Not Attempted
-          return ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
-        } else {
-          // If no Skipped covariate, treat ^ as Not Attempted too
-          return ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
-        }
-      } else if (covariateName.includes(" - Skipped")) {
-        // Skipped: return 1 if value is ^ (skip pattern), else 0
-        // Note: This covariate only exists for certain items (J1, K1, L1, N1, O1, R1, S1)
-        return rawValue === '^' ? 1 : 0;
-      }
-    }
-  }
-  return null;
-};
-
 /**
  * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
- * 
+ *
  * This function has been moved to api/utils/serverImputation.js to prevent reverse engineering.
+ * All proprietary imputation logic is now server-only and protected.
  */
 export const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate, itemMultipliers = null) => {
   // This function has been removed from client bundle to protect proprietary IP
