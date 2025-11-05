@@ -3,9 +3,12 @@
  * 
  * Provides functions for imputing missing end scores using
  * end score-specific multipliers and thresholds.
+ * 
+ * ⚠️ NOTE: This file uses secure API calls for proprietary logic.
  */
 
 import endScoreCoefficients from '../data/end-score-coefficients.json' with { type: 'json' };
+import { calculateFunctionScore } from './secureApiClient.js';
 
 /**
  * Get end score imputation multipliers for a specific GG item and ARD date
@@ -95,9 +98,15 @@ export async function calculateEndScoreImputedValue(ggItemId, parsedValues, summ
     return "01"; // Default fallback
   }
   
-  // Get covariates to determine Uses Wheelchair value
-  const { getFunctionCovariates } = await import('./calculations.js');
-  const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
+  // Get covariates using secure API to determine Uses Wheelchair value
+  const result = await calculateFunctionScore({
+    parsedValues,
+    summary,
+    icdList,
+    startScores,
+    ardDate
+  });
+  const covariates = result.covariates || {};
   const usesWheelchair = covariates["Uses Wheelchair"] === 1;
   
   let imputationScore = 0;
@@ -117,8 +126,23 @@ export async function calculateEndScoreImputedValue(ggItemId, parsedValues, summ
       }
     }
     
-    const { getCovariateValue } = await import('./fileParser.js');
-    const covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate, multipliers);
+    // Get covariate value from the covariates object returned by secure API
+    // For GG item-specific covariates, we need to calculate them separately
+    // For now, use the covariate value from the API result, or calculate GG-specific ones locally
+    let covariateValue = 0;
+    
+    // Try to get from API result first
+    if (covariates[covariateName] !== undefined) {
+      covariateValue = covariates[covariateName];
+    } else {
+      // For GG item-specific covariates, calculate them (this is non-proprietary logic)
+      const { getGGItemSpecificCovariate } = await import('./fileParser.js');
+      if (getGGItemSpecificCovariate) {
+        const ggSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues, multipliers);
+        covariateValue = ggSpecificValue !== null ? ggSpecificValue : 0;
+      }
+    }
+    
     imputationScore += covariateValue * multiplier;
   }
 
@@ -149,14 +173,29 @@ export async function imputeMissingEndScoreGGItems(parsedValues, summary, icdLis
   
   if (!endScoreMultipliers) {
     // Fall back to start score imputation if no end score multipliers available
-    const { imputeMissingGGItems } = await import('./imputationCalculations.js');
-    return imputeMissingGGItems(parsedValues, summary, icdList, startScores, targetEndScoreItems);
+    // Use secure API for batch imputation
+    const { batchImputeValues } = await import('./secureApiClient.js');
+    const result = await batchImputeValues({
+      targetGGItems: targetEndScoreItems,
+      parsedValues,
+      summary,
+      icdList,
+      startScores,
+      ardDate
+    });
+    return result.imputedValues || {};
   }
   
-  // Get the standard covariates (same as used for expected score calculation)
-  const { getFunctionCovariates } = await import('./calculations.js');
-  const { covariates } = getFunctionCovariates(parsedValues, summary, icdList, startScores, ardDate);
-  
+  // Get the standard covariates using secure API (same as used for expected score calculation)
+  const result = await calculateFunctionScore({
+    parsedValues,
+    summary,
+    icdList,
+    startScores,
+    ardDate
+  });
+  const covariates = result.covariates || {};
+
   // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
   const usesWheelchair = covariates["Uses Wheelchair"] === 1;
   
@@ -193,9 +232,21 @@ export async function imputeMissingEndScoreGGItems(parsedValues, summary, icdLis
             }
           }
           
-          // Get covariate value
-          const { getCovariateValue } = await import('./fileParser.js');
-          covariateValue = getCovariateValue(covariateName, parsedValues, summary, icdList, startScores, ardDate, itemMultipliers);
+          // Get covariate value from API result or calculate GG-specific ones
+          let covariateValue = 0;
+          
+          // Try to get from API result first
+          if (covariates[covariateName] !== undefined) {
+            covariateValue = covariates[covariateName];
+          } else {
+            // For GG item-specific covariates, calculate them (this is non-proprietary logic)
+            const { getGGItemSpecificCovariate } = await import('./fileParser.js');
+            if (getGGItemSpecificCovariate) {
+              const ggSpecificValue = getGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers);
+              covariateValue = ggSpecificValue !== null ? ggSpecificValue : 0;
+            }
+          }
+          
           imputationScore += covariateValue * multiplier;
         }
         

@@ -5,6 +5,7 @@ import { BulkUploadProvider, useBulkUpload } from './contexts/BulkUploadContext'
 import { RedactionProvider } from './contexts/RedactionContext';
 import { DataLossWarningProvider } from './contexts/DataLossWarningContext';
 import RouteBasedClearer from './components/RouteBasedClearer';
+import AuthStateTester from './components/AuthStateTester';
 import HomeScreen from './components/HomeScreen';
 import BasicApp from './components/BasicApp';
 import AdvancedAppDetail from './components/AdvancedAppDetail';
@@ -90,6 +91,7 @@ function AppContent() {
           <Router>
             <div className="App">
               <RouteBasedClearer />
+              <AuthStateTester />
               <Routes>
               <Route 
                 path="/" 

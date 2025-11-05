@@ -16,6 +16,14 @@ export const PortalProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Development testing override (for UI testing)
+    const testOverride = localStorage.getItem('auth-test-override');
+    if (testOverride !== null) {
+      setIsFromPortal(testOverride === 'true');
+      setIsLoading(false);
+      return;
+    }
+
     // Check if user has SSO token (authenticated via myCare)
     // This is the primary method: authenticated users have access to advanced mode
     const hasToken = hasSSOToken();
@@ -33,11 +41,15 @@ export const PortalProvider = ({ children }) => {
     
     if (isDev) {
       // In development, check for dev token (auto-set by secureApiClient)
-      const devToken = localStorage.getItem('dev-sso-token');
-      if (devToken === 'dev-bypass-token') {
-        setIsFromPortal(true);
-        setIsLoading(false);
-        return;
+      // But only if VITE_ALLOW_DEV_BYPASS is explicitly set
+      const allowDevBypass = import.meta.env.VITE_ALLOW_DEV_BYPASS === 'true';
+      if (allowDevBypass) {
+        const devToken = localStorage.getItem('dev-sso-token');
+        if (devToken === 'dev-bypass-token') {
+          setIsFromPortal(true);
+          setIsLoading(false);
+          return;
+        }
       }
     }
 

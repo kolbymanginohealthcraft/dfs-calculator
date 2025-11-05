@@ -19,10 +19,16 @@
  */
 function getSSOToken() {
   // For development: Allow bypass token
-  // Check if we're in development mode (works with Vite)
-  const isDev = import.meta.env.DEV || import.meta.env.MODE === 'development' || 
-                window.location.hostname === 'localhost' || 
-                window.location.hostname === '127.0.0.1';
+  // HARDENED: Only allow in localhost/development with explicit flag
+  const isProduction = import.meta.env.PROD || 
+                       (window.location.hostname !== 'localhost' && 
+                        window.location.hostname !== '127.0.0.1');
+  
+  // Check for VITE_ prefixed environment variable (Vite requirement)
+  const allowDevBypass = import.meta.env.VITE_ALLOW_DEV_BYPASS === 'true' ||
+                          import.meta.env.MODE === 'development';
+  
+  const isDev = !isProduction && allowDevBypass;
   
   if (isDev) {
     // In development, automatically set and use dev token if not already set

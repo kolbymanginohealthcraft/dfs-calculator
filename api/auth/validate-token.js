@@ -5,6 +5,8 @@
  * This is a flexible validator that can be customized based on your actual SSO token format.
  */
 
+import { logAuthAttempt } from '../utils/auditLogger.js';
+
 /**
  * Validates an SSO token
  * @param {string} token - The SSO token to validate
@@ -21,11 +23,17 @@ async function validateSSOToken(token) {
   }
 
   // For development: Allow bypass with a special token
-  // Remove this in production or secure it properly
-  // Check multiple ways to detect development mode
-  const isDev = process.env.NODE_ENV === 'development' || 
-                process.env.VERCEL_ENV !== 'production' ||
-                !process.env.VERCEL_ENV;
+  // HARDENED: Require explicit flag and multiple checks to prevent production bypass
+  const isProduction = process.env.VERCEL_ENV === 'production' || 
+                       (process.env.NODE_ENV === 'production' && process.env.VERCEL);
+  
+  // Only allow dev bypass if:
+  // 1. Not in production
+  // 2. Explicit ALLOW_DEV_BYPASS flag is set
+  // 3. Not running on Vercel (or explicitly dev environment)
+  const isDev = !isProduction &&
+                process.env.ALLOW_DEV_BYPASS === 'true' &&
+                (process.env.NODE_ENV === 'development' || !process.env.VERCEL);
   
   if (isDev && token === 'dev-bypass-token') {
     return { valid: true, user: { id: 'dev-user', source: 'development' } };
@@ -225,6 +233,10 @@ export default async function validateToken(req) {
   }
 
   const validation = await validateSSOToken(token);
+  
+  // Log authentication attempt
+  const identifier = token ? (token.substring(0, 20) + '...') : 'no-token';
+  logAuthAttempt(identifier, validation.valid, validation.error || null);
   
   if (!validation.valid) {
     return {

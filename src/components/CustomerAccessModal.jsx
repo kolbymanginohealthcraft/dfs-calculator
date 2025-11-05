@@ -57,7 +57,7 @@ const CustomerAccessModal = ({ isOpen, onClose }) => {
           </p>
           <button 
             className={styles.websiteButton}
-            onClick={() => window.open('https://aegistherapies.com/', '_blank')}
+            onClick={() => window.open('https://aegistherapies.com/contact-us', '_blank')}
           >
             Visit Aegis Therapies
           </button>
