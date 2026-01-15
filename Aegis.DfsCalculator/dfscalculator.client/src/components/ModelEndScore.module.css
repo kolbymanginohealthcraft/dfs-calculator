@@ -1,0 +1,328 @@
+.rightPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+  background: #f0fdf7;
+  min-width: 0;
+}
+
+
+.sticky {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 10;
+  /* border-bottom: 3px solid rgba(12, 67, 106, 0.2); */
+}
+
+.modelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.modelHeader h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  /* margin: 0; */
+}
+
+.modelHeader h2 svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.resetBtn {
+  background: #fcecec;
+  border: 1px solid #d64550;
+  color: #d64550;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.resetBtn:hover {
+  background: #f8d8d8;
+}
+
+.scoreBox {
+  background: #d9f7ea;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0;
+  font-weight: bold;
+  border-left: 5px solid #7fbc42;
+}
+
+
+.scoreSubsection {
+  margin-bottom: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+.scoreSubsection h3 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: #007cbb;
+}
+
+.scoreRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 1.2;
+  border-left: 4px solid transparent; /* always reserve space */
+}
+
+.itemLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 2;
+}
+
+.labelText {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0c436a;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.itemProgress {
+  margin: 0 10px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 30px;
+}
+
+.itemProgress::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  right: 12px;
+  height: 3px;
+  background: #e0e0e0;
+  border-radius: 2px;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.scoreControls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+
+.gain {
+  border-left: 4px solid #7fbc42;
+  background: #eefaea;
+}
+
+.loss {
+  border-left: 4px solid #d64550;
+  background: #fde8e7;
+}
+
+.delta {
+  margin-left: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: normal;
+}
+
+.positive {
+  color: #7fbc42;
+}
+
+.negative {
+  color: #c62828;
+}
+
+.itemId {
+  color: #999;
+  font-size: 0.85rem;
+  margin-left: 0.5rem;
+}
+
+.contributingIcon {
+  margin-left: 0.4rem;
+  font-size: 0.9rem;
+  color: green;
+  
+}
+
+.buttonRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.filterBtn {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.filterBtn:hover {
+  background-color: #ddd;
+}
+
+.contributeSlot {
+  width: 1.2rem;
+  display: inline-block;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.contributingDot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  background-color: #4AC5BB; /* Healthcraft teal */
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.subsectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline; /* Ensures dot aligns better with text baseline */
+}
+
+.sectionHeader h3 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #0c436a;
+}
+
+.contributeSummary {
+  display: flex;
+  align-items: baseline; /* aligns with h3 text */
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+
+.contributeLabel {
+  font-weight: 500;
+  /* margin-top: 0; */
+}
+
+.headerIcon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.summaryIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.domainIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.chartBox {
+  margin-bottom: 1rem;
+}
+
+
+.scoreSummaryBox {
+  background: #ffffff;
+  border: 1px solid #b5e2c1;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.summaryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.summaryItem {
+  flex: 1;
+  text-align: center;
+}
+
+.summaryLabel {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #007cbb;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+}
+
+.summaryValue {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0c436a;
+  font-family: 'Courier New', monospace;
+}
+
+.summaryDivider {
+  width: 1px;
+  height: 3rem;
+  background: linear-gradient(to bottom, transparent, #9fe4d9, transparent);
+}
+
+.expectedScoreBox {
+  background: linear-gradient(135deg, #007cbb 0%, #0c436a 100%);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 124, 187, 0.3);
+  text-align: center;
+  border: 2px solid #9fe4d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}

@@ -1,0 +1,17 @@
+export async function fetchFacilityInfo(ccn, setFacilityName, setFacilityAddress) {
+  if (!ccn) return;
+
+  try {
+    const response = await fetch(`/facility-name/${ccn}`);
+    const result = await response.json();
+    const name = result?.facility_name || "Unknown Facility";
+    const address = `${result?.address || ""}, ${result?.city || ""}, ${result?.state || ""} ${result?.zip || ""}`;
+
+    setFacilityName(name);
+    setFacilityAddress(address);
+  } catch (error) {
+    // Failed to fetch facility name - error logging removed for HIPAA compliance
+    setFacilityName("Lookup failed");
+    setFacilityAddress("");
+  }
+}

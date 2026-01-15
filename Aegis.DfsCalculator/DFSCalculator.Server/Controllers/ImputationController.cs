@@ -1,0 +1,67 @@
+using Aegis.DfsCalculator.Server.Utils;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+namespace Aegis.DfsCalculator.Server.Controllers
+{
+    [ApiController]
+    [Route("imputation")]
+    public class ImputationController : ControllerBase
+    {
+        [HttpPost]
+        public IActionResult HandleImputation(ImputationBody body)
+        {
+            //if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
+            if (!(body.ICDList.Count > 0 && body.ICDList.Count <= 100)) return BadRequest();
+
+            if (!String.IsNullOrEmpty(body.GGItemId))
+            {
+                try
+                {
+                    string imputedValue = ServerImputations.CalculateImputedValue(body.GGItemId, body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores);
+                    return Ok(imputedValue);
+                }
+                catch(KeyNotFoundException ex)
+                {
+                    return BadRequest(ex.Message);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500);
+                }
+            }
+            else
+            {
+                if (body.TargetGGItems.Count > 0)
+                {
+                    //try
+                    //{
+                        Dictionary<string, string> imputedValues = ServerImputations.ImputeMissingGGItems(body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores, body.TargetGGItems);
+                        return Ok(imputedValues);
+                    //}
+                    //catch (KeyNotFoundException ex)
+                    //{
+                    //    return BadRequest(ex.Message);
+                    //}
+                    //catch (Exception)
+                    //{
+                    //    return StatusCode(500);
+                    //}
+                }
+                return BadRequest("Either \"GGItemId\" (single) or \"TargetGGItems\" (batch) must be provided");
+            }
+        }
+    }
+
+    public class ImputationBody
+    {
+        public string? GGItemId { get; set; }
+        public Dictionary<string, string> ParsedValues { get; set; }
+        public PatientSummary Summary { get; set; }
+        public List<string> ICDList { get; set; }
+        public Dictionary<string, string> StartScores { get; set; }
+        public Dictionary<string, string> TargetGGItems { get; set; }
+    }
+}

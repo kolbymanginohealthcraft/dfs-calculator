@@ -1,0 +1,341 @@
+/* src/components/Covariates.module.css */
+
+.covariatesPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.covariatesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.covariatesHeader h2 {
+  display: flex;
+  align-items: center;
+}
+
+.headerIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 10;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  /* border-bottom: 3px solid rgba(12, 67, 106, 0.2); */
+}
+
+.scrollArea {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 0.5rem;
+  padding-bottom: 2rem;
+  padding-top: 1rem;
+  /* border-top: 3px solid rgba(12, 67, 106, 0.2); */
+}
+
+.covariateNote {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0.3rem 0 0.5rem;
+  line-height: 1.4;
+}
+
+.covariateList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.covariateRow {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #ddd;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 180px;
+  width: 100%;
+  height: 100%;
+}
+
+.searchBar {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.clearButton {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearButton:hover {
+  color: #c82333;
+}
+
+/* Table styling */
+.covariateTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.covariateTable td {
+  border: 1px solid #ccc;
+  padding: 0.4rem;
+}
+
+/* Align numeric cells right */
+.covariateTable td:nth-child(2),
+.covariateTable td:nth-child(3),
+.covariateTable td:nth-child(4) {
+  text-align: right;
+}
+
+.row {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.row:hover {
+  background-color: rgba(127, 188, 66, 0.08);
+  transform: translateX(2px);
+  box-shadow: 0 2px 4px rgba(127, 188, 66, 0.15);
+}
+
+.row:hover::after {
+  content: "→";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.selectedRow {
+  background-color: rgba(127, 188, 66, 0.15);
+  color: #0c436a;
+  font-weight: bold;
+  border-left: 3px solid var(--secondary-color);
+  transition: all 0.2s ease;
+}
+
+.selectedRow:hover {
+  background-color: rgba(127, 188, 66, 0.2);
+  transform: translateX(1px);
+}
+
+.selectedRow::before {
+  content: "✓";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-color);
+  font-weight: bold;
+  font-size: 0.8rem;
+}
+
+.covariateTable tr {
+  transition: background-color 0.2s ease;
+}
+
+/* Disabled covariates (no related items) */
+.disabledRow {
+  cursor: not-allowed;
+  pointer-events: none;
+  color: #888;
+  font-style: italic;
+}
+
+/* Total row */
+.totalRow {
+  /* background-color: #f9f9f9; */
+  border-top: 2px solid #ccc;
+  font-weight: bold;
+}
+
+/* NEW: Group header row */
+.groupRow {
+  background-color: #d6f0de;
+  font-weight: bold;
+  color: #0c436a;
+  font-size: 0.85rem;
+  border-top: 2px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+  padding: 0.4rem 0.75rem;
+}
+
+/* NEW: Pivot-style indentation for normal rows */
+.row td:first-child {
+  padding-left: 1.25rem;
+}
+
+/* Table header styling */
+.covariateTable th {
+  background-color: #e0e0e0;
+  color: #0c436a;
+  font-weight: 600;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+}
+
+/* Manual Toggle Section */
+.manualToggleSection {
+  background-color: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.toggleLabel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.toggleTitle {
+  font-weight: 600;
+  color: #0c436a;
+  font-size: 0.95rem;
+}
+
+.toggleDescription {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
+}
+
+.toggleControl {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.toggleSwitch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggleSwitch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleSlider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.toggleSlider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggleSwitch input:checked + .toggleSlider {
+  background-color: #7fbc42;
+}
+
+.toggleSwitch input:checked + .toggleSlider:before {
+  transform: translateX(26px);
+}
+
+.toggleText {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #0c436a;
+  min-width: 80px;
+}
+
+.toggleCovariateName {
+  font-size: 0.9rem;
+  color: #333;
+  padding: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 4px;
+  border-left: 3px solid #ffc107;
+}
+
+.toggleImpact {
+  margin-left: 0.5rem;
+  font-weight: 600;
+  color: #d9534f;
+  font-size: 0.95rem;
+}
+
+/* Highlight the discharge therapy row to match the toggle section */
+.dischargeTherapyRow {
+  background-color: #fff3cd;
+  border-left: 3px solid #ffc107 !important;
+}
+
+.dischargeTherapyRow:hover {
+  background-color: #ffe8a3;
+}

@@ -1,0 +1,53 @@
+{
+  "dataSources": {
+    "mds": {
+      "itm_mstr": {
+        "pattern": "*itm_mstr*.csv",
+        "description": "MDS item master definitions",
+        "required": true
+      },
+      "itm_val": {
+        "pattern": "*itm_val*.csv", 
+        "description": "MDS item value descriptions",
+        "required": true
+      }
+    },
+    "covariates": {
+      "imputation": {
+        "pattern": "*imputation*appendix*snf*.xlsx",
+        "description": "Imputation multipliers from CMS",
+        "required": true,
+        "sheets": ["Coefficients - Admission - ID 2"]
+      },
+      "riskAdjustment": {
+        "pattern": "*risk*adjustment*appendix*snf*.xlsx",
+        "description": "Risk adjustment multipliers from CMS", 
+        "required": true,
+        "sheets": ["Function Multipliers"]
+      }
+    },
+    "diagnoses": {
+      "icdToHcc": {
+        "pattern": "*snf*discharge*function*icd10*hcc*crosswalk*.xlsx",
+        "description": "ICD-10 to HCC mapping from CMS",
+        "required": true,
+        "sheets": ["ICD10-HCC Crosswalk"]
+      },
+      "icd10Codes": {
+        "pattern": "icd10cm_codes_*.txt",
+        "description": "ICD-10-CM code definitions",
+        "required": true
+      }
+    }
+  },
+  "outputPaths": {
+    "mdsLookup": "src/data/mds_item_lookup_generated.json",
+    "valueDescriptions": "public/itm_val_generated.csv",
+    "functionMultipliers": "src/utils/functionMultipliers_generated.js",
+    "imputationMultipliers": "src/utils/imputationMultipliers_generated.js", 
+    "icdToHcc": "src/utils/icdToHcc_generated.js",
+    "icd10Lookup": "public/icd10_lookup_2025_generated.json"
+  },
+  "currentYear": "2025",
+  "effectiveDate": "2024-10-01"
+}
