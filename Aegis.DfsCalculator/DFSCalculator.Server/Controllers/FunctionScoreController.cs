@@ -7,13 +7,13 @@ using System.Security.Claims;
 namespace Aegis.DfsCalculator.Server.Controllers
 {
     [ApiController]
-    [Route("function-score")]
+    [Route("api/function-score")]
     public class FunctionScoreController : Controller
     {
         [HttpPost]
         public IActionResult HandleFunctionScore(FunctionScoreCalculationBody body)
         {
-            //if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
+            if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
             if (!(body.ICDList.Count > 0 && body.ICDList.Count <= 100)) return BadRequest();
 
             Dictionary<string, double?> multipliers = CoefficientLoader.GetFunctionMultipliers(body.ARDDate);

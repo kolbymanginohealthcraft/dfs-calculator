@@ -377,7 +377,7 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
         // Fetch facility info if we have a CCN
         const ccn = parsedValues["A0100B"];
         if (ccn) {
-          const response = await fetch(`/facility-name/${ccn}`);
+          const response = await fetch(`/api/facility-name/${ccn}`);
           const result = await response.json();
           facilityName = result?.facility_name || `CCN: ${ccn}`;
           facilityAddress = `${result?.address || ""}, ${result?.city || ""}, ${result?.state || ""} ${result?.zip || ""}`;

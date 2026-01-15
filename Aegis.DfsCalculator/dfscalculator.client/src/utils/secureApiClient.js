@@ -133,7 +133,7 @@ export async function calculateFunctionScore(params) {
     manualOverrides = {}
   } = params;
 
-  return authenticatedFetch('/function-score', {
+  return authenticatedFetch('/api/function-score', {
     method: 'POST',
     body: JSON.stringify({
       parsedValues,
@@ -169,7 +169,7 @@ export async function calculateImputedValue(params) {
     ardDate
   } = params;
 
-  return authenticatedFetch('/imputation', {
+  return authenticatedFetch('/api/imputation', {
     method: 'POST',
     body: JSON.stringify({
       ggItemId,
@@ -205,7 +205,7 @@ export async function batchImputeValues(params) {
     ardDate
   } = params;
 
-  return authenticatedFetch('/imputation', {
+  return authenticatedFetch('/api/imputation', {
     method: 'POST',
     body: JSON.stringify({
       targetGGItems,
@@ -240,7 +240,7 @@ export async function getImputationAnalysisData(params) {
     ardDate
   } = params;
 
-  return authenticatedFetch('/imputation-analysis', {
+  return authenticatedFetch('/api/imputation-analysis', {
     method: 'POST',
     body: JSON.stringify({
       parsedValues,

@@ -47,19 +47,19 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/function-score': {
+            '^/api/function-score': {
                 target,
                 secure: false
             },
-            '^/imputation': {
+            '^/api/imputation': {
                 target,
                 secure: false
             },
-            '^/imputation-analysis': {
+            '^/api/imputation-analysis': {
                 target,
                 secure: false
             },
-            '^/facility-name': {
+            '^/api/facility-name': {
                 target,
                 secure: false
             }

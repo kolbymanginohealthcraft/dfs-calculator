@@ -378,7 +378,7 @@ function AdvancedAppDetail() {
     // If facility data is not yet loaded, fetch it first
     if (!facilityName && parsedValues?.A0100B) {
       try {
-        const response = await fetch(`/facility-name/${parsedValues.A0100B}`);
+        const response = await fetch(`/api/facility-name/${parsedValues.A0100B}`);
         const result = await response.json();
         const fetchedFacilityName = result?.facility_name || `CCN: ${parsedValues.A0100B}`;
         const fetchedFacilityAddress = `${result?.address || ""}, ${result?.city || ""}, ${result?.state || ""} ${result?.zip || ""}`;

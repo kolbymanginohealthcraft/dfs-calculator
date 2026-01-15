@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace Aegis.DfsCalculator.Server.Controllers
 {
     [ApiController]
-    [Route("facility")]
+    [Route("api/facility-name")]
     public class FacilityController : Controller
     {
         [HttpGet]

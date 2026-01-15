@@ -7,13 +7,13 @@ using System.Security.Claims;
 namespace Aegis.DfsCalculator.Server.Controllers
 {
     [ApiController]
-    [Route("imputation")]
+    [Route("api/imputation")]
     public class ImputationController : ControllerBase
     {
         [HttpPost]
         public IActionResult HandleImputation(ImputationBody body)
         {
-            //if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
+            if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
             if (!(body.ICDList.Count > 0 && body.ICDList.Count <= 100)) return BadRequest();
 
             if (!String.IsNullOrEmpty(body.GGItemId))
@@ -36,20 +36,20 @@ namespace Aegis.DfsCalculator.Server.Controllers
             {
                 if (body.TargetGGItems.Count > 0)
                 {
-                    //try
-                    //{
+                    try
+                    {
                         Dictionary<string, string> imputedValues = ServerImputations.ImputeMissingGGItems(body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores, body.TargetGGItems);
                         return Ok(imputedValues);
-                    //}
-                    //catch (KeyNotFoundException ex)
-                    //{
-                    //    return BadRequest(ex.Message);
-                    //}
-                    //catch (Exception)
-                    //{
-                    //    return StatusCode(500);
-                    //}
-                }
+                    }
+                    catch (KeyNotFoundException ex)
+                    {
+                        return BadRequest(ex.Message);
+                    }
+                    catch (Exception)
+                    {
+                        return StatusCode(500);
+                    }
+            }
                 return BadRequest("Either \"GGItemId\" (single) or \"TargetGGItems\" (batch) must be provided");
             }
         }
