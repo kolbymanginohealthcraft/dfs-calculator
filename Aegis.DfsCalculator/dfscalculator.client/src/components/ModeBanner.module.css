@@ -1,0 +1,445 @@
+.modeBanner {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.modeBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.1;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+}
+
+/* Basic mode - green colors */
+.modeBanner.basicMode {
+  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-light) 100%);
+  box-shadow: 0 2px 8px rgba(127, 188, 66, 0.2);
+}
+
+/* Advanced mode - blue colors */
+.modeBanner.advancedMode {
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+  box-shadow: 0 2px 8px rgba(0, 124, 187, 0.2);
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+  color: white;
+  gap: var(--spacing-lg);
+}
+
+.modeInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.modeIcon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.modeIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.modeText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.modeLabel {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.modeName {
+  font-size: 1rem;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.switchButton {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50px;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow: hidden;
+}
+
+.switchButton:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.switchButton:active {
+  transform: translateY(0);
+}
+
+.switchButton:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.switchButton svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+}
+
+.switchButton:hover svg {
+  transform: rotate(180deg);
+}
+
+.buttonText {
+  transition: opacity 0.3s ease;
+}
+
+/* Progress Navigation Styles */
+.progressNavigation {
+  display: flex;
+  align-items: center;
+  margin: 0 var(--spacing-md);
+}
+
+/* Advanced Navigation Styles */
+.advancedNavigation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin: 0 var(--spacing-md);
+}
+
+.fileNavigation {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.navButton {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 6px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.navButton:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.navButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.navButton:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.navButtonDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.navButtonDisabled:hover {
+  transform: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+}
+
+.progressBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progressStep {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 100px;
+  height: 36px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-primary);
+  font-family: inherit;
+  padding: var(--spacing-sm) var(--spacing-md);
+  gap: 6px;
+}
+
+.progressStep:hover:not(:disabled):not(.activeStep) {
+  background: #f8f9fa;
+  border-color: #cbd5e0;
+}
+
+.activeStep {
+  background: #f8f9fa;
+  color: var(--text-primary);
+  border: 3px solid #0c436a;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(12, 67, 106, 0.2), inset 0 0 0 1px rgba(12, 67, 106, 0.1);
+}
+
+.activeStep .stepText {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.8rem;
+}
+
+.completedStep {
+  background: #e8f5e8;
+  border-color: var(--secondary-color);
+  color: var(--text-primary);
+}
+
+.completedStep .stepText {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.disabledStep {
+  background: #f1f5f9;
+  border-color: #e2e8f0;
+  color: #a0aec0;
+  cursor: not-allowed;
+}
+
+.disabledStep .stepText {
+  color: #a0aec0;
+}
+
+.progressLine {
+  width: 16px;
+  height: 2px;
+  background-color: #e2e8f0;
+}
+
+.completedLine {
+  background-color: var(--secondary-color);
+}
+
+.stepDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.activeDot {
+  width: 8px;
+  height: 8px;
+}
+
+.completedDot {
+  opacity: 0.8;
+}
+
+.stepText {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* max-width: 120px; */
+  display: flex;
+  align-items: center;
+}
+
+.stepNumber {
+  margin-right: 0;
+  font-weight: 500;
+  color: inherit;
+}
+
+.stepColon {
+  margin-right: 4px;
+  font-weight: 500;
+  color: inherit;
+}
+
+.stepLabel {
+  font-weight: 500;
+  color: inherit;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .stepColon {
+    display: none;
+  }
+  
+  .stepLabel {
+    display: none;
+  }
+  
+  .buttonText {
+    display: none;
+  }
+  
+  .switchButton {
+    padding: var(--spacing-sm);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .modeBanner {
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+  
+  .bannerContent {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: flex-start;
+  }
+  
+  .modeInfo {
+    gap: var(--spacing-sm);
+  }
+  
+  .modeIcon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .modeIcon svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .modeText {
+    gap: 1px;
+  }
+  
+  .modeLabel {
+    font-size: 0.75rem;
+  }
+  
+  .modeName {
+    font-size: 0.9rem;
+  }
+  
+  .progressNavigation {
+    margin: 0 var(--spacing-sm);
+  }
+  
+  .progressBar {
+    gap: 4px;
+  }
+  
+  .progressStep {
+    min-width: 85px;
+    height: 32px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .stepDot {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .activeDot {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .stepText {
+    font-size: 0.7rem;
+    max-width: 85px;
+  }
+  
+  .stepLabel {
+    display: none;
+  }
+  
+  .activeStep .stepText {
+    font-size: 0.75rem;
+  }
+  
+  .progressLine {
+    width: 12px;
+  }
+  
+  .switchButton {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .switchButton svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .stepNumber {
+    display: none;
+  }
+  
+  .stepText::before {
+    content: attr(data-step-number);
+    font-weight: 500;
+    color: inherit;
+  }
+}

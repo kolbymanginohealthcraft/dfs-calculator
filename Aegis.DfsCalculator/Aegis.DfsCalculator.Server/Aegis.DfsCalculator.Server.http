@@ -1,6 +1,0 @@
-@Aegis.DfsCalculator.Server_HostAddress = http://localhost:5191
-
-GET {{Aegis.DfsCalculator.Server_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

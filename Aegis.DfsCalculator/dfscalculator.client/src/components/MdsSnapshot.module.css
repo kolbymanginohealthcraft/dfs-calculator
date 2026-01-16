@@ -1,0 +1,279 @@
+.leftPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  min-width: 0;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  z-index: 10;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+  /* border-bottom: 3px solid rgba(12, 67, 106, 0.2); */
+}
+
+.navButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.sectionLink {
+  all: unset;
+  padding: 0.2rem 0.5rem;     /* smaller padding */
+  background: #d6f0de;
+  border: 1px solid #7fbc42;
+  border-radius: 4px;
+  font-size: 0.7rem;          /* slightly smaller font */
+  color: #0c436a;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sectionLink:hover {
+  background: #c4eac5;
+}
+
+.sectionLinkActive {
+  background: #7fbc42 !important;
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(127, 188, 66, 0.3);
+}
+
+.sectionLinkActive:hover {
+  background: #6ba83a !important;
+}
+
+.scrollArea {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 0.5rem;
+  /* border-top: 3px solid rgba(12, 67, 106, 0.2); */
+}
+
+.mdsSection {
+  margin-bottom: 1.5rem;
+}
+
+.noSectionSelected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #666;
+  font-style: italic;
+}
+
+.mdsSection h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+th, td {
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #e0e0e0;
+  color: #0c436a;
+  font-weight: 600;
+}
+
+/* .headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+} */
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.headerRow h2 {
+  display: flex;
+  align-items: center;
+  /* margin: 0; */
+}
+
+/* .headerRow h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin: 0;
+} */
+
+.headerIcon {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+.searchInput {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-width: 180px;
+  width: 100%;
+  padding-right: 2rem; /* make room for ✕ */
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 180px;
+  height: 100%;
+}
+
+.clearButton {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #dc3545;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clearButton:hover {
+  color: #c82333;
+}
+
+.valueCode {
+  font-weight: 600;
+  color: #0c436a;
+  white-space: nowrap;
+}
+
+.valueDescription {
+  font-style: italic;
+  color: #555;
+  font-size: .75rem;
+}
+
+.hccMappingDisplay {
+  font-weight: 600;
+  color: #7fbc42;
+  font-size: 0.7rem;
+  background: rgba(127, 188, 66, 0.1);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  margin-left: 0.2rem;
+}
+
+.highlightedRow {
+  /* background-color: #e5f7f7; */
+}
+
+/* Covariate Selection Indicator */
+.covariateIndicator {
+  background: linear-gradient(135deg, rgba(127, 188, 66, 0.1) 0%, rgba(127, 188, 66, 0.05) 100%);
+  border: 1px solid rgba(127, 188, 66, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  box-shadow: 0 2px 8px rgba(127, 188, 66, 0.1);
+}
+
+.covariateIndicatorContent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.covariateIndicatorBack {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  background: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.covariateIndicatorBack:hover {
+  background: var(--secondary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(127, 188, 66, 0.3);
+}
+
+.covariateIndicatorText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.covariateIndicatorLabel {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.covariateIndicatorName {
+  font-size: 0.9rem;
+  color: var(--primary-color);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.covariateIndicatorClear {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  background: rgba(220, 53, 69, 0.1);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+  border-radius: 6px;
+  color: #dc3545;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.covariateIndicatorClear:hover {
+  background: rgba(220, 53, 69, 0.15);
+  border-color: rgba(220, 53, 69, 0.3);
+  color: #c82333;
+  transform: translateY(-1px);
+}
+

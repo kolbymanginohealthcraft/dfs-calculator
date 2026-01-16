@@ -1,7 +1,0 @@
-<Solution>
-  <Project Path="aegis.dfscalculator.client/aegis.dfscalculator.client.esproj">
-    <Build />
-    <Deploy />
-  </Project>
-  <Project Path="Aegis.DfsCalculator.Server/Aegis.DfsCalculator.Server.csproj" />
-</Solution>
