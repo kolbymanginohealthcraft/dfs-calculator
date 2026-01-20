@@ -1,0 +1,6 @@
+@DFSCalculator.Server_HostAddress = http://localhost:5189
+
+POST {{DFSCalculator.Server_HostAddress}}/imputation/
+Accept: application/json
+
+###

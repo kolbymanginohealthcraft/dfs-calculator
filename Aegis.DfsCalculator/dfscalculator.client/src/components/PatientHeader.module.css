@@ -1,0 +1,220 @@
+.headerBlock {
+  border-radius: 15px 15px 0 0;
+  padding: 10px 15px;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(12, 67, 106, 0.2);
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+
+.headerControls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.summaryName {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+  padding: 0.3rem 0;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  color: #0C436A;
+}
+
+.summaryName svg {
+  flex-shrink: 0;
+  vertical-align: middle;
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.inlineDetails {
+  font-size: 0.85rem;
+  font-weight: normal;
+  margin-left: 0.5rem;
+  color: #666;
+}
+
+/* File Name Display */
+.fileNameRow {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.fileNameText {
+  font-size: 0.7rem;
+  color: #4a5568;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+
+.placeholder {
+  font-style: italic;
+  color: #777;
+  padding: 0.5rem 0;
+  text-align: center;
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.toggleButton {
+  background: #e1f0f5;
+  border: 1px solid #007cbb;
+  color: #007cbb;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.toggleButton:hover {
+  background: #d4e7f2;
+  transform: translateY(-1px);
+}
+
+/* Compact Overview Styles */
+.compactOverview {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(12, 67, 106, 0.1);
+  display: flex;
+  gap: 2rem;
+}
+
+.overviewColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.overviewItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.3rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.overviewItem svg {
+  flex-shrink: 0;
+  color: #007cbb;
+  width: 14px;
+  height: 14px;
+  margin-top: 0.1rem;
+}
+
+.overviewLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0C436A;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.overviewValue {
+  font-size: 0.8rem;
+  color: #555;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+
+.facilityInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  flex: 1;
+  min-width: 0;
+  align-items: flex-start;
+}
+
+.facilityAddress {
+  font-size: 0.65rem;
+  color: #666;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: 0;
+}
+
+.ardDayInfo {
+  font-size: 0.65rem;
+  color: #007cbb;
+  margin-left: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .headerRow {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .headerControls {
+    justify-content: center;
+  }
+  
+  .summaryName {
+    font-size: 1.1rem;
+  }
+  
+  .compactOverview {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .overviewColumn {
+    gap: 0.4rem;
+  }
+  
+  .overviewItem {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .headerBlock {
+    padding: 15px 15px 0 15px;
+  }
+  
+  .summaryName {
+    font-size: 1rem;
+  }
+  
+  .inlineDetails {
+    font-size: 0.8rem;
+  }
+}

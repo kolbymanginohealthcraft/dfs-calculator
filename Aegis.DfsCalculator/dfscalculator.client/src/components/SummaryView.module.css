@@ -1,0 +1,1091 @@
+.summaryView {
+  background: var(--background-glass);
+  backdrop-filter: blur(15px);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-glass);
+  border: 1px solid var(--border-glass);
+  width: 100%;
+  position: relative;
+}
+
+.summaryView::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+}
+
+.summaryHeader {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: rgba(248, 250, 252, 0.8);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  min-height: 60px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.summaryTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+}
+
+.titleContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.paginationInfoContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: 2px;
+}
+
+.paginationInfo {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.inlinePaginationControls {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+}
+
+.inlinePageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3rem;
+  height: 1.5rem;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.6);
+  color: #6b7280;
+  border-radius: 0.25rem;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.inlinePageButton:hover:not(:disabled) {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #374151;
+}
+
+.inlinePageButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.inlineActivePage {
+  background: rgba(12, 67, 106, 0.1);
+  border-color: rgba(12, 67, 106, 0.3);
+  color: #0c436a;
+  font-weight: 600;
+}
+
+.inlineActivePage:hover {
+  background: rgba(12, 67, 106, 0.15);
+  border-color: rgba(12, 67, 106, 0.4);
+  color: #0c436a;
+}
+
+.inlineEllipsis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  font-size: 0.65rem;
+  color: #9ca3af;
+  cursor: default;
+}
+
+.summaryStats {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.statContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.statNumber {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.successIcon {
+  color: #22c55e;
+}
+
+.errorIcon {
+  color: #ef4444;
+}
+
+.errorDetail {
+  font-size: 0.85em;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.pendingIcon {
+  color: var(--accent-color);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.searchGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.searchGroup label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--background-glass);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 124, 187, 0.4);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xs) var(--spacing-md);
+  transition: border-color var(--transition-normal);
+  min-width: 200px;
+}
+
+.searchBar:focus-within {
+  border-color: #007cbb;
+  background: #fff8cc;
+}
+
+.searchIcon {
+  color: var(--text-secondary);
+  margin-right: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1;
+  height: 1.2rem;
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+  font-weight: 400;
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  transition: all var(--transition-normal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: var(--spacing-sm);
+}
+
+.clearButton:hover {
+  background: var(--background-glass-dark);
+  color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.filterGroup label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+
+/* Filter Dropdown Styles */
+.filterDropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.filterDropdownButton {
+  background: var(--background-glass);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  border: 1px solid rgba(0, 124, 187, 0.4);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-width: 120px;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.filterDropdownButton:hover {
+  background: var(--background-glass-hover);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+.filterDropdownButton:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(0, 124, 187, 0.1);
+}
+
+.filterDropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 160px;
+  margin-top: var(--spacing-xs);
+  overflow: hidden;
+}
+
+.filterDropdownItem {
+  width: 100%;
+  background: #ffffff;
+  border: none;
+  color: var(--text-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.filterDropdownItem:last-child {
+  border-bottom: none;
+}
+
+.filterDropdownItem:hover {
+  background: #f8f9fa;
+  color: var(--accent-color);
+}
+
+.filterDropdownItemActive {
+  background: rgba(0, 124, 187, 0.1);
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.filterDropdownItemActive:hover {
+  background: rgba(0, 124, 187, 0.15);
+}
+
+.exportButton {
+  background: var(--background-glass);
+  backdrop-filter: blur(10px);
+  color: #007cbb;
+  border: 2px solid rgba(0, 124, 187, 0.4);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.exportButton:hover:not(:disabled) {
+  background: #007cbb;
+  color: var(--text-white);
+}
+
+.exportButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.redactionButton {
+  background: #e1f0f5;
+  border: 1px solid rgba(0, 124, 187, 0.4);
+  color: #007cbb;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.redactionButton:hover {
+  background: #d4e7f2;
+  transform: translateY(-1px);
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+/* Export Dropdown Styles */
+.exportDropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.exportDropdownButton {
+  background: var(--accent-color);
+  backdrop-filter: blur(10px);
+  color: var(--text-white);
+  border: 1px solid var(--accent-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.exportDropdownButton:hover:not(:disabled) {
+  background: var(--accent-light);
+}
+
+.exportDropdownButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.chevronIcon {
+  transition: transform 0.2s ease;
+  margin-left: var(--spacing-xs);
+}
+
+.exportDropdownButton:hover .chevronIcon {
+  transform: rotate(180deg);
+}
+
+.exportDropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  min-width: 220px;
+  margin-top: var(--spacing-xs);
+  overflow: hidden;
+}
+
+.exportDropdownItem {
+  width: 100%;
+  background: #ffffff;
+  border: none;
+  color: var(--text-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.exportDropdownItemTitle {
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.exportDropdownItemDescription {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-left: 24px; /* Align with the icon */
+}
+
+.exportDropdownItem:last-child {
+  border-bottom: none;
+}
+
+.exportDropdownItem:hover {
+  background: #f8f9fa;
+  color: var(--accent-color);
+}
+
+.exportDropdownItem:active {
+  background: var(--background-active);
+}
+
+.separatorLine {
+  height: 1px;
+  background: var(--border-dark);
+  /* margin: var(--spacing-md) 0; */
+}
+
+.tableContainer {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.summaryTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: transparent;
+}
+
+.sortableHeader {
+  padding: var(--spacing-md) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.sortableHeader:hover {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--accent-color);
+}
+
+/* Score-specific header styling */
+.startScoreHeader {
+  color: #007cbb;
+}
+
+.expectedScoreHeader {
+  color: #dc3545;
+}
+
+.endScoreHeader {
+  color: #7fbc42;
+}
+
+.gainHeader {
+  color: #5bc0de;
+}
+
+.scoreDot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.startDot {
+  background-color: #007cbb;
+}
+
+.expectedDot {
+  background-color: #dc3545;
+}
+
+.endDot {
+  background-color: #7fbc42;
+}
+
+.gainDot {
+  background-color: #5bc0de;
+}
+
+.tableRow {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.tableRow:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.clickableRow {
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.clickableRow:hover {
+  background: rgba(0, 124, 187, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0, 124, 187, 0.15);
+}
+
+.successRow {
+  background: rgba(34, 197, 94, 0.05) !important;
+  border-left: 4px solid #22c55e;
+}
+
+.successRow:hover {
+  background: rgba(34, 197, 94, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15);
+}
+
+.successRow.clickableRow:hover {
+  background: rgba(34, 197, 94, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
+.errorRow {
+  background: rgba(255, 235, 59, 0.15) !important;
+}
+
+.errorRow:hover {
+  background: rgba(255, 235, 59, 0.25) !important;
+}
+
+.clickHint {
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  font-style: italic;
+  margin-left: var(--spacing-sm);
+  opacity: 0.8;
+}
+
+.userScore {
+  font-weight: 700;
+  color: var(--accent-color);
+  background: rgba(0, 124, 187, 0.1);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  border: 1px solid rgba(0, 124, 187, 0.2);
+}
+
+.noUserScore {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.smallText {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+.tableRow:last-child {
+  border-bottom: none;
+}
+
+.fileNameCell {
+  padding: var(--spacing-sm) var(--spacing-md);
+  min-width: 120px;
+  max-width: 220px;
+}
+
+.fileNameContent {
+  display: flex;
+  align-items: center;
+}
+
+.fileNameText {
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
+
+.patientCell {
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--text-primary);
+  min-width: 120px;
+  font-weight: 500;
+}
+
+.scoreCell {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 90px;
+  font-size: 0.9rem;
+}
+
+.differenceCell {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  min-width: 90px;
+}
+
+.differenceValue {
+  font-weight: 600;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  display: inline-block;
+  min-width: 60px;
+}
+
+.positiveDiff {
+  color: #16a34a;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.negativeDiff {
+  color: #dc2626;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.statusCell {
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  min-width: 80px;
+}
+
+.statusText {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.actionHeader {
+  padding: var(--spacing-md) var(--spacing-xs);
+  background: rgba(255, 255, 255, 0.8);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  width: 60px;
+  min-width: 60px;
+  backdrop-filter: blur(10px);
+}
+
+.actionCell {
+  padding: var(--spacing-sm) var(--spacing-xs);
+  text-align: center;
+  width: 60px;
+  min-width: 60px;
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  justify-content: center;
+}
+
+.deleteButton {
+  background: transparent;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: rgba(239, 68, 68, 0.8);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: var(--radius-sm);
+  min-width: 20px;
+  min-height: 20px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.9;
+}
+
+.deleteButton:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: rgba(239, 68, 68, 1);
+  opacity: 1;
+  transform: none;
+}
+
+.pdfButton {
+  background: transparent;
+  border: 1px solid rgba(0, 124, 187, 0.4);
+  color: rgba(0, 124, 187, 0.8);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 400;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: var(--radius-sm);
+  min-width: 20px;
+  min-height: 20px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.9;
+}
+
+.pdfButton:hover {
+  background: rgba(0, 124, 187, 0.12);
+  border-color: rgba(0, 124, 187, 0.5);
+  color: rgba(0, 124, 187, 1);
+  opacity: 1;
+  transform: none;
+}
+
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.emptyState h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+.emptyState p {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.emptyIcon {
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.6;
+  color: var(--accent-color);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .summaryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+  }
+
+  .headerLeft {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+  }
+
+  .summaryStats {
+    gap: var(--spacing-md);
+  }
+
+  .statCard {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .statNumber {
+    font-size: 1rem;
+  }
+
+  .statLabel {
+    font-size: 0.7rem;
+  }
+
+  .headerActions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .searchBar {
+    min-width: 150px;
+  }
+
+  .searchInput {
+    font-size: 0.85rem;
+  }
+
+  .filterDropdownButton {
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    min-width: 100px;
+  }
+
+  .filterDropdownMenu {
+    min-width: 140px;
+  }
+
+  .filterDropdownItem {
+    font-size: 0.8rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+
+  .summaryTable {
+    font-size: 0.8rem;
+  }
+
+  .sortableHeader {
+    padding: var(--spacing-md) var(--spacing-sm);
+    font-size: 0.8rem;
+  }
+
+  .fileNameCell,
+  .patientCell,
+  .scoreCell,
+  .differenceCell,
+  .statusCell {
+    padding: var(--spacing-sm);
+    min-width: 80px;
+  }
+
+  .actionCell {
+    padding: var(--spacing-sm);
+    width: 60px;
+    min-width: 60px;
+  }
+
+  .actionButtons {
+    gap: var(--spacing-xs);
+  }
+
+  .fileNameText {
+    font-size: 0.8rem;
+  }
+
+  .differenceValue {
+    font-size: 0.7rem;
+    min-width: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .summaryHeader {
+    padding: var(--spacing-lg);
+  }
+
+  .summaryTitle {
+    font-size: 1rem;
+  }
+
+  .statCard {
+    padding: var(--spacing-xs);
+  }
+
+  .statNumber {
+    font-size: 0.9rem;
+  }
+
+  .statLabel {
+    font-size: 0.65rem;
+  }
+
+  .exportButton {
+    padding: var(--spacing-xs) var(--spacing-md);
+    font-size: 0.8rem;
+  }
+
+  .searchBar {
+    min-width: 120px;
+  }
+
+  .searchInput {
+    font-size: 0.8rem;
+  }
+
+  .filterDropdownButton {
+    font-size: 0.75rem;
+    padding: var(--spacing-xs);
+    min-width: 80px;
+    width: 100%;
+  }
+
+  .filterDropdownMenu {
+    min-width: 120px;
+  }
+
+  .filterDropdownItem {
+    font-size: 0.75rem;
+    padding: var(--spacing-xs);
+  }
+
+
+  .summaryTable {
+    font-size: 0.75rem;
+  }
+
+  .sortableHeader {
+    padding: var(--spacing-sm);
+    font-size: 0.75rem;
+  }
+
+  .fileNameCell,
+  .patientCell,
+  .scoreCell,
+  .differenceCell,
+  .statusCell {
+    padding: var(--spacing-xs);
+    min-width: 60px;
+  }
+
+  .actionCell {
+    padding: var(--spacing-xs);
+    width: 50px;
+    min-width: 50px;
+  }
+
+  .actionButtons {
+    gap: 2px;
+  }
+
+  .fileNameText {
+    font-size: 0.75rem;
+  }
+
+  .differenceValue {
+    font-size: 0.65rem;
+    min-width: 40px;
+  }
+
+  .emptyState {
+    padding: var(--spacing-xl) var(--spacing-lg);
+  }
+
+  .emptyState h3 {
+    font-size: 1.2rem;
+  }
+
+  .emptyState p {
+    font-size: 0.9rem;
+  }
+}
