@@ -2,88 +2,31 @@
  * Secure API Client
  * 
  * Handles authenticated API calls to protected calculation endpoints.
- * Manages SSO token retrieval and provides clean interfaces for calculations.
+ * Uses session-based authentication with cookies (C# backend).
  */
 
-/**
- * Get SSO token from myCare portal
- * 
- * This function needs to be customized based on how myCare provides the token.
- * Common approaches:
- * - Token in localStorage: localStorage.getItem('mycare_sso_token')
- * - Token in cookie: document.cookie
- * - Token passed via URL parameter or window.postMessage from portal
- * - Token in meta tag: document.querySelector('meta[name="sso-token"]')?.content
- * 
- * TODO: Implement based on your myCare SSO integration
- */
-function getSSOToken() {
-  // For development: Allow bypass token
-  // HARDENED: Only allow in localhost/development with explicit flag
-  const isProduction = import.meta.env.PROD || 
-                       (window.location.hostname !== 'localhost' && 
-                        window.location.hostname !== '127.0.0.1');
-  
-  // Check for VITE_ prefixed environment variable (Vite requirement)
-  const allowDevBypass = import.meta.env.VITE_ALLOW_DEV_BYPASS === 'true' ||
-                          import.meta.env.MODE === 'development';
-  
-  const isDev = !isProduction && allowDevBypass;
-  
-  if (isDev) {
-    // In development, automatically set and use dev token if not already set
-    let devToken = localStorage.getItem('dev-sso-token');
-    if (!devToken) {
-      devToken = 'dev-bypass-token';
-      localStorage.setItem('dev-sso-token', devToken);
-    }
-    return devToken;
-  }
-
-  // SAML assertion token retrieval from cookie
-  // myCare stores the SAML XML assertion in the UPN cookie after authentication
-  const cookieName = import.meta.env.VITE_SAML_SESSION_COOKIE || 'UPN';
-  
-  const cookies = document.cookie.split(';');
-  const tokenCookie = cookies.find(c => {
-    const trimmed = c.trim();
-    return trimmed.startsWith(`${cookieName}=`);
-  });
-  
-  if (tokenCookie) {
-    // Extract and decode the cookie value
-    // SAML assertions may be base64 encoded or plain XML
-    const tokenValue = decodeURIComponent(tokenCookie.split('=').slice(1).join('='));
-    return tokenValue;
-  }
-  
-  return null;
-}
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
 /**
- * Make an authenticated API request
+ * Make an authenticated API request using session cookies
  */
 async function authenticatedFetch(endpoint, options = {}) {
-  const token = getSSOToken();
-  
-  if (!token) {
-    throw new Error('SSO token not found. Please ensure you are logged in through myCare portal.');
-  }
+  // In development, always use relative URLs to go through Vite proxy (avoids CORS)
+  // In production, use full URLs from environment variable
+  const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
+  const fullUrl = endpoint.startsWith('http') 
+    ? endpoint 
+    : isDevelopment 
+      ? endpoint  // Always use relative URL in dev (goes through Vite proxy)
+      : `${API_BASE_URL}${endpoint}`; // Use full URL in production
 
-  const headers = {
-    'Content-Type': 'application/json',
-    ...options.headers,
-  };
-
-  // Add token to Authorization header (Bearer token)
-  headers['Authorization'] = `Bearer ${token}`;
-  
-  // Also add as custom header (if myCare uses different format)
-  headers['X-SSO-Token'] = token;
-
-  const response = await fetch(endpoint, {
+  const response = await fetch(fullUrl, {
     ...options,
-    headers,
+    credentials: 'include', // CRITICAL: Include cookies for session authentication
+    headers: {
+      'Content-Type': 'application/json',
+      ...options.headers,
+    },
   });
 
   if (!response.ok) {
@@ -95,7 +38,10 @@ async function authenticatedFetch(endpoint, options = {}) {
     }
     
     if (response.status === 401) {
-      const error = new Error(errorData.message || errorData.error || 'Authentication failed. Please refresh and try again.');
+      // Redirect to login on 401
+      const { login } = await import('./authService.js');
+      login(window.location.href); // Redirect to login, then back here
+      const error = new Error(errorData.message || errorData.error || 'Authentication required. Redirecting to login...');
       error.status = 401;
       throw error;
     }
@@ -133,7 +79,7 @@ export async function calculateFunctionScore(params) {
     manualOverrides = {}
   } = params;
 
-  return authenticatedFetch('/api/calculate/function-score', {
+  return authenticatedFetch('/api/function-score', {
     method: 'POST',
     body: JSON.stringify({
       parsedValues,
@@ -169,7 +115,7 @@ export async function calculateImputedValue(params) {
     ardDate
   } = params;
 
-  return authenticatedFetch('/api/calculate/imputation', {
+  return authenticatedFetch('/api/imputation', {
     method: 'POST',
     body: JSON.stringify({
       ggItemId,
@@ -205,7 +151,7 @@ export async function batchImputeValues(params) {
     ardDate
   } = params;
 
-  return authenticatedFetch('/api/calculate/imputation', {
+  return authenticatedFetch('/api/imputation', {
     method: 'POST',
     body: JSON.stringify({
       targetGGItems,
@@ -240,7 +186,7 @@ export async function getImputationAnalysisData(params) {
     ardDate
   } = params;
 
-  return authenticatedFetch('/api/calculate/imputation-analysis', {
+  return authenticatedFetch('/api/imputation-analysis', {
     method: 'POST',
     body: JSON.stringify({
       parsedValues,
@@ -253,9 +199,27 @@ export async function getImputationAnalysisData(params) {
 }
 
 /**
- * Check if SSO token is available
- * Useful for showing appropriate UI states
+ * Check if user is authenticated
+ * Uses the auth service to check session status
+ * @returns {Promise<boolean>}
+ */
+export async function isAuthenticated() {
+  try {
+    const { getCurrentUser } = await import('./authService.js');
+    const { loggedIn } = await getCurrentUser();
+    return loggedIn;
+  } catch (error) {
+    console.error('Error checking authentication:', error);
+    return false;
+  }
+}
+
+/**
+ * @deprecated Use isAuthenticated() instead
+ * Kept for backward compatibility with PortalContext
  */
 export function hasSSOToken() {
-  return getSSOToken() !== null;
+  // For backward compatibility, check localStorage flag
+  // This will be set by PortalContext after checking auth
+  return localStorage.getItem('user-authenticated') === 'true';
 }

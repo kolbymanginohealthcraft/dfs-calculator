@@ -633,8 +633,9 @@ namespace Aegis.DfsCalculator.Server.Utils
         public static FunctionCovariatesReturn GetFunctionCovariates(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, string? ardDate, Dictionary<string, int>? manualOverrides = null)
         {
             // Get the correct version of function multipliers based on ARD date
-            DateTime ardDateValue = String.IsNullOrEmpty(ardDate) ? DateTime.Parse(parsedValues.GetValueOrDefault("A2300")) : UnixToDateTime(ardDate);
-            Dictionary<string, double?> functionMultipliers = CoefficientLoader.GetFunctionMultipliers(ardDate);
+            // Parse A2300 - it may be in YYYYMMDD format or Unix timestamp
+            string ardDateStr = String.IsNullOrEmpty(ardDate) ? parsedValues.GetValueOrDefault("A2300") : ardDate;
+            Dictionary<string, double?> functionMultipliers = CoefficientLoader.GetFunctionMultipliers(ardDateStr);
             
             Dictionary<string, int> covariates = new Dictionary<string, int>();
 

@@ -14,10 +14,31 @@ namespace Aegis.DfsCalculator.Server.Controllers
         public IActionResult HandleImputationAnalysis(ImputationAnalysisBody body)
         {
             if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
-            if (!(body.ICDList.Count > 0 && body.ICDList.Count <= 100)) return BadRequest();
+            
+            if (body == null) return BadRequest(new { error = "Request body is required" });
+            if (body.ParsedValues == null) return BadRequest(new { error = "parsedValues is required" });
+            if (body.Summary == null) return BadRequest(new { error = "summary is required" });
+            if (body.ICDList == null || body.ICDList.Count == 0 || body.ICDList.Count > 100) 
+                return BadRequest(new { error = "icdList must contain between 1 and 100 items" });
+            if (body.StartScores == null) return BadRequest(new { error = "startScores is required" });
 
-            Dictionary<string, ImputationAnalysisData> imputationData = ServerImputations.GetImputationAnalysisData(body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores);
-            return Ok(imputationData);
+            try
+            {
+                Dictionary<string, ImputationAnalysisData> imputationData = ServerImputations.GetImputationAnalysisData(
+                    body.ParsedValues, 
+                    body.Summary.Age, 
+                    body.ICDList, 
+                    body.StartScores
+                );
+                // Wrap in object to match frontend expectations: { imputationData: {...} }
+                return Ok(new { imputationData = imputationData });
+            }
+            catch (Exception ex)
+            {
+                // Log the full exception for debugging
+                System.Diagnostics.Debug.WriteLine($"ImputationAnalysis error: {ex}");
+                return StatusCode(500, new { error = "Internal server error", message = ex.Message });
+            }
         }
     }
 

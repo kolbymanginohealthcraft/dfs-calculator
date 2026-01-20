@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Sustainsys.Saml2;
 using Sustainsys.Saml2.AspNetCore2;
 using Sustainsys.Saml2.Metadata;
+using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 
 //To check if cert is setup: dotnet dev-certs https --check
@@ -43,7 +44,13 @@ else
         .SetApplicationName("AegisDfsCalculator");
 }
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        // Configure JSON serialization to accept camelCase from frontend
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase;
+    });
 
 // --- Add authentication services ---
 builder.Services.AddAuthentication(

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Sustainsys.Saml2.AspNetCore2;
 using System.Security.Claims;
 
@@ -36,6 +37,28 @@ namespace Aegis.DfsCalculator.Server.Controllers
                 Name = User.Identity!.Name,
                 Claims = User.Claims.Select(c => new { c.Type, c.Value })
             });
+        }
+
+        [HttpGet("dev-login")]
+        public async Task<IActionResult> DevLogin()
+        {
+            // Only allow in development
+            if (!HttpContext.RequestServices.GetRequiredService<IConfiguration>()["ASPNETCORE_ENVIRONMENT"]?.Equals("Development", StringComparison.OrdinalIgnoreCase) == true)
+            {
+                return NotFound();
+            }
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, "dev-user@localhost"),
+                new Claim(ClaimTypes.NameIdentifier, "dev-user")
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return Ok(new { Message = "Development login successful", User = "dev-user@localhost" });
         }
     }
 }

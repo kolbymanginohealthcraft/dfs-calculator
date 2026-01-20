@@ -21,36 +21,38 @@ namespace Aegis.DfsCalculator.Server.Controllers
                 try
                 {
                     string imputedValue = ServerImputations.CalculateImputedValue(body.GGItemId, body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores);
-                    return Ok(imputedValue);
+                    // Wrap response to match frontend expectations: { imputedValue: string }
+                    return Ok(new { imputedValue = imputedValue });
                 }
                 catch(KeyNotFoundException ex)
                 {
-                    return BadRequest(ex.Message);
+                    return BadRequest(new { error = ex.Message });
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    return StatusCode(500);
+                    return StatusCode(500, new { error = "Internal server error", message = ex.Message });
                 }
             }
             else
             {
-                if (body.TargetGGItems.Count > 0)
+                if (body.TargetGGItems != null && body.TargetGGItems.Count > 0)
                 {
                     try
                     {
                         Dictionary<string, string> imputedValues = ServerImputations.ImputeMissingGGItems(body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores, body.TargetGGItems);
-                        return Ok(imputedValues);
+                        // Wrap response to match frontend expectations: { imputedValues: Object }
+                        return Ok(new { imputedValues = imputedValues });
                     }
                     catch (KeyNotFoundException ex)
                     {
-                        return BadRequest(ex.Message);
+                        return BadRequest(new { error = ex.Message });
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        return StatusCode(500);
+                        return StatusCode(500, new { error = "Internal server error", message = ex.Message });
                     }
-            }
-                return BadRequest("Either \"GGItemId\" (single) or \"TargetGGItems\" (batch) must be provided");
+                }
+                return BadRequest(new { error = "Either \"GGItemId\" (single) or \"TargetGGItems\" (batch) must be provided" });
             }
         }
     }

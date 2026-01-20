@@ -9,7 +9,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "node src/utils/server.js",
+    "server": "cd Aegis.DfsCalculator/DFSCalculator.Server && dotnet run --launch-profile https",
     "bulk-process": "node scripts/bulk-process.js"
   },
   "dependencies": {

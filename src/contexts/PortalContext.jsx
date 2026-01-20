@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { hasSSOToken } from '../utils/secureApiClient';
+import { getCurrentUser } from '../utils/authService';
 
 const PortalContext = createContext();
 
@@ -14,6 +14,7 @@ export const usePortal = () => {
 export const PortalProvider = ({ children }) => {
   const [isFromPortal, setIsFromPortal] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     // Development testing override (for UI testing)
@@ -24,54 +25,26 @@ export const PortalProvider = ({ children }) => {
       return;
     }
 
-    // Check if user has SSO token (authenticated via myCare)
-    // This is the primary method: authenticated users have access to advanced mode
-    const hasToken = hasSSOToken();
-    
-    if (hasToken) {
-      setIsFromPortal(true);
+    // Check authentication status with C# backend
+    getCurrentUser().then(({ loggedIn, user: currentUser }) => {
+      setIsFromPortal(loggedIn);
+      setUser(currentUser);
       setIsLoading(false);
-      return;
-    }
-
-    // Development mode: Check if we're in dev and allow bypass
-    const isDev = import.meta.env.DEV || import.meta.env.MODE === 'development' || 
-                  window.location.hostname === 'localhost' || 
-                  window.location.hostname === '127.0.0.1';
-    
-    if (isDev) {
-      // In development, check for dev token (auto-set by secureApiClient)
-      // But only if VITE_ALLOW_DEV_BYPASS is explicitly set
-      const allowDevBypass = import.meta.env.VITE_ALLOW_DEV_BYPASS === 'true';
-      if (allowDevBypass) {
-        const devToken = localStorage.getItem('dev-sso-token');
-        if (devToken === 'dev-bypass-token') {
-          setIsFromPortal(true);
-          setIsLoading(false);
-          return;
-        }
-      }
-    }
-
-    // Fallback: Check referrer for portal access (secondary method)
-    // This is less reliable but can be used as backup
-    const referrer = document.referrer;
-    const hostname = window.location.hostname;
-    
-    // Check referrer for myCare portal OR hostname for test deployment
-    if (referrer.includes('mycare.com') || hostname.includes('mycare')) {
-      setIsFromPortal(true);
-    } else {
-      // Public access: No portal access, basic mode only
+      
+      // Store auth state for quick checks (for backward compatibility)
+      localStorage.setItem('user-authenticated', loggedIn ? 'true' : 'false');
+    }).catch((error) => {
+      console.error('Error checking authentication:', error);
       setIsFromPortal(false);
-    }
-    
-    setIsLoading(false);
+      setIsLoading(false);
+      localStorage.setItem('user-authenticated', 'false');
+    });
   }, []);
 
   const value = {
     isFromPortal,
-    isLoading
+    isLoading,
+    user
   };
 
   return (

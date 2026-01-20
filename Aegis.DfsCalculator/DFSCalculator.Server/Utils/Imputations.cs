@@ -102,7 +102,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             return -1;
         }
 
-        private static int GetCovariateValue(string covariateName, Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, DateTime ardDate, Dictionary<string, double?>? itemMultipliers = null)
+        private static int GetCovariateValue(string covariateName, Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, DateTime ardDate, Dictionary<string, double?>? itemMultipliers = null, Dictionary<string, int>? cachedCovariates = null)
         {
             int ggItemSpecificValue = GetGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers);
             if (ggItemSpecificValue != -1)
@@ -110,10 +110,17 @@ namespace Aegis.DfsCalculator.Server.Utils
                 return ggItemSpecificValue;
             }
 
+            // Use cached covariates if provided (performance optimization)
+            if (cachedCovariates != null)
+            {
+                return cachedCovariates.GetValueOrDefault(covariateName);
+            }
+
+            // Fallback: calculate if cache not provided (shouldn't happen in GetImputationAnalysisData)
             FunctionCovariatesReturn result = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ((DateTimeOffset)ardDate).ToUnixTimeSeconds().ToString());
             if (result?.Covariates != null)
             {
-                return result.Covariates[covariateName];
+                return result.Covariates.GetValueOrDefault(covariateName);
             }
             return 0;
         }
@@ -160,9 +167,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             Dictionary<string, double?> multipliers = CoefficientLoader.GetImputationMultipliersForItem(ggItemId, ardDate);
             if (multipliers == null || multipliers.Keys.Count() == 0) return "01"; // Default fallback
 
-            // Get covariates to determine Uses Wheelchair value
-            Dictionary<string, int> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ((DateTimeOffset)ardDate).ToUnixTimeSeconds().ToString()).Covariates;
-            bool usesWheelchair = covariates["Uses Wheelchair"] == 1;
+            // Get covariates to determine Uses Wheelchair value (cache for reuse)
+            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ((DateTimeOffset)ardDate).ToUnixTimeSeconds().ToString()).Covariates;
+            bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             List<double> thresholds = GetImputationThresholds(ggItemId, ardDate);
 
@@ -171,13 +178,19 @@ namespace Aegis.DfsCalculator.Server.Utils
             // Calculate imputation score using covariate * multiplier
             foreach (KeyValuePair<string, double?> entry in multipliers)
             {
+                // Skip threshold keys - they're not covariates
+                if (entry.Key.StartsWith("Model Threshold"))
+                {
+                    continue;
+                }
+                
                 // Check if this is a GG item-specific covariate that should be excluded
                 if (entry.Key.Contains("(GG") || entry.Key.Contains("Valid Score") || entry.Key.Contains("Not Attempted") || entry.Key.Contains("Skipped"))
                 {
                     if (ShouldExcludeGGItemCovariate(entry.Key, ggItemId, usesWheelchair)) continue;
                 }
 
-                var covariateValue = GetCovariateValue(entry.Key, parsedValues, age, icdList, startScores, ardDate, multipliers);
+                var covariateValue = GetCovariateValue(entry.Key, parsedValues, age, icdList, startScores, ardDate, multipliers, cachedCovariates);
                 imputationScore += covariateValue * (entry.Value ?? 0);
             }
 
@@ -248,25 +261,31 @@ namespace Aegis.DfsCalculator.Server.Utils
                     // Calculate imputation score using all covariates
                     foreach (KeyValuePair<string, double?> multiplierEntry in itemMultipliers)
                     {
+                        // Skip threshold keys - they're not covariates
+                        if (multiplierEntry.Key.StartsWith("Model Threshold"))
+                        {
+                            continue;
+                        }
+                        
                         int covariateValue = 0;
 
                         // Handle GG item-specific covariates
-                        if (entry.Key.Contains("(GG") || entry.Key.Contains("Valid Score") || entry.Key.Contains("Not Attempted") || entry.Key.Contains("Skipped"))
+                        if (multiplierEntry.Key.Contains("(GG") || multiplierEntry.Key.Contains("Valid Score") || multiplierEntry.Key.Contains("Not Attempted") || multiplierEntry.Key.Contains("Skipped"))
                         {
                             // Check if this GG item covariate should be excluded
-                            if (ShouldExcludeGGItemCovariate(entry.Key, ggItemId, usesWheelchair))
+                            if (ShouldExcludeGGItemCovariate(multiplierEntry.Key, ggItemId, usesWheelchair))
                             {
                                 continue;
                             }
 
                             // Extract GG item ID from covariate name
-                            Match match = Regex.Match(entry.Key, @"\(GG[0-9]+[A-Z][0-9]\)");
+                            Match match = Regex.Match(multiplierEntry.Key, @"\(GG[0-9]+[A-Z][0-9]\)");
                             if (match.Success && match.Length > 0)
                             {
                                 string itemId = match.Value.Substring(1, match.Length - 2);
-                                string rawValue = parsedValues[itemId];
+                                string? rawValue = parsedValues.GetValueOrDefault(itemId);
 
-                                if (entry.Key.Contains("Valid Score"))
+                                if (multiplierEntry.Key.Contains("Valid Score"))
                                 {
                                     if (rawValue != null && VALID.Contains(rawValue))
                                     {
@@ -275,7 +294,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                                 }
                                 // Not Attempted: return 1 if value is any ANA value (07, 08, 09, 10, 88)
                                 // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
-                                else if (entry.Key.Contains("Not Attempted"))
+                                else if (multiplierEntry.Key.Contains("Not Attempted"))
                                 {
                                     // Check if this item has a Skipped covariate (only J1, K1, L1, N1, O1, R1, S1)
                                     bool hasSkippedCovariate = false;
@@ -301,7 +320,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                                         }
                                     }
                                 }
-                                else if (entry.Key.Contains("Skipped"))
+                                else if (multiplierEntry.Key.Contains("Skipped"))
                                 {
                                     // Skipped: return 1 if value is ^ (skip pattern), else 0
                                     // Note: This covariate only exists for certain items (J1, K1, L1, N1, O1, R1, S1)
@@ -349,19 +368,19 @@ namespace Aegis.DfsCalculator.Server.Utils
         public static List<double> GetImputationThresholds(string ggItemId, DateTime ardDate)
         {
             Dictionary<string, Dictionary<string, double?>> multipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
-            Dictionary<string, double?> itemMultipliers;
-            if (multipliers.TryGetValue(ggItemId, out itemMultipliers))
+            Dictionary<string, double?>? itemMultipliers;
+            if (multipliers.TryGetValue(ggItemId, out itemMultipliers) && itemMultipliers != null)
             {
                 List<double> thresholds = new List<double> 
                 {
-                    itemMultipliers["Model Threshold 1"] ?? 0,
-                    itemMultipliers["Model Threshold 2"] ?? 0,
-                    itemMultipliers["Model Threshold 3"] ?? 0,
-                    itemMultipliers["Model Threshold 4"] ?? 0,
-                    itemMultipliers["Model Threshold 5"] ?? 0
+                    itemMultipliers.GetValueOrDefault("Model Threshold 1") ?? 0,
+                    itemMultipliers.GetValueOrDefault("Model Threshold 2") ?? 0,
+                    itemMultipliers.GetValueOrDefault("Model Threshold 3") ?? 0,
+                    itemMultipliers.GetValueOrDefault("Model Threshold 4") ?? 0,
+                    itemMultipliers.GetValueOrDefault("Model Threshold 5") ?? 0
                 };
 
-                if (thresholds.All(t => t != null))
+                if (thresholds.All(t => t != 0))
                 {
                     return thresholds;
                 }
@@ -377,10 +396,10 @@ namespace Aegis.DfsCalculator.Server.Utils
             DateTime ardDate = UnixToDateTime(parsedValues.GetValueOrDefault("A2300"));
             Dictionary<string, Dictionary<string, double?>> imputationMultipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
-            // Get the standard covariates (same as used for expected score calculation)
-            Dictionary<string, int> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, parsedValues.GetValueOrDefault("A2300")).Covariates;
+            // Get the standard covariates ONCE and cache them (expensive operation - don't repeat for each multiplier)
+            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, parsedValues.GetValueOrDefault("A2300")).Covariates;
             // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
-            bool usesWheelchair = covariates["Uses Wheelchair"] == 1;
+            bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             // Determine mobility type (same logic as ImputationTab)
             string mobilityType = DetermineMobilityType(parsedValues);
@@ -404,10 +423,23 @@ namespace Aegis.DfsCalculator.Server.Utils
                 // Get covariates for this specific GG item (reused logic)
                 Dictionary<string, int> itemCovariates = new Dictionary<string, int>();
                 double imputationScore = 0;
+                
+                // Filter out threshold keys from multipliers for response (they're not covariates)
+                Dictionary<string, double?> filteredMultipliers = new Dictionary<string, double?>();
 
                 foreach (KeyValuePair<string, double?> multiplierEntry in multipliers)
                 {
                     string covariateName = multiplierEntry.Key;
+                    
+                    // Skip threshold keys - they're not covariates
+                    if (covariateName.StartsWith("Model Threshold"))
+                    {
+                        continue;
+                    }
+                    
+                    // Add to filtered multipliers for response
+                    filteredMultipliers[covariateName] = multiplierEntry.Value;
+                    
                     if (covariateName.Contains("(GG") || covariateName.Contains("Valid Score") || covariateName.Contains("Not Attempted") || covariateName.Contains("Skipped"))
                     {
                         if (ShouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair))
@@ -416,7 +448,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                         }
                     }
 
-                    int covariateValue = GetCovariateValue(covariateName, parsedValues, age, icdList, startScores, ardDate, multipliers);
+                    int covariateValue = GetCovariateValue(covariateName, parsedValues, age, icdList, startScores, ardDate, multipliers, cachedCovariates);
                     if (covariateValue != 0)
                     {
                         itemCovariates[multiplierEntry.Key] = covariateValue;
@@ -436,14 +468,14 @@ namespace Aegis.DfsCalculator.Server.Utils
                 }
 
                 // Check raw MDS value to determine if imputation is needed
-                string rawValue = parsedValues[ggItemId];
-                bool isValidValue = VALID.Contains(rawValue);
+                string? rawValue = parsedValues.GetValueOrDefault(ggItemId);
+                bool isValidValue = rawValue != null && VALID.Contains(rawValue);
                 bool needsImputation = (rawValue == null) || !isValidValue;
 
                 data[ggItemId] = new ImputationAnalysisData
                 {
                     Covariates = itemCovariates,
-                    Multipliers = multipliers,
+                    Multipliers = filteredMultipliers, // Use filtered multipliers (without threshold keys)
                     ImputationScore = imputationScore,
                     Thresholds = thresholds,
                     ImputedValue = needsImputation ? (imputedValue > 10 ? $"0{imputedValue}" : imputedValue.ToString()) : null,

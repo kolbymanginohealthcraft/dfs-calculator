@@ -7,7 +7,20 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      "/api": "http://localhost:3001", // your Express server (for npm run dev)
+      // Proxy API requests to local C# backend (avoids CORS issues)
+      "/api": {
+        target: "http://localhost:5189",
+        changeOrigin: true,
+        secure: false,
+        ws: false,
+      },
+      // Proxy authentication requests to local C# backend
+      "/account": {
+        target: "http://localhost:5189",
+        changeOrigin: true,
+        secure: false,
+        ws: false,
+      }
     },
     // Optimize HMR for better dev performance
     hmr: {
