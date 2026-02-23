@@ -142,12 +142,14 @@ export async function handleFileUpload(
     
     let finalValue;
     if (isValidValue) {
-      // Use raw value if valid
+      // Use raw value if valid (keep as MDS code string)
       finalValue = rawVal;
     } else {
-      // Use imputed value from API
-      finalValue = imputedValues[sourceId] || "01"; // Fallback to "01" if imputation failed
-      imputedItems.add(item.id); // Track that this item was imputed
+      // Use imputed value from API — now a continuous number (e.g. 1.7903).
+      // Always store as a string for API compatibility (C# expects Dictionary<string,string>).
+      const imputed = imputedValues[sourceId];
+      finalValue = (imputed != null && !isNaN(imputed)) ? String(imputed) : "01";
+      imputedItems.add(item.id);
     }
     
     // Set both start and modeled scores to the same value (start scores)

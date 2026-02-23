@@ -2,7 +2,7 @@ import React from 'react';
 import BarbellChart from './BarbellChart';
 import ScoreButton from './ScoreButton';
 import { getScoreTypeColor } from '../utils/themeColors';
-import { GG_ITEMS, scoreMap } from '../utils/calculations';
+import { GG_ITEMS, scoreMap, resolveScore } from '../utils/calculations';
 import { getContributingKeys, getInitialScores } from '../utils/itemDefinitions';
 import { getBasicContributingItems } from '../utils/itemAdapters';
 import styles from './FunctionItemsList.module.css';
@@ -60,10 +60,10 @@ const FunctionItemsList = ({
     ];
   };
 
-  // Get score for an item
+  // Get score for an item (handles both MDS codes and continuous imputed values)
   const getScore = (item, category = null) => {
     if (mode === 'advanced') {
-      return scores[item.id] in scoreMap ? scoreMap[scores[item.id]] : 0;
+      return resolveScore(scores[item.id]);
     }
     
     // Basic mode
@@ -74,8 +74,7 @@ const FunctionItemsList = ({
   // Get start score for an item (for end/advanced modes)
   const getStartScore = (item, category = null) => {
     if (mode === 'advanced') {
-      const rawStart = startScores[item.id];
-      return rawStart in scoreMap ? scoreMap[rawStart] : 0;
+      return resolveScore(startScores[item.id]);
     }
     
     // Basic mode
@@ -177,18 +176,13 @@ const FunctionItemsList = ({
       itemsData.forEach(({ items: domainItems }) => {
         domainItems.forEach(item => {
           const itemId = item.id;
-          const currentRaw = scores[itemId];
-          const targetRaw = resetState[itemId];
-          
-          if (targetRaw !== undefined) {
-            const currentScore = currentRaw in scoreMap ? scoreMap[currentRaw] : 0;
-            const targetScore = targetRaw in scoreMap ? scoreMap[targetRaw] : 0;
+          const currentScore = resolveScore(scores[itemId]);
+          const targetScore = resolveScore(resetState[itemId]);
             
-            if (currentScore !== targetScore) {
-              const delta = targetScore - currentScore;
-              if (delta !== 0) {
-                onScoreAdjustment(itemId, delta);
-              }
+          if (currentScore !== targetScore) {
+            const delta = targetScore - currentScore;
+            if (delta !== 0) {
+              onScoreAdjustment(itemId, delta);
             }
           }
         });
@@ -211,11 +205,14 @@ const FunctionItemsList = ({
     }
   };
 
+  const formatScore = (val) => Number.isInteger(val) ? val : val.toFixed(4);
+
   // Render a single item row
   const renderItemRow = (item, category = null, isLast = false) => {
     const score = getScore(item, category);
     const startScore = getStartScore(item, category);
     const delta = score - startScore;
+    const roundedDelta = Math.round(delta * 10000) / 10000;
     const buttonColors = getButtonColors();
     
     // Items are already filtered at the getItems level
@@ -223,8 +220,8 @@ const FunctionItemsList = ({
     const rowClasses = [
       styles.scoreRow,
       mode === 'basic' && isLast ? styles.lastRow : '',
-      delta > 0 ? styles.gain : '',
-      delta < 0 ? styles.loss : '',
+      roundedDelta > 0 ? styles.gain : '',
+      roundedDelta < 0 ? styles.loss : '',
     ].filter(Boolean).join(' ');
 
     return (
@@ -238,9 +235,9 @@ const FunctionItemsList = ({
                 Imputed
               </span>
             )}
-            {delta !== 0 && (
-              <span className={`${styles.delta} ${delta > 0 ? styles.positive : styles.negative}`}>
-                ({delta > 0 ? '+' : ''}{delta})
+            {roundedDelta !== 0 && (
+              <span className={`${styles.delta} ${roundedDelta > 0 ? styles.positive : styles.negative}`}>
+                ({roundedDelta > 0 ? '+' : ''}{formatScore(roundedDelta)})
               </span>
             )}
           </span>

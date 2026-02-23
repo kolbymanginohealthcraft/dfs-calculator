@@ -1,7 +1,7 @@
 // Adapter functions to bridge basic version itemDefs with advanced version GG_ITEMS
 // This allows the basic version to use the unified GG_ITEMS structure while maintaining compatibility
 
-import { GG_ITEMS, scoreMap } from './calculations';
+import { GG_ITEMS, scoreMap, resolveScore } from './calculations';
 
 // Mapping from basic version keys to GG_ITEMS IDs
 export const BASIC_TO_GG_MAPPING = {
@@ -85,8 +85,7 @@ export const convertGGScoresToBasic = (ggScores) => {
   Object.entries(ggScores).forEach(([ggId, ggScore]) => {
     const basicKey = GG_TO_BASIC_MAPPING[ggId];
     if (basicKey) {
-      // Convert GG format (01-06) to numeric score
-      const numericScore = scoreMap[ggScore] || 1;
+      const numericScore = resolveScore(ggScore) || 1;
       
       // Determine domain based on GG_ITEMS
       const ggItem = GG_ITEMS.find(item => item.id === ggId);

@@ -18,6 +18,53 @@ import { getImputationMultipliers, getImputationMultipliersForItem } from './ser
 import { covariateMapping } from '../../src/utils/covariateMapping.js';
 
 /**
+ * Standard normal cumulative distribution function Φ(x).
+ * Uses the Abramowitz & Stegun rational approximation (max error ~1.5e-7).
+ */
+function normalCDF(x) {
+  const a1 =  0.254829592;
+  const a2 = -0.284496736;
+  const a3 =  1.421413741;
+  const a4 = -1.453152027;
+  const a5 =  1.061405429;
+  const p  =  0.3275911;
+
+  const sign = x < 0 ? -1 : 1;
+  const absX = Math.abs(x);
+  const t = 1.0 / (1.0 + p * absX);
+  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absX * absX / 2);
+
+  return 0.5 * (1.0 + sign * y);
+}
+
+/**
+ * Converts an imputation score (z) and thresholds (alphas) into a continuous
+ * imputed value using the CMS statistical imputation methodology.
+ *
+ * Per CMS Table 8-8:
+ *   Pr(z ≤ α₁)         = Φ(α₁ − z)
+ *   Pr(αₖ < z ≤ αₖ₊₁)  = Φ(αₖ₊₁ − z) − Φ(αₖ − z)
+ *   Pr(z > α₅)          = 1 − Φ(α₅ − z)
+ *
+ *   Imputed value = 1·P₁ + 2·P₂ + 3·P₃ + 4·P₄ + 5·P₅ + 6·P₆
+ */
+function computeImputedValueFromScore(z, thresholds) {
+  const probs = [];
+  probs[0] = normalCDF(thresholds[0] - z);
+  for (let i = 1; i < thresholds.length; i++) {
+    probs[i] = normalCDF(thresholds[i] - z) - normalCDF(thresholds[i - 1] - z);
+  }
+  probs[thresholds.length] = 1 - normalCDF(thresholds[thresholds.length - 1] - z);
+
+  let imputedValue = 0;
+  for (let i = 0; i <= thresholds.length; i++) {
+    imputedValue += (i + 1) * probs[i];
+  }
+
+  return imputedValue;
+}
+
+/**
  * Helper function to calculate GG item-specific covariates
  */
 function getGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers = null) {
@@ -146,16 +193,9 @@ export function calculateImputedValue(ggItemId, parsedValues, summary, icdList, 
     imputationScore += covariateValue * multiplier;
   }
 
-  // Determine which threshold range the score falls into
-  let imputedValue = 1; // Default to 1
-  for (let i = 0; i < thresholds.length; i++) {
-    if (imputationScore > thresholds[i]) {
-      imputedValue = i + 2; // 2, 3, 4, 5, 6
-    }
-  }
-
-  // Convert imputed value back to GG item format (01-06)
-  return imputedValue.toString().padStart(2, '0');
+  // CMS statistical imputation: convert z-score to continuous expected value
+  // using standard normal CDF probabilities across threshold partitions
+  return computeImputedValueFromScore(imputationScore, thresholds);
 }
 
 /**
@@ -262,17 +302,9 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
                 imputationScore += covariateValue * multiplier;
             });
             
-            // Convert imputation score to GG item value (1-6) using item-specific thresholds
-            // This matches what ImputationTab does
+            // CMS statistical imputation: convert z-score to continuous expected value
             const thresholds = getImputationThresholds(ggItemId, ardDate);
-            let imputedValue = 1; // Default to 1
-            for (let i = 0; i < thresholds.length; i++) {
-                if (imputationScore > thresholds[i]) {
-                    imputedValue = i + 2; // 2, 3, 4, 5, 6
-                }
-            }
-            // Convert to GG format (01-06)
-            imputedValues[ggItemId] = imputedValue.toString().padStart(2, '0');
+            imputedValues[ggItemId] = computeImputedValueFromScore(imputationScore, thresholds);
         }
     });
     
@@ -384,13 +416,8 @@ export function getImputationAnalysisData(parsedValues, summary, icdList, startS
       }
     }
 
-    // Determine which threshold range the score falls into (reused logic)
-    let imputedValue = 1; // Default to 1
-    for (let i = 0; i < thresholds.length; i++) {
-      if (imputationScore > thresholds[i]) {
-        imputedValue = i + 2; // 2, 3, 4, 5, 6
-      }
-    }
+    // CMS statistical imputation: convert z-score to continuous expected value
+    const imputedValue = computeImputedValueFromScore(imputationScore, thresholds);
 
     // Check raw MDS value to determine if imputation is needed
     const rawValue = parsedValues[ggItemId];
@@ -402,7 +429,7 @@ export function getImputationAnalysisData(parsedValues, summary, icdList, startS
       multipliers: multipliers,
       imputationScore: imputationScore,
       thresholds: thresholds,
-      imputedValue: needsImputation ? imputedValue.toString().padStart(2, '0') : null,
+      imputedValue: needsImputation ? imputedValue : null,
       originalValue: rawValue || null,
       needsImputation: needsImputation
     };

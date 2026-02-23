@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, lazy, Suspense, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { scoreMap, GG_ITEMS, conditionMap } from "../utils/calculations";
+import { scoreMap, GG_ITEMS, conditionMap, resolveScore, scoreToStoredValue } from "../utils/calculations";
 import {
   extractPatientSummary,
   determineMobilityType,
@@ -253,19 +253,43 @@ function AdvancedAppDetail() {
   const handleTick = (key, delta) => {
     setModeledValues((prev) => {
       const raw = prev[key];
-      const current = scoreMap[raw] ?? 0;
-      let next = Math.max(1, Math.min(6, current + delta));
-      
-      // Ensure end score doesn't go below start score
+      const current = resolveScore(raw);
       const startRaw = startScores[key];
-      if (startRaw !== undefined) {
-        const startScore = scoreMap[startRaw] ?? 0;
-        next = Math.max(next, startScore);
+      const startScore = resolveScore(startRaw);
+      const isImputed = imputedItems.has(key);
+      const hasNonIntegerStart = isImputed && !Number.isInteger(startScore);
+
+      let next;
+
+      if (hasNonIntegerStart) {
+        // Imputed item with continuous start value.
+        // Allowed values: [startScore, ceil(startScore), ceil+1, ..., 6]
+        const firstInt = Math.ceil(startScore);
+
+        if (delta > 0) {
+          if (!Number.isInteger(current)) {
+            next = firstInt;
+          } else {
+            next = Math.min(6, current + 1);
+          }
+        } else {
+          if (!Number.isInteger(current)) {
+            next = current; // already at imputed value, can't go lower
+          } else if (current <= firstInt) {
+            next = startScore; // drop back to the continuous imputed value
+          } else {
+            next = current - 1;
+          }
+        }
+      } else {
+        // Standard integer toggling
+        next = Math.max(1, Math.min(6, current + delta));
+        if (startRaw !== undefined) {
+          next = Math.max(next, startScore);
+        }
       }
-      
-      const code =
-        Object.entries(scoreMap).find(([k, v]) => v === next)?.[0] || "01";
-      return { ...prev, [key]: code };
+
+      return { ...prev, [key]: scoreToStoredValue(next) };
     });
   };
 
@@ -276,7 +300,7 @@ function AdvancedAppDetail() {
     domains.forEach(domain => {
       result[domain] = GG_ITEMS
         .filter((i) => i.domain === domain)
-        .reduce((sum, i) => sum + (scoreMap[modeledValues[i.id]] || 0), 0);
+        .reduce((sum, i) => sum + resolveScore(modeledValues[i.id]), 0);
     });
     return result;
   }, [modeledValues]);

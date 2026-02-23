@@ -70,7 +70,7 @@ const ScoreBarChart = ({
             className="start-bar" 
             style={{ width: `${(startTotal / 60) * 100}%` }}
           >
-            <span className="bar-value-text">{startTotal}</span>
+            <span className="bar-value-text">{Number.isInteger(startTotal) ? startTotal : startTotal.toFixed(2)}</span>
           </div>
         )}
         
@@ -95,7 +95,7 @@ const ScoreBarChart = ({
             }}
           >
             {actualGain >= 1 && (
-              <span className="bar-value-text">{Math.round(actualGain)}</span>
+              <span className="bar-value-text">{Number.isInteger(actualGain) ? actualGain : actualGain.toFixed(2)}</span>
             )}
           </div>
         )}
@@ -118,7 +118,7 @@ const ScoreBarChart = ({
               className="end-total-text" 
               style={{ color: getScoreTypeColor('end', 'primary') }}
             >
-              {Math.round(endTotal)}
+              {Number.isInteger(endTotal) ? endTotal : endTotal.toFixed(2)}
             </span>
           </div>
         )}
@@ -149,7 +149,7 @@ const ScoreBarChart = ({
             className="label-text" 
             style={{ color: getScoreTypeColor('start', 'primary') }}
           >
-            Start: {startTotal}
+            Start: {Number.isInteger(startTotal) ? startTotal : startTotal.toFixed(2)}
           </span>
         </div>
         
@@ -182,7 +182,7 @@ const ScoreBarChart = ({
           >
             {expectedScore ? (
               <>
-                {gainLabel}: {endTotal ? Math.round(actualGain) : 'TBD'}
+                {gainLabel}: {endTotal ? (Number.isInteger(actualGain) ? actualGain : actualGain.toFixed(2)) : 'TBD'}
                 {requiredGain > 0 && (
                   <span style={{ fontSize: '0.9em', opacity: 0.8 }}>
                     {' '}(required {requiredGain.toFixed(2)})
@@ -205,7 +205,7 @@ const ScoreBarChart = ({
             className="label-text" 
             style={{ color: getScoreTypeColor('end', 'primary') }}
           >
-            {endTotal ? `${endLabel}: ${Math.round(endTotal)}` : `${endLabel}: TBD`}
+            {endTotal ? `${endLabel}: ${Number.isInteger(endTotal) ? endTotal : endTotal.toFixed(2)}` : `${endLabel}: TBD`}
           </span>
         </div>
       </div>

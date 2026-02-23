@@ -194,7 +194,7 @@ export default function ImputationTab({
                           )}
                         </td>
                         <td>{data.needsImputation ? formatNumber(data.imputationScore) : "—"}</td>
-                        <td>{data.imputedValue ? parseInt(data.imputedValue, 10) : "—"}</td>
+                        <td>{data.imputedValue != null ? (Number.isInteger(data.imputedValue) ? data.imputedValue : Number(data.imputedValue).toFixed(4)) : "—"}</td>
                       </tr>
 
                       {/* Expanded covariate details */}
@@ -203,166 +203,11 @@ export default function ImputationTab({
                           <td colSpan="5">
                             <div className={styles.covariateDetails}>
                               <h4>Covariate Breakdown for {getGGItemLabel(ggItemId)} ({ggItemId})</h4>
-                              {/* Threshold Visualization */}
+                              {/* Imputed value summary */}
                               <div className={styles.thresholdVisualization}>
-                                <h5>Imputation Score: {formatNumber(data.imputationScore)} → Value {parseInt(data.imputedValue, 10)}</h5>
-
-                                {/* Simplified Horizontal Bar */}
-                                <div className={styles.simpleBarContainer}>
-                                  <div className={styles.barChart}>
-                                    {/* Value labels above the bar */}
-                                    <div className={styles.valueLabelsAbove}>
-                                      {(() => {
-                                        const minThreshold = Math.min(...data.thresholds);
-                                        const maxThreshold = Math.max(...data.thresholds);
-                                        const range = maxThreshold - minThreshold;
-                                        const extendedMin = minThreshold - (range * 0.2);
-                                        const extendedMax = maxThreshold + (range * 0.2);
-                                        const extendedRange = extendedMax - extendedMin;
-                                        const valueLabels = [];
-
-                                        // Value 1: center of first segment
-                                        const value1Center = (data.thresholds[0] - extendedMin) / extendedRange / 2 * 100;
-                                        valueLabels.push(
-                                          <div key={0} className={styles.valueLabelAbove} style={{ left: `${value1Center}%` }}>
-                                            1
-                                          </div>
-                                        );
-
-                                        // Values 2-5: centers of middle segments
-                                        for (let i = 0; i < data.thresholds.length - 1; i++) {
-                                          const startThreshold = data.thresholds[i];
-                                          const endThreshold = data.thresholds[i + 1];
-                                          const segmentCenter = ((startThreshold + endThreshold) / 2 - extendedMin) / extendedRange * 100;
-
-                                          valueLabels.push(
-                                            <div key={i + 1} className={styles.valueLabelAbove} style={{ left: `${segmentCenter}%` }}>
-                                              {i + 2}
-                                            </div>
-                                          );
-                                        }
-
-                                        // Value 6: center of last segment
-                                        const value6Center = (data.thresholds[data.thresholds.length - 1] + extendedMax) / 2;
-                                        const value6Position = (value6Center - extendedMin) / extendedRange * 100;
-                                        valueLabels.push(
-                                          <div key={5} className={styles.valueLabelAbove} style={{ left: `${value6Position}%` }}>
-                                            6
-                                          </div>
-                                        );
-
-                                        return valueLabels;
-                                      })()}
-                                    </div>
-
-                                    {/* Background bar with threshold lines */}
-                                    <div className={styles.backgroundBar}>
-                                      {/* Threshold lines inside the bar */}
-                                      <div className={styles.thresholdLines}>
-                                        {data.thresholds.map((threshold, index) => {
-                                          const minThreshold = Math.min(...data.thresholds);
-                                          const maxThreshold = Math.max(...data.thresholds);
-                                          const range = maxThreshold - minThreshold;
-                                          const extendedMin = minThreshold - (range * 0.2);
-                                          const extendedMax = maxThreshold + (range * 0.2);
-                                          const extendedRange = extendedMax - extendedMin;
-                                          const position = ((threshold - extendedMin) / extendedRange) * 100;
-
-                                          return (
-                                            <div
-                                              key={index}
-                                              className={styles.thresholdLine}
-                                              style={{ left: `${position}%` }}
-                                            ></div>
-                                          );
-                                        })}
-                                      </div>
-
-                                      {/* Score line marker */}
-                                      <div
-                                        className={styles.scoreMarker}
-                                        style={{
-                                          left: `${(() => {
-                                            const minThreshold = Math.min(...data.thresholds);
-                                            const maxThreshold = Math.max(...data.thresholds);
-                                            const range = maxThreshold - minThreshold;
-                                            const extendedMin = minThreshold - (range * 0.2);
-                                            const extendedMax = maxThreshold + (range * 0.2);
-                                            const extendedRange = extendedMax - extendedMin;
-
-                                            const position = ((data.imputationScore - extendedMin) / extendedRange) * 100;
-                                            return Math.max(0, Math.min(100, position));
-                                          })()}%`
-                                        }}
-                                      >
-                                        <div className={styles.scoreLine}></div>
-                                        <div className={styles.scoreLabel}>
-                                          {formatNumber(data.imputationScore)}
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                    {/* Threshold labels */}
-                                    <div className={styles.thresholdLabels}>
-                                      {/* First threshold label */}
-                                      <div
-                                        className={styles.thresholdLabel}
-                                        style={{
-                                          left: `${(() => {
-                                            const minThreshold = Math.min(...data.thresholds);
-                                            const maxThreshold = Math.max(...data.thresholds);
-                                            const range = maxThreshold - minThreshold;
-                                            const extendedMin = minThreshold - (range * 0.2);
-                                            const extendedMax = maxThreshold + (range * 0.2);
-                                            const extendedRange = extendedMax - extendedMin;
-                                            return ((data.thresholds[0] - extendedMin) / extendedRange) * 100;
-                                          })()}%`
-                                        }}
-                                      >
-                                        {formatNumber(data.thresholds[0])}
-                                      </div>
-
-                                      {/* Middle threshold labels */}
-                                      {data.thresholds.slice(1, -1).map((threshold, index) => {
-                                        const minThreshold = Math.min(...data.thresholds);
-                                        const maxThreshold = Math.max(...data.thresholds);
-                                        const range = maxThreshold - minThreshold;
-                                        const extendedMin = minThreshold - (range * 0.2);
-                                        const extendedMax = maxThreshold + (range * 0.2);
-                                        const extendedRange = extendedMax - extendedMin;
-                                        const position = ((threshold - extendedMin) / extendedRange) * 100;
-
-                                        return (
-                                          <div
-                                            key={index + 1}
-                                            className={styles.thresholdLabel}
-                                            style={{ left: `${position}%` }}
-                                          >
-                                            {formatNumber(threshold)}
-                                          </div>
-                                        );
-                                      })}
-
-                                      {/* Last threshold label */}
-                                      <div
-                                        className={styles.thresholdLabel}
-                                        style={{
-                                          left: `${(() => {
-                                            const minThreshold = Math.min(...data.thresholds);
-                                            const maxThreshold = Math.max(...data.thresholds);
-                                            const range = maxThreshold - minThreshold;
-                                            const extendedMin = minThreshold - (range * 0.2);
-                                            const extendedMax = maxThreshold + (range * 0.2);
-                                            const extendedRange = extendedMax - extendedMin;
-                                            return ((data.thresholds[data.thresholds.length - 1] - extendedMin) / extendedRange) * 100;
-                                          })()}%`,
-                                          transform: 'translateX(-50%)'
-                                        }}
-                                      >
-                                        {formatNumber(data.thresholds[data.thresholds.length - 1])}
-                                      </div>
-                                    </div>
-                                  </div>
+                                <h5>Imputation Score (z): {formatNumber(data.imputationScore)} → Imputed Value: {Number(data.imputedValue).toFixed(4)}</h5>
+                                <div className={styles.visualPlaceholder}>
+                                  Visual coming soon
                                 </div>
                               </div>
                               <table className={styles.covariateTable}>

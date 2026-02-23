@@ -20,8 +20,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
             {
                 try
                 {
-                    string imputedValue = ServerImputations.CalculateImputedValue(body.GGItemId, body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores);
-                    // Wrap response to match frontend expectations: { imputedValue: string }
+                    double imputedValue = ServerImputations.CalculateImputedValue(body.GGItemId, body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores);
                     return Ok(new { imputedValue = imputedValue });
                 }
                 catch(KeyNotFoundException ex)
@@ -39,8 +38,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
                 {
                     try
                     {
-                        Dictionary<string, string> imputedValues = ServerImputations.ImputeMissingGGItems(body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores, body.TargetGGItems);
-                        // Wrap response to match frontend expectations: { imputedValues: Object }
+                        Dictionary<string, double> imputedValues = ServerImputations.ImputeMissingGGItems(body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores, body.TargetGGItems);
                         return Ok(new { imputedValues = imputedValues });
                     }
                     catch (KeyNotFoundException ex)

@@ -23,6 +23,31 @@ export const scoreMap = {
   "^": 1,
 };
 
+/**
+ * Resolves a raw stored value to its numeric score. Handles both traditional
+ * MDS code strings ("01"-"06") via scoreMap AND continuous imputed values
+ * (e.g. 1.7903 stored as a number or string).
+ */
+export function resolveScore(rawValue) {
+  if (rawValue == null) return 0;
+  if (rawValue in scoreMap) return scoreMap[rawValue];
+  const parsed = typeof rawValue === 'number' ? rawValue : parseFloat(rawValue);
+  if (!isNaN(parsed) && parsed >= 1 && parsed <= 6) return parsed;
+  return 0;
+}
+
+/**
+ * Converts a numeric score back to its stored format (always a string).
+ * Integers become zero-padded codes ("01"-"06"); continuous values become
+ * their string representation (e.g. "1.7903").
+ */
+export function scoreToStoredValue(score) {
+  if (Number.isInteger(score) && score >= 1 && score <= 6) {
+    return score.toString().padStart(2, '0');
+  }
+  return String(score);
+}
+
 export const GG_ITEMS = [
   { id: "GG0130A", label: "Eating", domain: "selfCare" },
   { id: "GG0130B", label: "Oral hygiene", domain: "selfCare" },
@@ -187,7 +212,9 @@ export function determineMobilityType(parsedValues) {
 export function calculateFunctionScore(values, mobilityType = null) {
   const safe = (key) => {
     const v = values[key];
-    return valid.has(v) ? parseInt(v, 10) : 1;
+    if (valid.has(v)) return parseInt(v, 10);
+    const score = resolveScore(v);
+    return score > 0 ? score : 1;
   };
 
   const sa = safe("GG0130A");

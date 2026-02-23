@@ -46,27 +46,36 @@ namespace Aegis.DfsCalculator.Server.Utils
                 : "Walk";
         }
 
-        private static int CalculateFunctionScore(Dictionary<string, string> startScores, string? mobilityType = null)
+        private static double ResolveScore(string? rawValue)
         {
-            Dictionary<string, int> safe = startScores.Where(i => VALID.Any(j => j == i.Value)).ToDictionary(i => i.Key, i => Int32.Parse(i.Value));
+            if (rawValue == null) return 0;
+            if (VALID.Contains(rawValue)) return int.Parse(rawValue);
+            if (double.TryParse(rawValue, System.Globalization.NumberStyles.Float, 
+                System.Globalization.CultureInfo.InvariantCulture, out double parsed) 
+                && parsed >= 1 && parsed <= 6)
+                return parsed;
+            return 1;
+        }
 
+        private static double CalculateFunctionScore(Dictionary<string, string> startScores, string? mobilityType = null)
+        {
             if (!String.IsNullOrEmpty(mobilityType))
             {
                 mobilityType = DetermineMobilityType(startScores);
             }
             
-            int sa = safe.GetValueOrDefault("GG0130A");
-            int sb = safe.GetValueOrDefault("GG0130B");
-            int sc = safe.GetValueOrDefault("GG0130C");
+            double sa = ResolveScore(startScores.GetValueOrDefault("GG0130A"));
+            double sb = ResolveScore(startScores.GetValueOrDefault("GG0130B"));
+            double sc = ResolveScore(startScores.GetValueOrDefault("GG0130C"));
 
-            int ma = safe.GetValueOrDefault("GG0170A");
-            int mc = safe.GetValueOrDefault("GG0170C");
-            int md = safe.GetValueOrDefault("GG0170D");
-            int me = safe.GetValueOrDefault("GG0170E");
-            int mf = safe.GetValueOrDefault("GG0170F");
-            int mi = safe.GetValueOrDefault("GG0170I");
-            int mj = safe.GetValueOrDefault("GG0170J");
-            int mr = safe.GetValueOrDefault("GG0170R");
+            double ma = ResolveScore(startScores.GetValueOrDefault("GG0170A"));
+            double mc = ResolveScore(startScores.GetValueOrDefault("GG0170C"));
+            double md = ResolveScore(startScores.GetValueOrDefault("GG0170D"));
+            double me = ResolveScore(startScores.GetValueOrDefault("GG0170E"));
+            double mf = ResolveScore(startScores.GetValueOrDefault("GG0170F"));
+            double mi = ResolveScore(startScores.GetValueOrDefault("GG0170I"));
+            double mj = ResolveScore(startScores.GetValueOrDefault("GG0170J"));
+            double mr = ResolveScore(startScores.GetValueOrDefault("GG0170R"));
 
             if (mobilityType == "Wheel")
             {
@@ -644,9 +653,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             // covariates["Entry"] = 1;
 
             // 2. Admission Function score + squared
-            int startScore = CalculateFunctionScore(startScores);
-            covariates["Admission Function - Continuous Form"] = startScore;
-            covariates["Admission Function - Squared Form"] = (int)Math.Pow(startScore, 2);
+            double startScore = CalculateFunctionScore(startScores);
+            covariates["Admission Function - Continuous Form"] = (int)Math.Round(startScore);
+            covariates["Admission Function - Squared Form"] = (int)Math.Round(Math.Pow(startScore, 2));
 
             // 3. Age group logic
             string ageCov = ProcessAgeCovariate(parsedValues, age) ?? "";
@@ -664,7 +673,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
             // 10-16. Use extracted processing functions
             covariates = MergeCovariates(covariates, ProcessAdditionalClinicalConditions(parsedValues));
-            covariates = MergeCovariates(covariates, ProcessMedicalConditionCategory(parsedValues, startScore));
+            covariates = MergeCovariates(covariates, ProcessMedicalConditionCategory(parsedValues, (int)Math.Round(startScore)));
             covariates = MergeCovariates(covariates, ProcessPriorFunctioning(parsedValues));
             covariates = MergeCovariates(covariates, ProcessPriorMobilityDevices(parsedValues));
 

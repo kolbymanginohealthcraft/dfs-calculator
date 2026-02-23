@@ -2,7 +2,7 @@ import React from "react";
 import { formatDOB } from "../utils/calculations";
 import { getBasicContributingItems, getContributingGGItemsForDisplay } from "../utils/itemAdapters";
 import { getContributingKeys } from "../utils/itemDefinitions";
-import { GG_ITEMS, scoreMap } from "../utils/calculations";
+import { GG_ITEMS, scoreMap, resolveScore } from "../utils/calculations";
 import "./ExportView.css";
 import { BarChart3 } from "lucide-react";
 
@@ -46,10 +46,7 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
   // Helper function to get score for an item
   const getItemScore = (item, domain) => {
     if (functionItems && functionItems.scores) {
-      // Advanced app structure
-      const rawScore = functionItems.scores[item.id];
-      const score = rawScore in scoreMap ? scoreMap[rawScore] : 0;
-      return score;
+      return resolveScore(functionItems.scores[item.id]);
     } else {
       // Basic app structure - scores passed separately
       const key = item.key || item.id;
@@ -60,10 +57,7 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
   // Helper function to get start score for an item
   const getItemStartScore = (item, domain) => {
     if (functionItems && functionItems.startScores) {
-      // Advanced app structure
-      const rawStart = functionItems.startScores[item.id];
-      const startScore = rawStart in scoreMap ? scoreMap[rawStart] : 0;
-      return startScore;
+      return resolveScore(functionItems.startScores[item.id]);
     } else {
       // Basic app structure - startScores passed separately
       const key = item.key || item.id;

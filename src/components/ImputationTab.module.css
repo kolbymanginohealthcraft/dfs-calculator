@@ -329,6 +329,16 @@ mark {
   font-weight: 600;
 }
 
+.visualPlaceholder {
+  padding: 1.5rem;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+  background-color: #fff;
+  border: 1px dashed #ced4da;
+  border-radius: 6px;
+}
+
 /* Simplified Bar Chart */
 .simpleBarContainer {
   margin-bottom: 1rem;

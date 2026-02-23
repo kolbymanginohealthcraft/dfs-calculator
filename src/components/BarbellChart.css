@@ -82,3 +82,22 @@
   font-weight: bold;
   text-align: center;
 }
+
+/* Wider nodes for continuous (non-integer) imputed values */
+.barbell-node-wide {
+  width: 36px;
+  border-radius: 12px;
+}
+
+.barbell-node-wide .barbell-node-text {
+  font-size: 8px;
+}
+
+.barbell-end-node-wide {
+  width: 32px;
+  border-radius: 10px;
+}
+
+.barbell-end-node-wide .barbell-end-node-text {
+  font-size: 7.5px;
+}
