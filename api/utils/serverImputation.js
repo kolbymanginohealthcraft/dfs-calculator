@@ -29,10 +29,11 @@ function normalCDF(x) {
   const a5 =  1.061405429;
   const p  =  0.3275911;
 
+  // A&S 7.1.26 approximates erf(u), so convert: Φ(x) = 0.5(1 + erf(x/√2))
   const sign = x < 0 ? -1 : 1;
-  const absX = Math.abs(x);
-  const t = 1.0 / (1.0 + p * absX);
-  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absX * absX / 2);
+  const u = Math.abs(x) / Math.SQRT2;
+  const t = 1.0 / (1.0 + p * u);
+  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-u * u);
 
   return 0.5 * (1.0 + sign * y);
 }

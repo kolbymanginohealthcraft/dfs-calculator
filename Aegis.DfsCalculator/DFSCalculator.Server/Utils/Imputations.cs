@@ -15,6 +15,7 @@ namespace Aegis.DfsCalculator.Server.Utils
         /// <summary>
         /// Standard normal CDF Φ(x) using the Abramowitz &amp; Stegun rational approximation.
         /// </summary>
+        /// A&S 7.1.26 approximates erf(u), so convert: Φ(x) = 0.5(1 + erf(x/√2))
         private static double NormalCDF(double x)
         {
             const double a1 =  0.254829592;
@@ -25,9 +26,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             const double p  =  0.3275911;
 
             double sign = x < 0 ? -1.0 : 1.0;
-            double absX = Math.Abs(x);
-            double t = 1.0 / (1.0 + p * absX);
-            double y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.Exp(-absX * absX / 2.0);
+            double u = Math.Abs(x) / Math.Sqrt(2.0);
+            double t = 1.0 / (1.0 + p * u);
+            double y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.Exp(-u * u);
 
             return 0.5 * (1.0 + sign * y);
         }
