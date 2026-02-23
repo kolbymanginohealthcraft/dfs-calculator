@@ -103,6 +103,47 @@ For an imputed item with start score 1.7903:
 
 ---
 
+## MDS Skip Cascade Rules (Skipped vs. Not Attempted)
+
+### Problem
+
+The MDS form has built-in skip patterns: when a "gate" item is coded as ANA (Activity Not Attempted: `07`, `09`, `10`, `88`), downstream items in the same sequence are skipped entirely. These skipped items must use the **Skipped covariate** (not the Not Attempted covariate) when computing imputation scores for other GG items. Using the wrong covariate applies the wrong multiplier, changing the imputed value.
+
+**Example**: When imputing GG0170F1 (Toilet Transfer), the covariate for Walk 10 Feet Uneven Surface (GG0170L1) was incorrectly using "Not Attempted" (multiplier = −0.0774) instead of "Skipped" (multiplier = 0), because GG0170I1 (Walk 10 Feet) was coded `88` (ANA).
+
+### MDS Skip Cascade Rules
+
+| Gate Item | Gate Condition | Downstream Items Become Skipped (`^`) |
+|-----------|---------------|---------------------------------------|
+| GG0170I1 (Walk 10 Feet) | ANA (07, 09, 10, 88) | J1 (Walk 50 Feet), K1 (Walk 150 Feet), L1 (Walk 10 Feet Uneven) |
+| GG0170M1 (1 Step - Curb) | ANA (07, 09, 10, 88) | N1 (4 Steps), O1 (12 Steps) |
+| GG0170N1 (4 Steps) | ANA (07, 09, 10, 88) | O1 (12 Steps) |
+
+No cascade applies to wheelchair items (R1, S1).
+
+### Implementation
+
+**Hard override**: When the gate item is ANA, downstream items are forced to `^` (skipped) regardless of their raw MDS value.
+
+A new helper function `getEffectiveGGValue()` / `GetEffectiveGGValue()` checks the gate item's raw value before returning the downstream item's value. All covariate lookup code now calls this function instead of reading `parsedValues` directly.
+
+### Items With Skipped Covariate
+
+Seven GG items conceptually have a separate "Skipped" covariate: **J1, K1, L1, N1, O1, R1, S1**. However, the CMS coefficient data only includes non-zero Skipped multipliers for **J1, N1, O1, and R1**. The Skipped multipliers for K1, L1, and S1 are zero and therefore omitted from `coefficients-all-versions.json`.
+
+The previous code determined whether an item had a Skipped covariate by searching the multiplier dictionary for a matching key. This failed for K1, L1, and S1 (zero-valued multipliers are absent), causing `^` to be misclassified as "Not Attempted."
+
+**Fix**: Replaced the dictionary-based check with a hardcoded constant `ITEMS_WITH_SKIPPED_COVARIATE` containing all 7 items. The distinction between Skipped and Not Attempted is now always correct, regardless of whether the Skipped multiplier is zero or non-zero.
+
+### Files Modified
+
+| File | Changes |
+|------|---------|
+| `api/utils/serverImputation.js` | Added `SKIP_CASCADE_ANA`, `ITEMS_WITH_SKIPPED_COVARIATE`, `getEffectiveGGValue()`. Updated `getGGItemSpecificCovariate()` and inline covariate code in `imputeMissingGGItems()` to use effective values and hardcoded item set. |
+| `Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs` | Added `ITEMS_WITH_SKIPPED_COVARIATE`, `SKIP_CASCADE_WALK_DOWNSTREAM`, `SKIP_CASCADE_STEP_M_DOWNSTREAM`, `GetEffectiveGGValue()`. Updated `GetGGItemSpecificCovariate()` and inline covariate code in `ImputeMissingGGItems()` to use effective values and hardcoded item set. Also fixed a pre-existing bug where the inline `hasSkippedCovariate` check in `ImputeMissingGGItems` was comparing against `ggItemId` (the item being imputed) instead of `itemId` (the covariate item). |
+
+---
+
 ## Outstanding Items / Next Steps
 
 ### 1. Imputation Tab Visual (Placeholder)
@@ -119,13 +160,10 @@ The threshold bar visualization was removed from `ImputationTab.jsx` and replace
 - `needsImputation` — boolean
 - `originalValue` — raw MDS value
 
-### 2. C# Server Rebuild Required
-The C# backend needs to be stopped and rebuilt to pick up the algorithm changes. The code compiles clean but the running process (PID 28932 at time of last attempt) locks the output file.
-
-### 3. Pre-existing 400 Error Investigation
+### 2. Pre-existing 400 Error Investigation
 A `400 Bad Request` from `/api/function-score` was observed. This appears to be **pre-existing** (not from our changes) — likely caused by test files with missing date fields that produce `null` for `PatientSummary.Age` (non-nullable `int` in C#). The `FunctionScoreCalculationBody.StartScores` values are confirmed to always be strings after our fix.
 
-### 4. C# Covariate Dictionary Type
+### 3. C# Covariate Dictionary Type
 The C# covariate dictionary remains `Dictionary<string, int>`. The continuous function score is rounded to `int` via `Math.Round()` before being stored as `"Admission Function - Continuous Form"` and squared. A future refactor could change this to `Dictionary<string, double>` for full precision, but this is a larger change that ripples through the entire calculation pipeline.
 
 ---

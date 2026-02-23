@@ -10,6 +10,7 @@ namespace Aegis.DfsCalculator.Server.Utils
         static List<string> VALID = new List<string> { "01", "02", "03", "04", "05", "06" };
         static List<string> WALKER_ITEMS = new List<string> { "GG0170I1", "GG0170J1", "GG0170K1", "GG0170L1", "GG0170M1", "GG0170N1", "GG0170O1" };
         static List<string> WHEELCHAIR_ITEMS = new List<string> { "GG0170R1", "GG0170S1" };
+        static HashSet<string> ITEMS_WITH_SKIPPED_COVARIATE = new HashSet<string> { "GG0170J1", "GG0170K1", "GG0170L1", "GG0170N1", "GG0170O1", "GG0170R1", "GG0170S1" };
 
         /// <summary>
         /// Standard normal CDF Φ(x) using the Abramowitz &amp; Stegun rational approximation.
@@ -54,6 +55,40 @@ namespace Aegis.DfsCalculator.Server.Utils
             return imputedValue;
         }
 
+        private static readonly HashSet<string> SKIP_CASCADE_WALK_DOWNSTREAM = new HashSet<string> { "GG0170J1", "GG0170K1", "GG0170L1" };
+        private static readonly HashSet<string> SKIP_CASCADE_STEP_M_DOWNSTREAM = new HashSet<string> { "GG0170N1", "GG0170O1" };
+
+        /// <summary>
+        /// Applies MDS skip cascade rules to determine the effective value of a GG item.
+        /// Hard override: if the gate item is ANA, downstream items are forced to "^" (skipped).
+        ///
+        /// Walking:  I1 ANA → J1, K1, L1 become "^"
+        /// Steps:    M1 ANA → N1, O1 become "^"
+        ///           N1 ANA → O1 becomes "^"
+        /// </summary>
+        private static string? GetEffectiveGGValue(string ggItemId, Dictionary<string, string> parsedValues)
+        {
+            if (SKIP_CASCADE_WALK_DOWNSTREAM.Contains(ggItemId))
+            {
+                string? i1Value = parsedValues.GetValueOrDefault("GG0170I1");
+                if (i1Value != null && ANA.Contains(i1Value)) return "^";
+            }
+
+            if (SKIP_CASCADE_STEP_M_DOWNSTREAM.Contains(ggItemId))
+            {
+                string? m1Value = parsedValues.GetValueOrDefault("GG0170M1");
+                if (m1Value != null && ANA.Contains(m1Value)) return "^";
+            }
+
+            if (ggItemId == "GG0170O1")
+            {
+                string? n1Value = parsedValues.GetValueOrDefault("GG0170N1");
+                if (n1Value != null && ANA.Contains(n1Value)) return "^";
+            }
+
+            return parsedValues.GetValueOrDefault(ggItemId);
+        }
+
         private static string DetermineMobilityType(Dictionary<string, string> parsedValues)
         {
             if (String.IsNullOrEmpty(parsedValues.GetValueOrDefault("GG0170I1"))) return "Unknown";
@@ -81,7 +116,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                 if (match.Success && match.Length > 0) 
                 {
                     string ggItemId = match.Value.Substring(1, match.Length - 2);
-                    string rawValue = parsedValues[ggItemId];
+                    string rawValue = GetEffectiveGGValue(ggItemId, parsedValues);
 
                     if (covariateName.Contains(" - Valid Score")) 
                     {
@@ -90,40 +125,15 @@ namespace Aegis.DfsCalculator.Server.Utils
                             return Int32.Parse(rawValue);
                         }
                     }
-                    // Not Attempted: return 1 if value is any ANA value (07, 08, 09, 10, 88)
-                    // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
                     else if (covariateName.Contains(" - Not Attempted"))
                     {
-                        // Check if this item has a Skipped covariate (only J1, K1, L1, N1, O1, R1, S1)
-                        bool hasSkippedCovariate = false;
-                        if (itemMultipliers != null) 
+                        if (ITEMS_WITH_SKIPPED_COVARIATE.Contains(ggItemId))
                         {
-                            hasSkippedCovariate = itemMultipliers.Keys.Any(k => k.Contains(ggItemId) && k.Contains("Skipped"));
-                        }
-
-                        if (hasSkippedCovariate)
-                        {
-                            // If item has a Skipped covariate, only count ANA values as Not Attempted
-                            if (ANA.Contains(rawValue))
-                            {
-                                return 1;
-                            }
-                            else
-                            {
-                                return 0;
-                            }
+                            return ANA.Contains(rawValue) ? 1 : 0;
                         }
                         else
                         {
-                            // If no Skipped covariate, treat ^ as Not Attempted too
-                            if (ANA.Contains(rawValue) || rawValue == "^")
-                            {
-                                return 1;
-                            }
-                            else
-                            {
-                                return 0;
-                            }
+                            return (ANA.Contains(rawValue) || rawValue == "^") ? 1 : 0;
                         }
                     }
                     else if (covariateName.Contains(" - Skipped"))
@@ -183,11 +193,12 @@ namespace Aegis.DfsCalculator.Server.Utils
                 }
 
                 // Extract the letter from the GG item (e.g., "GG0170I1" -> "I")
-                char? covariateItemLetter = Regex.Match(ggItemId, @"GG[0-9]+([A-Z])[0-9]").Value?[1];
-                if (covariateItemLetter == null)
+                Match letterMatch = Regex.Match(ggItemId, @"GG[0-9]+([A-Z])[0-9]");
+                if (!letterMatch.Success || letterMatch.Groups.Count < 2)
                 {
                     return false;
                 }
+                char covariateItemLetter = letterMatch.Groups[1].Value[0];
 
                 // Rule 2: If Uses Wheelchair, exclude Walk items (I, J, K, L)
                 if (usesWheelchair && covariateItemLetter >= 'I' && covariateItemLetter <= 'L')
@@ -281,7 +292,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                             if (match.Success && match.Length > 0)
                             {
                                 string itemId = match.Value.Substring(1, match.Length - 2);
-                                string? rawValue = parsedValues.GetValueOrDefault(itemId);
+                                string? rawValue = GetEffectiveGGValue(itemId, parsedValues);
 
                                 if (multiplierEntry.Key.Contains("Valid Score"))
                                 {
@@ -290,10 +301,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                                 }
                                 else if (multiplierEntry.Key.Contains("Not Attempted"))
                                 {
-                                    bool hasSkippedCovariate = itemMultipliers != null &&
-                                        itemMultipliers.Keys.Any(k => k.Contains(ggItemId) && k.Contains("Skipped"));
-
-                                    if (hasSkippedCovariate)
+                                    if (ITEMS_WITH_SKIPPED_COVARIATE.Contains(itemId))
                                         covariateValue = ANA.Contains(rawValue) ? 1 : 0;
                                     else
                                         covariateValue = (ANA.Contains(rawValue) || rawValue == "^") ? 1 : 0;

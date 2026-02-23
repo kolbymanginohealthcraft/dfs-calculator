@@ -64,6 +64,35 @@ function computeImputedValueFromScore(z, thresholds) {
   return imputedValue;
 }
 
+const SKIP_CASCADE_ANA = ['07', '09', '10', '88'];
+const ITEMS_WITH_SKIPPED_COVARIATE = new Set([
+  'GG0170J1', 'GG0170K1', 'GG0170L1', 'GG0170N1', 'GG0170O1', 'GG0170R1', 'GG0170S1'
+]);
+
+/**
+ * Applies MDS skip cascade rules to determine the effective value of a GG item.
+ * Hard override: if the gate item is ANA, downstream items are forced to '^' (skipped).
+ *
+ * Walking:  I1 ANA → J1, K1, L1 become '^'
+ * Steps:    M1 ANA → N1, O1 become '^'
+ *           N1 ANA → O1 becomes '^'
+ */
+function getEffectiveGGValue(ggItemId, parsedValues) {
+  if (['GG0170J1', 'GG0170K1', 'GG0170L1'].includes(ggItemId)) {
+    if (SKIP_CASCADE_ANA.includes(parsedValues['GG0170I1'])) return '^';
+  }
+
+  if (['GG0170N1', 'GG0170O1'].includes(ggItemId)) {
+    if (SKIP_CASCADE_ANA.includes(parsedValues['GG0170M1'])) return '^';
+  }
+
+  if (ggItemId === 'GG0170O1') {
+    if (SKIP_CASCADE_ANA.includes(parsedValues['GG0170N1'])) return '^';
+  }
+
+  return parsedValues[ggItemId];
+}
+
 /**
  * Helper function to calculate GG item-specific covariates
  */
@@ -75,7 +104,7 @@ function getGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers
     const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
     if (match) {
       const ggItemId = match[0].slice(1, -1);
-      const rawValue = parsedValues[ggItemId];
+      const rawValue = getEffectiveGGValue(ggItemId, parsedValues);
       
       if (covariateName.includes(" - Valid Score")) {
         if (rawValue && ['01', '02', '03', '04', '05', '06'].includes(rawValue)) {
@@ -83,20 +112,10 @@ function getGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers
         }
         return 0;
       } else if (covariateName.includes(" - Not Attempted")) {
-        // Not Attempted: return 1 if value is any ANA value (07, 08, 09, 10, 88)
-        // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
-        
-        // Check if this item has a Skipped covariate (only J1, K1, L1, N1, O1, R1, S1)
-        const hasSkippedCovariate = itemMultipliers && Object.keys(itemMultipliers).some(key => 
-          key.includes(ggItemId) && key.includes('Skipped')
-        );
-        
-        if (hasSkippedCovariate) {
-          // If item has a Skipped covariate, only count ANA values as Not Attempted
-          return ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+        if (ITEMS_WITH_SKIPPED_COVARIATE.has(ggItemId)) {
+          return ['07', '09', '10', '88'].includes(rawValue) ? 1 : 0;
         } else {
-          // If no Skipped covariate, treat ^ as Not Attempted too
-          return ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
+          return ['07', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
         }
       } else if (covariateName.includes(" - Skipped")) {
         // Skipped: return 1 if value is ^ (skip pattern), else 0
@@ -264,9 +283,7 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
                     const match = covariateName.match(/\(GG[0-9]+[A-Z][0-9]\)/);
                     if (match) {
                         const itemId = match[0].slice(1, -1);
-                        // Use parsedValues for GG item-specific covariates (original MDS values)
-                        // This matches what ImputationTab does and ensures consistency
-                        const rawValue = parsedValues[itemId];
+                        const rawValue = getEffectiveGGValue(itemId, parsedValues);
                         
                         if (covariateName.includes('Valid Score')) {
                             // Valid score: return the actual score value (1-6) if valid
@@ -274,18 +291,10 @@ export function imputeMissingGGItems(parsedValues, summary, icdList, startScores
                                 covariateValue = parseInt(rawValue, 10);
                             }
                         } else if (covariateName.includes('Not Attempted')) {
-                            // Not attempted: 1 if value is any ANA value (07, 08, 09, 10, 88)
-                            // For items WITHOUT a separate "Skipped" covariate, ^ is also treated as Not Attempted
-                            const hasSkippedCovariate = Object.keys(itemMultipliers).some(key => 
-                                key.includes(itemId) && key.includes('Skipped')
-                            );
-                            
-                            if (hasSkippedCovariate) {
-                                // If item has a Skipped covariate, only count ANA values as Not Attempted
-                                covariateValue = ['07', '08', '09', '10', '88'].includes(rawValue) ? 1 : 0;
+                            if (ITEMS_WITH_SKIPPED_COVARIATE.has(itemId)) {
+                                covariateValue = ['07', '09', '10', '88'].includes(rawValue) ? 1 : 0;
                             } else {
-                                // If no Skipped covariate, treat ^ as Not Attempted too
-                                covariateValue = ['07', '08', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
+                                covariateValue = ['07', '09', '10', '88', '^'].includes(rawValue) ? 1 : 0;
                             }
                         } else if (covariateName.includes('Skipped')) {
                             // Skipped: 1 if value is ^ (skip pattern), 0 otherwise
