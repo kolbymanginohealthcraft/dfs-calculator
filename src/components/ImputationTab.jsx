@@ -194,7 +194,7 @@ export default function ImputationTab({
                           )}
                         </td>
                         <td>{data.needsImputation ? formatNumber(data.imputationScore) : "—"}</td>
-                        <td>{data.imputedValue || "—"}</td>
+                        <td>{data.imputedValue ? parseInt(data.imputedValue, 10) : "—"}</td>
                       </tr>
 
                       {/* Expanded covariate details */}
@@ -205,7 +205,7 @@ export default function ImputationTab({
                               <h4>Covariate Breakdown for {getGGItemLabel(ggItemId)} ({ggItemId})</h4>
                               {/* Threshold Visualization */}
                               <div className={styles.thresholdVisualization}>
-                                <h5>Imputation Score: {formatNumber(data.imputationScore)} → Value {data.imputedValue}</h5>
+                                <h5>Imputation Score: {formatNumber(data.imputationScore)} → Value {parseInt(data.imputedValue, 10)}</h5>
 
                                 {/* Simplified Horizontal Bar */}
                                 <div className={styles.simpleBarContainer}>

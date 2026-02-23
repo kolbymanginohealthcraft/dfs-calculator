@@ -6,98 +6,38 @@ This guide explains how to test your application in both authenticated and unaut
 
 Your application has two access modes:
 1. **Unauthenticated (Public)**: Basic mode only - anyone can access
-2. **Authenticated (myCare Portal)**: Full access including advanced mode with file uploads
+2. **Authenticated (Portal)**: Full access including advanced mode with file uploads
 
-## Quick Test Method: Auth State Tester
-
-A development-only component has been added to help you toggle between states.
-
-### How to Use
-
-1. **Start your dev server** (if not already running):
-   ```bash
-   npm run dev
-   ```
-
-2. **Look for the Auth Tester widget** in the bottom-right corner of your app
-   - It only appears in development mode
-   - Shows your current authentication state
-
-3. **Toggle between states**:
-   - Click **"✅ Simulate Authenticated"** to test as a myCare portal user
-   - Click **"❌ Simulate Unauthenticated"** to test as a public user
-   - The page will reload to apply the change
-
-### What You Should See
-
-#### Unauthenticated State (Public User):
-- ✅ Can access home page (`/`)
-- ✅ Can access basic mode (`/basic/*`)
-- ✅ Can see FAQ
-- ❌ Cannot access advanced mode (redirected to home)
-- ❌ Clicking "Advanced Mode" shows `CustomerAccessModal` with myCare portal link
-- ❌ Mode banner shows modal when trying to switch from basic to advanced
-
-#### Authenticated State (myCare Portal User):
-- ✅ Can access home page
-- ✅ Can access basic mode
-- ✅ Can access advanced mode (`/advanced`, `/advanced/summary`)
-- ✅ Can upload MDS files
-- ✅ Can use all calculation features
-- ✅ No modals blocking access
+Authentication is determined by the C# backend using SAML/session cookies. The frontend calls `/account/me` to check session status; `PortalContext` uses this to set `isFromPortal`.
 
 ## Manual Testing Method
 
-If you prefer to test manually without the widget:
-
 ### Test Unauthenticated State:
 
-1. **Remove dev bypass** from your `.env` file:
-   ```env
-   # Comment out or remove these lines:
-   # VITE_ALLOW_DEV_BYPASS=true
-   # ALLOW_DEV_BYPASS=true
-   ```
+1. **Ensure you're logged out**:
+   - Navigate to `/account/logout` (or call it via the C# dev server)
+   - Or use a fresh browser session / incognito window
 
-2. **Clear localStorage**:
-   - Open browser DevTools (F12)
-   - Go to Application → Local Storage
-   - Delete `dev-sso-token` and `auth-test-override`
-
-3. **Restart dev server**:
-   ```bash
-   # Stop server (Ctrl+C)
-   npm run dev
-   ```
-
-4. **Test the UI**:
+2. **Test the UI**:
    - Try clicking "Advanced Mode" on home page → should show modal
    - Try navigating to `/advanced` → should redirect to home
    - Try switching from basic to advanced in mode banner → should show modal
 
-### Test Authenticated State:
+### Test Authenticated State (Development):
 
-1. **Add dev bypass** to your `.env` file:
-   ```env
-   VITE_ALLOW_DEV_BYPASS=true
-   ALLOW_DEV_BYPASS=true
-   ```
+When running against the C# backend in Development mode:
 
-2. **Set localStorage**:
-   - Open browser DevTools (F12)
-   - Go to Console tab
-   - Run: `localStorage.setItem('dev-sso-token', 'dev-bypass-token')`
-   - Refresh the page
+1. **Get a dev session**:
+   - Navigate to `http://localhost:<port>/account/dev-login` (or your dev server URL)
+   - Or use a request tool (curl, Postman) to `GET /account/dev-login` with credentials
+   - The C# server creates a session cookie for `dev-user@localhost`
 
-3. **Restart dev server** (if you changed `.env`):
-   ```bash
-   npm run dev
-   ```
-
-4. **Test the UI**:
+2. **Test the UI**:
    - Should be able to access `/advanced`
    - Should be able to upload files
    - No modals blocking access
+
+**Note**: The `/account/dev-login` endpoint only exists when `ASPNETCORE_ENVIRONMENT=Development`. It returns 404 in production.
 
 ## Key UI Components to Test
 
@@ -115,48 +55,43 @@ If you prefer to test manually without the widget:
 
 ### 4. Customer Access Modal
 - **Trigger**: Clicking "Advanced Mode" when unauthenticated
-- **Content**: 
+- **Content**:
   - Explains advanced features require customer access
-  - "Go to myCare Portal" button (opens https://www.mycare.com/)
-  - "Visit Aegis Therapies" button (opens https://aegistherapies.com/)
+  - "Go to myCare Portal" button (opens portal URL)
+  - "Visit Aegis Therapies" button (opens company website)
 
 ## Troubleshooting
 
-### Auth Tester not appearing?
-- Ensure you're in development mode (`npm run dev`)
-- Check that you're on `localhost` or `127.0.0.1`
-- Hard refresh the page (Ctrl+Shift+R or Cmd+Shift+R)
-
 ### Modal not showing when clicking Advanced Mode?
 - Check browser console for errors
-- Verify `isFromPortal` is `false` in PortalContext
+- Verify `isFromPortal` is `false` in PortalContext (inspect React DevTools)
 - Check that `CustomerAccessModal` is imported and used in `HomeScreen.jsx`
+- Confirm `/account/me` returns 401 when unauthenticated
 
 ### Can't access advanced mode when authenticated?
-- Check that `dev-sso-token` exists in localStorage
-- Verify `VITE_ALLOW_DEV_BYPASS=true` in `.env` (if using manual method)
+- Verify you have a valid session (call `/account/me` - should return 200 with user info)
+- In development, ensure you've hit `/account/dev-login` first
 - Check browser console for authentication errors
+- In production, ensure you're coming from the portal with valid SAML session
 
-### Auth state not changing after toggle?
-- Wait for page reload (should happen automatically)
-- If stuck, manually refresh the page
-- Clear localStorage and try again
+### Auth state not updating?
+- The app checks auth on mount via `getCurrentUser()` in PortalContext
+- Refresh the page after logging in/out
+- Check Network tab: `/account/me` should reflect your session status
 
 ## Production Behavior
 
-**Important**: The Auth Tester widget does NOT appear in production builds. In production:
+In production, authentication is determined by:
 
-- Authentication is determined by:
-  1. SAML token in `UPN` cookie (from myCare portal)
-  2. Referrer checking (if coming from myCare domain)
-  3. No dev bypass is available
+- **SAML/session cookies**: Users authenticate via the portal (myCare); the IdP sets cookies after SAML flow. The C# backend validates the session.
+- **No dev bypass**: `/account/dev-login` is disabled (returns 404) when not in Development.
 
-- Public users (no authentication):
+- **Public users (no authentication)**:
   - Can only access basic mode
   - See modals when trying to access advanced features
   - Advanced routes redirect to home
 
-- Authenticated users (from myCare):
+- **Authenticated users (portal session)**:
   - Full access to all features
   - No redirects or blocking modals
 
@@ -171,5 +106,4 @@ Before deploying to production, verify:
 - [ ] Authenticated users can upload files
 - [ ] Mode banner shows correct behavior for both states
 - [ ] Customer Access Modal displays correctly
-- [ ] Modal links work (myCare portal, Aegis website)
-
+- [ ] Modal links work (portal, company website)

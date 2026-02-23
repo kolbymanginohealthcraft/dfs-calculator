@@ -19,7 +19,16 @@ export default function MdsSnapshot({
   const [searchTerm, setSearchTerm] = useState("");
   const [activeSection, setActiveSection] = useState(null);
   const [hasBeenInitialized, setHasBeenInitialized] = useState(false);
-  const icd10Descriptions = useICD10Lookup();
+  const { lookup: icd10Descriptions, loading: icd10Loading, loadLookup } = useICD10Lookup();
+
+  // Load ICD-10 lookup when component mounts (only loads once globally)
+  useEffect(() => {
+    if (Object.keys(icd10Descriptions).length === 0 && !icd10Loading) {
+      loadLookup().catch(() => {
+        // Silently handle errors - component will work without descriptions
+      });
+    }
+  }, [icd10Descriptions, icd10Loading, loadLookup]);
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
   const clearSearch = () => setSearchTerm("");

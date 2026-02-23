@@ -104,26 +104,42 @@ builder.Services.AddAuthentication(
         // ---- Load your SP signing/encryption certificate from Azure Key Vault ----
         var keyVaultUrl = builder.Configuration["KeyVault:Url"];
         var certSecretName = builder.Configuration["KeyVault:SamlCert"];
+        bool certificateLoaded = false;
 
         if (!string.IsNullOrEmpty(keyVaultUrl) && !string.IsNullOrEmpty(certSecretName))
         {
-            var secretClient = new SecretClient(new Uri(keyVaultUrl),
+            try
+            {
+                var secretClient = new SecretClient(new Uri(keyVaultUrl),
 #if DEBUG
-                new VisualStudioCredential()
+                    new VisualStudioCredential()
 #else
-                new DefaultAzureCredential()
+                    new DefaultAzureCredential()
 #endif
-            );
-            var secret = secretClient.GetSecret(certSecretName);
-            // Most KV PFX secrets are base64; no password if you uploaded a plain PFX.
-            var pfxBytes = Convert.FromBase64String(secret.Value.Value);
+                );
+                var secret = secretClient.GetSecret(certSecretName);
+                // Most KV PFX secrets are base64; no password if you uploaded a plain PFX.
+                var pfxBytes = Convert.FromBase64String(secret.Value.Value);
 
-            var spCert = new X509Certificate2(
-                pfxBytes,
-                (string?)null,
-                X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable | X509KeyStorageFlags.EphemeralKeySet);
+                var spCert = new X509Certificate2(
+                    pfxBytes,
+                    (string?)null,
+                    X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable | X509KeyStorageFlags.EphemeralKeySet);
 
-            options.SPOptions.ServiceCertificates.Add(spCert);
+                // Add certificate - Sustainsys.Saml2 will use it for signing by default
+                // The certificate must have a private key for signing
+                options.SPOptions.ServiceCertificates.Add(spCert);
+                certificateLoaded = true;
+            }
+            catch (Exception ex)
+            {
+                // Log but don't fail in development if certificate can't be loaded
+#if DEBUG
+                System.Diagnostics.Debug.WriteLine($"Warning: Could not load SAML certificate from Key Vault: {ex.Message}");
+#else
+                throw; // Fail in production if certificate can't be loaded
+#endif
+            }
         }
 
         // ---- Identity Provider configuration ----
@@ -158,7 +174,9 @@ builder.Services.AddAuthentication(
         };
 
         idp.SigningKeys.AddConfiguredKey(idpCert);
-        idp.WantAuthnRequestsSigned = true;
+        // Only require signed requests if we have a service certificate loaded
+        // In development, if certificate isn't available, disable signing requirement
+        idp.WantAuthnRequestsSigned = certificateLoaded;
         idp.LoadMetadata = false;
 
         options.IdentityProviders.Add(idp);
@@ -177,12 +195,27 @@ builder.Services.AddAuthentication(
     });
 builder.Services.AddAuthorization();
 
+// Add CORS support for development (allows frontend to connect)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "https://localhost:5173")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials(); // Required for cookies
+    });
+});
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Enable CORS before authentication
+app.UseCors("AllowLocalhost");
 
 app.UseAuthentication();
 app.UseAuthorization();

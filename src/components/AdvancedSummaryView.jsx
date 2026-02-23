@@ -56,10 +56,11 @@ const AdvancedSummaryView = () => {
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
 
   // Track data changes for browser refresh warnings
+  // Only warn if there are processed files with results (not just pending uploads)
   useEffect(() => {
-    const hasFiles = uploadedFiles.length > 0;
-    updateDataStatus('advancedFiles', hasFiles, 'Uploaded files and analysis results');
-  }, [uploadedFiles.length, updateDataStatus]);
+    const hasProcessedFiles = uploadedFiles.some(file => file.status === 'processed');
+    updateDataStatus('advancedFiles', hasProcessedFiles, 'Uploaded files and analysis results');
+  }, [uploadedFiles, updateDataStatus]);
 
 
   // Start processing function

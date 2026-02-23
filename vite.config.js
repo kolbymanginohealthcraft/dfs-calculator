@@ -9,16 +9,16 @@ export default defineConfig({
     proxy: {
       // Proxy API requests to local C# backend (avoids CORS issues)
       "/api": {
-        target: "http://localhost:5189",
+        target: "https://localhost:7194",
         changeOrigin: true,
-        secure: false,
+        secure: false, // Allow self-signed certificates
         ws: false,
       },
       // Proxy authentication requests to local C# backend
       "/account": {
-        target: "http://localhost:5189",
+        target: "https://localhost:7194",
         changeOrigin: true,
-        secure: false,
+        secure: false, // Allow self-signed certificates
         ws: false,
       }
     },

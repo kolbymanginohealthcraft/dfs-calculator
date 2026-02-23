@@ -117,7 +117,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             }
 
             // Fallback: calculate if cache not provided (shouldn't happen in GetImputationAnalysisData)
-            FunctionCovariatesReturn result = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ((DateTimeOffset)ardDate).ToUnixTimeSeconds().ToString());
+            FunctionCovariatesReturn result = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, parsedValues.GetValueOrDefault("A2300"));
             if (result?.Covariates != null)
             {
                 return result.Covariates.GetValueOrDefault(covariateName);
@@ -163,12 +163,13 @@ namespace Aegis.DfsCalculator.Server.Utils
 
         public static string CalculateImputedValue(string ggItemId, Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores)
         {
-            DateTime ardDate = UnixToDateTime(parsedValues.GetValueOrDefault("A2300"));
+            string ardDateRaw = parsedValues.GetValueOrDefault("A2300");
+            DateTime ardDate = CoefficientLoader.ParseArdDate(ardDateRaw) ?? DateTime.UtcNow;
             Dictionary<string, double?> multipliers = CoefficientLoader.GetImputationMultipliersForItem(ggItemId, ardDate);
             if (multipliers == null || multipliers.Keys.Count() == 0) return "01"; // Default fallback
 
             // Get covariates to determine Uses Wheelchair value (cache for reuse)
-            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ((DateTimeOffset)ardDate).ToUnixTimeSeconds().ToString()).Covariates;
+            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
             bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             List<double> thresholds = GetImputationThresholds(ggItemId, ardDate);
@@ -212,22 +213,15 @@ namespace Aegis.DfsCalculator.Server.Utils
             return imputedValue.ToString();
         }
 
-        private static DateTime UnixToDateTime(string unix)
-        {
-            long unixSeconds = (long)Convert.ToDouble(unix);
-            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            dateTime = dateTime.AddSeconds(unixSeconds).ToLocalTime();
-            return dateTime;
-        }
-
         public static Dictionary<string, string> ImputeMissingGGItems(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, Dictionary<string, string> targetGGItems)
         {
             // Get ARD date and correct version of multipliers
-            DateTime ardDate = UnixToDateTime(parsedValues.GetValueOrDefault("A2300"));
+            string ardDateRaw = parsedValues.GetValueOrDefault("A2300");
+            DateTime ardDate = CoefficientLoader.ParseArdDate(ardDateRaw) ?? DateTime.UtcNow;
             Dictionary<string, Dictionary<string, double?>> multipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
             // Get the standard covariates (same as used for expected score calculation)
-            Dictionary<string, int> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ((DateTimeOffset)ardDate).ToUnixTimeSeconds().ToString()).Covariates;
+            Dictionary<string, int> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
             // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
             bool usesWheelchair = covariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
@@ -358,7 +352,10 @@ namespace Aegis.DfsCalculator.Server.Utils
                     {
                         imputedValues[ggItemId] = $"0{imputedValue}";
                     }
-                    imputedValues[ggItemId] = imputedValue.ToString();
+                    else
+                    {
+                        imputedValues[ggItemId] = imputedValue.ToString();
+                    }
                 }
             }
 
@@ -393,11 +390,12 @@ namespace Aegis.DfsCalculator.Server.Utils
         {
             Dictionary<string, ImputationAnalysisData> data = new Dictionary<string, ImputationAnalysisData> ();
 
-            DateTime ardDate = UnixToDateTime(parsedValues.GetValueOrDefault("A2300"));
+            string ardDateRaw = parsedValues.GetValueOrDefault("A2300");
+            DateTime ardDate = CoefficientLoader.ParseArdDate(ardDateRaw) ?? DateTime.UtcNow;
             Dictionary<string, Dictionary<string, double?>> imputationMultipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
             // Get the standard covariates ONCE and cache them (expensive operation - don't repeat for each multiplier)
-            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, parsedValues.GetValueOrDefault("A2300")).Covariates;
+            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
             // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
             bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
@@ -478,7 +476,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                     Multipliers = filteredMultipliers, // Use filtered multipliers (without threshold keys)
                     ImputationScore = imputationScore,
                     Thresholds = thresholds,
-                    ImputedValue = needsImputation ? (imputedValue > 10 ? $"0{imputedValue}" : imputedValue.ToString()) : null,
+                    ImputedValue = needsImputation ? (imputedValue < 10 ? $"0{imputedValue}" : imputedValue.ToString()) : null,
                     OriginalValue = rawValue,
                     NeedsImputation = needsImputation
                 };

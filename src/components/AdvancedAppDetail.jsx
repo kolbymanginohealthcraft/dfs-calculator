@@ -8,7 +8,6 @@ import {
 } from "../utils/calculations";
 import { fetchFacilityInfo } from "../utils/facilityLookup";
 import { calculateFunctionScore as calculateFunctionScoreSecure } from "../utils/secureApiClient";
-import { useICD10Lookup } from "../utils/useICD10Lookup";
 import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
 import { useBulkUpload } from "../contexts/BulkUploadContext";
@@ -59,10 +58,11 @@ function AdvancedAppDetail() {
   const [showSwitchWarning, setShowSwitchWarning] = useState(false);
   
   // Track data changes for browser refresh warnings
+  // Only warn if there are processed files with results (not just pending uploads)
   useEffect(() => {
-    const hasFiles = uploadedFiles.length > 0;
-    updateDataStatus('advancedFiles', hasFiles, 'Uploaded files and analysis results');
-  }, [uploadedFiles.length, updateDataStatus]);
+    const hasProcessedFiles = uploadedFiles.some(file => file.status === 'processed');
+    updateDataStatus('advancedFiles', hasProcessedFiles, 'Uploaded files and analysis results');
+  }, [uploadedFiles, updateDataStatus]);
 
 
   // Current file state (for detailed view)
@@ -85,7 +85,6 @@ function AdvancedAppDetail() {
   const [manualCovariateOverrides, setManualCovariateOverrides] = useState({});
   const exportRef = useRef();
 
-  const icd10Descriptions = useICD10Lookup();
   const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
 
@@ -699,7 +698,6 @@ function AdvancedAppDetail() {
                     <MdsSnapshot
                       groupedSections={groupedSections}
                       descriptions={descriptions}
-                      icd10Descriptions={icd10Descriptions}
                       selectedItems={selectedItems}
                       selectedCovariate={selectedCovariate}
                       onClearSelection={clearCovariateSelection}

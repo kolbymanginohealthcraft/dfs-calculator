@@ -175,3 +175,6 @@ docker-compose.vs.release.yml
 # Entity Framework
 MigrationsSnapshot.cs
 certs/
+
+# Duplicate frontend folder (removed, but may have remnants)
+Aegis.DfsCalculator/dfscalculator.client/

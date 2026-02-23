@@ -44,17 +44,23 @@ export const DataLossWarningProvider = ({ children }) => {
 
 
   // Show warning when user tries to leave with unsaved work
+  // Note: Modern browsers only show custom messages in certain scenarios
   useEffect(() => {
     const handleBeforeUnload = (event) => {
-      // Only show warning if there is data and user is trying to leave
+      // Only show warning if there is data and user is actually trying to leave
+      // Don't trigger during file operations or other non-navigation events
       if (hasDataToLose) {
+        // Modern browsers ignore custom messages and show their own
         event.preventDefault();
-        event.returnValue = 'You have unsaved work. Are you sure you want to leave?';
-        return 'You have unsaved work. Are you sure you want to leave?';
+        event.returnValue = ''; // Empty string triggers default browser message
+        return ''; // Must return a value for the warning to show
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    // Only add listener if there's actually data to lose
+    if (hasDataToLose) {
+      window.addEventListener('beforeunload', handleBeforeUnload);
+    }
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);

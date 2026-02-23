@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using System.Linq;
 
 namespace Aegis.DfsCalculator.Server.Utils
@@ -27,8 +27,8 @@ namespace Aegis.DfsCalculator.Server.Utils
             return dateTime;
         }
 
-        // Parse A2300 date string - handles both Unix timestamp and YYYYMMDD formats
-        private static DateTime? ParseArdDate(string dateStr)
+        // Parse A2300 date string - handles Unix timestamp, YYYYMMDD, and YYYY-MM-DD formats
+        public static DateTime? ParseArdDate(string dateStr)
         {
             if (string.IsNullOrEmpty(dateStr))
             {

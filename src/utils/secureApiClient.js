@@ -7,22 +7,36 @@
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
 
+const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
+
 /**
- * Make an authenticated API request using session cookies
+ * In development, silently re-establish a session via the dev-login endpoint.
+ * Returns true if the session was restored successfully.
  */
-async function authenticatedFetch(endpoint, options = {}) {
-  // In development, always use relative URLs to go through Vite proxy (avoids CORS)
-  // In production, use full URLs from environment variable
-  const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
+async function tryDevReauth() {
+  try {
+    const res = await fetch('/account/dev-login', { credentials: 'include' });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Make an authenticated API request using session cookies.
+ * In development, a 401 triggers an automatic dev-login + single retry
+ * so the browser is never redirected to the external SAML IdP.
+ */
+async function authenticatedFetch(endpoint, options = {}, _isRetry = false) {
   const fullUrl = endpoint.startsWith('http') 
     ? endpoint 
     : isDevelopment 
-      ? endpoint  // Always use relative URL in dev (goes through Vite proxy)
-      : `${API_BASE_URL}${endpoint}`; // Use full URL in production
+      ? endpoint
+      : `${API_BASE_URL}${endpoint}`;
 
   const response = await fetch(fullUrl, {
     ...options,
-    credentials: 'include', // CRITICAL: Include cookies for session authentication
+    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
       ...options.headers,
@@ -30,20 +44,29 @@ async function authenticatedFetch(endpoint, options = {}) {
   });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      if (isDevelopment && !_isRetry) {
+        const restored = await tryDevReauth();
+        if (restored) {
+          return authenticatedFetch(endpoint, options, true);
+        }
+      }
+
+      if (!isDevelopment) {
+        const { login } = await import('./authService.js');
+        login(window.location.href);
+      }
+
+      const error = new Error('Authentication required');
+      error.status = 401;
+      throw error;
+    }
+
     let errorData;
     try {
       errorData = await response.json();
     } catch (e) {
       errorData = { error: 'Request failed', message: `HTTP ${response.status}: ${response.statusText}` };
-    }
-    
-    if (response.status === 401) {
-      // Redirect to login on 401
-      const { login } = await import('./authService.js');
-      login(window.location.href); // Redirect to login, then back here
-      const error = new Error(errorData.message || errorData.error || 'Authentication required. Redirecting to login...');
-      error.status = 401;
-      throw error;
     }
     
     const error = new Error(errorData.message || errorData.error || `API request failed: ${response.status}`);

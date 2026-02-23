@@ -259,14 +259,8 @@ Update `src/utils/secureApiClient.js`:
  * depends on how myCare provides it after authentication.
  */
 function getSSOToken() {
-  // Development mode
-  const isDev = import.meta.env.DEV || import.meta.env.MODE === 'development';
-  if (isDev) {
-    const devToken = localStorage.getItem('dev-sso-token');
-    if (devToken) {
-      return devToken;
-    }
-  }
+  // Note: In development, the C# backend provides /account/dev-login for session-based auth.
+  // Production uses SAML/session cookies from the portal.
 
   // Option A: Token in cookie (set by SAML ACS endpoint)
   // This requires reading cookies (works in browser)

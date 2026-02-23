@@ -17,15 +17,7 @@ export const PortalProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Development testing override (for UI testing)
-    const testOverride = localStorage.getItem('auth-test-override');
-    if (testOverride !== null) {
-      setIsFromPortal(testOverride === 'true');
-      setIsLoading(false);
-      return;
-    }
-
-    // Check authentication status with C# backend
+    // Check authentication status with C# backend (SAML/cookies)
     getCurrentUser().then(({ loggedIn, user: currentUser }) => {
       setIsFromPortal(loggedIn);
       setUser(currentUser);
