@@ -61,7 +61,7 @@ These are only used in production builds. During development, the Vite proxy ove
 - Check .NET SDK: `dotnet --version`
 - Trust certificate: `dotnet dev-certs https --trust`
 - Check if port 7194 is in use
-- Verify the IdP certificate is installed (see `docs/INSTALL_SAML_CERTIFICATE.md`)
+- Verify the IdP certificate is installed (see `CERTIFICATE_MANAGEMENT.md`)
 
 ### 401 Unauthorized on `/account/me`
 - This is normal on first load -- `AuthContext` automatically calls `/account/dev-login` to fix it

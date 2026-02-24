@@ -116,8 +116,7 @@ No code changes required — the versioning system handles new fiscal years auto
 
 - `docs/ARCHITECTURE.md` — System architecture and design decisions
 - `docs/LOCAL_DEVELOPMENT_GUIDE.md` — Dev environment setup
-- `docs/SETUP_LOCAL_BACKEND.md` — Running the C# backend locally
-- `docs/SAML_CONFIGURATION.md` — SAML SSO configuration
+- `docs/AUTHENTICATION.md` — Authentication architecture and SAML flow
 - `docs/TRANSFORMER_USAGE.md` — Data transformation pipeline
 - `docs/TROUBLESHOOTING.md` — Common issues and fixes
 

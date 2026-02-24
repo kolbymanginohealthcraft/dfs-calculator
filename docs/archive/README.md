@@ -1,43 +1,36 @@
 # Archived Documentation
 
-Historical documents from past migrations, optimizations, cleanups, and security assessments. These are no longer actively maintained but are preserved for reference. All content remains in git history.
+Reference documents from past migrations, optimizations, and security assessments. No longer actively maintained but preserved for context. Pure status reports and progress trackers have been removed (available in git history).
 
-## Migration & Consolidation
+## Migration
 - `C_SHARP_MIGRATION_GUIDE.md` — C# backend migration reference
 - `C_SHARP_MIGRATION_QUICK_REFERENCE.md` — Quick reference for C# migration patterns
 - `COEFFICIENT_MIGRATION.md` — Multi-version coefficient system migration
-- `CONSOLIDATION_PROGRESS.md` — Backend consolidation status (completed Feb 2026)
-- `MIGRATION_COMPLETE.md` — Migration completion status
 - `MIGRATION_GUIDE.md` — General code migration patterns
 - `IMPUTATION_ALGORITHM_CHANGE.md` — Imputation algorithm migration notes
 
-## Security (Superseded)
+## Security
 - `SECURITY_ASSESSMENT.md` — Initial security assessment
-- `SECURITY_COMPARISON.md` — Security approach comparison
-- `SECURITY_IMPLEMENTATION.md` — Implementation guide
-- `SECURITY_RECOMMENDATIONS.md` — Recommendations (incorporated into implementation)
-- `SECURITY_STATUS_REPORT.md` — Point-in-time security status
-- `SECURITY_SUMMARY.md` — Implementation summary
-- `SECURITY_VULNERABILITY_ANALYSIS.md` — Vulnerability analysis
-- `CLIENT_SIDE_EXPOSURE_ANALYSIS.md` — Client-side exposure analysis
+- `SECURITY_COMPARISON.md` — Node.js vs C# security approach comparison
+- `SECURITY_IMPLEMENTATION.md` — Security implementation guide
+- `SECURITY_RECOMMENDATIONS.md` — Security recommendations (incorporated into implementation)
+- `SECURITY_VULNERABILITY_ANALYSIS.md` — IP protection and vulnerability analysis
+- `CLIENT_SIDE_EXPOSURE_ANALYSIS.md` — Client-side data exposure analysis
 
-## Optimization (Completed)
+## Optimization
 - `OPTIMIZATION.md` — Performance optimization guide
-- `OPTIMIZATION_IMPLEMENTATION_SUMMARY.md` — Implementation details
-- `OPTIMIZATION_SUMMARY.md` — Optimization summary
-- `COMPREHENSIVE_OPTIMIZATION_REPORT.md` — Full optimization report
-- `FINAL_OPTIMIZATION_SUMMARY.md` — Final optimization status
-- `PERFORMANCE_OPTIMIZATION_REPORT.md` — Performance metrics
+- `COMPREHENSIVE_OPTIMIZATION_REPORT.md` — Full optimization report with metrics
+- `PERFORMANCE_OPTIMIZATION_REPORT.md` — Dev server performance analysis
 
-## Cleanup & Status Reports
-- `CHANGES.md` — October 2025 changelog
-- `CLEANUP_AND_OPTIMIZATION_GUIDE.md` — Cleanup guide
-- `CLEANUP_COMPLETE.md` — Cleanup completion status
-- `CLEANUP_REPORT.md` — January 2025 cleanup report
-- `CLEANUP_SUMMARY.md` — Cleanup summary
-- `CURRENT_STATUS.md` — Point-in-time project status
-- `FRONTEND_UPDATE_SUMMARY.md` — Frontend update summary
-- `OPTION_COMPARISON.md` — Architecture decision comparison
+## SAML
+- `SAML_CONFIGURATION.md` — SAML SSO configuration reference
+- `SAML_IMPLEMENTATION_GUIDE.md` — SAML implementation guide
+
+## Setup (Superseded)
+- `SETUP_LOCAL_BACKEND.md` — Initial C# backend setup walkthrough (superseded by `LOCAL_DEVELOPMENT_GUIDE.md`)
+- `DEFAULT_VALUE_ARCHITECTURE.md` — Design proposal for covariate-based GG item defaults (not implemented)
 
 ## Other
-- `NEXT_STEPS_ACTION_PLAN.md` — Action plan (actions completed)
+- `CLEANUP_REPORT.md` — January 2025 cleanup analysis
+- `CLEANUP_AND_OPTIMIZATION_GUIDE.md` — Cleanup and optimization task guide
+- `OPTION_COMPARISON.md` — Architecture decision comparison (staging vs local backend)

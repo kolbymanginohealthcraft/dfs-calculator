@@ -164,37 +164,11 @@ CMS publishes regulatory files annually. Transformer scripts convert them into a
 - In development: `/account/dev-login` bypasses SAML for local testing
 - Basic mode requires no authentication
 
-## Build & Development
+## Development & Operations
 
-```bash
-npm install                  # Install frontend dependencies
-npm run dev                  # Vite dev server (proxies API to local C# backend)
-npm run server               # Start C# backend (dotnet run)
-npm run build                # Production build
-npm test                     # Run coefficient version selection tests
-npm run test:transformers    # Run data transformation tests (requires CMS source data)
-npm run lint                 # ESLint
-```
-
-The Vite dev server proxies `/api/*` and `/account/*` requests to the local C# backend at `https://localhost:7194` (configured in `vite.config.js`).
-
-## Deployment
-
-Automatic deployment via Bitbucket Pipelines on push to `release/*` branches.
-
-**Environment:** Azure Static Web Apps (frontend) + Azure App Service (C# backend)
-
-## Annual Updates (October)
-
-When CMS releases new fiscal year coefficients:
-
-1. Download new files to `scripts/data-sources/`
-2. Run `node scripts/build-all.cjs`
-3. Run `npm test` to verify version selection
-4. Test with sample MDS files from `test-data/`
-5. Deploy
-
-**No code changes required** — the versioning system handles new fiscal years automatically.
+- **Local setup:** See `LOCAL_DEVELOPMENT_GUIDE.md`
+- **Git workflow & deployment:** See `REPOSITORY_WORKFLOW.md`
+- **Annual CMS data updates:** See `TRANSFORMER_USAGE.md`
 
 ## Resources
 
