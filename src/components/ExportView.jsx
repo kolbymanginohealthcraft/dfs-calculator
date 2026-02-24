@@ -43,6 +43,8 @@ const ExportView = React.memo(({ patient, scores, functionItems, mobilityType = 
 
   const functionItemsData = getFunctionItemsData();
 
+  const fmt = (v) => Number.isFinite(v) && !Number.isInteger(v) ? v.toFixed(2) : v;
+
   // Helper function to get score for an item
   const getItemScore = (item, domain) => {
     if (functionItems && functionItems.scores) {
@@ -91,7 +93,7 @@ const ExportView = React.memo(({ patient, scores, functionItems, mobilityType = 
         <div className={styles.summaryGrid}>
           <div className={styles.summaryCell}>
             <div className={styles.summaryLabel}>Start Score</div>
-            <div className={styles.summaryValue}>{scores.start ?? "—"}</div>
+            <div className={styles.summaryValue}>{scores.start !== undefined ? fmt(scores.start) : "—"}</div>
           </div>
           <div className={styles.summaryCell}>
             <div className={styles.summaryLabel}>Expected Score</div>
@@ -110,7 +112,7 @@ const ExportView = React.memo(({ patient, scores, functionItems, mobilityType = 
             })()}`}>
               {(() => {
                 if (scores.modeled === undefined) return "—";
-                const endScore = Number(scores.modeled).toFixed(0);
+                const endScore = fmt(scores.modeled);
                 if (scores.expected !== undefined) {
                   const diff = scores.modeled - scores.expected;
                   if (diff >= 0) {
@@ -135,9 +137,9 @@ const ExportView = React.memo(({ patient, scores, functionItems, mobilityType = 
                 const gain = scores.modeled - scores.start;
                 if (scores.expected !== undefined) {
                   const required = scores.expected - scores.start;
-                  return `+${gain.toFixed(0)} (required ${required.toFixed(2)})`;
+                  return `+${fmt(gain)} (required ${required.toFixed(2)})`;
                 }
-                return gain >= 0 ? `+${gain.toFixed(0)}` : `${gain.toFixed(0)}`;
+                return gain >= 0 ? `+${fmt(gain)}` : `${fmt(gain)}`;
               })()}
             </div>
           </div>
@@ -176,10 +178,10 @@ const ExportView = React.memo(({ patient, scores, functionItems, mobilityType = 
                     return (
                       <tr key={item.key || item.id}>
                         <td className={styles.itemName}>{item.label}</td>
-                        <td className={styles.scoreCell}>{startScore}</td>
-                        <td className={styles.scoreCell}>{endScore}</td>
+                        <td className={styles.scoreCell}>{fmt(startScore)}</td>
+                        <td className={styles.scoreCell}>{fmt(endScore)}</td>
                         <td className={`${styles.gainCell} ${gain > 0 ? styles.positive : gain < 0 ? styles.negative : ''}`}>
-                          {gain > 0 ? `+${gain}` : gain === 0 ? '—' : gain}
+                          {gain > 0 ? `+${fmt(gain)}` : gain === 0 ? '—' : fmt(gain)}
                         </td>
                       </tr>
                     );
