@@ -114,6 +114,17 @@ Deleted: `vercel.json`
 - `ConditionMap.cs` — rewritten to load JSON at runtime with thread-safe lazy singleton (same pattern as `ICDtoHCC.cs`)
 - `src/utils/calculations.js` — imports from the C# Data JSON, re-exports for downstream consumers
 
+### `GG_ITEMS` — CONSOLIDATED
+
+**Before:** Two copies of the same 24-entry GG item list (id, label, domain):
+- C#: `GGItems.cs` — hardcoded `List<GGItem>`
+- JS: inline `GG_ITEMS` array in `src/utils/calculations.js`
+
+**After:** One JSON file, zero copies:
+- `Aegis.DfsCalculator/DFSCalculator.Server/Data/ggItems.json` — single source of truth
+- `GGItems.cs` — rewritten to load JSON at runtime with thread-safe lazy singleton (same pattern as `ICDtoHCC.cs`)
+- `src/utils/calculations.js` — imports from the C# Data JSON, re-exports for downstream consumers (~12 JS files import `GG_ITEMS` from `calculations.js`)
+
 ---
 
 ## Parity Verification Notes

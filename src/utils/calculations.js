@@ -1,5 +1,6 @@
 import { getFunctionMultipliers } from "./coefficientLoader.js";
 import conditionMap from "../../Aegis.DfsCalculator/DFSCalculator.Server/Data/conditionMap.json";
+import GG_ITEMS from "../../Aegis.DfsCalculator/DFSCalculator.Server/Data/ggItems.json";
 
 // Configuration flag for I0020 dependency methodology
 // Set to true to use original CMS logic with I0020 dependencies
@@ -48,36 +49,7 @@ export function scoreToStoredValue(score) {
   return String(score);
 }
 
-export const GG_ITEMS = [
-  { id: "GG0130A", label: "Eating", domain: "selfCare" },
-  { id: "GG0130B", label: "Oral hygiene", domain: "selfCare" },
-  { id: "GG0130C", label: "Toileting hygiene", domain: "selfCare" },
-  { id: "GG0130E", label: "Shower/bathe self", domain: "selfCare" },
-  { id: "GG0130F", label: "Upper body dressing", domain: "selfCare" },
-  { id: "GG0130G", label: "Lower body dressing", domain: "selfCare" },
-  { id: "GG0130H", label: "Put on/take off footwear", domain: "selfCare" },
-  { id: "GG0170A", label: "Roll left and right", domain: "mobility" },
-  { id: "GG0170B", label: "Sit to lying", domain: "mobility" },
-  { id: "GG0170C", label: "Lying to sitting on bed side", domain: "mobility" },
-  { id: "GG0170D", label: "Sit to stand", domain: "mobility" },
-  { id: "GG0170E", label: "Chair/bed-to-chair transfer", domain: "mobility" },
-  { id: "GG0170F", label: "Toilet transfer", domain: "mobility" },
-  { id: "GG0170G", label: "Car transfer", domain: "mobility" },
-  { id: "GG0170I", label: "Walk 10 feet", domain: "mobility" },
-  { id: "GG0170J", label: "Walk 50 feet with two turns", domain: "mobility" },
-  { id: "GG0170K", label: "Walk 150 feet", domain: "mobility" },
-  {
-    id: "GG0170L",
-    label: "Walking 10 feet uneven surface",
-    domain: "mobility",
-  },
-  { id: "GG0170M", label: "1 step (curb)", domain: "mobility" },
-  { id: "GG0170N", label: "4 steps", domain: "mobility" },
-  { id: "GG0170O", label: "12 steps", domain: "mobility" },
-  { id: "GG0170P", label: "Picking up object", domain: "mobility" },
-  { id: "GG0170R", label: "Wheel 50 feet with two turns", domain: "mobility" },
-  { id: "GG0170S", label: "Wheel 150 feet", domain: "mobility" },
-];
+export { GG_ITEMS };
 
 export { conditionMap };
 
