@@ -85,10 +85,10 @@
 .end-total-label {
   position: absolute;
   top: 0;
-  width: 30px;
+  width: auto;
+  white-space: nowrap;
   height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   margin-left: 5px;
 }

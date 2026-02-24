@@ -315,7 +315,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                         }
                         else
                         {
-                            string mappedCovariateName = CovariateMap.COVARIATE_MAP.GetValueOrDefault(entry.Key) ?? entry.Key;
+                            string mappedCovariateName = CovariateMap.COVARIATE_MAP.GetValueOrDefault(multiplierEntry.Key) ?? multiplierEntry.Key;
                             covariates.TryGetValue(mappedCovariateName, out covariateValue);
                         }
 

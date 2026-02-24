@@ -19,7 +19,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
         private static int CalculateAgeAtAdmission(DateTime dob, DateTime admit)
         {
-            int age = dob.Year - admit.Year;
+            int age = admit.Year - dob.Year;
             if (!(admit.Month > dob.Month || (admit.Month == dob.Month && admit.Day >= dob.Day)))
             {
                 age--;
@@ -59,7 +59,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
         private static double CalculateFunctionScore(Dictionary<string, string> startScores, string? mobilityType = null)
         {
-            if (!String.IsNullOrEmpty(mobilityType))
+            if (String.IsNullOrEmpty(mobilityType))
             {
                 mobilityType = DetermineMobilityType(startScores);
             }
@@ -213,7 +213,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             Dictionary<string, int> covariates = new Dictionary<string, int>();
 
             string bowel = BOWEL_CONTINENCE_MAP.GetValueOrDefault(parsedValues.GetValueOrDefault("H0400"));
-            string urine = URINE_CONTINENCE_MAP.GetValueOrDefault(parsedValues.GetValueOrDefault("H0400"));
+            string urine = URINE_CONTINENCE_MAP.GetValueOrDefault(parsedValues.GetValueOrDefault("H0300"));
 
             if (bowel == "Always")
             {
