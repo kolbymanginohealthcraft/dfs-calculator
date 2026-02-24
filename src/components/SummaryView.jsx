@@ -759,7 +759,7 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                   </td>
                   <td className={styles.scoreCell}>
                     {file.results?.startScore !== undefined
-                      ? (Number.isInteger(file.results.startScore) ? file.results.startScore : file.results.startScore.toFixed(2))
+                      ? file.results.startScore.toFixed(2)
                       : '—'}
                   </td>
                   <td className={styles.scoreCell}>

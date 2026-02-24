@@ -322,7 +322,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                         imputationScore += covariateValue * (multiplierEntry.Value ?? 0);
                     }
 
-                    List<double> thresholds = GetImputationThresholds(ggItemId, ardDate);
+                    List<double> thresholds = ExtractThresholds(itemMultipliers);
                     imputedValues[ggItemId] = ComputeImputedValueFromScore(imputationScore, thresholds);
                 }
             }
@@ -333,25 +333,28 @@ namespace Aegis.DfsCalculator.Server.Utils
         public static List<double> GetImputationThresholds(string ggItemId, DateTime ardDate)
         {
             Dictionary<string, Dictionary<string, double?>> multipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
-            Dictionary<string, double?>? itemMultipliers;
-            if (multipliers.TryGetValue(ggItemId, out itemMultipliers) && itemMultipliers != null)
+            if (multipliers.TryGetValue(ggItemId, out Dictionary<string, double?>? itemMultipliers) && itemMultipliers != null)
             {
-                List<double> thresholds = new List<double> 
-                {
-                    itemMultipliers.GetValueOrDefault("Model Threshold 1") ?? 0,
-                    itemMultipliers.GetValueOrDefault("Model Threshold 2") ?? 0,
-                    itemMultipliers.GetValueOrDefault("Model Threshold 3") ?? 0,
-                    itemMultipliers.GetValueOrDefault("Model Threshold 4") ?? 0,
-                    itemMultipliers.GetValueOrDefault("Model Threshold 5") ?? 0
-                };
-
-                if (thresholds.All(t => t != 0))
-                {
-                    return thresholds;
-                }
+                return ExtractThresholds(itemMultipliers);
             }
 
-            return new List<double> { -0.5, 0.5, 1.5, 2.5, 3.5 };
+            return DEFAULT_THRESHOLDS;
+        }
+
+        private static readonly List<double> DEFAULT_THRESHOLDS = new List<double> { -0.5, 0.5, 1.5, 2.5, 3.5 };
+
+        private static List<double> ExtractThresholds(Dictionary<string, double?> itemMultipliers)
+        {
+            List<double> thresholds = new List<double>
+            {
+                itemMultipliers.GetValueOrDefault("Model Threshold 1") ?? 0,
+                itemMultipliers.GetValueOrDefault("Model Threshold 2") ?? 0,
+                itemMultipliers.GetValueOrDefault("Model Threshold 3") ?? 0,
+                itemMultipliers.GetValueOrDefault("Model Threshold 4") ?? 0,
+                itemMultipliers.GetValueOrDefault("Model Threshold 5") ?? 0
+            };
+
+            return thresholds.All(t => t != 0) ? thresholds : DEFAULT_THRESHOLDS;
         }
 
         public static Dictionary<string, ImputationAnalysisData> GetImputationAnalysisData(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores)

@@ -153,7 +153,7 @@ const FileManager = ({
                       <div className={styles.resultItem}>
                         <span className={styles.resultLabel}>Start Score:</span>
                         <span className={styles.resultValue}>
-                          {file.results.startScore}
+                          {file.results.startScore !== undefined ? file.results.startScore.toFixed(2) : '—'}
                         </span>
                       </div>
                       <div className={styles.resultItem}>

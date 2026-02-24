@@ -44,8 +44,10 @@ export async function handleFileUpload(
   setGroupedSections,
   setModeledValues,
   setStartScores,
-  setImputedItems
+  setImputedItems,
+  options = {}
 ) {
+  const { skipImputation = false, onTargetGGItems = null, onRawStartScores = null } = options;
   setFileName(file.name);
 
   const text = await file.text();
@@ -105,9 +107,11 @@ export async function handleFileUpload(
     }
   });
   
-  // If we have items needing imputation, call the secure API
+  if (onTargetGGItems) onTargetGGItems(targetGGItems);
+  if (onRawStartScores) onRawStartScores({ ...tempStartScores });
+
   let imputedValues = {};
-  if (itemsNeedingImputation.length > 0) {
+  if (!skipImputation && itemsNeedingImputation.length > 0) {
     try {
       const summary = extractPatientSummary(parsed, parsed["A2300"]);
       const icdList = Object.entries(parsed)
@@ -127,7 +131,6 @@ export async function handleFileUpload(
       imputedValues = result.imputedValues || {};
     } catch (error) {
       console.error('Imputation failed during file upload:', error);
-      // Fallback: use default value "01" for items that failed imputation
       itemsNeedingImputation.forEach(itemId => {
         imputedValues[itemId] = "01";
       });

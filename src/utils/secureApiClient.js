@@ -221,6 +221,42 @@ export async function batchImputeValues(params) {
 }
 
 /**
+ * Combined imputation + function score in a single round-trip (protected)
+ * 
+ * @param {Object} params
+ * @param {Object} params.parsedValues - Parsed MDS data
+ * @param {Object} params.summary - Patient summary data
+ * @param {Array} params.icdList - List of ICD codes
+ * @param {Object} params.startScores - Raw (pre-imputation) start scores
+ * @param {string} params.ardDate - Assessment Reference Date
+ * @param {Object} params.targetGGItems - GG items with raw values for imputation
+ * 
+ * @returns {Promise<{imputedValues: Object, covariates: Object, weightedScore: number, multipliers: Object}>}
+ */
+export async function processFileComplete(params) {
+  const {
+    parsedValues,
+    summary,
+    icdList,
+    startScores,
+    ardDate,
+    targetGGItems
+  } = params;
+
+  return authenticatedFetch('/api/process-file', {
+    method: 'POST',
+    body: JSON.stringify({
+      parsedValues,
+      summary,
+      icdList,
+      startScores,
+      ardDate,
+      targetGGItems
+    })
+  });
+}
+
+/**
  * Get imputation analysis data for display (protected)
  * This returns pre-calculated imputation data for UI display without exposing the algorithm
  * 

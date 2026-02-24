@@ -19,7 +19,8 @@ export async function handleFileUploadWithValidation(
   setImputedItems,
   setValidationError = null,
   setValidationWarning = null,
-  errorCallback = null
+  errorCallback = null,
+  options = {}
 ) {
   try {
     // Clear any previous validation messages
@@ -78,7 +79,8 @@ export async function handleFileUploadWithValidation(
       setGroupedSections,
       setModeledValues,
       setStartScores,
-      setImputedItems
+      setImputedItems,
+      options
     );
 
     return true; // Success

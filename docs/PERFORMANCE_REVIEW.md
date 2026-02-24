@@ -8,12 +8,13 @@ This document captures observations and optimization work from the February 2026
 
 The migration from a JavaScript-only frontend to a C# backend introduced network round-trips for operations that were previously client-side. This tradeoff was intentional — it moved proprietary algorithm logic (function score, imputation, covariate extraction) behind SAML authentication. The calculation endpoints are:
 
-- `POST /api/function-score` — weighted covariate-based function score
-- `POST /api/imputation` — single or batch GG item imputation (CMS Table 8-8)
-- `POST /api/imputation-analysis` — imputation detail breakdown
+- `POST /api/process-file` — **combined** imputation + function score in a single round-trip (primary bulk processing endpoint)
+- `POST /api/function-score` — weighted covariate-based function score (used by detail view for manual override recalculation)
+- `POST /api/imputation` — single or batch GG item imputation (used by detail view)
+- `POST /api/imputation-analysis` — imputation detail breakdown (deferred; on-demand)
 - `GET /api/facility-name/{ccn}` — CMS facility name lookup
 
-Each Advanced mode file upload triggers two of these calls (imputation during parsing, then function score). Bulk processing (up to 100 files) multiplies this. The imputation analysis call is deferred until the user views a specific file's Imputation tab.
+Each Advanced mode file upload triggers a single `process-file` call. Bulk processing (up to 100 files) uses concurrent batches of 5. The imputation analysis call is deferred until the user views a specific file's Imputation tab.
 
 ---
 
@@ -136,6 +137,106 @@ Format: `[API] POST /api/imputation → 200 in 347ms`
 
 All timings are also stored in an in-memory `apiTimings` array accessible via exported `getApiTimings()` and `clearApiTimings()` functions. Zero behavioral impact — only adds two `performance.now()` calls and a `console.log` per request.
 
+### 7. Combined Imputation + Function Score Endpoint
+
+**Problem:** Each file required two sequential API round-trips: `POST /api/imputation` during parsing (in `fileParser.js`), then `POST /api/function-score` after parsing (in `AdvancedSummaryView.jsx`). Both endpoints receive the same core data (`parsedValues`, `summary`, `icdList`, `startScores`, `ardDate`), meaning the backend derived the same intermediate values (age group, ICD-to-HCC mapping, condition flags) twice per file. For bulk processing, this meant 200 API calls for 100 files.
+
+**Changes:**
+
+Backend:
+- Created `ProcessFileController.cs` with `POST /api/process-file` endpoint
+- Accepts the union of both request bodies: `parsedValues`, `summary`, `icdList`, `startScores`, `ardDate`, and `targetGGItems`
+- Internally runs `ServerImputations.ImputeMissingGGItems()`, merges imputed values into `startScores` (mapping sourceId `"GG0130A1"` → itemId `"GG0130A"`), then runs `ServerCalculations.GetFunctionCovariates()` with the merged scores
+- Returns `{ imputedValues, covariates, weightedScore, multipliers }`
+
+Frontend:
+- Added `processFileComplete()` in `secureApiClient.js` — calls the new combined endpoint
+- Added `skipImputation` option to `handleFileUpload()` in `fileParser.js` — when true, skips the `batchImputeValues` API call during parsing. Also exposes `onTargetGGItems` and `onRawStartScores` callbacks so callers can capture the data needed for the combined endpoint
+- Wired the `options` parameter through `handleFileUploadWithValidation()` in `enhancedFileParser.js`
+- Updated both processing paths in `AdvancedSummaryView.jsx` (zip and regular) to use `skipImputation: true` and call `processFileComplete()` instead of the separate `calculateFunctionScoreSecure()`. Imputed values from the response are merged back into `startData` for the detail view
+
+Unchanged:
+- `AdvancedAppDetail.jsx` still uses the individual `/api/function-score` endpoint (needed for manual override recalculation)
+- `ImputationTab.jsx` still uses `/api/imputation-analysis` (deferred, on-demand)
+- All original endpoints remain functional for backward compatibility
+
+**Measured result (100-file zip, cold start):**
+
+| Metric | Before (opt #5, warm) | After (combined, cold) | After (combined, warm) |
+|--------|----------------------|----------------------|----------------------|
+| API calls per file | 2 (imp + fs) | **1** | **1** |
+| Total API calls (100 files) | 200 | **100** | **100** |
+| Cold batch (first 5 files) | N/A | ~1,700ms avg | N/A |
+| Warm batch (last 5 files) | ~400ms wall clock | N/A | ~250–550ms wall clock |
+| Warm per-file avg | ~300ms (140+85+overhead) | N/A | **~300ms** |
+
+The combined endpoint consolidates two round-trips into one. Per-file latency is comparable (the backend now does both operations sequentially within a single request), but total network overhead is halved: 100 HTTP requests instead of 200, with proportionally less serialization, fewer TCP round-trips, and a simpler frontend data flow.
+
+### 8. Coefficient Data: Static In-Memory Cache
+
+**Problem:** `CoefficientLoader.LoadAllVersions()` read `coefficients-all-versions.json` (303 KB, 4,172 lines) from disk and deserialized it on every call. There was no caching — each call opened a `StreamReader`, read the full file, and ran `JsonConvert.DeserializeObject`. Every public method in `CoefficientLoader` called `LoadAllVersions()`, and several methods called each other, creating cascading file reads.
+
+**Measured call frequency per single `POST /api/process-file` request:**
+
+| Call site | `LoadAllVersions()` calls |
+|-----------|--------------------------|
+| `GetImputationMultipliers` in `ImputeMissingGGItems` | 2 (self + `GetUpdateIdForDate`) |
+| `GetFunctionCovariates` called from `ImputeMissingGGItems` | 2 |
+| `GetImputationThresholds` × N items needing imputation | 2 × N |
+| `GetFunctionMultipliers` in `ProcessFileController` | 2 |
+| `GetFunctionCovariates` in `ProcessFileController` | 2 |
+| **Total per request** | **8 + 2N** |
+
+With ~15 GG items needing imputation: **~38 file reads + deserializations per request**. At concurrency 5: **~190 per batch**. This was the primary driver of the cold-start penalty (~1,500ms) and contributed to warm-state latency.
+
+**Changes:**
+
+`CoefficientLoader.cs`:
+- Replaced `LoadAllVersions()` body with a `Lazy<CoefficientAllVersions>` static field using `LazyThreadSafetyMode.ExecutionAndPublication` (thread-safe, exactly-once initialization)
+- The actual file I/O moved to a private `LoadFromDisk()` method called only by the `Lazy<>` initializer
+- `LoadAllVersions()` now returns `_cachedData.Value` — a single in-memory reference for the process lifetime
+
+`Imputations.cs`:
+- `ImputeMissingGGItems`: replaced `GetImputationThresholds(ggItemId, ardDate)` inside the loop (which re-fetched all multipliers per item) with `ExtractThresholds(itemMultipliers)` using the already-available `entry.Value`
+- Extracted `ExtractThresholds(Dictionary<string, double?> itemMultipliers)` as a private helper
+- Refactored public `GetImputationThresholds` to delegate to the same helper
+
+**Impact:**
+
+| Metric | Before | After |
+|--------|--------|-------|
+| File reads per request (~15 items) | ~38 | **1** (once per process) |
+| File reads per 100-file batch | ~3,800 | **1** |
+| JSON deserialization per request | ~38 | **0** (after first) |
+| Cold-start penalty source | File I/O + deserialization + JIT | **JIT only** |
+
+**Measured result (100-file zip, warm server):**
+
+| Metric | Before cache (warm) | After cache (warm) | Change |
+|--------|--------------------|--------------------|--------|
+| Per-request avg | ~300ms | **~75ms** | **−75%** |
+| Per-request range | 172–551ms | **34–136ms** | **4× faster** |
+| 100-file wall clock (at concurrency 5) | ~8s | **~1.9s** | **−76%** |
+
+The pre-cache "warm" numbers (172–551ms) were still paying ~38 file reads and JSON deserializations per request. With the static cache, the per-request time reflects only the actual computation (imputation + covariate extraction + weighted score calculation).
+
+Cold-start behavior (100-file zip, fresh server): first batch of 5 files takes ~1,700ms avg (JIT compilation), settling to warm-state (~75ms avg) after ~70 files. Total cold-start wall clock is ~20.8s, unchanged from pre-cache — JIT dominates cold start, not file I/O.
+
+All 57 existing tests pass with the cache in place.
+
+### Cumulative Impact Summary (100-File Zip Upload)
+
+| Metric | Original Baseline | After All Optimizations | Improvement |
+|--------|-------------------|------------------------|-------------|
+| API calls per file | 2 (sequential) | 1 (combined) | **−50%** |
+| Total API calls | 200 | 100 | **−50%** |
+| Processing pattern | 1 file at a time, 200ms delays | 5 concurrent, no delays | **5× parallel** |
+| Main JS bundle (gzip) | 165.64 KB | 85.52 KB | **−48%** |
+| Backend file I/O per request | ~38 reads (303 KB each) | **0** (cached) | **~100%** |
+| Per-request latency (warm) | ~300ms | **~75ms** | **−75%** |
+| Measured 100-file time (cold) | ~60s+ | ~20.8s | **~−65%** |
+| Measured 100-file time (warm) | ~60s+ | **~1.9s** | **~−97%** |
+
 ---
 
 ## Investigated — No Changes Needed
@@ -175,46 +276,54 @@ Profiled via `performance.now()` instrumentation in `secureApiClient.js` (see op
 
 #### Measured Latency (Feb 24, 2026)
 
+Pre-cache (optimization #7):
+
 | Endpoint | Cold (first batch) | Warm (steady-state) | Notes |
 |----------|---------------------|---------------------|-------|
-| `POST /api/imputation` | 1,245–1,483ms | 70–300ms (avg ~180ms) | Cold-start dominates first 5 calls |
-| `POST /api/function-score` | 338–493ms | 51–200ms (avg ~120ms) | Occasional spikes to ~400ms under load |
+| `POST /api/process-file` | 1,569–1,994ms | 172–551ms (avg ~300ms) | Combined imputation + function-score |
+| `POST /api/imputation` | 1,245–1,483ms | 70–300ms (avg ~180ms) | Used only by detail view now |
+| `POST /api/function-score` | 338–493ms | 51–200ms (avg ~120ms) | Used only by detail view (manual overrides) |
 | `POST /api/imputation-analysis` | ~420ms | ~420ms | Deferred; only on Imputation tab view |
 
-Cold-start penalty is ~900ms on imputation and ~250ms on function-score, likely from .NET JIT compilation and/or first-time coefficient file I/O.
+Post-cache (optimization #8):
 
-#### Per-file call flow
+| Endpoint | Cold (first batch) | Warm (steady-state) | Notes |
+|----------|---------------------|---------------------|-------|
+| `POST /api/process-file` | 1,569–1,994ms (unchanged) | **34–136ms (avg ~75ms)** | **−75% from pre-cache warm** |
 
-Each file upload in Advanced mode triggers **two sequential API calls**:
+Cold-start penalty is ~1,700ms avg on the combined endpoint (first batch of 5 files) — unchanged by caching since it's dominated by .NET JIT compilation. Warm steady-state dropped from ~300ms to ~75ms after coefficient caching (optimization #8) eliminated ~38 file reads and JSON deserializations per request.
 
-1. **`POST /api/imputation`** — Called during file parsing in `src/utils/fileParser.js` (line ~118, via `batchImputeValues`). Sends all GG item values to the backend; receives imputed values for missing items. Controller: `ImputationController.cs`. Backend logic: `ServerImputations.ImputeMissingGGItems()` in `Utils/Imputations.cs`.
+#### Current per-file call flow (after optimization #7)
 
-2. **`POST /api/function-score`** — Called after parsing completes, in `src/components/AdvancedSummaryView.jsx` (via `calculateFunctionScoreSecure`). Sends `parsedValues`, `summary`, `icdList`, `startScores`, and `ardDate`. Controller: `FunctionScoreController.cs`. Backend logic: `ServerCalculations.GetFunctionCovariates()` in `Utils/Calculations.cs`.
+Each file upload in Advanced mode now triggers a **single API call**:
 
-A **third call** (`POST /api/imputation-analysis`) is deferred — it only fires when the user opens the Imputation tab in the detail view (`src/components/ImputationTab.jsx`). Controller: `ImputationAnalysisController.cs`.
+- **`POST /api/process-file`** — Called from `AdvancedSummaryView.jsx` via `processFileComplete()`. The backend runs imputation, merges imputed values into start scores, then computes function score covariates — all in one request. Controller: `ProcessFileController.cs`.
+
+**Deferred calls** (unchanged):
+- `POST /api/imputation-analysis` — only fires when the user opens the Imputation tab
+- `POST /api/function-score` — only used in `AdvancedAppDetail.jsx` for manual override recalculation
 
 #### Remaining areas to investigate
 
-- **Combined endpoint** — Since imputation and function score are always called together for the same file data, a single endpoint that returns both results would eliminate one full round-trip per file (~120ms warm). The backend would run imputation first, merge imputed values into `parsedValues`, then run function-score — mirroring the current frontend flow. Existing individual endpoints should remain for single-item recalculations and the detail view. Based on measured latency, this would save ~100–120ms per file warm, or ~500–600ms per batch of 5.
+- **Response payload for bulk** — `ProcessFileController.cs` returns `{ imputedValues, covariates, weightedScore, multipliers }`. During bulk processing in `AdvancedSummaryView`, only `weightedScore` and `imputedValues` are used. The `covariates` and `multipliers` are only needed in the detail view (`AdvancedAppDetail.jsx`). A lighter bulk response could skip these fields via a query parameter (e.g., `?bulk=true`). Note: `multipliers` contains proprietary coefficient values — while the endpoint is behind auth, minimizing how often they're transmitted is good practice.
 
-- **Response payload for bulk** — `FunctionScoreController.cs` (line ~40) returns `new { covariates, weightedScore, multipliers }`. The `multipliers` field is the full `Dictionary<string, double?>` from `CoefficientLoader.GetFunctionMultipliers()`. During bulk processing in `AdvancedSummaryView`, only `weightedScore` is used (`covariateResult?.weightedScore || 0`). The `covariates` and `multipliers` are only needed in the detail view (`AdvancedAppDetail.jsx`). A lighter bulk response could skip these fields. Note: `multipliers` contains proprietary coefficient values — while the endpoint is behind auth, minimizing how often they're transmitted is good practice.
+- ~~**Coefficient loading** — resolved in optimization #8. `LoadAllVersions()` was reading from disk on every call with no caching. Added `Lazy<CoefficientAllVersions>` static cache — file is now read once per process lifetime. Also eliminated redundant `GetImputationThresholds` calls inside `ImputeMissingGGItems` by extracting thresholds directly from the already-loaded item multipliers.~~
 
-- **Coefficient loading** — `CoefficientLoader.GetFunctionMultipliers(ardDate)` is called on every `/api/function-score` request. Check whether this reads from disk each time or uses an in-memory cache. If it's file I/O, add a static cache. The cold-start penalty (~900ms on imputation, ~250ms on function-score) may partly stem from first-time file reads.
-
-- **Redundant work across calls** — Both `/api/imputation` and `/api/function-score` receive the same `parsedValues`, `summary`, `icdList`, and `startScores`. Both backend methods likely derive the same intermediate values (age group, ICD-to-HCC mapping, condition flags). A combined endpoint would naturally eliminate this duplication.
+- **Redundant intermediate computation** — Within the combined endpoint, `ImputeMissingGGItems()` and `GetFunctionCovariates()` both receive the same input data and likely derive overlapping intermediate values (age group, ICD-to-HCC mapping, condition flags). Profiling these two methods server-side could reveal whether shared computation is being repeated and whether extracting a common setup step would help. Note: with coefficient caching (optimization #8), the repeated computation is now in-memory dictionary lookups rather than file I/O, making this less urgent.
 
 #### Key files for backend investigation
 
 | File | Purpose |
 |------|---------|
-| `Aegis.DfsCalculator/DFSCalculator.Server/Controllers/FunctionScoreController.cs` | Function score endpoint |
-| `Aegis.DfsCalculator/DFSCalculator.Server/Controllers/ImputationController.cs` | Imputation endpoint |
+| `Aegis.DfsCalculator/DFSCalculator.Server/Controllers/ProcessFileController.cs` | Combined imputation + function-score endpoint (new) |
+| `Aegis.DfsCalculator/DFSCalculator.Server/Controllers/FunctionScoreController.cs` | Function score endpoint (detail view only) |
+| `Aegis.DfsCalculator/DFSCalculator.Server/Controllers/ImputationController.cs` | Imputation endpoint (detail view only) |
 | `Aegis.DfsCalculator/DFSCalculator.Server/Controllers/ImputationAnalysisController.cs` | Imputation analysis endpoint |
 | `Aegis.DfsCalculator/DFSCalculator.Server/Utils/Calculations.cs` (772 lines) | `ServerCalculations.GetFunctionCovariates()` |
 | `Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs` (459 lines) | `ServerImputations.ImputeMissingGGItems()`, `GetImputationAnalysisData()` |
 | `src/utils/secureApiClient.js` | Frontend API client (all endpoint wrappers + latency instrumentation) |
-| `src/utils/fileParser.js` | Calls `batchImputeValues` during file parsing |
-| `src/components/AdvancedSummaryView.jsx` | Calls `calculateFunctionScoreSecure` after parsing |
+| `src/utils/fileParser.js` | Parsing + optional imputation (`skipImputation` option) |
+| `src/components/AdvancedSummaryView.jsx` | Calls `processFileComplete` for bulk processing |
 
 ### vendor-pdf Chunk (871 KB)
 

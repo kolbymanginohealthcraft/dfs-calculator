@@ -10,7 +10,7 @@ import DataLossWarningModal from './DataLossWarningModal';
 import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../utils/zipHandler';
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
 import { calculateFunctionScore, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
-import { calculateFunctionScore as calculateFunctionScoreSecure } from '../utils/secureApiClient';
+import { processFileComplete } from '../utils/secureApiClient';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
 import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import { useRedaction } from '../contexts/RedactionContext';
@@ -206,6 +206,8 @@ const AdvancedSummaryView = () => {
             let startData = null;
             let imputedData = null;
             let validationError = null;
+            let targetGGItems = null;
+            let rawStartScores = null;
 
             const result = await handleFileUploadWithValidation(
               xmlFileObj,
@@ -221,14 +223,17 @@ const AdvancedSummaryView = () => {
                 if (error && error !== null) {
                   validationError = error;
                 }
+              },
+              {
+                skipImputation: true,
+                onTargetGGItems: (items) => { targetGGItems = items; },
+                onRawStartScores: (scores) => { rawStartScores = scores; }
               }
             );
 
             if (cancelledRef.current) return;
 
             if (result && parsedData && startData) {
-              const startScore = calculateFunctionScore(startData);
-
               let expectedScore = 0;
               let summary = null;
               let icdList = [];
@@ -241,16 +246,24 @@ const AdvancedSummaryView = () => {
                   .map(([_, value]) => value)
                   .filter(Boolean);
 
-                covariateResult = await calculateFunctionScoreSecure({
+                covariateResult = await processFileComplete({
                   parsedValues: parsedData,
                   summary,
                   icdList,
-                  startScores: startData,
+                  startScores: rawStartScores || startData,
                   ardDate: parsedData["A2300"],
-                  manualOverrides: {}
+                  targetGGItems
                 });
 
                 expectedScore = covariateResult?.weightedScore || 0;
+
+                if (covariateResult?.imputedValues) {
+                  for (const [sourceId, value] of Object.entries(covariateResult.imputedValues)) {
+                    const itemId = sourceId.endsWith('1') ? sourceId.slice(0, -1) : sourceId;
+                    startData[itemId] = String(value);
+                    modeledData[itemId] = String(value);
+                  }
+                }
               } catch (error) {
                 console.error('Calculation failed (bulk):', error);
                 expectedScore = 0;
@@ -258,6 +271,8 @@ const AdvancedSummaryView = () => {
 
               if (cancelledRef.current) return;
 
+              // Calculate startScore AFTER imputed values are applied to startData
+              const startScore = calculateFunctionScore(startData);
               const scoreDifference = expectedScore - startScore;
 
               const summaryData = {
@@ -345,29 +360,32 @@ const AdvancedSummaryView = () => {
       let startData = null;
       let imputedData = null;
       let validationError = null;
+      let targetGGItems = null;
+      let rawStartScores = null;
 
       const result = await handleFileUploadWithValidation(
         tempFile,
-        (name) => {}, // fileName callback - not used in summary view
+        (name) => {},
         (data) => { parsedData = data; },
         (data) => { groupedData = data; },
         (data) => { modeledData = data; },
         (data) => { startData = data; },
         (data) => { imputedData = data; },
         (error) => {
-          // Only handle actual errors, not null values
           if (error && error !== null) {
-            // Store the detailed error message for later use
             validationError = error;
           }
+        },
+        null,
+        null,
+        {
+          skipImputation: true,
+          onTargetGGItems: (items) => { targetGGItems = items; },
+          onRawStartScores: (scores) => { rawStartScores = scores; }
         }
       );
 
       if (result && parsedData && startData) {
-        // Calculate scores
-        const startScore = calculateFunctionScore(startData);
-        
-        // Calculate expected score using the same logic as AdvancedAppBulk
         let expectedScore = 0;
         let summary = null;
         let icdList = [];
@@ -380,18 +398,25 @@ const AdvancedSummaryView = () => {
             .map(([_, value]) => value)
             .filter(Boolean);
           
-          covariateResult = await calculateFunctionScoreSecure({
+          covariateResult = await processFileComplete({
             parsedValues: parsedData,
             summary,
             icdList,
-            startScores: startData,
+            startScores: rawStartScores || startData,
             ardDate: parsedData["A2300"],
-            manualOverrides: {}
+            targetGGItems
           });
           
           expectedScore = covariateResult?.weightedScore || 0;
+
+          if (covariateResult?.imputedValues) {
+            for (const [sourceId, value] of Object.entries(covariateResult.imputedValues)) {
+              const itemId = sourceId.endsWith('1') ? sourceId.slice(0, -1) : sourceId;
+              startData[itemId] = String(value);
+              modeledData[itemId] = String(value);
+            }
+          }
         } catch (error) {
-          // Silently handle calculation errors - they're already shown in UI
           expectedScore = 0;
         }
         
@@ -400,6 +425,9 @@ const AdvancedSummaryView = () => {
           return;
         }
         
+        // Calculate startScore AFTER imputed values are applied to startData
+        // so that continuous imputed values (e.g. 1.7903) are included
+        const startScore = calculateFunctionScore(startData);
         const scoreDifference = expectedScore - startScore;
 
         // Create summary data for lazy loading
@@ -514,7 +542,7 @@ const AdvancedSummaryView = () => {
         file.name,
         isRedacted ? redactName(file.results?.patientFirstName || '') : (file.results?.patientFirstName || ''),
         isRedacted ? redactName(file.results?.patientLastName || '') : (file.results?.patientLastName || ''),
-        startScore ? Math.round(startScore) : 0,
+        startScore ? startScore.toFixed(2) : 0,
         expectedScore ? expectedScore.toFixed(2) : 0,
         endScoreValue,
         endScoreComparison,
@@ -572,13 +600,13 @@ const AdvancedSummaryView = () => {
         const startValue = startScores[itemId] || '';
         const endValue = endScores[itemId] || '';
         
-        // Calculate score change (end - start)
         let scoreChange = '';
         if (startValue && endValue && startValue !== '' && endValue !== '') {
-          const startNum = parseInt(startValue, 10);
-          const endNum = parseInt(endValue, 10);
+          const startNum = parseFloat(startValue);
+          const endNum = parseFloat(endValue);
           if (!isNaN(startNum) && !isNaN(endNum)) {
-            scoreChange = (endNum - startNum).toString();
+            const diff = endNum - startNum;
+            scoreChange = Number.isInteger(diff) ? diff.toString() : diff.toFixed(2);
           }
         }
         

@@ -5,18 +5,27 @@ namespace Aegis.DfsCalculator.Server.Utils
 {
     public class CoefficientLoader
     {
-        public static CoefficientAllVersions LoadAllVersions()
+        private static readonly Lazy<CoefficientAllVersions> _cachedData = new Lazy<CoefficientAllVersions>(
+            () => LoadFromDisk(),
+            System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+
+        private static CoefficientAllVersions LoadFromDisk()
         {
             using (StreamReader r = new StreamReader("./Data/coefficients-all-versions.json"))
             {
                 string json = r.ReadToEnd();
                 var settings = new JsonSerializerSettings
                 {
-                    DateFormatString = "MM/dd/yyyy", // Explicit format for schedule dates
+                    DateFormatString = "MM/dd/yyyy",
                     Culture = System.Globalization.CultureInfo.InvariantCulture
                 };
                 return JsonConvert.DeserializeObject<CoefficientAllVersions>(json, settings);
             }
+        }
+
+        public static CoefficientAllVersions LoadAllVersions()
+        {
+            return _cachedData.Value;
         }
 
         private static DateTime UnixToDateTime(string unix)
