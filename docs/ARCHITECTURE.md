@@ -8,23 +8,23 @@ The Discharge Function Score (DFS) Viewer is a React-based web application that 
 
 - **Frontend:** React 19 + React Router
 - **Build Tool:** Vite
-- **Styling:** CSS Modules [[memory:4277039]]
+- **Styling:** CSS Modules
 - **Data Processing:** xlsx (Excel), JSON (replaced CSV parsing)
 - **Charts:** Recharts
-- **Deployment:** Vercel
+- **Backend:** ASP.NET Core 8.0 (C#) with SAML 2.0 authentication
+- **Deployment:** Azure Static Web Apps via Bitbucket Pipelines
 
 ## Architecture Decisions
 
-### Static-First Approach
+### C# Backend as Single Source of Truth
 
-**All coefficient data is bundled at build time** - no backend database required.
+All proprietary algorithm logic (function score calculation, imputation, coefficient loading) lives exclusively in the C# backend (`Aegis.DfsCalculator/`). The React frontend calls the C# API endpoints for all protected calculations.
 
 **Benefits:**
-- Zero API latency
-- Works offline after initial load
-- Simple deployment (static hosting)
-- No server costs
-- Easy to maintain
+- Single codebase for all algorithm logic (no JS/C# duplication)
+- SAML 2.0 authentication protects all calculation endpoints
+- Coefficient data loaded at runtime by the backend
+- Frontend remains a thin presentation layer
 
 ### Data Flow
 
@@ -35,18 +35,24 @@ Transformation Scripts (scripts/transformers/)
     ↓
 Generated Data Files (JSON/CSV)
     ↓
-Bundle at Build Time
+Bundle at Build Time (frontend assets)
     ↓
-Runtime: User Uploads MDS XML → Calculations → Display Results
+Runtime: User Uploads MDS XML → C# API Calls → Display Results
 ```
 
 ## Directory Structure
 
 ```
 dfs-viewer/
-├── api/                           # Vercel serverless functions
-│   └── facility-name/
-│       └── [ccn].js              # CMS facility lookup API
+├── Aegis.DfsCalculator/           # C# ASP.NET Core backend
+│   └── DFSCalculator.Server/
+│       ├── Controllers/           # API endpoints (function-score, imputation, etc.)
+│       ├── Data/                  # Static data (ICD-to-HCC, covariate maps, coefficients)
+│       ├── Utils/                 # Algorithm implementations
+│       │   ├── Calculations.cs    # Function score & covariate calculation
+│       │   ├── Imputations.cs     # CMS statistical imputation engine
+│       │   └── CoefficientLoader.cs # Version-aware coefficient access
+│       └── Program.cs             # App startup, SAML auth, routing
 ├── docs/                          # Project documentation
 ├── public/                        # Static assets (served as-is)
 │   ├── icd10_lookup_2025.json    # ICD-10 code descriptions
@@ -58,14 +64,14 @@ dfs-viewer/
 ├── src/
 │   ├── components/               # React components
 │   ├── data/                     # Build-time data imports
-│   │   ├── coefficients-all-versions.json
 │   │   ├── mds_item_lookup.json
 │   │   └── instructionContent.js
-│   └── utils/                    # Business logic & helpers
-│       ├── calculations.js       # Core scoring algorithms
+│   └── utils/                    # Client-side helpers
+│       ├── secureApiClient.js    # Authenticated API calls to C# backend
+│       ├── authService.js        # SAML auth (login/logout/session)
+│       ├── calculations.js       # Client-side score display helpers
 │       ├── coefficientLoader.js  # Version-aware coefficient access
 │       ├── fileParser.js         # MDS XML parsing
-│       ├── imputationCalculations.js
 │       └── [other utilities]
 └── test-data/                    # Sample MDS files for testing
 ```
@@ -92,29 +98,29 @@ dfs-viewer/
 
 - Stores all historical CMS coefficient versions (FY 2023, 2025, 2026)
 - Automatically selects correct version based on ARD date (A2300)
-- Single source of truth: `src/data/coefficients-all-versions.json`
+- Single source of truth: `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json`
 - Access via: `src/utils/coefficientLoader.js`
 
 See `docs/COEFFICIENT_MIGRATION.md` for details.
 
-### Core Calculation Engine
+### Core Calculation Engine (C# Backend)
 
-**`src/utils/calculations.js`**
+**`Aegis.DfsCalculator/DFSCalculator.Server/Utils/Calculations.cs`**
 
 Main functions:
-- `calculateFunctionScore()` - Computes discharge function score
-- `getFunctionCovariates()` - Extracts covariates from MDS data
-- `extractPatientSummary()` - Aggregates patient demographics
+- `CalculateFunctionScore()` - Computes discharge function score
+- `GetFunctionCovariates()` - Extracts covariates from MDS data
+- `ExtractPatientSummary()` - Aggregates patient demographics
 
-**`src/utils/imputationCalculations.js`**
+**`Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs`**
 
-Handles missing GG item imputation using CMS methodology.
+Handles missing GG item imputation using CMS statistical methodology (Table 8-8).
 
-### File Parsing
+### File Parsing (Client-Side)
 
 **`src/utils/fileParser.js`**
 
-Parses MDS 3.0 XML files and orchestrates calculations.
+Parses MDS 3.0 XML files and orchestrates API calls to the C# backend.
 
 ## Data Files
 
@@ -122,8 +128,8 @@ Parses MDS 3.0 XML files and orchestrates calculations.
 
 | File | Purpose | Size |
 |------|---------|------|
-| `coefficients-all-versions.json` | All CMS coefficient versions | ~300 KB |
-| `mds_item_lookup.json` | MDS item definitions | ~100 KB |
+| `Aegis.DfsCalculator/.../Data/coefficients-all-versions.json` | All CMS coefficient versions (shared with C# backend) | ~300 KB |
+| `src/data/mds_item_lookup.json` | MDS item definitions | ~100 KB |
 
 ### Runtime (loaded from public/)
 
@@ -136,13 +142,10 @@ Parses MDS 3.0 XML files and orchestrates calculations.
 
 ```
 1. User uploads MDS XML file
-2. Parse XML → extract all item values
-3. Extract ARD date (A2300)
-4. Load correct coefficient version for ARD date
-5. Calculate covariates from parsed data
-6. Apply function multipliers
-7. Calculate predicted discharge score
-8. Display results + export options
+2. Parse XML client-side → extract all item values
+3. POST to /api/function-score → C# calculates covariates & weighted score
+4. POST to /api/imputation → C# imputes missing GG items
+5. Display results + export options
 ```
 
 ## Versioning Strategy
@@ -176,9 +179,9 @@ npm run preview      # Preview production build locally
 
 ### Deployment
 
-Automatic deployment via Vercel on push to main branch.
+Automatic deployment via Bitbucket Pipelines on push to `release/*` branches.
 
-**Environment:** Static site + serverless functions (facility lookup)
+**Environment:** Azure Static Web Apps with C# ASP.NET Core backend
 
 ## Testing
 

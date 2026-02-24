@@ -22,7 +22,7 @@ Successfully migrated from single-version coefficients to a multi-version system
 
 ### Data Structure
 ```
-src/data/coefficients-all-versions.json (~300 KB)
+Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json (~300 KB)
 ├── metadata (source files, generation info)
 ├── schedule (version date ranges)
 ├── functionMultipliers (3 historical versions)
@@ -66,7 +66,7 @@ const modelIntercept = functionMults['Model Intercept'];
 
 ### New Files
 - `src/utils/coefficientLoader.js` - Version-aware data access utilities
-- `src/data/coefficients-all-versions.json` - All historical coefficient data
+- `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json` - All historical coefficient data
 - `scripts/transformers/generateAllCoefficients.cjs` - Generator script
 
 ## Future Updates (FY 2027+)

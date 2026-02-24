@@ -111,7 +111,7 @@ This runs all transformation scripts:
 
 ### Generated Files
 
-- `src/data/coefficients-all-versions.json` - All historical coefficient versions (~300 KB)
+- `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json` - All historical coefficient versions (~300 KB)
 - `public/icd10_lookup_2025.json` - ICD-10 code descriptions (~2 MB)
 - `src/data/mds_item_lookup.json` - MDS item definitions (~100 KB)
 

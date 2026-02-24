@@ -41,7 +41,7 @@
    - `processPriorMobilityDevices()` - Mobility device logic
    - `processHccConditions()` - HCC processing logic
 
-4. **All Multipliers/Coefficients** (in `src/data/coefficients-all-versions.json`)
+4. **All Multipliers/Coefficients** (in `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json`)
    - ✅ **PUBLIC DATA**: CMS releases these anyway
    - All function multipliers for all versions
    - All imputation multipliers for all versions

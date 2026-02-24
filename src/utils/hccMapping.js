@@ -1,4 +1,4 @@
-import icdToHcc from "../data/icdToHcc.json";
+import icdToHcc from "../../Aegis.DfsCalculator/DFSCalculator.Server/Data/icdToHcc.json";
 
 /**
  * Get HCC values for a given ICD code

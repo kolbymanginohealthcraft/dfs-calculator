@@ -21,7 +21,7 @@ node scripts/test-transformations.cjs
 - `scripts/data-sources/imputation_appendix_file_for_snf_effective_10_01_2025.xlsx`
 
 **Output:**
-- `src/data/coefficients-all-versions.json` (~300 KB)
+- `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json` (~300 KB)
 
 **What it extracts:**
 

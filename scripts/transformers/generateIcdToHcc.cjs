@@ -36,7 +36,7 @@ if (availableFiles.length === 0) {
 
 const EXCEL_SOURCE = path.join(DATA_SOURCE_DIR, availableFiles[0]);
 console.log(`Using file: ${availableFiles[0]}`);
-const JSON_OUTPUT = path.join(__dirname, '..', '..', 'src', 'data', 'icdToHcc.json');
+const JSON_OUTPUT = path.join(__dirname, '..', '..', 'Aegis.DfsCalculator', 'DFSCalculator.Server', 'Data', 'icdToHcc.json');
 
 console.log('ICD-to-HCC Mapping Generator');
 console.log('============================\n');

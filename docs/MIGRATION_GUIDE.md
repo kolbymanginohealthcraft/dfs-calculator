@@ -13,7 +13,7 @@ This guide shows how to update your calculations to use version-aware coefficien
 node scripts/transformers/generateAllCoefficients.cjs
 ```
 
-This creates `src/data/coefficients-all-versions.json` with all historical versions.
+This creates `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json` with all historical versions.
 
 ## Step 2: Update calculations.js
 
@@ -226,4 +226,4 @@ The app will automatically:
 
 - Check `scripts/transformers/README.md` for data source details
 - See `src/utils/coefficientLoader.js` for API documentation
-- Review `src/data/coefficients-all-versions.json` for data structure
+- Review `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json` for data structure

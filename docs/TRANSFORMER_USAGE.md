@@ -21,7 +21,7 @@ node scripts/transformers/generateAllCoefficients.cjs
 - `imputation_appendix_file_for_snf_effective_*.xlsx`
 
 **Output:**
-- `src/data/coefficients-all-versions.json`
+- `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json`
 
 **What it does:**
 - Extracts function multipliers for all Update IDs (FY 2023, 2025, 2026)
@@ -225,7 +225,7 @@ npm run build
 
 | File | Size | Location |
 |------|------|----------|
-| coefficients-all-versions.json | ~300 KB | src/data/ |
+| coefficients-all-versions.json | ~300 KB | Aegis.DfsCalculator/.../Data/ |
 | icd10_lookup_2026.json | ~2 MB | public/ |
 | mds_item_lookup.json | ~100 KB | src/data/ |
 | itm_val.json | ~207 KB | public/ |

@@ -1,5 +1,5 @@
-import icdToHcc from "../data/icdToHcc.json" with { type: "json" };
 import { getFunctionMultipliers } from "./coefficientLoader.js";
+import conditionMap from "../../Aegis.DfsCalculator/DFSCalculator.Server/Data/conditionMap.json";
 
 // Configuration flag for I0020 dependency methodology
 // Set to true to use original CMS logic with I0020 dependencies
@@ -79,21 +79,7 @@ export const GG_ITEMS = [
   { id: "GG0170S", label: "Wheel 150 feet", domain: "mobility" },
 ];
 
-export const conditionMap = {
-  "01": "Stroke",
-  "02": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
-  "03": "Non-Traumatic Brain Dysfunction and Traumatic Brain Dysfunction",
-  "04": "Non-Traumatic Spinal Cord Dysfunction",
-  "05": "Traumatic Spinal Cord Dysfunction",
-  "06": "Progressive Neurological Conditions",
-  "07": "Other Neurological Conditions",
-  "08": "Amputation",
-  "09": "Hip and Knee Replacements",
-  10: "Fractures and Other Multiple Trauma",
-  11: "Other Orthopedic Conditions",
-  12: "Debility, Cardiorespiratory Conditions",
-  13: "Medically Complex Conditions",
-};
+export { conditionMap };
 
 export function formatDOB(dobStr) {
   if (!dobStr || dobStr.length !== 8) return "Unknown";

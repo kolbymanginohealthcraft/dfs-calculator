@@ -33,14 +33,15 @@ Where Φ(x) is the standard normal CDF, implemented via the Abramowitz & Stegun 
 
 ## Files Modified
 
-### Server-Side (Algorithm)
+### Server-Side (Algorithm — C# Backend)
 
 | File | Changes |
 |------|---------|
-| `api/utils/serverImputation.js` | Added `normalCDF()`, `computeImputedValueFromScore()`. Updated `calculateImputedValue()`, `imputeMissingGGItems()`, and `getImputationAnalysisData()` to use probability-based calculation. All three now return continuous `number` values instead of padded string codes. |
 | `Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs` | Added `NormalCDF()`, `ComputeImputedValueFromScore()`. `CalculateImputedValue()` returns `double`. `ImputeMissingGGItems()` returns `Dictionary<string, double>`. `ImputationAnalysisData.ImputedValue` changed from `string?` to `double?`. |
 | `Aegis.DfsCalculator/DFSCalculator.Server/Controllers/ImputationController.cs` | Updated to handle `double` return from `CalculateImputedValue` and `Dictionary<string, double>` from `ImputeMissingGGItems`. |
 | `Aegis.DfsCalculator/DFSCalculator.Server/Utils/Calculations.cs` | Added `ResolveScore()` helper. `CalculateFunctionScore()` now returns `double` and handles continuous string values (e.g., `"1.7903"`) in `startScores`. Downstream consumers (`ProcessMedicalConditionCategory`, covariate assignments) receive rounded `int` values for compatibility. |
+
+> **Note:** The previously duplicated JS algorithm files (`api/utils/serverImputation.js`, `api/utils/serverCalculations.js`) have been removed. The C# backend is now the single source of truth for all algorithm logic.
 
 ### Client-Side (Score Resolution & Storage)
 
@@ -70,9 +71,9 @@ MDS XML File
   ↓
 fileParser.js — parseXml() extracts raw values
   ↓
-batchImputeValues() API call → POST /api/imputation (C# or Vercel)
+batchImputeValues() API call → POST /api/imputation (C# backend)
   ↓
-Server runs: imputeMissingGGItems()
+Server runs: ImputeMissingGGItems()
   - Calculates z = Σ(covariate × multiplier) for each GG item needing imputation
   - Computes continuous imputed value via normalCDF probability formula
   - Returns { imputedValues: { "GG0130A1": 1.7903, ... } }
@@ -139,7 +140,6 @@ The previous code determined whether an item had a Skipped covariate by searchin
 
 | File | Changes |
 |------|---------|
-| `api/utils/serverImputation.js` | Added `SKIP_CASCADE_ANA`, `ITEMS_WITH_SKIPPED_COVARIATE`, `getEffectiveGGValue()`. Updated `getGGItemSpecificCovariate()` and inline covariate code in `imputeMissingGGItems()` to use effective values and hardcoded item set. |
 | `Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs` | Added `ITEMS_WITH_SKIPPED_COVARIATE`, `SKIP_CASCADE_WALK_DOWNSTREAM`, `SKIP_CASCADE_STEP_M_DOWNSTREAM`, `GetEffectiveGGValue()`. Updated `GetGGItemSpecificCovariate()` and inline covariate code in `ImputeMissingGGItems()` to use effective values and hardcoded item set. Also fixed a pre-existing bug where the inline `hasSkippedCovariate` check in `ImputeMissingGGItems` was comparing against `ggItemId` (the item being imputed) instead of `itemId` (the covariate item). |
 
 ---
@@ -170,14 +170,11 @@ The C# covariate dictionary remains `Dictionary<string, int>`. The continuous fu
 
 ## Key Architecture Notes
 
-- **Proprietary IP protection**: All imputation algorithm logic is server-only. Client-side files (`src/utils/imputationCalculations.js`, `src/utils/fileParser.js`) contain only stubs that throw errors if called directly. The real implementations live in `api/utils/serverImputation.js` (Vercel) and `Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs` (C#).
+- **Proprietary IP protection**: All imputation algorithm logic lives exclusively in the C# backend (`Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs`). The frontend calls the API and never has access to the algorithm.
 
-- **Dual backend**: The app runs against either:
-  - **Vercel serverless functions** (`api/` directory) — production
-  - **C# ASP.NET backend** (`Aegis.DfsCalculator/`) — local development
-  Both backends must stay in sync for any algorithm changes.
+- **Single backend**: The app runs against the C# ASP.NET Core backend (`Aegis.DfsCalculator/`) with SAML 2.0 authentication. Algorithm changes only need to be made in one place.
 
-- **Coefficient versioning**: Imputation multipliers and thresholds are version-specific, selected based on the ARD date (`A2300`). Data lives in `src/data/coefficients-all-versions.json` (JS) and loaded via `CoefficientLoader` (C#).
+- **Coefficient versioning**: Imputation multipliers and thresholds are version-specific, selected based on the ARD date (`A2300`). Data loaded via `CoefficientLoader.cs`.
 
 - **Values are stored as strings**: All GG item values in `startScores` and `modeledValues` are strings for C# API compatibility. MDS codes are `"01"`–`"06"`. Continuous imputed values are `"1.7903"`. The `resolveScore()` function (JS) and `ResolveScore()` method (C#) handle both formats.
 

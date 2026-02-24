@@ -17,7 +17,7 @@ const path = require('path');
 const XLSX = require('xlsx');
 
 const DATA_SOURCE_DIR = path.join(__dirname, '..', 'data-sources');
-const OUTPUT_FILE = path.join(__dirname, '..', '..', 'src', 'data', 'coefficients-all-versions.json');
+const OUTPUT_FILE = path.join(__dirname, '..', '..', 'Aegis.DfsCalculator', 'DFSCalculator.Server', 'Data', 'coefficients-all-versions.json');
 
 console.log('┌────────────────────────────────────────────────┐');
 console.log('│  Historical Coefficients Generator            │');

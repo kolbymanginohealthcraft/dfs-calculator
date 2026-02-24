@@ -80,7 +80,7 @@ Mixed file formats and locations
 Consistent JSON data architecture
 ├── src/data/icdToHcc.json
 ├── src/data/mds_section_names.json
-├── src/data/coefficients-all-versions.json
+├── Aegis.DfsCalculator/.../Data/coefficients-all-versions.json
 ├── public/itm_val.json
 └── Lazy loading for heavy components
 ```
