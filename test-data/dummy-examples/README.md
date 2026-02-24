@@ -60,13 +60,7 @@ Both files are designed to have:
 
 ## Usage
 
-### Process with bulk script:
-```bash
-node scripts/bulk-process.js test-data/dummy-examples
-```
-
-### Load in the web application:
-Simply upload either file through the file upload interface to see how the application handles different fiscal year coefficients.
+Upload either file through the web application's file upload interface to see how the application handles different fiscal year coefficients.
 
 ## Expected Comparison Results
 

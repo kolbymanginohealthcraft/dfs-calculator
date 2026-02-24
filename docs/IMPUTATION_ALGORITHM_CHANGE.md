@@ -146,25 +146,17 @@ The previous code determined whether an item had a Skipped covariate by searchin
 
 ## Outstanding Items / Next Steps
 
-### 1. Imputation Tab Visual (Placeholder)
-The threshold bar visualization was removed from `ImputationTab.jsx` and replaced with a **"Visual coming soon"** placeholder. A new visualization needs to be designed that reflects the probability-based approach (showing the normal distribution partitioned by thresholds, with shaded probability regions, rather than a simple threshold comparison bar).
+### ~~1. Imputation Tab Visual (Placeholder)~~ — DONE
 
-**Location**: `src/components/ImputationTab.jsx`, lines ~207–210 (inside the expanded covariate detail row, within `<div className={styles.thresholdVisualization}>`).
+The "Visual coming soon" placeholder has been replaced with the `ImputationDistributionChart` component. The chart shows the normal distribution partitioned by thresholds, with shaded probability regions and the z-score marker. Each expanded covariate detail row displays the z-score, threshold positions, per-value probabilities, and the resulting continuous imputed value.
 
-**Data available from server** (`getImputationAnalysisData` response for each GG item):
-- `imputationScore` — the z-score (continuous)
-- `thresholds` — array of 5 α values
-- `imputedValue` — the continuous expected value (1–6)
-- `covariates` — object of non-zero covariate values
-- `multipliers` — all multipliers for the item
-- `needsImputation` — boolean
-- `originalValue` — raw MDS value
+### ~~2. Pre-existing 400 Error Investigation~~ — DONE
 
-### 2. Pre-existing 400 Error Investigation
-A `400 Bad Request` from `/api/function-score` was observed. This appears to be **pre-existing** (not from our changes) — likely caused by test files with missing date fields that produce `null` for `PatientSummary.Age` (non-nullable `int` in C#). The `FunctionScoreCalculationBody.StartScores` values are confirmed to always be strings after our fix.
+The 400 was caused by MDS files missing DOB (`A0900`) or all admission date fields (`A2400B`, `A1600`, `A1900`), producing `null` for `PatientSummary.Age` (non-nullable `int` in C#). Fixed by adding validation checks in `src/utils/fileValidation.js` — files missing these fields are now rejected at upload time with clear error messages (`MISSING_DOB`, `MISSING_ADMIT_DATE`) before they ever reach the API.
 
-### 3. C# Covariate Dictionary Type
-The C# covariate dictionary remains `Dictionary<string, int>`. The continuous function score is rounded to `int` via `Math.Round()` before being stored as `"Admission Function - Continuous Form"` and squared. A future refactor could change this to `Dictionary<string, double>` for full precision, but this is a larger change that ripples through the entire calculation pipeline.
+### ~~3. C# Covariate Dictionary Type~~ — ALREADY RESOLVED
+
+The covariate dictionary is already `Dictionary<string, double>` throughout `Calculations.cs`. The function score flows through as a full-precision `double` — no `Math.Round()` or `int` cast is applied. The doc was written before this was fixed.
 
 ---
 

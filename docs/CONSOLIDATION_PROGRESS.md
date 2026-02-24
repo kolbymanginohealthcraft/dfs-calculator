@@ -1,5 +1,11 @@
 # Backend Consolidation Progress — February 2026
 
+## Status: DATA CONSOLIDATION COMPLETE
+
+All shared data now lives in exactly one place: `Aegis.DfsCalculator/DFSCalculator.Server/Data/`. Zero data duplication remains between the C# backend and JavaScript frontend. See "What's Left" at the bottom for remaining cleanup items.
+
+---
+
 ## Context
 
 This app historically had duplicated algorithm logic across two backends:
@@ -88,7 +94,7 @@ Deleted: `vercel.json`
 
 ---
 
-## Remaining Data Duplication
+## Data Consolidation (All Complete)
 
 ### `coefficients-all-versions.json` — CONSOLIDATED
 
@@ -162,13 +168,64 @@ C# ASP.NET Core Backend (SAML-protected)
 ## Build Verification
 
 Both builds pass after all changes:
-- `npm run build` — exit code 0, 2007 modules, built in ~38s
+- `npm run build` — exit code 0, 2009 modules
 - `dotnet build` — compiles successfully (only fails to copy .exe if server is already running, which is expected)
 
 ---
 
-## What Still Uses `src/data/`
+## Shared Data — Single Source of Truth
 
-After cleanup, these files remain in `src/data/`:
-- `mds_item_lookup.json` — used by frontend for MDS item display (no C# equivalent, no duplication)
-- `instructionContent.js` — UI instruction text (no C# equivalent, no duplication)
+All shared data files now live in `Aegis.DfsCalculator/DFSCalculator.Server/Data/`:
+
+| File | What | C# Loader | JS Consumer |
+|------|------|-----------|-------------|
+| `coefficients-all-versions.json` | CMS coefficients (~300 KB) | `CoefficientLoader.cs` | `src/utils/coefficientLoader.js` |
+| `icdToHcc.json` | ICD-10 to HCC crosswalk (~3700 lines) | `ICDtoHCC.cs` | `src/utils/hccMapping.js` |
+| `conditionMap.json` | 13 medical condition categories | `ConditionMap.cs` | `src/utils/calculations.js` |
+| `ggItems.json` | 24 GG item definitions | `GGItems.cs` | `src/utils/calculations.js` |
+
+**Pattern:** Each JSON file is the single source of truth. C# loads it via a thread-safe lazy singleton (`ICDtoHCC.cs` pattern). JS imports it via a relative path to the C# Data folder. Generator scripts (`scripts/transformers/`) write directly to the C# Data folder.
+
+---
+
+## What Still Uses `src/data/` and `src/utils/`
+
+These folders contain **frontend-only** files with no C# equivalents or duplication:
+
+**`src/data/` (3 files):**
+- `mds_item_lookup.json` — MDS item display definitions
+- `mds_section_names.json` — MDS section name labels
+- `instructionContent.js` — UI instruction text
+
+**`src/utils/` (~15 files):**
+- `fileParser.js`, `xmlParser.js` — client-side MDS XML parsing
+- `secureApiClient.js` — authenticated API calls to C# backend
+- `authService.js` — SAML auth (login/logout/session)
+- `coefficientLoader.js` — version-aware coefficient access (imports shared JSON)
+- `calculations.js` — score display helpers + re-exports shared data
+- `hccMapping.js` — HCC lookup (imports shared JSON)
+- `itemAdapters.js`, `scoreHelpers.js`, `itemDefinitions.js` — React component utilities
+- Various other UI utilities (themes, compression, pagination, etc.)
+
+These cannot and should not be moved to the C# folder — they are JavaScript running in the browser, not shared data. Vite's module resolution requires them under `src/`.
+
+---
+
+## What's Left
+
+### 1. ~~Dead Proprietary Function Stubs in `calculations.js`~~ — DONE
+
+Removed 15 dead stub functions (`getAgeCovariate`, `processAgeCovariate`, `processMobilityType`, `processUsesWheelchair`, `processBMICovariates`, `processCognitiveFunction`, `processCommunicationImpairment`, `processContinenceCovariates`, `processPriorFunctioning`, `processPriorMobilityDevices`, `processMedicalConditionCategory`, `processHccConditions`, `processAdditionalClinicalConditions`, `getHccCount`, `getFunctionCovariates`). Also removed the unused `getFunctionMultipliers` import and `USE_I0020_DEPENDENCIES` constant. `calculations.js` reduced from ~390 lines to ~215 lines.
+
+Deleted `scripts/bulk-process.js` and `scripts/README-BULK-PROCESS.md` — this CLI tool was superseded by the in-app Analysis Console which supports drag-and-drop bulk processing of up to 100 files. Removed `bulk-process` npm script from `package.json`.
+
+### 2. Intentional Logic Duplication (Not Actionable)
+
+`coefficientLoader.js` (JS) and `CoefficientLoader.cs` (C#) both implement date-range version selection logic. This is intentional — the frontend needs it for UI display (showing which FY period a patient falls in) without a server round-trip. The shared data file is already consolidated; only the selection logic is duplicated.
+
+### 3. Items From `IMPUTATION_ALGORITHM_CHANGE.md`
+
+See `docs/IMPUTATION_ALGORITHM_CHANGE.md` for additional outstanding items:
+- ~~Imputation Tab visualization (placeholder)~~ — DONE (replaced with `ImputationDistributionChart`)
+- ~~Pre-existing 400 error~~ — DONE (added `MISSING_DOB` and `MISSING_ADMIT_DATE` validation checks in `fileValidation.js`)
+- ~~C# covariate dictionary type (`int` vs `double`)~~ — ALREADY RESOLVED (dictionary is `Dictionary<string, double>` throughout)

@@ -245,6 +245,25 @@ export function validateMdsContent(parsedData) {
     );
   }
 
+  // Check for DOB (required for age calculation)
+  const dob = parsedData['A0900'];
+  if (!dob || dob.trim() === '') {
+    result.addError(
+      'Missing date of birth (A0900). Patient age cannot be calculated without a date of birth.',
+      'MISSING_DOB'
+    );
+  }
+
+  // Check for at least one admission date field (required for age calculation)
+  const admitDateFields = ['A2400B', 'A1600', 'A1900'];
+  const hasAdmitDate = admitDateFields.some(f => parsedData[f] && parsedData[f].trim() !== '' && parsedData[f] !== '^');
+  if (!hasAdmitDate) {
+    result.addError(
+      'Missing admission date. At least one of A2400B (Medicare start), A1600 (Entry date), or A1900 (Admission date) is required.',
+      'MISSING_ADMIT_DATE'
+    );
+  }
+
   // Check for minimum number of GG elements needed for reliable imputation
   const ggElements = Object.keys(parsedData).filter(key => 
     (key.startsWith('GG0130') || key.startsWith('GG0170')) && 
@@ -546,6 +565,18 @@ export function generateUserFriendlyMessage(validationResult) {
       title: 'Invalid File Format',
       message: 'This file does not have the correct root element for an MDS data file.',
       suggestion: 'Please export the actual MDS data as XML from your EMR system, not a converted PDF or other document format.'
+    },
+    MISSING_DOB: {
+      type: 'error',
+      title: 'Missing Date of Birth',
+      message: 'This file is missing the patient date of birth (A0900), which is required for age-based calculations.',
+      suggestion: 'Please ensure the MDS file includes the patient date of birth field (A0900).'
+    },
+    MISSING_ADMIT_DATE: {
+      type: 'error',
+      title: 'Missing Admission Date',
+      message: 'This file is missing all admission date fields (A2400B, A1600, A1900), which are required for age-based calculations.',
+      suggestion: 'Please ensure the MDS file includes at least one admission date field: Medicare start date (A2400B), entry date (A1600), or admission date (A1900).'
     },
     INVALID_ASSESSMENT_TYPE: {
       type: 'error',

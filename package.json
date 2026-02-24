@@ -8,8 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "cd Aegis.DfsCalculator/DFSCalculator.Server && dotnet run --launch-profile https",
-    "bulk-process": "node scripts/bulk-process.js"
+    "server": "cd Aegis.DfsCalculator/DFSCalculator.Server && dotnet run --launch-profile https"
   },
   "dependencies": {
     "html2pdf.js": "^0.10.3",
