@@ -1,8 +1,10 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, memo, lazy, Suspense } from "react";
 import styles from "./ImputationTab.module.css";
 import { Calculator } from "lucide-react";
 import { GG_ITEMS, extractPatientSummary } from "../utils/calculations";
 import { getImputationAnalysisData } from "../utils/secureApiClient";
+
+const ImputationDistributionChart = lazy(() => import("./ImputationDistributionChart"));
 
 function ImputationTab({
   hasFile,
@@ -206,9 +208,13 @@ function ImputationTab({
                               {/* Imputed value summary */}
                               <div className={styles.thresholdVisualization}>
                                 <h5>Imputation Score (z): {formatNumber(data.imputationScore)} → Imputed Value: {Number(data.imputedValue).toFixed(4)}</h5>
-                                <div className={styles.visualPlaceholder}>
-                                  Visual coming soon
-                                </div>
+                                <Suspense fallback={<div className={styles.visualPlaceholder}>Loading chart...</div>}>
+                                  <ImputationDistributionChart
+                                    z={data.imputationScore}
+                                    thresholds={data.thresholds}
+                                    imputedValue={data.imputedValue}
+                                  />
+                                </Suspense>
                               </div>
                               <table className={styles.covariateTable}>
                                 <thead>
