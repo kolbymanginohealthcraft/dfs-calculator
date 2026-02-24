@@ -276,7 +276,7 @@ function AdvancedAppDetail() {
           if (!Number.isInteger(current)) {
             next = current; // already at imputed value, can't go lower
           } else if (current <= firstInt) {
-            next = startScore; // drop back to the continuous imputed value
+            next = startScore; // drop to imputed value; never go below start score
           } else {
             next = current - 1;
           }
@@ -330,6 +330,16 @@ function AdvancedAppDetail() {
   const mobilityType = determineMobilityType(parsedValues);
   const conditionCode = parsedValues["I0020"];
   const conditionCategory = conditionMap[conditionCode] || "Unknown";
+
+  // Memoize icdList for ImputationTab - prevents re-renders and effect re-runs when toggling GG items
+  const imputationIcdList = useMemo(
+    () =>
+      Object.entries(parsedValues)
+        .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
+        .map(([_, value]) => value)
+        .filter(Boolean),
+    [parsedValues]
+  );
 
   useEffect(() => {
     fetchFacilityInfo(
@@ -758,10 +768,7 @@ function AdvancedAppDetail() {
                       parsedValues={parsedValues}
                       startScores={startScores}
                       summary={patientSummary}
-                      icdList={Object.entries(parsedValues)
-                        .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
-                        .map(([_, value]) => value)
-                        .filter(Boolean)}
+                      icdList={imputationIcdList}
                     />
                   </Suspense>
                 </div>

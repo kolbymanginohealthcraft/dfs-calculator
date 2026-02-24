@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import styles from "./ImputationTab.module.css";
 import { Calculator } from "lucide-react";
 import { GG_ITEMS, extractPatientSummary } from "../utils/calculations";
 import { getImputationAnalysisData } from "../utils/secureApiClient";
 
-export default function ImputationTab({
+function ImputationTab({
   hasFile,
   parsedValues = {},
   startScores = {},
@@ -264,3 +264,5 @@ export default function ImputationTab({
     </div>
   );
 }
+
+export default memo(ImputationTab);
