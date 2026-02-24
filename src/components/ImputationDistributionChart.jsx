@@ -125,11 +125,11 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
         {/* ── section labels ── */}
         <text x={(cL + cR) / 2} y={10} textAnchor="middle"
           fontSize="9.5" fill="#6b7280" fontWeight="600">
-          Score distribution
+          Imputation Score vs Thresholds
         </text>
         <text x={(bL + bR) / 2} y={10} textAnchor="middle"
           fontSize="9.5" fill="#6b7280" fontWeight="600">
-          Value probabilities
+          Expected Value Calculation
         </text>
 
         {/* ════════ BELL CURVE ════════ */}
