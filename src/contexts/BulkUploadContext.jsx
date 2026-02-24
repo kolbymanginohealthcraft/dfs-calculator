@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useMemo } from 'react';
-import { storeFileData, getFileData, getFileSummary, clearAllFileData, getMemoryStats } from '../utils/fileDataManager';
 import { createPaginationManager } from '../utils/paginationManager';
 import { startMemoryMonitoring, addCleanupCallback, removeCleanupCallback, getMemoryUsage, stopMemoryMonitoring } from '../utils/memoryMonitor';
 
@@ -43,11 +42,9 @@ export const BulkUploadProvider = ({ children }) => {
     // Add cleanup callback for memory pressure
     const cleanupCallback = (level, memoryInfo) => {
       if (level === 'critical') {
-        // Clear raw data from least recently used files
-        clearAllFileData();
         setUploadedFiles(prev => prev.map(file => ({
           ...file,
-          _rawData: null // Clear raw data but keep summary
+          _rawData: null
         })));
       }
     };
@@ -82,7 +79,6 @@ export const BulkUploadProvider = ({ children }) => {
 
   const clearAllFiles = useCallback(() => {
     setUploadedFiles([]);
-    clearAllFileData();
   }, []);
 
   const setProcessing = useCallback((processing) => {
@@ -145,31 +141,6 @@ export const BulkUploadProvider = ({ children }) => {
     return pagination.getPaginationInfo();
   }, [uploadedFiles, pagination]);
 
-  // Lazy loading methods
-  const loadFileData = useCallback(async (fileId, reprocessCallback) => {
-    try {
-      const fileData = await getFileData(fileId, reprocessCallback);
-      return fileData;
-    } catch (error) {
-      console.error('Failed to load file data:', error);
-      throw error;
-    }
-  }, []);
-
-  const getFileSummary = useCallback((fileId) => {
-    try {
-      return getFileSummary(fileId);
-    } catch (error) {
-      console.error('Failed to get file summary:', error);
-      return null;
-    }
-  }, []);
-
-  // Memory management
-  const getMemoryStats = useCallback(() => {
-    return getMemoryStats();
-  }, []);
-
   // Memoize the context value to prevent unnecessary re-renders
   const value = useMemo(() => ({
     uploadedFiles,
@@ -196,12 +167,7 @@ export const BulkUploadProvider = ({ children }) => {
     setItemsPerPageValue,
     getPaginatedFiles,
     getPaginationInfo,
-    // Lazy loading
-    loadFileData,
-    getFileSummary,
-    // Memory management
-    memoryUsage,
-    getMemoryStats
+    memoryUsage
   }), [
     uploadedFiles,
     isProcessing,
@@ -224,10 +190,7 @@ export const BulkUploadProvider = ({ children }) => {
     setItemsPerPageValue,
     getPaginatedFiles,
     getPaginationInfo,
-    loadFileData,
-    getFileSummary,
-    memoryUsage,
-    getMemoryStats
+    memoryUsage
   ]);
 
   return (

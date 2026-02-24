@@ -40,7 +40,7 @@ function AdvancedAppDetail() {
   const [searchParams] = useSearchParams();
   
   // Use bulk upload context
-  const { uploadedFiles, setUploadedFiles, loadFileData } = useBulkUpload();
+  const { uploadedFiles, setUploadedFiles } = useBulkUpload();
   const { updateDataStatus, clearDataStatus } = useDataLossWarning();
   
   // Use redaction context

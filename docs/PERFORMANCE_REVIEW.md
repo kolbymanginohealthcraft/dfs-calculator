@@ -224,6 +224,46 @@ Cold-start behavior (100-file zip, fresh server): first batch of 5 files takes ~
 
 All 57 existing tests pass with the cache in place.
 
+### 9. Removed Persistent Browser Storage (HIPAA Compliance)
+
+**Problem:** Three utility modules — `indexedDBManager.js`, `fileDataManager.js`, and `compressionUtils.js` — implemented an IndexedDB persistence layer for bulk file data. IndexedDB is disk-based browser storage that survives page refreshes, browser restarts, and tab closures. If connected, it would have written parsed MDS values, patient names, clinical scores, and covariate data to the user's local disk — directly violating the app's HIPAA compliance model, which requires that no patient data is stored anywhere. Data is fetched from the API, used for calculations, and discarded when the user refreshes or clears their files.
+
+**Finding:** The persistence layer was built but never wired up. `storeFileData()` was imported in `AdvancedSummaryView.jsx` and `BulkUploadContext.jsx` but never called. IndexedDB was never written to during normal processing. All file data lived exclusively in React state (`uploadedFiles` array in `BulkUploadContext`), which is purely in-memory and vanishes on refresh — the correct behavior.
+
+However, the infrastructure posed a latent risk: any future developer connecting the `storeFileData()` call would inadvertently persist PHI to the browser's disk without realizing the compliance implications.
+
+Additional dead code in `BulkUploadContext.jsx`:
+- `loadFileData()` — wrapper around `getFileData()` from `fileDataManager.js`, destructured by `AdvancedAppDetail.jsx` but never called
+- `getFileSummary()` — wrapper around `getFileSummary()` from `fileDataManager.js`, never called
+- `getMemoryStats()` — wrapper around `getMemoryStats()` from `fileDataManager.js`, never called
+
+The "compression" in `compressionUtils.js` was also ineffective — it applied whitespace-removal regexes to `JSON.stringify()` output, which already produces minified output. Effective compression ratio was near zero.
+
+**Changes:**
+
+Deleted:
+- `src/utils/indexedDBManager.js` — IndexedDB open/read/write/clear operations
+- `src/utils/fileDataManager.js` — LRU in-memory cache + IndexedDB persistence wrapper
+- `src/utils/compressionUtils.js` — pseudo-compression utilities (only consumer was `fileDataManager.js`)
+
+Cleaned up:
+- `src/contexts/BulkUploadContext.jsx` — removed `fileDataManager` import, removed `clearAllFileData()` calls, removed dead `loadFileData`/`getFileSummary`/`getMemoryStats` methods and their context exports
+- `src/components/AdvancedSummaryView.jsx` — removed unused `storeFileData` import
+- `src/components/AdvancedAppDetail.jsx` — removed unused `loadFileData` destructure from context
+
+Kept:
+- `src/utils/memoryMonitor.js` — still useful; in production it monitors JS heap usage and nulls out `_rawData` from React state if memory reaches 85% (purely in-memory cleanup, no disk persistence)
+- `src/utils/paginationManager.js` — actively used for paginating the summary table
+
+**Impact:** No functional change (the deleted code was never executed). Eliminates the risk of accidentally persisting PHI to browser storage. The app's data lifecycle is now enforced by the code structure itself: all patient data exists only in React state, which is garbage-collected on navigation away or page refresh.
+
+**Current bulk data model (100 files):**
+- All file data lives in the `uploadedFiles` array in `BulkUploadContext` (React state / JS heap)
+- Estimated ~100–500 KB per file uncompressed (parsedValues, groupedSections, modeledValues, startScores, covariates, multipliers)
+- For 100 files: ~10–50 MB in heap, well within modern browser limits
+- No localStorage, no sessionStorage, no IndexedDB — only a single boolean in localStorage for the redaction toggle (`RedactionContext`)
+- Memory monitor (production only) nulls out `_rawData` at 85% heap usage as a safety valve
+
 ### Cumulative Impact Summary (100-File Zip Upload)
 
 | Metric | Original Baseline | After All Optimizations | Improvement |
@@ -337,3 +377,4 @@ The `html2pdf.js` library produces the largest chunk. It is already lazy-loaded 
 - Latency reductions that improve the user's experience are worth pursuing; micro-optimizations that save milliseconds are not
 - The C# backend migration was the right call for IP protection — any performance work should preserve that boundary
 - Basic mode (no auth, no API calls) should remain fast since it's the public-facing entry point
+- No patient data may be persisted to browser storage (localStorage, sessionStorage, IndexedDB). All PHI must exist only in JavaScript heap memory and be discarded on page refresh or navigation
