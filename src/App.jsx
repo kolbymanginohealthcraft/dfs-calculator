@@ -7,10 +7,10 @@ import { DataLossWarningProvider } from './contexts/DataLossWarningContext';
 import RouteBasedClearer from './components/RouteBasedClearer';
 import HomeScreen from './components/HomeScreen';
 import BasicApp from './components/BasicApp';
+import FAQ from './components/FAQ';
 
 const AdvancedAppDetail = lazy(() => import('./components/AdvancedAppDetail'));
 const AdvancedSummaryView = lazy(() => import('./components/AdvancedSummaryView'));
-const FAQ = lazy(() => import('./components/FAQ'));
 
 // Component to handle conditional routing for advanced pages
 function AdvancedRouteHandler() {
@@ -68,23 +68,20 @@ function AdvancedRouteHandler() {
   return <Suspense fallback={fallback}><AdvancedSummaryView /></Suspense>;
 }
 
+const authLoadingFallback = (
+  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '18px', color: '#666' }}>
+    Loading...
+  </div>
+);
+
+function AuthGate({ children }) {
+  const { isAuthenticated, isLoading } = useAuth();
+  if (isLoading) return authLoadingFallback;
+  return isAuthenticated ? children : <Navigate to="/" replace />;
+}
+
 function AppContent() {
   const { isAuthenticated, isLoading } = useAuth();
-
-  if (isLoading) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        fontSize: '18px',
-        color: '#666'
-      }}>
-        Loading...
-      </div>
-    );
-  }
 
   return (
     <RedactionProvider>
@@ -96,30 +93,26 @@ function AppContent() {
               <Routes>
               <Route 
                 path="/" 
-                element={<HomeScreen isAuthenticated={isAuthenticated} />}
+                element={isLoading ? authLoadingFallback : <HomeScreen isAuthenticated={isAuthenticated} />}
               />
               <Route path="/basic/*" element={<BasicApp />} />
               <Route 
                 path="/advanced" 
                 element={
-                  isAuthenticated ? (
+                  <AuthGate>
                     <AdvancedRouteHandler />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
+                  </AuthGate>
                 } 
               />
               <Route 
                 path="/advanced/summary" 
                 element={
-                  isAuthenticated ? (
+                  <AuthGate>
                     <AdvancedRouteHandler />
-                  ) : (
-                    <Navigate to="/" replace />
-                  )
+                  </AuthGate>
                 } 
               />
-              <Route path="/faq" element={<Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '18px', color: '#666' }}>Loading...</div>}><FAQ /></Suspense>} />
+              <Route path="/faq" element={<FAQ />} />
               </Routes>
             </div>
           </Router>

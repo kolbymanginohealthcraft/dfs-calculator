@@ -62,7 +62,9 @@ const AdvancedSummaryView = () => {
   }, [uploadedFiles, updateDataStatus]);
 
 
-  // Start processing function
+  const CONCURRENCY_LIMIT = 5;
+
+  // Start processing function — processes files concurrently in batches
   const startProcessing = useCallback(async (filesToProcess) => {
     setProcessing(true);
     setCancelled(false);
@@ -71,22 +73,23 @@ const AdvancedSummaryView = () => {
 
     setTotalFiles(filesToProcess.length);
 
-    for (let i = 0; i < filesToProcess.length; i++) {
-      if (cancelledRef.current) {
-        break;
-      }
-      const fileObj = filesToProcess[i];
-      
-      // Check if file is still pending (not already processed)
-      const currentFiles = uploadedFiles;
-      const existingFile = currentFiles.find(f => f.id === fileObj.id);
-      if (existingFile && existingFile.status !== 'pending') {
-        continue;
-      }
-      
-      await processFile(fileObj);
-      setProcessed(i + 1);
+    let completedCount = 0;
+
+    // Process files in concurrent batches
+    for (let i = 0; i < filesToProcess.length; i += CONCURRENCY_LIMIT) {
+      if (cancelledRef.current) break;
+
+      const batch = filesToProcess.slice(i, i + CONCURRENCY_LIMIT).filter(fileObj => {
+        const existing = uploadedFiles.find(f => f.id === fileObj.id);
+        return !existing || existing.status === 'pending';
+      });
+
+      await Promise.all(batch.map(fileObj => processFile(fileObj)));
+
+      completedCount += batch.length;
+      setProcessed(completedCount);
     }
+
     setProcessing(false);
     resetProgress();
     processingStartedRef.current = false;
@@ -226,9 +229,6 @@ const AdvancedSummaryView = () => {
                 }
               }
             );
-
-            // Wait a bit for all callbacks to complete
-            await new Promise(resolve => setTimeout(resolve, 200));
 
             // Check for cancellation after file validation
             if (cancelledRef.current) {
@@ -384,9 +384,6 @@ const AdvancedSummaryView = () => {
         }
       );
 
-      // Wait a bit for all callbacks to complete
-      await new Promise(resolve => setTimeout(resolve, 200));
-      
       if (result && parsedData && startData) {
         // Calculate scores
         const startScore = calculateFunctionScore(startData);
