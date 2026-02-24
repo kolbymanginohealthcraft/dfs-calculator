@@ -5,7 +5,8 @@
  * Run: node test-version-selection.cjs
  */
 
-const allVersions = require('./Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json');
+const path = require('path');
+const allVersions = require(path.resolve(__dirname, '..', 'Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json'));
 
 // Version selection logic (duplicated from coefficientLoader for testing)
 function getUpdateIdForDate(dateStr) {

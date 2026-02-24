@@ -20,6 +20,7 @@ function ImputationTab({
   const [error, setError] = useState(null);
 
   const formatNumber = (n) => Number(n).toFixed(4);
+  const formatCoefficient = (n) => Number.isInteger(n) ? n : Number(n).toFixed(2);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -238,7 +239,7 @@ function ImputationTab({
                                     return (
                                       <tr key={covariateName}>
                                         <td title={covariateName}>{covariateName}</td>
-                                        <td>{value}</td>
+                                        <td>{formatCoefficient(value)}</td>
                                         <td>{formatNumber(multiplier)}</td>
                                         <td>{formatNumber(contribution)}</td>
                                       </tr>

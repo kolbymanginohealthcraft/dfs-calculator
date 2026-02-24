@@ -2,242 +2,199 @@
 
 ## Overview
 
-The Discharge Function Score (DFS) Viewer is a React-based web application that calculates predicted discharge function scores from MDS 3.0 assessment data using CMS-published coefficients.
+The Discharge Function Score (DFS) Viewer is a web application that calculates predicted discharge function scores from MDS 3.0 assessment data using CMS-published risk adjustment coefficients.
+
+It operates in two modes:
+
+1. **Basic Mode** — No MDS file required. Users manually input start scores and expected scores, then model end scores. No authentication required.
+2. **Advanced Mode** — Drag-and-drop an MDS XML file to automatically calculate start scores, expected scores, and imputation. Requires SAML authentication.
 
 ## Technology Stack
 
-- **Frontend:** React 19 + React Router
-- **Build Tool:** Vite
+- **Frontend:** React 19, React Router 7, Vite 7
 - **Styling:** CSS Modules
-- **Data Processing:** xlsx (Excel), JSON (replaced CSV parsing)
+- **Data Processing:** xlsx (Excel), xml2js / xml-crypto (XML/SAML)
 - **Charts:** Recharts
-- **Backend:** ASP.NET Core 8.0 (C#) with SAML 2.0 authentication
+- **PDF Export:** html2pdf.js
+- **File Handling:** react-dropzone, jszip
+- **Backend:** ASP.NET Core 8.0 (C#) with SAML 2.0 authentication (Sustainsys.Saml2)
+- **Secrets:** Azure Key Vault
 - **Deployment:** Azure Static Web Apps via Bitbucket Pipelines
 
-## Architecture Decisions
-
-### C# Backend as Single Source of Truth
-
-All proprietary algorithm logic (function score calculation, imputation, coefficient loading) lives exclusively in the C# backend (`Aegis.DfsCalculator/`). The React frontend calls the C# API endpoints for all protected calculations.
-
-**Benefits:**
-- Single codebase for all algorithm logic (no JS/C# duplication)
-- SAML 2.0 authentication protects all calculation endpoints
-- Coefficient data loaded at runtime by the backend
-- Frontend remains a thin presentation layer
-
-### Data Flow
+## System Architecture
 
 ```
-CMS Source Files (Excel/CSV/TXT)
-    ↓
-Transformation Scripts (scripts/transformers/)
-    ↓
-Generated Data Files (JSON/CSV)
-    ↓
-Bundle at Build Time (frontend assets)
-    ↓
-Runtime: User Uploads MDS XML → C# API Calls → Display Results
+Frontend (React/Vite)
+  │
+  ├── Basic Mode (no auth, no API calls)
+  │     └── Manual score input → client-side modeling
+  │
+  └── Advanced Mode (SAML-authenticated)
+        ├── POST /api/function-score      → Function score calculation
+        ├── POST /api/imputation          → Missing GG item imputation
+        ├── POST /api/imputation-analysis → Imputation detail breakdown
+        └── GET  /api/facility-name/{ccn} → CMS facility name lookup
+              │
+              ▼
+        C# ASP.NET Core Backend (SAML-protected)
+          ├── Controllers/                → API routing + auth
+          ├── Utils/Calculations.cs       → Function score algorithm
+          ├── Utils/Imputations.cs        → CMS statistical imputation
+          ├── Utils/CoefficientLoader.cs  → Version-aware coefficient access
+          └── Data/                       → Shared JSON data (single source of truth)
 ```
+
+**Frontend API client:** `src/utils/secureApiClient.js` — all calls use session cookies + SAML auth
+**Frontend auth:** `src/utils/authService.js` — login/logout/session via `/account/*` endpoints
 
 ## Directory Structure
 
 ```
 dfs-viewer/
-├── Aegis.DfsCalculator/           # C# ASP.NET Core backend
+├── Aegis.DfsCalculator/              # C# ASP.NET Core backend
 │   └── DFSCalculator.Server/
-│       ├── Controllers/           # API endpoints (function-score, imputation, etc.)
-│       ├── Data/                  # Static data (ICD-to-HCC, covariate maps, coefficients)
-│       ├── Utils/                 # Algorithm implementations
-│       │   ├── Calculations.cs    # Function score & covariate calculation
-│       │   ├── Imputations.cs     # CMS statistical imputation engine
-│       │   └── CoefficientLoader.cs # Version-aware coefficient access
-│       └── Program.cs             # App startup, SAML auth, routing
-├── docs/                          # Project documentation
-├── public/                        # Static assets (served as-is)
-│   ├── icd10_lookup_2025.json    # ICD-10 code descriptions
-│   └── itm_val.csv               # MDS item value descriptions
-├── scripts/                       # Data transformation pipeline
-│   ├── data-sources/             # Raw CMS source files
-│   ├── transformers/             # Data generation scripts
-│   └── build-all.cjs             # Master build script
+│       ├── Controllers/              # API endpoints
+│       │   ├── FunctionScoreController.cs
+│       │   ├── ImputationController.cs
+│       │   ├── ImputationAnalysisController.cs
+│       │   ├── FacilityController.cs
+│       │   └── AccountController.cs
+│       ├── Data/                     # Shared data (single source of truth)
+│       │   ├── coefficients-all-versions.json
+│       │   ├── icdToHcc.json
+│       │   ├── conditionMap.json
+│       │   └── ggItems.json
+│       ├── Utils/                    # Algorithm implementations
+│       │   ├── Calculations.cs       # Function score & covariates
+│       │   ├── Imputations.cs        # CMS statistical imputation
+│       │   ├── CoefficientLoader.cs  # Version-aware coefficient access
+│       │   └── FacilityLookup.cs     # CMS facility name lookup
+│       └── Program.cs               # App startup, SAML auth, routing
+├── docs/                             # Active documentation
+│   └── archive/                      # Historical docs
+├── public/                           # Static assets (served as-is)
+│   └── itm_val.json                  # MDS item value descriptions
+├── scripts/                          # Data transformation pipeline
+│   ├── data-sources/                 # Raw CMS source files (gitignored)
+│   ├── transformers/                 # Data generation scripts
+│   └── build-all.cjs                # Master build script
 ├── src/
-│   ├── components/               # React components
-│   ├── data/                     # Build-time data imports
-│   │   ├── mds_item_lookup.json
-│   │   └── instructionContent.js
-│   └── utils/                    # Client-side helpers
-│       ├── secureApiClient.js    # Authenticated API calls to C# backend
-│       ├── authService.js        # SAML auth (login/logout/session)
-│       ├── calculations.js       # Client-side score display helpers
-│       ├── coefficientLoader.js  # Version-aware coefficient access
-│       ├── fileParser.js         # MDS XML parsing
-│       └── [other utilities]
-└── test-data/                    # Sample MDS files for testing
+│   ├── components/                   # Advanced mode React components
+│   ├── basic/                        # Basic mode UI
+│   │   ├── components/               # BasicLayout, ExpectedScoreSlider, etc.
+│   │   └── screens/                  # StartScore, ExpectedScore, EndScore
+│   ├── contexts/                     # React contexts
+│   │   ├── PortalContext.jsx         # Auth state + portal integration
+│   │   ├── BulkUploadContext.jsx     # Bulk file processing state
+│   │   ├── RedactionContext.jsx      # Data redaction for exports
+│   │   └── DataLossWarningContext.jsx
+│   ├── data/                         # Frontend-only data
+│   │   ├── mds_item_lookup.json      # MDS item definitions
+│   │   ├── mds_section_names.json    # MDS section labels
+│   │   └── instructionContent.js     # UI instruction text
+│   └── utils/                        # Client-side utilities
+│       ├── secureApiClient.js        # Authenticated API calls to C# backend
+│       ├── authService.js            # SAML auth (login/logout/session)
+│       ├── calculations.js           # Score display helpers + shared data re-exports
+│       ├── coefficientLoader.js      # Version-aware coefficient access
+│       ├── fileParser.js             # MDS XML parsing
+│       ├── hccMapping.js             # ICD-10 to HCC lookup
+│       └── xmlParser.js              # XML utilities
+├── tests/                            # Test scripts
+├── test-data/                        # Sample MDS files
+├── package.json
+└── vite.config.js
 ```
 
-## Key Components
+## Shared Data — Single Source of Truth
 
-### Data Transformation Pipeline
+All shared data lives in `Aegis.DfsCalculator/DFSCalculator.Server/Data/`. Each JSON file is loaded by C# via a thread-safe lazy singleton, and imported by JavaScript via a relative path to the same file. Generator scripts write directly to this folder.
 
-**Purpose:** Convert CMS regulatory files into app-ready JSON/CSV formats
+| File | What | C# Loader | JS Consumer |
+|------|------|-----------|-------------|
+| `coefficients-all-versions.json` | CMS coefficients (~300 KB) | `CoefficientLoader.cs` | `src/utils/coefficientLoader.js` |
+| `icdToHcc.json` | ICD-10 to HCC crosswalk (~3700 entries) | `ICDtoHCC.cs` | `src/utils/hccMapping.js` |
+| `conditionMap.json` | 13 medical condition categories | `ConditionMap.cs` | `src/utils/calculations.js` |
+| `ggItems.json` | 24 GG item definitions | `GGItems.cs` | `src/utils/calculations.js` |
+
+**Intentional duplication:** `coefficientLoader.js` (JS) and `CoefficientLoader.cs` (C#) both implement date-range version selection logic. The frontend needs this for UI display (showing which FY period a patient falls in) without a server round-trip. The shared data file is consolidated; only the selection logic is duplicated.
+
+## Coefficient Versioning
+
+Managed automatically based on Assessment Reference Date (A2300):
+
+| ARD Date Range | Update ID | Fiscal Year | Model Intercept |
+|----------------|-----------|-------------|-----------------|
+| 01/01/2023 – 09/30/2024 | 1 | FY 2023-2024 | 26.6465 |
+| 10/01/2024 – 09/30/2025 | 2 | FY 2025 | 30.0118 |
+| 10/01/2025 – Present | 3 | FY 2026 | 29.076 |
+
+## Data Transformation Pipeline
+
+CMS publishes regulatory files annually. Transformer scripts convert them into app-ready JSON.
 
 **Location:** `scripts/transformers/`
 
-**Transformers:**
-1. `generateAllCoefficients.cjs` - Extracts multi-version coefficients from Excel
-2. `generateIcd10Lookup.cjs` - Converts ICD-10 TXT to JSON
-3. `generateIcdToHcc.cjs` - Creates ICD-10 to HCC crosswalk
-4. `generateMdsLookup.cjs` - Transforms MDS item definitions
+| Script | Output |
+|--------|--------|
+| `generateAllCoefficients.cjs` | `Data/coefficients-all-versions.json` |
+| `generateIcdToHcc.cjs` | `Data/icdToHcc.json` |
+| `generateIcd10Lookup.cjs` | `public/icd10_lookup_YYYY.json` |
+| `generateMdsLookup.cjs` | `src/data/mds_item_lookup.json` |
 
 **Run all:** `node scripts/build-all.cjs`
 
-### Coefficient Management
-
-**Multi-Version System** (since Oct 2025)
-
-- Stores all historical CMS coefficient versions (FY 2023, 2025, 2026)
-- Automatically selects correct version based on ARD date (A2300)
-- Single source of truth: `Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json`
-- Access via: `src/utils/coefficientLoader.js`
-
-See `docs/COEFFICIENT_MIGRATION.md` for details.
-
-### Core Calculation Engine (C# Backend)
-
-**`Aegis.DfsCalculator/DFSCalculator.Server/Utils/Calculations.cs`**
-
-Main functions:
-- `CalculateFunctionScore()` - Computes discharge function score
-- `GetFunctionCovariates()` - Extracts covariates from MDS data
-- `ExtractPatientSummary()` - Aggregates patient demographics
-
-**`Aegis.DfsCalculator/DFSCalculator.Server/Utils/Imputations.cs`**
-
-Handles missing GG item imputation using CMS statistical methodology (Table 8-8).
-
-### File Parsing (Client-Side)
-
-**`src/utils/fileParser.js`**
-
-Parses MDS 3.0 XML files and orchestrates API calls to the C# backend.
-
-## Data Files
-
-### Build-Time (imported in code)
-
-| File | Purpose | Size |
-|------|---------|------|
-| `Aegis.DfsCalculator/.../Data/coefficients-all-versions.json` | All CMS coefficient versions (shared with C# backend) | ~300 KB |
-| `src/data/mds_item_lookup.json` | MDS item definitions | ~100 KB |
-
-### Runtime (loaded from public/)
-
-| File | Purpose | Size |
-|------|---------|------|
-| `icd10_lookup_2025.json` | ICD-10 code descriptions | ~2 MB |
-| `itm_val.csv` | MDS value descriptions | ~200 KB |
-
-## Calculation Flow
+## Calculation Flow (Advanced Mode)
 
 ```
 1. User uploads MDS XML file
-2. Parse XML client-side → extract all item values
-3. POST to /api/function-score → C# calculates covariates & weighted score
-4. POST to /api/imputation → C# imputes missing GG items
-5. Display results + export options
+2. Client-side: Parse XML → extract all item values
+3. Client-side: Determine coefficient version from ARD date
+4. POST /api/function-score   → C# calculates covariates & weighted score
+5. POST /api/imputation       → C# imputes missing GG items (Table 8-8)
+6. POST /api/imputation-analysis → C# returns detailed imputation breakdown
+7. Display results with charts, covariates, and export options
 ```
 
-## Versioning Strategy
+## Authentication
 
-### Coefficient Versions
+- **SAML 2.0** via Sustainsys.Saml2 in the C# backend
+- Identity Provider managed by IT (myCare SSO)
+- Session-based auth with cookies
+- In development: `/account/dev-login` bypasses SAML for local testing
+- Basic mode requires no authentication
 
-Managed automatically based on ARD date:
-- **Update ID 1:** FY 2023-2024 (Jan 2023 - Sep 2024)
-- **Update ID 2:** FY 2025 (Oct 2024 - Sep 2025)  
-- **Update ID 3:** FY 2026 (Oct 2025 - Present)
+## Build & Development
 
-### ICD-10 Codes
-
-Separate files per year: `icd10_lookup_YYYY.json`
-
-Currently using: 2025
-
-## Build & Deploy
-
-### Development
 ```bash
-npm run dev          # Local development server
-npm run lint         # ESLint
+npm install                  # Install frontend dependencies
+npm run dev                  # Vite dev server (proxies API to local C# backend)
+npm run server               # Start C# backend (dotnet run)
+npm run build                # Production build
+npm test                     # Run coefficient version selection tests
+npm run test:transformers    # Run data transformation tests (requires CMS source data)
+npm run lint                 # ESLint
 ```
 
-### Production
-```bash
-npm run build        # Vite production build
-npm run preview      # Preview production build locally
-```
+The Vite dev server proxies `/api/*` and `/account/*` requests to the local C# backend at `https://localhost:7194` (configured in `vite.config.js`).
 
-### Deployment
+## Deployment
 
 Automatic deployment via Bitbucket Pipelines on push to `release/*` branches.
 
-**Environment:** Azure Static Web Apps with C# ASP.NET Core backend
+**Environment:** Azure Static Web Apps (frontend) + Azure App Service (C# backend)
 
-## Testing
-
-### Manual Testing
-- Sample MDS files in `test-data/examples/`
-- `GOOD_EXAMPLE.xml` - Valid file
-- `BAD_EXAMPLE.xml` - Test error handling
-
-### Validation
-- `test-version-selection.js` - Coefficient version selection tests
-- `scripts/test-transformations.cjs` - Data transformation tests
-
-## Performance Considerations
-
-### Bundle Optimization
-- Code splitting via React.lazy() for large components
-- JSON files gzipped by Vite
-- CSS Modules for scoped styles
-
-### Data Loading
-- Large files (ICD-10 lookup) loaded on-demand
-- Coefficients bundled for instant access
-- MDS parsing happens client-side (no backend latency)
-
-## Future Enhancements
-
-### Planned
-- [ ] Convert `itm_val.csv` to JSON for faster parsing
-- [ ] Add coefficient version indicator in UI
-- [ ] Automated testing suite
-
-### Potential
-- [ ] TypeScript migration
-- [ ] Service worker for offline support
-- [ ] Batch file processing
-
-## Maintenance
-
-### Annual Updates (October)
+## Annual Updates (October)
 
 When CMS releases new fiscal year coefficients:
 
 1. Download new files to `scripts/data-sources/`
 2. Run `node scripts/build-all.cjs`
-3. Test with sample MDS files
-4. Deploy
+3. Run `npm test` to verify version selection
+4. Test with sample MDS files from `test-data/`
+5. Deploy
 
-**No code changes required** - version system handles it automatically.
-
-### Dependencies
-
-Update regularly:
-```bash
-npm outdated         # Check for updates
-npm update           # Update within version ranges
-```
+**No code changes required** — the versioning system handles new fiscal years automatically.
 
 ## Resources
 

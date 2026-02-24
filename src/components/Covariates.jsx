@@ -38,6 +38,7 @@ function Covariates({
 
   const formatNumber = (n) => Number(n).toFixed(2);
   const formatNumberDetailed = (n) => Number(n).toFixed(4);
+  const formatCoefficient = (n) => Number.isInteger(n) ? n : Number(n).toFixed(2);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -214,7 +215,7 @@ function Covariates({
                         title={!isClickable ? "No related MDS items" : ""}
                       >
                         <td>{highlightMatch(key, searchTerm)}</td>
-                        <td>{value}</td>
+                        <td>{formatCoefficient(value)}</td>
                         <td>{formatNumberDetailed(multiplier)}</td>
                         <td>{formatNumberDetailed(subtotal)}</td>
                       </tr>

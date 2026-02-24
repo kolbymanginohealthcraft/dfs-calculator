@@ -29,7 +29,7 @@ for (const script of transformations) {
   console.log(`🔄 Testing ${script}...`);
   
   try {
-    const scriptPath = path.join(__dirname, 'transformers', script);
+    const scriptPath = path.join(__dirname, '..', 'scripts', 'transformers', script);
     execSync(`node "${scriptPath}"`, { 
       cwd: path.join(__dirname, '..'),
       encoding: 'utf8',
