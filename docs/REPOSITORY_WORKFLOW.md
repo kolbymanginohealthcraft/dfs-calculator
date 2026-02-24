@@ -58,23 +58,33 @@ git fetch upstream
 git merge upstream/Develop
 ```
 
-Resolve any conflicts if needed.
+Resolve any conflicts if needed. Conflicts are rare because you work on the frontend (`src/`) and IT works on the backend (`Aegis.DfsCalculator/`). If conflicts appear in `src/`, keep your changes. If they involve IT's backend files, check with Scott or Hannah.
 
 ### Step 2: Push to your Bitbucket fork
 
+Push your local `safety` branch to the `Develop` branch on your Bitbucket fork. This avoids needing to switch branches:
+
 ```bash
-git push bitbucket Develop
+git push bitbucket safety:Develop
 ```
+
+If the push is rejected (non-fast-forward), it means `bitbucket/Develop` has commits you don't have. Re-run Step 1 to sync, resolve any conflicts, then retry the push.
 
 ### Step 3: Create a Pull Request
 
-- Go to Bitbucket web interface
-- Create PR from `dfs-calculator_km0001/Develop` → `dfs-calculator/Develop`
-- IT team reviews and merges
+1. Go to your fork on Bitbucket: `https://bitbucket.org/aegis-therapies/dfs-calculator_km0001`
+2. Click **Create pull request**
+3. Set the source and destination:
+   - **Source:** `dfs-calculator_km0001` / `Develop`
+   - **Destination:** `dfs-calculator` / `release/1.1.0` (or current release branch)
+4. Add a title and description summarizing the changes (see [Pull Request History](#pull-request-history) for examples)
+5. Submit — IT reviews and merges
+
+**Important:** PRs go to a `release/*` branch, not to `Develop`. The `Develop` branch on IT's repo is the base you originally forked from. IT manages the release branch lifecycle.
 
 ### Step 4: IT triggers deployment
 
-Once merged into `Develop`, IT creates or updates a `release/*` branch. The Bitbucket Pipeline (`bitbucket-pipelines.yml`) handles the rest:
+The Bitbucket Pipeline (`bitbucket-pipelines.yml`) triggers on `release/*` branches:
 
 1. **Build** — `npm ci && npm run build` (produces `dist/`)
 2. **Deploy to Staging** — Automatic, uses Azure Static Web Apps CLI
@@ -113,26 +123,59 @@ The project previously used Vercel for quick test deployments directly from GitH
 
 **Current deployment path:** Bitbucket → Azure Static Web Apps (frontend) + Azure App Service (C# backend). This is managed by IT and is the only supported deployment target.
 
+## Pull Request History
+
+### PR #1 — Initial frontend submission (Declined)
+
+- **Target:** `dfs-calculator/release/1.1.0`
+- **Outcome:** Declined by IT due to security vulnerabilities in the JavaScript-only architecture. The frontend bundle contained exposed calculation logic in Vercel serverless functions (`api/` directory), and client-side files included proprietary algorithm code (`server.js`, `covariateMapping.js`, `imputationCalculations.js`).
+- **Result:** Triggered the migration to a C# ASP.NET Core backend to move all proprietary logic behind SAML authentication.
+
+### PR #2 — C# backend migration (February 2026)
+
+- **Target:** `dfs-calculator_km0001/Develop` → `dfs-calculator/release/1.1.0`
+- **Title:** C# backend migration: security remediation and frontend modernization
+- **Scope:** 34 commits, 158 files changed (~9,500 insertions, ~12,200 deletions)
+- **Key changes:**
+  - Full C# ASP.NET Core 8.0 backend with SAML 2.0 authentication
+  - All proprietary logic (`Calculations.cs`, `Imputations.cs`) compiled and server-only
+  - Removed Vercel serverless functions and all client-side algorithm code
+  - Frontend modernized: CSS Modules, lazy loading, new charts, performance optimizations
+  - Comprehensive documentation and C# unit tests added
+
+### Writing a PR description
+
+For significant PRs, include:
+1. **Summary** — One paragraph explaining the purpose and what changed at a high level
+2. **What Changed** — Grouped by area (Backend, Security, Frontend, Performance, Documentation, Removed)
+3. **Testing** — How the changes were verified (unit tests, manual testing, specific scenarios)
+
 ## Branch Strategy
 
 **Your branches:**
-- `safety` — Current working branch
+- `safety` — Current working branch (pushed to GitHub as `origin/safety`)
 - `main` — Synced with GitHub main
 
 **IT's branches:**
-- `Develop` — Development branch (target for your PRs)
-- `release/*` — Triggers pipeline deployment
+- `Develop` — Base development branch (you forked from this)
+- `release/*` — Target for your PRs; triggers pipeline deployment
 - `DotNetBase` — Historical migration branch (merged)
 
 ## Common Tasks
 
-### Syncing with IT
+### Full Bitbucket push and PR workflow
 
 ```bash
-git fetch upstream Develop
+# 1. Sync with IT's latest code
+git fetch upstream
 git merge upstream/Develop
-# Resolve conflicts if any
-git push bitbucket Develop
+
+# 2. Push your safety branch to Develop on your Bitbucket fork
+git push bitbucket safety:Develop
+
+# 3. Create PR on Bitbucket web interface:
+#    Source: dfs-calculator_km0001 / Develop
+#    Destination: dfs-calculator / release/1.1.0 (or current release branch)
 ```
 
 ### Running tests before pushing
