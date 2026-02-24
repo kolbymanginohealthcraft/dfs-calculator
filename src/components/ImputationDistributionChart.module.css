@@ -9,16 +9,3 @@
   height: auto;
   display: block;
 }
-
-.formulaNote {
-  margin: 0.3rem 0 0;
-  font-size: 0.74rem;
-  color: #6b7280;
-  text-align: center;
-  line-height: 1.4;
-}
-
-.formulaNote strong {
-  color: #dc3545;
-  font-family: monospace;
-}

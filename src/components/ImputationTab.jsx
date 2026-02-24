@@ -167,8 +167,8 @@ function ImputationTab({
                   <th>GG Item</th>
                   <th style={{ textAlign: "right" }}>Raw MDS</th>
                   <th style={{ textAlign: "center" }}>Needs Imputation</th>
-                  <th style={{ textAlign: "right" }}>Imputation Score</th>
-                  <th style={{ textAlign: "right" }}>Value</th>
+                  <th style={{ textAlign: "right" }}>z-Score</th>
+                  <th style={{ textAlign: "right" }}>Imputed Value</th>
                 </tr>
               </thead>
               <tbody>
@@ -207,7 +207,12 @@ function ImputationTab({
                               <h4>Covariate Breakdown for {getGGItemLabel(ggItemId)} ({ggItemId})</h4>
                               {/* Imputed value summary */}
                               <div className={styles.thresholdVisualization}>
-                                <h5>Imputation Score (z): {formatNumber(data.imputationScore)} → Imputed Value: {Number(data.imputedValue).toFixed(4)}</h5>
+                                <h5>
+                                  z-Score: {formatNumber(data.imputationScore)} → Imputed Value: {Number(data.imputedValue).toFixed(4)}{" "}
+                                  <span style={{ fontSize: "0.75em", fontWeight: "normal", color: "#6b7280" }}>
+                                    (each GG value weighted by its probability)
+                                  </span>
+                                </h5>
                                 <Suspense fallback={<div className={styles.visualPlaceholder}>Loading chart...</div>}>
                                   <ImputationDistributionChart
                                     z={data.imputationScore}
@@ -243,7 +248,7 @@ function ImputationTab({
                                 <tfoot>
                                   <tr className={styles.totalRow}>
                                     <td colSpan="3" style={{ textAlign: "right", fontWeight: "bold" }}>
-                                      Total Imputation Score:
+                                      z-Score (sum of contributions):
                                     </td>
                                     <td style={{ fontWeight: "bold", color: "#dc3545" }}>
                                       {formatNumber(data.imputationScore)}

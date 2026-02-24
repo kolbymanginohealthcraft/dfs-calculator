@@ -125,11 +125,11 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
         {/* ── section labels ── */}
         <text x={(cL + cR) / 2} y={10} textAnchor="middle"
           fontSize="9.5" fill="#6b7280" fontWeight="600">
-          Imputation Score vs Thresholds
+          z-Score vs Thresholds
         </text>
         <text x={(bL + bR) / 2} y={10} textAnchor="middle"
           fontSize="9.5" fill="#6b7280" fontWeight="600">
-          Expected Value Calculation
+          Imputed Value Calculation
         </text>
 
         {/* ════════ BELL CURVE ════════ */}
@@ -175,13 +175,30 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
           </text>
         ))}
 
-        {/* peak marker — show z value */}
-        <circle cx={sx(0)} cy={sy(yPeak)} r={2.5} fill="#dc3545" />
-        <text x={sx(0)} y={sy(yPeak) - 7}
-          textAnchor="middle" fontSize="7.5" fontWeight="600" fill="#dc3545"
-          fontFamily="monospace">
-          z = {z.toFixed(4)}
-        </text>
+        {/* z-Score badge at top (matches Imputed Value badge style) */}
+        {(() => {
+          const zx = sx(0);
+          const zBx = Math.max(cL + 32, Math.min(cR - 32, zx));
+          return (
+            <g>
+              <rect x={zBx - 30} y={badgeY} width={60} height={badgeH}
+                rx={3} fill="#dc3545" />
+              <text x={zBx} y={badgeY + 10.5}
+                textAnchor="middle" fontSize="8.5" fontWeight="700"
+                fill="#fff" fontFamily="monospace">
+                z = {z.toFixed(4)}
+              </text>
+            </g>
+          );
+        })()}
+
+        {/* z-Score dashed line — from badge to peak */}
+        <line x1={sx(0)} y1={lineStart} x2={sx(0)} y2={sy(yPeak)}
+          stroke="#dc3545" strokeWidth={1.8}
+          strokeDasharray="5,3" opacity={0.7} />
+
+        {/* peak marker dot */}
+        <circle cx={sx(0)} cy={sy(yPeak)} r={2} fill="#dc3545" />
 
         {/* curve baseline */}
         <line x1={cL} y1={cBase} x2={cR} y2={cBase}
@@ -264,11 +281,6 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
         />
 
       </svg>
-
-      <p className={styles.formulaNote}>
-        Imputed value = each value weighted by its probability ={" "}
-        <strong>{ev.toFixed(4)}</strong>
-      </p>
     </div>
   );
 }
