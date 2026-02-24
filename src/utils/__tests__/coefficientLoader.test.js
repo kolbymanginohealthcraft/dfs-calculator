@@ -1,20 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import {
   getUpdateIdForDate,
-  getFunctionMultipliers,
-  getImputationMultipliers,
-  getImputationMultipliersForItem,
   getScheduleInfo,
   getVersionFromArdDate,
   getAllSchedules,
   getMetadata,
-  allVersions,
 } from '../coefficientLoader.js';
 
 // ---------------------------------------------------------------------------
 // Baseline data integrity
 // ---------------------------------------------------------------------------
-describe('allVersions data integrity', () => {
+describe('schedule data integrity', () => {
   it('has metadata with expected fields', () => {
     const meta = getMetadata();
     expect(meta).toHaveProperty('generated');
@@ -35,29 +31,6 @@ describe('allVersions data integrity', () => {
       expect(s).toHaveProperty('updateId');
       expect(s).toHaveProperty('startDate');
       expect(s).toHaveProperty('fiscalYear');
-    }
-  });
-
-  it('has functionMultipliers for every updateId in the schedule', () => {
-    const schedules = getAllSchedules();
-    for (const s of schedules) {
-      expect(allVersions.functionMultipliers).toHaveProperty(s.updateId);
-    }
-  });
-
-  it('has imputationMultipliers for every updateId in the schedule', () => {
-    const schedules = getAllSchedules();
-    for (const s of schedules) {
-      expect(allVersions.imputationMultipliers).toHaveProperty(s.updateId);
-    }
-  });
-
-  it('function multipliers contain Model Intercept', () => {
-    const schedules = getAllSchedules();
-    for (const s of schedules) {
-      const multipliers = allVersions.functionMultipliers[s.updateId];
-      expect(multipliers).toHaveProperty('Model Intercept');
-      expect(typeof multipliers['Model Intercept']).toBe('number');
     }
   });
 });
@@ -108,52 +81,6 @@ describe('getUpdateIdForDate', () => {
 
   it('returns the latest version for a far-future date', () => {
     expect(getUpdateIdForDate('20991231')).toBe(latestId);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// getFunctionMultipliers
-// ---------------------------------------------------------------------------
-describe('getFunctionMultipliers', () => {
-  it('returns an object with numeric multiplier values', () => {
-    const mult = getFunctionMultipliers('20251001');
-    expect(typeof mult).toBe('object');
-    expect(mult).not.toBeNull();
-    expect(typeof mult['Model Intercept']).toBe('number');
-  });
-
-  it('returns consistent multipliers for dates in the same period', () => {
-    const mult1 = getFunctionMultipliers('20251001');
-    const mult2 = getFunctionMultipliers('20260101');
-    expect(mult1['Model Intercept']).toBe(mult2['Model Intercept']);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// getImputationMultipliers
-// ---------------------------------------------------------------------------
-describe('getImputationMultipliers', () => {
-  it('returns an object keyed by GG item IDs', () => {
-    const mult = getImputationMultipliers('20251001');
-    expect(typeof mult).toBe('object');
-    const keys = Object.keys(mult);
-    expect(keys.length).toBeGreaterThan(0);
-    expect(keys.some(k => k.startsWith('GG'))).toBe(true);
-  });
-});
-
-// ---------------------------------------------------------------------------
-// getImputationMultipliersForItem
-// ---------------------------------------------------------------------------
-describe('getImputationMultipliersForItem', () => {
-  it('returns multipliers for a valid GG item', () => {
-    const mult = getImputationMultipliersForItem('GG0130A1', '20251001');
-    expect(typeof mult).toBe('object');
-  });
-
-  it('returns empty object for unknown GG item', () => {
-    const mult = getImputationMultipliersForItem('GG9999Z9', '20251001');
-    expect(mult).toEqual({});
   });
 });
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { BulkUploadProvider, useBulkUpload } from './contexts/BulkUploadContext';
@@ -7,9 +7,10 @@ import { DataLossWarningProvider } from './contexts/DataLossWarningContext';
 import RouteBasedClearer from './components/RouteBasedClearer';
 import HomeScreen from './components/HomeScreen';
 import BasicApp from './components/BasicApp';
-import AdvancedAppDetail from './components/AdvancedAppDetail';
-import AdvancedSummaryView from './components/AdvancedSummaryView';
-import FAQ from './components/FAQ';
+
+const AdvancedAppDetail = lazy(() => import('./components/AdvancedAppDetail'));
+const AdvancedSummaryView = lazy(() => import('./components/AdvancedSummaryView'));
+const FAQ = lazy(() => import('./components/FAQ'));
 
 // Component to handle conditional routing for advanced pages
 function AdvancedRouteHandler() {
@@ -54,14 +55,17 @@ function AdvancedRouteHandler() {
     }
   }, [hasFiles, location.pathname, navigate, isDetailViewRequest, uploadedFiles, fileId]);
 
-  // If there's a fileId parameter and we have files, show the detail view
+  const fallback = (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '18px', color: '#666' }}>
+      Loading...
+    </div>
+  );
+
   if (isDetailViewRequest && hasFiles) {
-    return <AdvancedAppDetail />;
+    return <Suspense fallback={fallback}><AdvancedAppDetail /></Suspense>;
   }
 
-  // For all other cases (no files or files uploaded), show the summary view
-  // AdvancedSummaryView now handles both upload state and summary view
-  return <AdvancedSummaryView />;
+  return <Suspense fallback={fallback}><AdvancedSummaryView /></Suspense>;
 }
 
 function AppContent() {
@@ -115,7 +119,7 @@ function AppContent() {
                   )
                 } 
               />
-              <Route path="/faq" element={<FAQ />} />
+              <Route path="/faq" element={<Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: '18px', color: '#666' }}>Loading...</div>}><FAQ /></Suspense>} />
               </Routes>
             </div>
           </Router>

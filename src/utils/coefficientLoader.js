@@ -1,11 +1,14 @@
 /**
- * Coefficient Loader - Version-Aware Data Access
+ * Coefficient Loader - Version-Aware Schedule Access
  * 
- * This utility provides access to the correct version of coefficients
- * based on the ARD (Assessment Reference Date - A2300) from the MDS file.
+ * Provides access to the fiscal-year schedule based on the ARD
+ * (Assessment Reference Date - A2300) from the MDS file.
+ * 
+ * Coefficient multiplier data is NOT bundled in the frontend.
+ * All calculation logic using those values lives on the C# backend.
  */
 
-import allVersions from '../../Aegis.DfsCalculator/DFSCalculator.Server/Data/coefficients-all-versions.json' with { type: "json" };
+import scheduleData from '../data/schedule-only.json' with { type: "json" };
 
 /**
  * Determine which Update ID to use based on an assessment date
@@ -14,35 +17,28 @@ import allVersions from '../../Aegis.DfsCalculator/DFSCalculator.Server/Data/coe
  */
 export function getUpdateIdForDate(dateStr) {
   if (!dateStr) {
-    // No ARD date (A2300) provided, using latest coefficient version
-    return allVersions.schedule[allVersions.schedule.length - 1].updateId;
+    return scheduleData.schedule[scheduleData.schedule.length - 1].updateId;
   }
   
-  // Parse date string (handle both YYYYMMDD and YYYY-MM-DD formats)
   let assessmentDate;
   if (dateStr.includes('-')) {
-    // YYYY-MM-DD format
     assessmentDate = new Date(dateStr);
   } else if (dateStr.length === 8) {
-    // YYYYMMDD format (MDS standard)
     const year = dateStr.substring(0, 4);
     const month = dateStr.substring(4, 6);
     const day = dateStr.substring(6, 8);
     assessmentDate = new Date(`${year}-${month}-${day}`);
   } else {
-    // Invalid ARD date format, using latest version
-    return allVersions.schedule[allVersions.schedule.length - 1].updateId;
+    return scheduleData.schedule[scheduleData.schedule.length - 1].updateId;
   }
   
-  // Find matching schedule entry
-  // Normalize all dates to midnight UTC to avoid timezone issues
   const assessmentDateOnly = new Date(Date.UTC(
     assessmentDate.getUTCFullYear(),
     assessmentDate.getUTCMonth(),
     assessmentDate.getUTCDate()
   ));
   
-  for (const period of allVersions.schedule) {
+  for (const period of scheduleData.schedule) {
     const startDate = new Date(period.startDate);
     const startDateOnly = new Date(Date.UTC(
       startDate.getUTCFullYear(),
@@ -62,40 +58,7 @@ export function getUpdateIdForDate(dateStr) {
     }
   }
   
-  // Default to latest if date is in the future or not found
-  return allVersions.schedule[allVersions.schedule.length - 1].updateId;
-}
-
-/**
- * Get function multipliers for a specific date
- * @param {string} dateStr - ARD date
- * @returns {Object} Function multipliers object
- */
-export function getFunctionMultipliers(dateStr) {
-  const updateId = getUpdateIdForDate(dateStr);
-  return allVersions.functionMultipliers[updateId];
-}
-
-/**
- * Get imputation multipliers for a specific date
- * @param {string} dateStr - ARD date
- * @returns {Object} Imputation multipliers object
- */
-export function getImputationMultipliers(dateStr) {
-  const updateId = getUpdateIdForDate(dateStr);
-  return allVersions.imputationMultipliers[updateId];
-}
-
-/**
- * Get imputation multipliers for a specific GG item and date
- * @param {string} ggItemId - GG item ID (e.g., 'GG0130A1')
- * @param {string} dateStr - ARD date
- * @returns {Object} Imputation multipliers for that item
- */
-export function getImputationMultipliersForItem(ggItemId, dateStr) {
-  const updateId = getUpdateIdForDate(dateStr);
-  const allImputation = allVersions.imputationMultipliers[updateId];
-  return allImputation?.[ggItemId] || {};
+  return scheduleData.schedule[scheduleData.schedule.length - 1].updateId;
 }
 
 /**
@@ -105,7 +68,7 @@ export function getImputationMultipliersForItem(ggItemId, dateStr) {
  */
 export function getScheduleInfo(dateStr) {
   const updateId = getUpdateIdForDate(dateStr);
-  return allVersions.schedule.find(s => s.updateId === updateId);
+  return scheduleData.schedule.find(s => s.updateId === updateId);
 }
 
 /**
@@ -122,7 +85,7 @@ export function getVersionFromArdDate(dateStr) {
  * @returns {Array} Array of schedule entries
  */
 export function getAllSchedules() {
-  return allVersions.schedule;
+  return scheduleData.schedule;
 }
 
 /**
@@ -130,8 +93,5 @@ export function getAllSchedules() {
  * @returns {Object} Metadata
  */
 export function getMetadata() {
-  return allVersions.metadata;
+  return scheduleData.metadata;
 }
-
-// Export the raw data for advanced use cases
-export { allVersions };

@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "generated": "2025-10-06T22:31:51.534Z",
+    "riskAdjustmentSource": "risk_adjustment_appendix_file_snf_effective_10_01_2025.xlsx",
+    "imputationSource": "imputation_appendix_file_for_snf_effective_10_01_2025.xlsx",
+    "updateCount": 3
+  },
+  "schedule": [
+    {
+      "updateId": "1",
+      "manualVersion": "5.0",
+      "manualPostDate": "September 2023",
+      "startDate": "01/01/2023",
+      "endDate": "09/30/2024",
+      "fiscalYear": "FY 2023",
+      "comments": "These values were derived using FY 2022 assessment data.\r\n\r\nThe reporting of this measure commenced using data collected starting on January 1, 2023."
+    },
+    {
+      "updateId": "2",
+      "manualVersion": "6.0",
+      "manualPostDate": "August 2024",
+      "startDate": "10/01/2024",
+      "endDate": "09/30/2025",
+      "fiscalYear": "FY 2025",
+      "comments": "This update reflects the edits made to the measure specifications included in the SNF QRP Measure Calculations and Reporting User's Manual (Version 6.0) posted in August 2024. \r\n\r\nThis update additionally reflects updates to the model coefficients based on ICD-10 mapping updates and utilizing assessment data for FY 2023."
+    },
+    {
+      "updateId": "3",
+      "manualVersion": "7",
+      "manualPostDate": "September 2025",
+      "startDate": "10/01/2025",
+      "endDate": null,
+      "fiscalYear": "FY 2026",
+      "comments": "This update reflects the edits made to the measure specifications included in the SNF QRP Measure Calculations and Reporting User's Manual (Version 7.0) posted in September 2025. \r\n\r\nThis update additionally reflects updates to the model coefficients based on ICD-10 mapping and utilizing assessment data for FY 2024."
+    }
+  ]
+}
