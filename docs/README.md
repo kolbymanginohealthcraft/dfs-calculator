@@ -23,6 +23,7 @@ This directory contains active project documentation. Historical docs live in `a
 
 ## Future Work
 - **`FUTURE_IMPROVEMENTS.md`** — Deferred items: component tests, integration tests, coverage reporting
+- **`PERFORMANCE_REVIEW.md`** — Performance optimization opportunities and measurement plan
 
 ## Archive
 - **`archive/`** — Reference docs from past migrations, optimizations, and security assessments (21 files). See `archive/README.md`.

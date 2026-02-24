@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Sustainsys.Saml2.AspNetCore2;
@@ -11,6 +12,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
     [Route("account")]
     public class AccountController : Controller
     {
+        [AllowAnonymous]
         [HttpGet("login")]
         public IActionResult Login(string? returnUrl = "/")
         {
@@ -18,6 +20,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
             return Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, Saml2Defaults.Scheme);
         }
 
+        [AllowAnonymous]
         [HttpGet("logout")]
         public IActionResult Logout(string? returnUrl = "/")
         {
@@ -28,10 +31,10 @@ namespace Aegis.DfsCalculator.Server.Controllers
                 Saml2Defaults.Scheme);
         }
 
+        [Authorize]
         [HttpGet("me")]
         public IActionResult Me()
         {
-            if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
             return Ok(new
             {
                 Name = User.Identity!.Name,
@@ -39,6 +42,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
             });
         }
 
+        [AllowAnonymous]
         [HttpGet("dev-login")]
         public async Task<IActionResult> DevLogin()
         {

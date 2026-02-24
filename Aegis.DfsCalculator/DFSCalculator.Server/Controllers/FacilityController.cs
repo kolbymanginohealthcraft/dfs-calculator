@@ -1,20 +1,20 @@
-﻿using Aegis.DfsCalculator.Server.Utils;
+using Aegis.DfsCalculator.Server.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Aegis.DfsCalculator.Server.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/facility-name")]
     public class FacilityController : Controller
     {
         [HttpGet("{ccn}")]
         public async Task<IActionResult> GetFacility(string ccn)
         {
-            if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
-            
             if (string.IsNullOrEmpty(ccn))
             {
                 return BadRequest(new { error = "CCN parameter is required" });

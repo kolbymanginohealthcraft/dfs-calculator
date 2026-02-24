@@ -1,20 +1,20 @@
 using Aegis.DfsCalculator.Server.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
 namespace Aegis.DfsCalculator.Server.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/imputation-analysis")]
     public class ImputationAnalysisController : Controller
     {
         [HttpPost]
         public IActionResult HandleImputationAnalysis(ImputationAnalysisBody body)
         {
-            if (User?.Identity?.IsAuthenticated != true) return Unauthorized();
-            
             if (body == null) return BadRequest(new { error = "Request body is required" });
             if (body.ParsedValues == null) return BadRequest(new { error = "parsedValues is required" });
             if (body.Summary == null) return BadRequest(new { error = "summary is required" });
