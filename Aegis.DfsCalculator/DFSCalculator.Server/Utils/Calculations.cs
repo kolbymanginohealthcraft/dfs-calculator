@@ -559,7 +559,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, double> ProcessAdditionalClinicalConditions(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessAdditionalClinicalConditions(Dictionary<string, string> parsedValues, string updateId)
         {
             Dictionary<string, double> covariates = new Dictionary<string, double>();
 
@@ -578,13 +578,16 @@ namespace Aegis.DfsCalculator.Server.Utils
                 covariates["No Physical or Occupational Therapy - Admission"] = 1;
             }
 
-            // No PT or OT on Discharge
-            int ptSumDischarge = new List<string> { "O0425B1", "O0425B2", "O0425B3" }.Sum(k => Int32.Parse(Int32.TryParse(parsedValues.GetValueOrDefault(k), out _) ? parsedValues.GetValueOrDefault(k) : "0"));
-            int otSumDischarge = new List<string> { "O0425C1", "O0425C2", "O0425C3" }.Sum(k => Int32.Parse(Int32.TryParse(parsedValues.GetValueOrDefault(k), out _) ? parsedValues.GetValueOrDefault(k) : "0"));
-
-            if (ptSumDischarge == 0 && otSumDischarge == 0)
+            // No PT or OT on Discharge — only applicable for Update ID "3" (FY 2026) and later
+            if (int.TryParse(updateId, out int id) && id >= 3)
             {
-                covariates["No Physical or Occupational Therapy - Discharge"] = 1;
+                int ptSumDischarge = new List<string> { "O0425B1", "O0425B2", "O0425B3" }.Sum(k => Int32.Parse(Int32.TryParse(parsedValues.GetValueOrDefault(k), out _) ? parsedValues.GetValueOrDefault(k) : "0"));
+                int otSumDischarge = new List<string> { "O0425C1", "O0425C2", "O0425C3" }.Sum(k => Int32.Parse(Int32.TryParse(parsedValues.GetValueOrDefault(k), out _) ? parsedValues.GetValueOrDefault(k) : "0"));
+
+                if (ptSumDischarge == 0 && otSumDischarge == 0)
+                {
+                    covariates["No Physical or Occupational Therapy - Discharge"] = 1;
+                }
             }
 
             // Stage 2 Pressure Ulcer on Admission
@@ -645,6 +648,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             // Parse A2300 - it may be in YYYYMMDD format or Unix timestamp
             string ardDateStr = String.IsNullOrEmpty(ardDate) ? parsedValues.GetValueOrDefault("A2300") : ardDate;
             Dictionary<string, double?> functionMultipliers = CoefficientLoader.GetFunctionMultipliers(ardDateStr);
+            string updateId = CoefficientLoader.GetUpdateIdForDate(CoefficientLoader.ParseArdDate(ardDateStr));
             
             Dictionary<string, double> covariates = new Dictionary<string, double>();
 
@@ -672,7 +676,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             covariates = MergeCovariates(covariates, ProcessUsesWheelchair(parsedValues));
 
             // 10-16. Use extracted processing functions
-            covariates = MergeCovariates(covariates, ProcessAdditionalClinicalConditions(parsedValues));
+            covariates = MergeCovariates(covariates, ProcessAdditionalClinicalConditions(parsedValues, updateId));
             covariates = MergeCovariates(covariates, ProcessMedicalConditionCategory(parsedValues, startScore));
             covariates = MergeCovariates(covariates, ProcessPriorFunctioning(parsedValues));
             covariates = MergeCovariates(covariates, ProcessPriorMobilityDevices(parsedValues));

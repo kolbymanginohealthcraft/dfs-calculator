@@ -79,6 +79,7 @@ function AdvancedAppDetail() {
   const [validationWarning, setValidationWarning] = useState(null);
   const [manualCovariateOverrides, setManualCovariateOverrides] = useState({});
   const exportRef = useRef();
+  const initialCovariatesLoaded = useRef(false);
 
   const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
@@ -117,6 +118,7 @@ function AdvancedAppDetail() {
     setValidationError(null);
     setValidationWarning(null);
     setManualCovariateOverrides({});
+    initialCovariatesLoaded.current = false;
     // Force garbage collection hint for sensitive data
     if (window.gc) {
       window.gc();
@@ -181,6 +183,7 @@ function AdvancedAppDetail() {
         setWeightedScore(initialWeightedScore);
         setVersionMultipliers(file.userVersionMultipliers || file._rawData.multipliers || {});
         setManualCovariateOverrides(file.userManualCovariateOverrides || {});
+        initialCovariatesLoaded.current = true;
       } else {
         // Fallback to empty data if no data available
         setParsedValues({});
@@ -192,6 +195,7 @@ function AdvancedAppDetail() {
         setWeightedScore(0);
         setVersionMultipliers({});
         setManualCovariateOverrides({});
+        initialCovariatesLoaded.current = false;
       }
       
       setValidationError(null);
@@ -346,14 +350,12 @@ function AdvancedAppDetail() {
     };
   }, [clearAllPatientData]);
 
-  // Recalculate covariates only when manual overrides change.
-  // On initial load, covariates/multipliers are already cached from bulk processing (_rawData)
-  // or from a previous user session (userCovariates/userVersionMultipliers).
+  // Recalculate only when manual overrides change — skip when covariates are already cached.
+  // covariates/versionMultipliers are NOT in the dependency array because the effect sets them.
   useEffect(() => {
     if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0) {
       const hasManualOverrides = Object.keys(manualCovariateOverrides).length > 0;
-      const hasCachedCovariates = Object.keys(covariates).length > 0 && Object.keys(versionMultipliers).length > 0;
-      if (hasManualOverrides || !hasCachedCovariates) {
+      if (hasManualOverrides || !initialCovariatesLoaded.current) {
         const icdList = Object.entries(parsedValues)
           .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
           .map(([_, value]) => value)
@@ -372,8 +374,7 @@ function AdvancedAppDetail() {
 
             setVersionMultipliers(result.multipliers || {});
             setCovariates(result.covariates || {});
-            // Only update weightedScore if we have manual overrides (which change the calculation)
-            // Otherwise, keep the pre-calculated value for immediate display
+            initialCovariatesLoaded.current = true;
             if (hasManualOverrides) {
               setWeightedScore(result.weightedScore || 0);
             }
@@ -385,7 +386,7 @@ function AdvancedAppDetail() {
         calculateScores();
       }
     }
-  }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides, covariates, versionMultipliers]);
+  }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides]);
 
   const handleExport = async () => {
     if (!fileName) return;
@@ -735,7 +736,6 @@ function AdvancedAppDetail() {
                       ardDate={ardDate}
                       manualOverrides={manualCovariateOverrides}
                       onManualOverrideChange={setManualCovariateOverrides}
-                      parsedValues={parsedValues}
                     />
                   </Suspense>
                 </div>

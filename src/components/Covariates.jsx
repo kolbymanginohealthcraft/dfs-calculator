@@ -14,26 +14,18 @@ function Covariates({
   ardDate = null,
   manualOverrides = {},
   onManualOverrideChange = () => {},
-  parsedValues = {},
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   
   // Memoize version calculation to avoid recalculating on every render
   const version = useMemo(() => getVersionFromArdDate(ardDate), [ardDate]);
   
-  // Memoize therapy data check
-  const therapyItems = useMemo(() => ["O0425B1", "O0425B2", "O0425B3", "O0425C1", "O0425C2", "O0425C3"], []);
-  const hasTherapyData = useMemo(() => {
-    return therapyItems.some(item => {
-      const value = parsedValues[item];
-      return value && value !== "^" && value !== "";
-    });
-  }, [therapyItems, parsedValues]);
-  
-  // Only show toggle for FY 2026 AND when therapy data is NOT available
+  // Show toggle for FY 2026+ (Update ID "3" or later) — this covariate
+  // only exists in those versions and always needs user control since
+  // discharge therapy data may not yet be filled in for on-caseload patients.
   const showDischargeTherapyToggle = useMemo(() => 
-    version?.updateId === "3" && !hasTherapyData, 
-    [version, hasTherapyData]
+    version?.updateId && parseInt(version.updateId, 10) >= 3, 
+    [version]
   );
 
   const formatNumber = (n) => Number(n).toFixed(2);
