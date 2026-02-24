@@ -84,7 +84,7 @@ dfs-viewer/
 │   │   ├── components/               # BasicLayout, ExpectedScoreSlider, etc.
 │   │   └── screens/                  # StartScore, ExpectedScore, EndScore
 │   ├── contexts/                     # React contexts
-│   │   ├── PortalContext.jsx         # Auth state + portal integration
+│   │   ├── AuthContext.jsx            # Auth state (SAML session check)
 │   │   ├── BulkUploadContext.jsx     # Bulk file processing state
 │   │   ├── RedactionContext.jsx      # Data redaction for exports
 │   │   └── DataLossWarningContext.jsx

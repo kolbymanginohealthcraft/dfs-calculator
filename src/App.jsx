@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { PortalProvider, usePortal } from './contexts/PortalContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { BulkUploadProvider, useBulkUpload } from './contexts/BulkUploadContext';
 import { RedactionProvider } from './contexts/RedactionContext';
 import { DataLossWarningProvider } from './contexts/DataLossWarningContext';
@@ -65,7 +65,7 @@ function AdvancedRouteHandler() {
 }
 
 function AppContent() {
-  const { isFromPortal, isLoading } = usePortal();
+  const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -92,13 +92,13 @@ function AppContent() {
               <Routes>
               <Route 
                 path="/" 
-                element={<HomeScreen isFromPortal={isFromPortal} />}
+                element={<HomeScreen isAuthenticated={isAuthenticated} />}
               />
               <Route path="/basic/*" element={<BasicApp />} />
               <Route 
                 path="/advanced" 
                 element={
-                  isFromPortal ? (
+                  isAuthenticated ? (
                     <AdvancedRouteHandler />
                   ) : (
                     <Navigate to="/" replace />
@@ -108,7 +108,7 @@ function AppContent() {
               <Route 
                 path="/advanced/summary" 
                 element={
-                  isFromPortal ? (
+                  isAuthenticated ? (
                     <AdvancedRouteHandler />
                   ) : (
                     <Navigate to="/" replace />
@@ -127,9 +127,9 @@ function AppContent() {
 
 function App() {
   return (
-    <PortalProvider>
+    <AuthProvider>
       <AppContent />
-    </PortalProvider>
+    </AuthProvider>
   );
 }
 

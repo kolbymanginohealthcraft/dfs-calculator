@@ -1,129 +1,78 @@
 # Local Development Guide
 
-## Overview
+## Quick Start
 
-The development process has changed now that we're using the C# backend instead of the Node.js backend.
-
-## Old Process (Before C# Migration)
+Open two terminals:
 
 ```bash
-# Terminal 1: Start Node.js backend
+# Terminal 1: Start C# backend
 npm run server
 
 # Terminal 2: Start React frontend
 npm run dev
 ```
 
-## New Process (With C# Backend)
+Then open `http://localhost:5173`. Authentication happens automatically -- `AuthContext` calls `/account/dev-login` on the C# backend to create a session as `dev-user@localhost`.
 
-### Option 1: Run C# Backend Locally (Recommended for Full Testing)
+## How It Works
 
-```bash
-# Terminal 1: Start C# backend
-cd Aegis.DfsCalculator/DFSCalculator.Server
-dotnet run
+- **Frontend**: Vite dev server on `http://localhost:5173`
+- **Backend**: C# ASP.NET Core on `https://localhost:7194`
+- **Proxy**: Vite forwards `/api/*` and `/account/*` requests to the C# backend (configured in `vite.config.js`), so the frontend never needs to know the backend URL during development
 
-# Terminal 2: Start React frontend
-npm run dev
-```
+### Environment Variables
 
-**Note:** Make sure your `.env.development` has:
+A single `.env` file contains production URLs:
+
 ```env
-VITE_API_BASE_URL=https://localhost:7194
-VITE_AUTH_BASE_URL=https://localhost:7194
+VITE_API_BASE_URL=https://dfs.mycare.com
+VITE_AUTH_BASE_URL=https://dfs.mycare.com
 ```
 
-### Option 2: Use Staging Backend (Easier, No Local Backend Needed)
+These are only used in production builds. During development, the Vite proxy overrides them by routing API and auth requests to `https://localhost:7194`.
 
-```bash
-# Only need one terminal: Start React frontend
-npm run dev
-```
+## Prerequisites
 
-**Note:** Make sure your `.env.development` has:
-```env
-VITE_API_BASE_URL=https://kind-mushroom-023e7820f-staging.eastus2.2.azurestaticapps.net
-VITE_AUTH_BASE_URL=https://kind-mushroom-023e7820f-staging.eastus2.2.azurestaticapps.net
-```
+1. **Node.js** (for the React frontend)
 
-## Prerequisites for Running C# Backend Locally
+2. **.NET SDK 8.0** (for the C# backend)
+   - Check: `dotnet --version`
+   - Download: https://dotnet.microsoft.com/download
 
-If you want to run the C# backend locally, you'll need:
-
-1. **.NET SDK** (version specified in the project)
-   - Check `Aegis.DfsCalculator/DFSCalculator.Server/DFSCalculator.Server.csproj` for the target framework
-   - Download from: https://dotnet.microsoft.com/download
-
-2. **Trust the localhost certificate** (for HTTPS):
+3. **Trust the localhost HTTPS certificate**:
    ```bash
    dotnet dev-certs https --trust
    ```
 
-3. **Visual Studio or VS Code** (optional, for debugging)
-   - Visual Studio 2022 Community (free)
-   - OR VS Code with C# extension
+4. **IdP certificate installed** in your local certificate store (thumbprint configured in `appsettings.json` under `Saml:IdpCertThumbprint`)
 
-## What Changed?
+## NPM Scripts
 
-### Old Backend (`npm run server`)
-- Node.js/Express server
-- Provided `/api/facility-name` endpoint
-- Ran on port 3001
-- **No longer needed** - replaced by C# backend
-
-### New Backend (C#)
-- C# ASP.NET Core backend
-- Provides all API endpoints:
-  - `/account/login`, `/account/logout`, `/account/me`
-  - `/api/function-score`
-  - `/api/imputation`
-  - `/api/imputation-analysis`
-  - `/api/facility-name` (handled by `FacilityController.cs`)
-- Runs on `https://localhost:7194` (HTTPS) or `http://localhost:5189` (HTTP)
-
-## Quick Start (Easiest)
-
-If you just want to test the frontend without running the backend locally:
-
-1. **Set up environment file:**
-   Create `.env.development` with staging URL:
-   ```env
-   VITE_API_BASE_URL=https://kind-mushroom-023e7820f-staging.eastus2.2.azurestaticapps.net
-   VITE_AUTH_BASE_URL=https://kind-mushroom-023e7820f-staging.eastus2.2.azurestaticapps.net
-   ```
-
-2. **Start frontend:**
-   ```bash
-   npm run dev
-   ```
-
-3. **Test in browser:**
-   - Open `http://localhost:5173`
-   - The frontend will connect to the staging backend
-   - You can test login, API calls, etc.
+| Script | Command | Purpose |
+|---|---|---|
+| `npm run dev` | `vite` | Start Vite frontend dev server |
+| `npm run server` | `cd Aegis.DfsCalculator/DFSCalculator.Server && dotnet run --launch-profile https` | Start C# backend |
+| `npm run build` | `vite build` | Production build |
+| `npm test` | `vitest run` | Run frontend tests |
 
 ## Troubleshooting
 
 ### C# Backend Won't Start
-- Make sure you have .NET SDK installed: `dotnet --version`
-- Trust the certificate: `dotnet dev-certs https --trust`
-- Check if port 7194 is already in use
+- Check .NET SDK: `dotnet --version`
+- Trust certificate: `dotnet dev-certs https --trust`
+- Check if port 7194 is in use
+- Verify the IdP certificate is installed (see `docs/INSTALL_SAML_CERTIFICATE.md`)
+
+### 401 Unauthorized on `/account/me`
+- This is normal on first load -- `AuthContext` automatically calls `/account/dev-login` to fix it
+- If it persists, ensure the C# backend is running and Vite proxy is forwarding to it
+- Check that the C# backend shows `Hosting environment: Development` in its console output
 
 ### Frontend Can't Connect to Backend
-- Check your `.env.development` file has the correct URL
-- Make sure the backend is running (if using localhost)
-- Check browser console for CORS errors (backend may need CORS configuration)
+- Verify the C# backend is running (check terminal for "Now listening on: https://localhost:7194")
+- Check browser console Network tab for proxy errors
+- Ensure `vite.config.js` proxy targets `https://localhost:7194`
 
 ### Certificate Errors
 - Run: `dotnet dev-certs https --trust`
-- Or use HTTP instead: `http://localhost:5189` (update `.env.development`)
-
-## Summary
-
-**You no longer need `npm run server`** - that was the old Node.js backend.
-
-**New workflow:**
-- Frontend: `npm run dev` (same as before)
-- Backend: Either run C# backend locally OR use staging URL
-
-The easiest approach is to use the staging backend URL in your `.env.development` file, so you only need to run `npm run dev`.
+- The Vite proxy is configured with `secure: false` to accept self-signed certs

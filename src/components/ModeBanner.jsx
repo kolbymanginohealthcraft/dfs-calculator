@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getScoreTypeColor } from '../utils/themeColors';
-import { usePortal } from '../contexts/PortalContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import CustomerAccessModal from './CustomerAccessModal';
 import DataLossWarningModal from './DataLossWarningModal';
@@ -30,7 +30,7 @@ const ModeBanner = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isFromPortal } = usePortal();
+  const { isAuthenticated } = useAuth();
   const { hasDataToLose: hasBasicDataToLose, clearDataStatus } = useDataLossWarning();
   const [showModal, setShowModal] = useState(false);
   const [showDataLossWarning, setShowDataLossWarning] = useState(false);
@@ -43,7 +43,7 @@ const ModeBanner = ({
   const handleSwitchCalculator = () => {
     if (isBasicRoute) {
       // First check if user has access to advanced mode
-      if (!isFromPortal) {
+      if (!isAuthenticated) {
         // Show modal for public users (no access to advanced mode)
         setShowModal(true);
         return;
@@ -227,11 +227,11 @@ const ModeBanner = ({
 
         
         <button 
-          className={`${styles.switchButton} ${isBasicRoute && !isFromPortal ? styles.restrictedButton : ''}`}
+          className={`${styles.switchButton} ${isBasicRoute && !isAuthenticated ? styles.restrictedButton : ''}`}
           onClick={handleSwitchCalculator}
           title={
             isBasicRoute 
-              ? (isFromPortal ? "Switch to Advanced Mode" : "Advanced Mode - Customer Only")
+              ? (isAuthenticated ? "Switch to Advanced Mode" : "Advanced Mode - Customer Only")
               : "Switch to Basic Mode"
           }
         >
@@ -240,7 +240,7 @@ const ModeBanner = ({
           </svg>
           <span className={styles.buttonText}>
             {isBasicRoute 
-              ? (isFromPortal ? 'Switch to Advanced' : 'Advanced (Customer Only)')
+              ? (isAuthenticated ? 'Switch to Advanced' : 'Advanced (Customer Only)')
               : 'Switch to Basic'
             }
           </span>

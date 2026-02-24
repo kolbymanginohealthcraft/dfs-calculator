@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CustomerAccessModal from './CustomerAccessModal';
 import styles from './HomeScreen.module.css';
 
-const HomeScreen = ({ isFromPortal = false }) => {
+const HomeScreen = ({ isAuthenticated = false }) => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
@@ -12,7 +12,7 @@ const HomeScreen = ({ isFromPortal = false }) => {
   };
 
   const handleAdvancedMode = () => {
-    if (isFromPortal) {
+    if (isAuthenticated) {
       navigate('/advanced');
     } else {
       // For public users, show modal about advanced features
@@ -106,7 +106,7 @@ const HomeScreen = ({ isFromPortal = false }) => {
                 </div>
                 <div className={styles['hero-mode-content']}>
                   <h3 className={styles['hero-mode-title']}>
-                    {isFromPortal ? 'Advanced Mode' : 'Advanced Mode (Customer Only)'}
+                    {isAuthenticated ? 'Advanced Mode' : 'Advanced Mode (Customer Only)'}
                   </h3>
                   <p className={styles['hero-mode-description']}>
                     Upload MDS XML files for comprehensive analysis
@@ -116,7 +116,7 @@ const HomeScreen = ({ isFromPortal = false }) => {
                   className={`${styles['hero-mode-button']} ${styles['hero-advanced-button']}`}
                   onClick={handleAdvancedMode}
                 >
-                  {isFromPortal ? 'Start Advanced' : 'Learn More'}
+                  {isAuthenticated ? 'Start Advanced' : 'Learn More'}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>

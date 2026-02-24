@@ -12,7 +12,6 @@ import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
 import { useBulkUpload } from "../contexts/BulkUploadContext";
 import { useRedaction } from "../contexts/RedactionContext";
-import { usePortal } from "../contexts/PortalContext";
 import { useDataLossWarning } from "../contexts/DataLossWarningContext";
 import html2pdf from "html2pdf.js";
 
@@ -40,8 +39,6 @@ function AdvancedAppDetail() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   
-  // Debug: Check portal context
-  const { isFromPortal } = usePortal();
   // Use bulk upload context
   const { uploadedFiles, setUploadedFiles, loadFileData } = useBulkUpload();
   const { updateDataStatus, clearDataStatus } = useDataLossWarning();
