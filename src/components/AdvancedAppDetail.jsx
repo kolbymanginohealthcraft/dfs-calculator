@@ -242,8 +242,7 @@ function AdvancedAppDetail() {
     setShowSwitchWarning(false);
   }, []);
 
-  // Rest of the component logic (handleTick, subtotal, etc.) remains the same
-  const handleTick = (key, delta) => {
+  const handleTick = useCallback((key, delta) => {
     setModeledValues((prev) => {
       const raw = prev[key];
       const current = resolveScore(raw);
@@ -255,8 +254,6 @@ function AdvancedAppDetail() {
       let next;
 
       if (hasNonIntegerStart) {
-        // Imputed item with continuous start value.
-        // Allowed values: [startScore, ceil(startScore), ceil+1, ..., 6]
         const firstInt = Math.ceil(startScore);
 
         if (delta > 0) {
@@ -267,15 +264,14 @@ function AdvancedAppDetail() {
           }
         } else {
           if (!Number.isInteger(current)) {
-            next = current; // already at imputed value, can't go lower
+            next = current;
           } else if (current <= firstInt) {
-            next = startScore; // drop to imputed value; never go below start score
+            next = startScore;
           } else {
             next = current - 1;
           }
         }
       } else {
-        // Standard integer toggling
         next = Math.max(1, Math.min(6, current + delta));
         if (startRaw !== undefined) {
           next = Math.max(next, startScore);
@@ -284,7 +280,7 @@ function AdvancedAppDetail() {
 
       return { ...prev, [key]: scoreToStoredValue(next) };
     });
-  };
+  }, [startScores, imputedItems]);
 
   // Memoize subtotals per domain to avoid recalculating on every render
   const subtotals = useMemo(() => {
@@ -594,6 +590,33 @@ function AdvancedAppDetail() {
     setShowClearWarning(false);
   }, []);
 
+  const handleBackToSummary = useCallback(() => {
+    setIsNavigatingAway(true);
+    
+    if (currentFile && currentFile.status === 'processed') {
+      const originalModeledValues = currentFile._rawData?.modeledValues || {};
+      const hasChanges = JSON.stringify(modeledValues) !== JSON.stringify(originalModeledValues);
+      
+      if (hasChanges || currentFile.userModeledValues) {
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === currentFile.id 
+            ? { 
+                ...f, 
+                userModeledValues: { ...modeledValues },
+                userCovariates: { ...covariates },
+                userWeightedScore: weightedScore,
+                userVersionMultipliers: { ...versionMultipliers },
+                userManualCovariateOverrides: { ...manualCovariateOverrides }
+              }
+            : f
+        ));
+      }
+    }
+    setCurrentFileIndex(-1);
+    clearAllPatientData();
+    navigate('/advanced/summary');
+  }, [currentFile, modeledValues, covariates, weightedScore, versionMultipliers, manualCovariateOverrides, setUploadedFiles, clearAllPatientData, navigate]);
+
   const advancedNavbar = (
     <>
       <Navbar 
@@ -605,35 +628,7 @@ function AdvancedAppDetail() {
       />
       <ModeBanner 
         showBackToSummary={isViewingFileDetail}
-        onBackToSummary={useCallback(() => {
-          // Set flag to prevent auto-selection during navigation
-          setIsNavigatingAway(true);
-          
-          // Save current modeled values to the current file before going back
-          // Only save if the user has actually made changes
-          if (currentFile && currentFile.status === 'processed') {
-            const originalModeledValues = currentFile._rawData?.modeledValues || {};
-            const hasChanges = JSON.stringify(modeledValues) !== JSON.stringify(originalModeledValues);
-            
-            if (hasChanges || currentFile.userModeledValues) {
-              setUploadedFiles(prev => prev.map(f => 
-                f.id === currentFile.id 
-                  ? { 
-                      ...f, 
-                      userModeledValues: { ...modeledValues },
-                      userCovariates: { ...covariates },
-                      userWeightedScore: weightedScore,
-                      userVersionMultipliers: { ...versionMultipliers },
-                      userManualCovariateOverrides: { ...manualCovariateOverrides }
-                    }
-                  : f
-              ));
-            }
-          }
-          setCurrentFileIndex(-1);
-          clearAllPatientData();
-          navigate('/advanced/summary');
-        }, [currentFile, modeledValues, covariates, weightedScore, versionMultipliers, manualCovariateOverrides, setUploadedFiles, clearAllPatientData, navigate])}
+        onBackToSummary={handleBackToSummary}
         onPreviousFile={handlePreviousFile}
         onNextFile={handleNextFile}
         canGoPrevious={canGoPrevious}

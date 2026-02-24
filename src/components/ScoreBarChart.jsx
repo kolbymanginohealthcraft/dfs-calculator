@@ -2,7 +2,7 @@ import React from 'react';
 import { getScoreTypeColor } from '../utils/themeColors';
 import styles from './ScoreBarChart.module.css';
 
-const ScoreBarChart = ({ 
+const ScoreBarChart = React.memo(({ 
   startTotal, 
   expectedScore, 
   endTotal, 
@@ -14,11 +14,10 @@ const ScoreBarChart = ({
   title = "DFS Calculation Summary",
   paddingTop = 0,
   showComparisonIndicator = false,
-  // New props for flexibility
-  mode = 'basic', // 'basic' or 'advanced'
-  variant = 'start', // 'start', 'expected', 'end'
-  endLabel = 'End', // 'End' or 'Modeled'
-  gainLabel = 'Gain' // 'Gain' or 'Gain'
+  mode = 'basic',
+  variant = 'start',
+  endLabel = 'End',
+  gainLabel = 'Gain'
 }) => {
   const actualGain = endTotal ? endTotal - startTotal : 0;
   const requiredGain = expectedScore ? expectedScore - startTotal : 0;
@@ -211,6 +210,6 @@ const ScoreBarChart = ({
       </div>
     </div>
   );
-};
+});
 
 export default ScoreBarChart;

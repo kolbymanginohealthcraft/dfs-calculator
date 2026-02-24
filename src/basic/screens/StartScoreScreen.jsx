@@ -55,14 +55,10 @@ const StartScoreScreen = () => {
     setScores(newScores);
   };
 
-  const handleScoreAdjustment = (key, delta) => {
-    if (!hasInteracted) {
-      setHasInteracted(true);
-    }
-    
-    const newScores = adjustScore(scores, key, delta);
-    setScores(newScores);
-  };
+  const handleScoreAdjustment = useCallback((key, delta) => {
+    setHasInteracted(true);
+    setScores(prev => adjustScore(prev, key, delta));
+  }, []);
 
   const calcTotal = useCallback(() => {
     return calculateTotalScore(scores, mobilityType);

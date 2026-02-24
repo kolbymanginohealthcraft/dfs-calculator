@@ -7,7 +7,7 @@ import { getContributingKeys, getInitialScores } from '../utils/itemDefinitions'
 import { getBasicContributingItems } from '../utils/itemAdapters';
 import styles from './FunctionItemsList.module.css';
 
-const FunctionItemsList = ({
+const FunctionItemsList = React.memo(({
   mode = 'basic', // 'basic' or 'advanced'
   variant = 'start', // 'start', 'end', or 'advanced'
   items = [], // For advanced mode, pass GG_ITEMS
@@ -364,6 +364,6 @@ const FunctionItemsList = ({
       )}
     </div>
   );
-};
+});
 
 export default FunctionItemsList;

@@ -26,14 +26,10 @@ const EndScoreScreen = () => {
 
   const contributingKeys = getContributingKeys(mobilityType);
 
-  const handleScoreAdjustment = (key, delta) => {
-    if (!hasInteracted) {
-      setHasInteracted(true);
-    }
-    
-    const newScores = adjustScore(endScores, key, delta, startScores);
-    setEndScores(newScores);
-  };
+  const handleScoreAdjustment = useCallback((key, delta) => {
+    setHasInteracted(true);
+    setEndScores(prev => adjustScore(prev, key, delta, startScores));
+  }, [startScores]);
 
   const calcEndTotal = () => {
     return calculateTotalScore(endScores, mobilityType);

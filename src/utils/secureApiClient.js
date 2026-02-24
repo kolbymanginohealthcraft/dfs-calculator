@@ -28,6 +28,7 @@ async function tryDevReauth() {
  * so the browser is never redirected to the external SAML IdP.
  */
 function logTiming(entry) {
+  if (!isDevelopment) return;
   const style = entry.duration > 500 ? 'color: red; font-weight: bold'
     : entry.duration > 200 ? 'color: orange'
     : 'color: green';

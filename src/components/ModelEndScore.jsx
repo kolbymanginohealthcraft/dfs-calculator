@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styles from "./ModelEndScore.module.css";
 import layoutStyles from "../basic/styles/BasicLayout.module.css";
 import {
   GG_ITEMS,
-  scoreMap,
   calculateFunctionScore,
   getContributingItemIds,
 } from "../utils/calculations";
 import ScoreBarChart from "./ScoreBarChart";
 import FunctionItemsList from "./FunctionItemsList";
-import { getScoreTypeColor } from "../utils/themeColors";
 import { Wrench, BarChart3, Target, HandHeart, User, Settings } from "lucide-react";
 
-const ModelEndScore = ({
+const ModelEndScore = React.memo(({
   modeledValues,
   startScores,
   subtotal,
@@ -26,10 +24,8 @@ const ModelEndScore = ({
   imputedItems = new Set(),
 }) => {
   const [filterContributing, setFilterContributing] = useState(false);
-  const startTotal = calculateFunctionScore(startScores);
-  const contributingIds = getContributingItemIds(modeledValues);
-
-  // Determine if end score meets expected score for accent border styling
+  const startTotal = useMemo(() => calculateFunctionScore(startScores), [startScores]);
+  const contributingIds = useMemo(() => getContributingItemIds(modeledValues), [modeledValues]);
   const meetsExpectedScore = modeledTotal >= weightedScore;
 
   const toggleFilter = () => {
@@ -76,6 +72,6 @@ const ModelEndScore = ({
       )}
     </>
   );
-};
+});
 
 export default ModelEndScore;

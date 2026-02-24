@@ -4,7 +4,7 @@ import styles from './BarbellChart.module.css';
 
 const formatNodeLabel = (val) => Number.isInteger(val) ? val : val.toFixed(2);
 
-const BarbellChart = ({ 
+const BarbellChart = React.memo(({ 
   startScore, 
   endScore = null, 
   showEndNode = false,
@@ -60,6 +60,6 @@ const BarbellChart = ({
       )}
     </div>
   );
-};
+});
 
 export default BarbellChart;

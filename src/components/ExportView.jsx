@@ -6,7 +6,7 @@ import { GG_ITEMS, scoreMap, resolveScore } from "../utils/calculations";
 import styles from "./ExportView.module.css";
 import { BarChart3 } from "lucide-react";
 
-const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) => {
+const ExportView = React.memo(({ patient, scores, functionItems, mobilityType = 'Walk' }) => {
   const today = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -196,6 +196,6 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
       </p>
     </div>
   );
-};
+});
 
 export default ExportView;

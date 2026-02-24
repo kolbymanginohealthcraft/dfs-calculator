@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ScoreButton.module.css';
 
-const ScoreButton = ({ 
+const ScoreButton = React.memo(({ 
   type, // 'plus' or 'minus'
   onClick, 
   disabled = false, 
@@ -23,6 +23,6 @@ const ScoreButton = ({
       {type === 'plus' ? '+' : '-'}
     </button>
   );
-};
+});
 
 export default ScoreButton;
