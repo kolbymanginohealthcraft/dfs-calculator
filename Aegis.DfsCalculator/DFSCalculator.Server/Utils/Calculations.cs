@@ -129,9 +129,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return GetAgeCovariate(age);
         }
 
-        private static Dictionary<string, int> ProcessUsesWheelchair(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessUsesWheelchair(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             string mobilityType = DetermineMobilityType(parsedValues);
             if (mobilityType == "Wheel")
@@ -142,9 +142,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessBMICovariates(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessBMICovariates(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             double height = Double.Parse(parsedValues.GetValueOrDefault("K0200A"));
             double weight = Double.Parse(parsedValues.GetValueOrDefault("K0200B"));
@@ -163,9 +163,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessCognitiveFunction(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessCognitiveFunction(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             string bims = parsedValues.GetValueOrDefault("C0500");
             List<string> c0900 = new List<string> { "C0900A", "C0900B", "C0900C", "C0900D" }.Select(k => parsedValues.GetValueOrDefault(k)).ToList();
@@ -185,9 +185,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessCommunicationImpairment(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessCommunicationImpairment(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             string b0700 = parsedValues.GetValueOrDefault("B0700");
             string b0800 = parsedValues.GetValueOrDefault("B0800");
@@ -208,9 +208,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessContinenceCovariates(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessContinenceCovariates(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             string bowel = BOWEL_CONTINENCE_MAP.GetValueOrDefault(parsedValues.GetValueOrDefault("H0400"));
             string urine = URINE_CONTINENCE_MAP.GetValueOrDefault(parsedValues.GetValueOrDefault("H0300"));
@@ -236,9 +236,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessPriorFunctioning(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessPriorFunctioning(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             // Prior Functioning: Self-Care
             string pfSelfCare = parsedValues.GetValueOrDefault("GG0100A");
@@ -283,9 +283,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessPriorMobilityDevices(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessPriorMobilityDevices(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             if (parsedValues.GetValueOrDefault("GG0110A") == "1" || parsedValues.GetValueOrDefault("GG0110B") == "1")
             {
@@ -307,9 +307,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessMedicalConditionCategory(Dictionary<string, string> parsedValues, int startScore)
+        private static Dictionary<string, double> ProcessMedicalConditionCategory(Dictionary<string, string> parsedValues, double startScore)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             string conditionCode = parsedValues.GetValueOrDefault("I0020");
             string conditionLabel = ConditionMap.CONDITION_MAP.GetValueOrDefault(conditionCode);
@@ -325,9 +325,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessHCCConditions(Dictionary<string, string> parsedValues, List<string> icdList)
+        private static Dictionary<string, double> ProcessHCCConditions(Dictionary<string, string> parsedValues, List<string> icdList)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             icdList = icdList.Select(icd => Regex.Replace(icd, @"[^A-Z0-9]", "")).ToList();
             List<int> hccList = icdList.Select(icd => ICDtoHCC.ICD_TO_HCC.GetValueOrDefault(icd)).ToList();
@@ -559,9 +559,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> ProcessAdditionalClinicalConditions(Dictionary<string, string> parsedValues)
+        private static Dictionary<string, double> ProcessAdditionalClinicalConditions(Dictionary<string, string> parsedValues)
         {
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             // Prior Surgery
             if (parsedValues.GetValueOrDefault("J2000") == "1")
@@ -625,9 +625,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return covariates;
         }
 
-        private static Dictionary<string, int> MergeCovariates(Dictionary<string, int> dict1, Dictionary<string, int> dict2) 
+        private static Dictionary<string, double> MergeCovariates(Dictionary<string, double> dict1, Dictionary<string, double> dict2) 
         {
-            List<Dictionary<string, int>> dictList = new List<Dictionary<string, int>> { dict1, dict2};
+            List<Dictionary<string, double>> dictList = new List<Dictionary<string, double>> { dict1, dict2};
             return dictList.SelectMany(dict => dict).ToDictionary();
         }
 
@@ -639,14 +639,14 @@ namespace Aegis.DfsCalculator.Server.Utils
             return dateTime;
         }
 
-        public static FunctionCovariatesReturn GetFunctionCovariates(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, string? ardDate, Dictionary<string, int>? manualOverrides = null)
+        public static FunctionCovariatesReturn GetFunctionCovariates(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, string? ardDate, Dictionary<string, double>? manualOverrides = null)
         {
             // Get the correct version of function multipliers based on ARD date
             // Parse A2300 - it may be in YYYYMMDD format or Unix timestamp
             string ardDateStr = String.IsNullOrEmpty(ardDate) ? parsedValues.GetValueOrDefault("A2300") : ardDate;
             Dictionary<string, double?> functionMultipliers = CoefficientLoader.GetFunctionMultipliers(ardDateStr);
             
-            Dictionary<string, int> covariates = new Dictionary<string, int>();
+            Dictionary<string, double> covariates = new Dictionary<string, double>();
 
             // 1. Intercept and Entry terms
             covariates["Model Intercept"] = 1;
@@ -654,8 +654,8 @@ namespace Aegis.DfsCalculator.Server.Utils
 
             // 2. Admission Function score + squared
             double startScore = CalculateFunctionScore(startScores);
-            covariates["Admission Function - Continuous Form"] = (int)Math.Round(startScore);
-            covariates["Admission Function - Squared Form"] = (int)Math.Round(Math.Pow(startScore, 2));
+            covariates["Admission Function - Continuous Form"] = startScore;
+            covariates["Admission Function - Squared Form"] = Math.Pow(startScore, 2);
 
             // 3. Age group logic
             string ageCov = ProcessAgeCovariate(parsedValues, age) ?? "";
@@ -673,7 +673,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
             // 10-16. Use extracted processing functions
             covariates = MergeCovariates(covariates, ProcessAdditionalClinicalConditions(parsedValues));
-            covariates = MergeCovariates(covariates, ProcessMedicalConditionCategory(parsedValues, (int)Math.Round(startScore)));
+            covariates = MergeCovariates(covariates, ProcessMedicalConditionCategory(parsedValues, startScore));
             covariates = MergeCovariates(covariates, ProcessPriorFunctioning(parsedValues));
             covariates = MergeCovariates(covariates, ProcessPriorMobilityDevices(parsedValues));
 
@@ -686,18 +686,15 @@ namespace Aegis.DfsCalculator.Server.Utils
 
             // Apply manual overrides (for covariates that can't be determined from data)
             if (manualOverrides != null) {
-                foreach (KeyValuePair<string, int> entry in manualOverrides) 
+                foreach (KeyValuePair<string, double> entry in manualOverrides) 
                 {
-                    if (entry.Value != null) 
-                    {
-                        covariates[entry.Key] = entry.Value;
-                    }
+                    covariates[entry.Key] = entry.Value;
                 }
             }
 
             // Total weighted score based on covariates
             double weightedScore = 0;
-            foreach (KeyValuePair<string, int> entry in covariates) {
+            foreach (KeyValuePair<string, double> entry in covariates) {
                 double multiplier = functionMultipliers.GetValueOrDefault(entry.Key) ?? 0;
                 weightedScore += entry.Value * multiplier;
             }
@@ -769,7 +766,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
     public class FunctionCovariatesReturn
     {
-        public Dictionary<string, int> Covariates { get; set; }
+        public Dictionary<string, double> Covariates { get; set; }
         public double WeightedScore { get; set; }
     }
 }

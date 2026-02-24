@@ -108,7 +108,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                 : "Walk";
         }
 
-        private static int GetGGItemSpecificCovariate(string covariateName, Dictionary<string, string> parsedValues, Dictionary<string, double?>? itemMultipliers = null) 
+        private static double GetGGItemSpecificCovariate(string covariateName, Dictionary<string, string> parsedValues, Dictionary<string, double?>? itemMultipliers = null) 
         {
             if (covariateName.Contains(" - Valid Score") || 
                 covariateName.Contains(" - Not Attempted") || 
@@ -156,9 +156,9 @@ namespace Aegis.DfsCalculator.Server.Utils
             return -1;
         }
 
-        private static int GetCovariateValue(string covariateName, Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, DateTime ardDate, Dictionary<string, double?>? itemMultipliers = null, Dictionary<string, int>? cachedCovariates = null)
+        private static double GetCovariateValue(string covariateName, Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, DateTime ardDate, Dictionary<string, double?>? itemMultipliers = null, Dictionary<string, double>? cachedCovariates = null)
         {
-            int ggItemSpecificValue = GetGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers);
+            double ggItemSpecificValue = GetGGItemSpecificCovariate(covariateName, parsedValues, itemMultipliers);
             if (ggItemSpecificValue != -1)
             {
                 return ggItemSpecificValue;
@@ -224,7 +224,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             if (multipliers == null || multipliers.Keys.Count() == 0) return 1.0;
 
             // Get covariates to determine Uses Wheelchair value (cache for reuse)
-            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
+            Dictionary<string, double> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
             bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             List<double> thresholds = GetImputationThresholds(ggItemId, ardDate);
@@ -257,7 +257,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             DateTime ardDate = CoefficientLoader.ParseArdDate(ardDateRaw) ?? DateTime.UtcNow;
             Dictionary<string, Dictionary<string, double?>> multipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
-            Dictionary<string, int> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
+            Dictionary<string, double> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
             bool usesWheelchair = covariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             string mobilityType = DetermineMobilityType(parsedValues);
@@ -283,7 +283,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                     {
                         if (multiplierEntry.Key.StartsWith("Model Threshold")) continue;
                         
-                        int covariateValue = 0;
+                        double covariateValue = 0;
 
                         if (multiplierEntry.Key.Contains("(GG") || multiplierEntry.Key.Contains("Valid Score") || multiplierEntry.Key.Contains("Not Attempted") || multiplierEntry.Key.Contains("Skipped"))
                         {
@@ -363,7 +363,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             Dictionary<string, Dictionary<string, double?>> imputationMultipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
             // Get the standard covariates ONCE and cache them (expensive operation - don't repeat for each multiplier)
-            Dictionary<string, int> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
+            Dictionary<string, double> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
             // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
             bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
@@ -387,7 +387,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                 List<double> thresholds = GetImputationThresholds(ggItemId, ardDate);
 
                 // Get covariates for this specific GG item (reused logic)
-                Dictionary<string, int> itemCovariates = new Dictionary<string, int>();
+                Dictionary<string, double> itemCovariates = new Dictionary<string, double>();
                 double imputationScore = 0;
                 
                 // Filter out threshold keys from multipliers for response (they're not covariates)
@@ -414,7 +414,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                         }
                     }
 
-                    int covariateValue = GetCovariateValue(covariateName, parsedValues, age, icdList, startScores, ardDate, multipliers, cachedCovariates);
+                    double covariateValue = GetCovariateValue(covariateName, parsedValues, age, icdList, startScores, ardDate, multipliers, cachedCovariates);
                     if (covariateValue != 0)
                     {
                         itemCovariates[multiplierEntry.Key] = covariateValue;
@@ -448,7 +448,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
     public class ImputationAnalysisData
     {
-        public Dictionary<string, int> Covariates { get; set; }
+        public Dictionary<string, double> Covariates { get; set; }
         public Dictionary<string, double?> Multipliers { get; set; }
         public double ImputationScore { get; set; }
         public List<double> Thresholds { get; set; }

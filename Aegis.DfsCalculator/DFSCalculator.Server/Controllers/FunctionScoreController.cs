@@ -1,4 +1,4 @@
-﻿using Aegis.DfsCalculator.Server.Utils;
+using Aegis.DfsCalculator.Server.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +57,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
         public List<string> ICDList { get; set; }
         public Dictionary<string, string> StartScores { get; set; }
         public string ARDDate { get; set; }
-        public Dictionary<string, int>? ManualOverrides { get; set; }
+        public Dictionary<string, double>? ManualOverrides { get; set; }
     }
 
     public class PatientSummary {

@@ -758,7 +758,9 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                     }
                   </td>
                   <td className={styles.scoreCell}>
-                    {file.results?.startScore !== undefined ? Math.round(file.results.startScore) : '—'}
+                    {file.results?.startScore !== undefined
+                      ? (Number.isInteger(file.results.startScore) ? file.results.startScore : file.results.startScore.toFixed(2))
+                      : '—'}
                   </td>
                   <td className={styles.scoreCell}>
                     {file.results?.expectedScore !== undefined ? file.results.expectedScore.toFixed(2) : '—'}
@@ -776,24 +778,24 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                         {(() => {
                           const expectedScore = file.results?.expectedScore;
                           if (userEndScore !== null) {
-                            const endScore = Math.round(userEndScore);
+                            const formattedEnd = Number.isInteger(userEndScore) ? userEndScore : userEndScore.toFixed(2);
                             if (expectedScore !== undefined) {
                               const diff = userEndScore - expectedScore;
                               if (diff >= 0) {
                                 return (
                                   <>
-                                    {endScore} <span className={styles.smallText}>({diff.toFixed(2)} over)</span>
+                                    {formattedEnd} <span className={styles.smallText}>({diff.toFixed(2)} over)</span>
                                   </>
                                 );
                               } else {
                                 return (
                                   <>
-                                    {endScore} <span className={styles.smallText}>({Math.abs(diff).toFixed(2)} under)</span>
+                                    {formattedEnd} <span className={styles.smallText}>({Math.abs(diff).toFixed(2)} under)</span>
                                   </>
                                 );
                               }
                             }
-                            return endScore.toString();
+                            return formattedEnd.toString();
                           }
                           return '—';
                         })()}
@@ -809,15 +811,16 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
                       
                       if (userEndScore !== null && startScore !== undefined) {
                         const gain = userEndScore - startScore;
+                        const formattedGain = Number.isInteger(gain) ? gain : gain.toFixed(2);
                         if (expectedScore !== undefined) {
                           const required = expectedScore - startScore;
                           return (
                             <>
-                              +{gain.toFixed(0)} <span className={styles.smallText}>(required {required.toFixed(2)})</span>
+                              +{formattedGain} <span className={styles.smallText}>(required {required.toFixed(2)})</span>
                             </>
                           );
                         }
-                        return gain >= 0 ? `+${gain.toFixed(0)}` : `${gain.toFixed(0)}`;
+                        return gain >= 0 ? `+${formattedGain}` : `${formattedGain}`;
                       } else if (expectedScore !== undefined && startScore !== undefined) {
                         // Show required gain even when no actual gain yet
                         const required = expectedScore - startScore;
