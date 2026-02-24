@@ -15,6 +15,11 @@ function normalCDF(x) {
   return 0.5 * (1.0 + sign * y);
 }
 
+const INV_SQRT_2PI = 1 / Math.sqrt(2 * Math.PI);
+function normalPDF(x) {
+  return INV_SQRT_2PI * Math.exp(-0.5 * x * x);
+}
+
 const ZONE_FILLS = [
   "#fecaca", "#fed7aa", "#fef08a", "#bbf7d0", "#bfdbfe", "#c7d2fe",
 ];
@@ -33,30 +38,82 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
     return probs;
   }, [z, thresholds]);
 
-  const W = 460;
-  const pad = { left: 34, right: 16 };
-  const plotW = W - pad.left - pad.right;
-  const segW = plotW / 6;
+  const curve = useMemo(() => {
+    const cuts = thresholds.map(t => t - z);
+    const xMin = Math.min(-4, Math.min(...cuts) - 0.8);
+    const xMax = Math.max( 4, Math.max(...cuts) + 0.8);
+    const N = 400;
+    const pts = [];
+    for (let i = 0; i <= N; i++) {
+      const x = xMin + (i / N) * (xMax - xMin);
+      pts.push([x, normalPDF(x)]);
+    }
+    return { cuts, xMin, xMax, pts, yPeak: normalPDF(0) };
+  }, [z, thresholds]);
 
-  const lineTop = 4;
-  const barTop = 38;
-  const barH = 100;
-  const barBase = barTop + barH;
-  const barW = segW * 0.68;
-  const maxProb = Math.max(...probabilities, 0.05);
+  /* ── geometry ── */
+  const W = 570;
 
-  const H = barBase + 20;
+  // left half — bell curve
+  const cL = 14, cR = 262, cW = cR - cL;
+  const cTop = 34, cH = 112, cBase = cTop + cH;
+
+  // right half — probability bars
+  const bL = 318, bR = 556, bW = bR - bL;
+  const segW = bW / 6;
+  const barW = segW * 0.88;
+  const maxP = Math.max(...probabilities, 0.05);
+  const bBase = cBase;                       // shared baseline
+  const bBarH = 102;                         // max bar height
+  const bTop  = bBase - bBarH;
+
+  // gap centre
+  const gapCX = (cR + bL) / 2;
+
+  // top badge for imputed value
+  const badgeY = 17;
+  const badgeH = 14;
+  const lineStart = badgeY + badgeH;
+
+  // bottom labels & fulcrum
+  const labelY = cBase + 14;
+  const fulcrumTip = cBase + 2;
+  const fulcrumBase = cBase + 9;
+  const H = cBase + 24;
 
   const ev = Number(imputedValue);
 
+  /* ── bell-curve scaling ── */
+  const { cuts, xMin, xMax, pts, yPeak } = curve;
+  const sx = (x) => cL + ((x - xMin) / (xMax - xMin)) * cW;
+  const sy = (y) => cBase - (y / yPeak) * cH * 0.88;
+
+  /* ── filled regions ── */
+  const bounds = [xMin, ...cuts, xMax];
+  const regions = [];
+  for (let i = 0; i < 6; i++) {
+    const lo = bounds[i], hi = bounds[i + 1];
+    const seg = pts.filter(([x]) => x >= lo && x <= hi);
+    if (seg.length === 0) continue;
+    const all = [[lo, normalPDF(lo)], ...seg, [hi, normalPDF(hi)]];
+    let d = `M${sx(lo)} ${cBase}`;
+    all.forEach(([x, y]) => { d += ` L${sx(x)} ${sy(y)}`; });
+    d += ` L${sx(hi)} ${cBase}Z`;
+    regions.push({ d, i, w: sx(hi) - sx(lo), labelX: sx((lo + hi) / 2) });
+  }
+
+  /* ── bars ── */
   const bars = probabilities.map((p, i) => {
-    const cx = pad.left + (i + 0.5) * segW;
-    const x = cx - barW / 2;
-    const h = Math.max(2, (p / maxProb) * barH);
-    const y = barBase - h;
+    const cx  = bL + (i + 0.5) * segW;
+    const x   = cx - barW / 2;
+    const h   = Math.max(2, (p / maxP) * bBarH);
+    const y   = bBase - h;
     const pct = p * 100;
-    return { x, y, h, pct, value: i + 1, cx };
+    return { x, y, h, pct, cx, value: i + 1 };
   });
+
+  /* ── imputed-value marker position ── */
+  const evX  = bL + ((ev - 0.5) / 6) * bW;
 
   return (
     <div className={styles.chartWrapper}>
@@ -65,80 +122,153 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
         preserveAspectRatio="xMidYMid meet"
         className={styles.svg}
       >
-        {/* Subtle horizontal grid */}
-        {[0.25, 0.5, 0.75].map(f => (
-          <line
-            key={f}
-            x1={pad.left} y1={barBase - f * barH}
-            x2={pad.left + plotW} y2={barBase - f * barH}
-            stroke="#f0f0f0" strokeWidth={0.5}
-          />
+        {/* ── section labels ── */}
+        <text x={(cL + cR) / 2} y={10} textAnchor="middle"
+          fontSize="9.5" fill="#6b7280" fontWeight="600">
+          Score distribution
+        </text>
+        <text x={(bL + bR) / 2} y={10} textAnchor="middle"
+          fontSize="9.5" fill="#6b7280" fontWeight="600">
+          Value probabilities
+        </text>
+
+        {/* ════════ BELL CURVE ════════ */}
+
+        {/* filled zones */}
+        {regions.map(r => (
+          <path key={r.i} d={r.d}
+            fill={ZONE_FILLS[r.i]} stroke={ZONE_STROKES[r.i]}
+            strokeWidth={0.6} opacity={0.82} />
         ))}
 
-        {/* Probability bars */}
+        {/* outline */}
+        <path
+          d={`M${sx(pts[0][0])} ${sy(pts[0][1])}` +
+            pts.slice(1).map(([x, y]) => ` L${sx(x)} ${sy(y)}`).join("")}
+          fill="none" stroke="#374151" strokeWidth={1.3}
+        />
+
+        {/* threshold dashes + value labels */}
+        {cuts.map((c, i) => {
+          const tx = sx(c);
+          const stagger = i % 2 === 0 ? 0 : 9;
+          return (
+            <g key={i}>
+              <line
+                x1={tx} y1={cTop + 4} x2={tx} y2={cBase}
+                stroke="#9ca3af" strokeWidth={0.7} strokeDasharray="3,2" />
+              <text x={tx} y={cBase + 9 + stagger}
+                textAnchor="middle" fontSize="7" fill="#7c7c7c"
+                fontFamily="monospace">
+                {thresholds[i].toFixed(2)}
+              </text>
+            </g>
+          );
+        })}
+
+        {/* value labels inside zones (where they fit) */}
+        {regions.map(r => r.w > 18 && (
+          <text key={`v${r.i}`} x={r.labelX} y={cBase - 4}
+            textAnchor="middle" fontSize="10" fontWeight="700"
+            fill={ZONE_STROKES[r.i]} opacity={0.55}>
+            {r.i + 1}
+          </text>
+        ))}
+
+        {/* peak marker — show z value */}
+        <circle cx={sx(0)} cy={sy(yPeak)} r={2.5} fill="#dc3545" />
+        <text x={sx(0)} y={sy(yPeak) - 7}
+          textAnchor="middle" fontSize="7.5" fontWeight="600" fill="#dc3545"
+          fontFamily="monospace">
+          z = {z.toFixed(4)}
+        </text>
+
+        {/* curve baseline */}
+        <line x1={cL} y1={cBase} x2={cR} y2={cBase}
+          stroke="#d1d5db" strokeWidth={1} />
+
+        {/* ════════ CONNECTING ANNOTATION ════════ */}
+        <text x={gapCX} y={cBase * 0.48} textAnchor="middle"
+          fontSize="20" fill="#b0b0b0">→</text>
+        <text x={gapCX} y={cBase * 0.48 + 16} textAnchor="middle"
+          fontSize="7.5" fill="#b0b0b0" fontStyle="italic">
+          area =
+        </text>
+        <text x={gapCX} y={cBase * 0.48 + 25} textAnchor="middle"
+          fontSize="7.5" fill="#b0b0b0" fontStyle="italic">
+          probability
+        </text>
+
+        {/* ════════ PROBABILITY BARS ════════ */}
+
+        {/* grid */}
+        {[0.25, 0.5, 0.75].map(f => (
+          <line key={f}
+            x1={bL} y1={bBase - f * bBarH}
+            x2={bR} y2={bBase - f * bBarH}
+            stroke="#f0f0f0" strokeWidth={0.5} />
+        ))}
+
+        {/* bars + % labels */}
         {bars.map((b, i) => (
           <g key={i}>
-            <rect
-              x={b.x} y={b.y} width={barW} height={b.h}
+            <rect x={b.x} y={b.y} width={barW} height={b.h}
               rx={3} fill={ZONE_FILLS[i]}
-              stroke={ZONE_STROKES[i]} strokeWidth={1.2}
-            />
-            <text
-              x={b.cx} y={b.y - 4}
-              textAnchor="middle" fontSize="9" fontWeight="600"
-              fill="#374151" fontFamily="monospace"
-            >
+              stroke={ZONE_STROKES[i]} strokeWidth={1.2} />
+            <text x={b.cx} y={b.y - 3}
+              textAnchor="middle" fontSize="8" fontWeight="600"
+              fill="#374151" fontFamily="monospace">
               {b.pct < 0.1 ? "<0.1%" : b.pct.toFixed(1) + "%"}
-            </text>
-            <text
-              x={b.cx} y={barBase + 14}
-              textAnchor="middle" fontSize="12" fontWeight="700"
-              fill={ZONE_STROKES[i]}
-            >
-              {b.value}
             </text>
           </g>
         ))}
 
-        {/* Imputed value reference line — full height, behind bars visually distinct */}
+        {/* imputed-value badge at top */}
         {(() => {
-          const lineX = pad.left + ((ev - 0.5) / 6) * plotW;
-          const labelX = Math.max(pad.left + 30, Math.min(pad.left + plotW - 30, lineX));
+          const bx = Math.max(bL + 26, Math.min(bR - 26, evX));
           return (
             <g>
-              <line
-                x1={lineX} y1={lineTop}
-                x2={lineX} y2={barBase}
-                stroke="#dc3545" strokeWidth={2}
-                strokeDasharray="6,4"
-                opacity={0.8}
-              />
-              <circle cx={lineX} cy={barBase} r={3} fill="#dc3545" />
-              <rect
-                x={labelX - 28} y={lineTop}
-                width={56} height={15} rx={4}
-                fill="#dc3545"
-              />
-              <text
-                x={labelX} y={lineTop + 11}
-                textAnchor="middle" fontSize="9" fontWeight="700"
-                fill="#fff" fontFamily="monospace"
-              >
+              <rect x={bx - 26} y={badgeY} width={52} height={badgeH}
+                rx={3} fill="#dc3545" />
+              <text x={bx} y={badgeY + 10.5}
+                textAnchor="middle" fontSize="8.5" fontWeight="700"
+                fill="#fff" fontFamily="monospace">
                 {ev.toFixed(4)}
               </text>
             </g>
           );
         })()}
 
-        {/* Baseline */}
-        <line
-          x1={pad.left} y1={barBase}
-          x2={pad.left + plotW} y2={barBase}
-          stroke="#d1d5db" strokeWidth={1}
+        {/* imputed-value dashed line — from badge to fulcrum */}
+        <line x1={evX} y1={lineStart} x2={evX} y2={fulcrumTip}
+          stroke="#dc3545" strokeWidth={1.8}
+          strokeDasharray="5,3" opacity={0.7} />
+
+        {/* bar baseline */}
+        <line x1={bL - 3} y1={bBase} x2={bR + 3} y2={bBase}
+          stroke="#6b7280" strokeWidth={1.5} strokeLinecap="round" />
+
+        {/* score labels */}
+        {bars.map((b, i) => (
+          <text key={`bl-${i}`} x={b.cx} y={labelY}
+            textAnchor="middle" fontSize="11" fontWeight="700"
+            fill={ZONE_STROKES[i]}>
+            {b.value}
+          </text>
+        ))}
+
+        {/* fulcrum triangle — weighted-average "balance point" */}
+        <polygon
+          points={`${evX},${fulcrumTip} ${evX - 5},${fulcrumBase} ${evX + 5},${fulcrumBase}`}
+          fill="#dc3545"
         />
 
       </svg>
 
+      <p className={styles.formulaNote}>
+        Imputed value = each value weighted by its probability ={" "}
+        <strong>{ev.toFixed(4)}</strong>
+      </p>
     </div>
   );
 }
