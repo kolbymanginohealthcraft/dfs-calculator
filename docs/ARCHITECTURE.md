@@ -112,12 +112,14 @@ All shared data lives in `Aegis.DfsCalculator/DFSCalculator.Server/Data/`. Each 
 
 | File | What | C# Loader | JS Consumer |
 |------|------|-----------|-------------|
-| `coefficients-all-versions.json` | CMS coefficients (~300 KB) | `CoefficientLoader.cs` | `src/utils/coefficientLoader.js` |
+| `coefficients-all-versions.json` | CMS coefficients (~300 KB) | `CoefficientLoader.cs` | Backend only (multipliers are proprietary algorithm inputs) |
 | `icdToHcc.json` | ICD-10 to HCC crosswalk (~3700 entries) | `ICDtoHCC.cs` | `src/utils/hccMapping.js` |
 | `conditionMap.json` | 13 medical condition categories | `ConditionMap.cs` | `src/utils/calculations.js` |
 | `ggItems.json` | 24 GG item definitions | `GGItems.cs` | `src/utils/calculations.js` |
 
-**Intentional duplication:** `coefficientLoader.js` (JS) and `CoefficientLoader.cs` (C#) both implement date-range version selection logic. The frontend needs this for UI display (showing which FY period a patient falls in) without a server round-trip. The shared data file is consolidated; only the selection logic is duplicated.
+The frontend `coefficientLoader.js` imports only `src/data/schedule-only.json` (fiscal year date ranges, no multiplier values) for UI display of which FY period a patient falls in. The full coefficient dataset with multiplier values is loaded exclusively by the C# backend.
+
+See `IP_CLASSIFICATION.md` for the complete breakdown of public data vs. proprietary algorithm logic.
 
 ## Coefficient Versioning
 

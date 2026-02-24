@@ -18,6 +18,7 @@ const XLSX = require('xlsx');
 
 const DATA_SOURCE_DIR = path.join(__dirname, '..', 'data-sources');
 const OUTPUT_FILE = path.join(__dirname, '..', '..', 'Aegis.DfsCalculator', 'DFSCalculator.Server', 'Data', 'coefficients-all-versions.json');
+const SCHEDULE_ONLY_FILE = path.join(__dirname, '..', '..', 'src', 'data', 'schedule-only.json');
 
 console.log('┌────────────────────────────────────────────────┐');
 console.log('│  Historical Coefficients Generator            │');
@@ -299,6 +300,24 @@ if (!fs.existsSync(outputDir)) {
 fs.writeFileSync(OUTPUT_FILE, JSON.stringify(output, null, 2), 'utf8');
 
 console.log(`\n✅ Success! Generated ${OUTPUT_FILE}`);
+
+// Generate frontend-safe schedule-only extract (excludes proprietary coefficients)
+const scheduleOnly = {
+  metadata: output.metadata,
+  schedule: output.schedule
+};
+
+const scheduleOnlyDir = path.dirname(SCHEDULE_ONLY_FILE);
+if (!fs.existsSync(scheduleOnlyDir)) {
+  fs.mkdirSync(scheduleOnlyDir, { recursive: true });
+}
+
+fs.writeFileSync(SCHEDULE_ONLY_FILE, JSON.stringify(scheduleOnly, null, 2) + '\n', 'utf8');
+
+const scheduleStats = fs.statSync(SCHEDULE_ONLY_FILE);
+const scheduleSizeKB = (scheduleStats.size / 1024).toFixed(1);
+console.log(`✅ Success! Generated ${SCHEDULE_ONLY_FILE} (${scheduleSizeKB} KB)`);
+
 console.log('\n📊 Summary:');
 console.log(`   - ${schedule.length} update versions`);
 console.log(`   - ${Object.keys(functionMultipliers).length} function multiplier versions`);
@@ -307,6 +326,7 @@ console.log(`   - ${Object.keys(imputationMultipliers).length} imputation multip
 // Calculate total size
 const stats = fs.statSync(OUTPUT_FILE);
 const sizeKB = (stats.size / 1024).toFixed(1);
-console.log(`   - Output file size: ${sizeKB} KB`);
+console.log(`   - Coefficients file size: ${sizeKB} KB`);
+console.log(`   - Schedule-only file size: ${scheduleSizeKB} KB`);
 
 console.log('\n✨ Done!\n');

@@ -46,13 +46,14 @@ function ImputationTab({
     );
   };
 
-  // Load imputation analysis data from API when data changes
   useEffect(() => {
     if (!hasFile || !parsedValues || !startScores || Object.keys(parsedValues).length === 0) {
       setImputationData({});
       setError(null);
       return;
     }
+
+    const abortController = new AbortController();
 
     const loadImputationAnalysis = async () => {
       setIsLoading(true);
@@ -72,19 +73,25 @@ function ImputationTab({
           icdList: icdList.length > 0 ? icdList : currentIcdList,
           startScores,
           ardDate
-        });
+        }, { signal: abortController.signal });
 
-        setImputationData(result.imputationData || {});
+        if (!abortController.signal.aborted) {
+          setImputationData(result.imputationData || {});
+        }
       } catch (err) {
+        if (err.name === 'AbortError') return;
         console.error('Failed to load imputation analysis:', err);
         setError(err.message || 'Failed to load imputation analysis');
         setImputationData({});
       } finally {
-        setIsLoading(false);
+        if (!abortController.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     };
 
     loadImputationAnalysis();
+    return () => abortController.abort();
   }, [hasFile, parsedValues, startScores, summary, icdList]);
 
   // Helper function to get GG item label (following FunctionItemsList.jsx pattern)

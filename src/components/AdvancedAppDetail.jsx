@@ -175,13 +175,11 @@ function AdvancedAppDetail() {
         
         // Load user's saved modeled values, or fall back to original modeled values
         setModeledValues(file.userModeledValues || file._rawData.modeledValues || {});
-        setCovariates(file.userCovariates || {});
-        // Use pre-calculated expected score from summary if available (unless user has overrides)
-        // This makes the expected score appear immediately instead of waiting for recalculation
+        setCovariates(file.userCovariates || file._rawData.covariates || {});
         const initialWeightedScore = file.userWeightedScore ?? 
           (file.results?.expectedScore !== undefined ? file.results.expectedScore : 0);
         setWeightedScore(initialWeightedScore);
-        setVersionMultipliers(file.userVersionMultipliers || {});
+        setVersionMultipliers(file.userVersionMultipliers || file._rawData.multipliers || {});
         setManualCovariateOverrides(file.userManualCovariateOverrides || {});
       } else {
         // Fallback to empty data if no data available
@@ -352,20 +350,13 @@ function AdvancedAppDetail() {
     };
   }, [clearAllPatientData]);
 
-  // Calculate covariates when file is loaded (or when manual overrides change)
-  // The expected score (weightedScore) is already set from file.results.expectedScore for immediate display
-  // We still need to fetch covariates/multipliers for the detailed view
+  // Recalculate covariates only when manual overrides change.
+  // On initial load, covariates/multipliers are already cached from bulk processing (_rawData)
+  // or from a previous user session (userCovariates/userVersionMultipliers).
   useEffect(() => {
     if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0) {
-      // Check if we have manual overrides - if so, we need to recalculate everything
       const hasManualOverrides = Object.keys(manualCovariateOverrides).length > 0;
-      
-      // Check if we already have cached covariates from user saved data
       const hasCachedCovariates = Object.keys(covariates).length > 0 && Object.keys(versionMultipliers).length > 0;
-      
-      // Only recalculate if we have manual overrides or don't have cached covariates
-      // Note: weightedScore is already set from file.results.expectedScore, so it appears immediately
-      // We just need to fetch covariates/multipliers in the background
       if (hasManualOverrides || !hasCachedCovariates) {
         const icdList = Object.entries(parsedValues)
           .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))

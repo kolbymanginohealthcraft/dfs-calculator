@@ -290,7 +290,9 @@ const AdvancedSummaryView = () => {
                 groupedSections: groupedData,
                 modeledValues: modeledData,
                 startScores: startData,
-                imputedItems: imputedData
+                imputedItems: imputedData,
+                covariates: covariateResult?.covariates || {},
+                multipliers: covariateResult?.multipliers || {}
               };
 
               const fileId = `extracted-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -446,7 +448,9 @@ const AdvancedSummaryView = () => {
           groupedSections: groupedData,
           modeledValues: modeledData,
           startScores: startData,
-          imputedItems: imputedData
+          imputedItems: imputedData,
+          covariates: covariateResult?.covariates || {},
+          multipliers: covariateResult?.multipliers || {}
         };
 
         // Update file with results

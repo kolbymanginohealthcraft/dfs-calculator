@@ -27,10 +27,7 @@ async function tryDevReauth() {
  * In development, a 401 triggers an automatic dev-login + single retry
  * so the browser is never redirected to the external SAML IdP.
  */
-const apiTimings = [];
-
 function logTiming(entry) {
-  apiTimings.push(entry);
   const style = entry.duration > 500 ? 'color: red; font-weight: bold'
     : entry.duration > 200 ? 'color: orange'
     : 'color: green';
@@ -38,18 +35,6 @@ function logTiming(entry) {
     `%c[API] ${entry.method} ${entry.endpoint} → ${entry.status} in ${entry.duration}ms`,
     style
   );
-}
-
-/**
- * Returns a copy of all recorded API timings for external consumption.
- * Each entry: { endpoint, method, status, duration, timestamp }
- */
-export function getApiTimings() {
-  return [...apiTimings];
-}
-
-export function clearApiTimings() {
-  apiTimings.length = 0;
 }
 
 async function authenticatedFetch(endpoint, options = {}, _isRetry = false) {
@@ -149,42 +134,6 @@ export async function calculateFunctionScore(params) {
 }
 
 /**
- * Calculate imputed value for a single GG item (protected)
- * 
- * @param {Object} params
- * @param {string} params.ggItemId - GG item ID (e.g., 'GG0130A1')
- * @param {Object} params.parsedValues - Parsed MDS data
- * @param {Object} params.summary - Patient summary data
- * @param {Array} params.icdList - List of ICD codes
- * @param {Object} params.startScores - Start scores for GG items
- * @param {string} params.ardDate - Assessment Reference Date
- * 
- * @returns {Promise<{imputedValue: string}>}
- */
-export async function calculateImputedValue(params) {
-  const {
-    ggItemId,
-    parsedValues,
-    summary,
-    icdList,
-    startScores,
-    ardDate
-  } = params;
-
-  return authenticatedFetch('/api/imputation', {
-    method: 'POST',
-    body: JSON.stringify({
-      ggItemId,
-      parsedValues,
-      summary,
-      icdList,
-      startScores,
-      ardDate
-    })
-  });
-}
-
-/**
  * Batch impute missing GG items (protected)
  * 
  * @param {Object} params
@@ -269,7 +218,7 @@ export async function processFileComplete(params) {
  * 
  * @returns {Promise<{imputationData: Object}>}
  */
-export async function getImputationAnalysisData(params) {
+export async function getImputationAnalysisData(params, { signal } = {}) {
   const {
     parsedValues,
     summary,
@@ -286,7 +235,8 @@ export async function getImputationAnalysisData(params) {
       icdList,
       startScores,
       ardDate
-    })
+    }),
+    signal
   });
 }
 

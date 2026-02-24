@@ -4,39 +4,6 @@ import { parseXml } from "./xmlParser.js";
 import { getSectionName } from "./sectionNames.js";
 import { batchImputeValues } from "./secureApiClient.js";
 
-/**
- * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
- *
- * This function has been moved to api/utils/serverImputation.js to prevent reverse engineering.
- * All proprietary imputation logic is now server-only and protected.
- */
-export const getCovariateValue = (covariateName, parsedValues, summary, icdList, startScores, ardDate, itemMultipliers = null) => {
-  // This function has been removed from client bundle to protect proprietary IP
-  throw new Error(
-    'getCovariateValue() is server-only. This function has been removed from the client bundle to protect proprietary intellectual property.'
-  );
-};
-
-/**
- * ⚠️ PROPRIETARY FUNCTION - REMOVED FROM CLIENT BUNDLE ⚠️
- * 
- * This function contains proprietary imputation logic and has been moved
- * to api/utils/serverImputation.js to prevent reverse engineering.
- * 
- * Use the secure API client instead:
- * 
- * import { calculateImputedValue } from '../utils/secureApiClient';
- * const result = await calculateImputedValue({ ... });
- */
-export const calculateImputedValue = (ggItemId, parsedValues, summary, icdList, startScores) => {
-  // This function has been removed from client bundle to protect proprietary IP
-  // All implementation is in api/utils/serverImputation.js
-  throw new Error(
-    'calculateImputedValue() is server-only. Use calculateImputedValue() from secureApiClient.js instead. ' +
-    'This function has been removed from the client bundle to protect proprietary intellectual property.'
-  );
-};
-
 export async function handleFileUpload(
   file,
   setFileName,
