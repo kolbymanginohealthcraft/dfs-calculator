@@ -38,19 +38,16 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
   const plotW = W - pad.left - pad.right;
   const segW = plotW / 6;
 
-  const barTop = 20;
+  const lineTop = 4;
+  const barTop = 38;
   const barH = 100;
   const barBase = barTop + barH;
   const barW = segW * 0.68;
   const maxProb = Math.max(...probabilities, 0.05);
 
-  const gaugeTop = barBase + 28;
-  const gaugeH = 12;
-  const H = gaugeTop + gaugeH + 32;
+  const H = barBase + 20;
 
   const ev = Number(imputedValue);
-  const evX = pad.left + ((ev - 1) / 5) * plotW;
-  const labelX = Math.max(pad.left + 22, Math.min(pad.left + plotW - 22, evX));
 
   const bars = probabilities.map((p, i) => {
     const cx = pad.left + (i + 0.5) * segW;
@@ -91,11 +88,7 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
               textAnchor="middle" fontSize="9" fontWeight="600"
               fill="#374151" fontFamily="monospace"
             >
-              {b.pct < 0.1
-                ? "<.1%"
-                : b.pct < 10
-                  ? b.pct.toFixed(1) + "%"
-                  : Math.round(b.pct) + "%"}
+              {b.pct < 0.1 ? "<0.1%" : b.pct.toFixed(1) + "%"}
             </text>
             <text
               x={b.cx} y={barBase + 14}
@@ -107,6 +100,36 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
           </g>
         ))}
 
+        {/* Imputed value reference line — full height, behind bars visually distinct */}
+        {(() => {
+          const lineX = pad.left + ((ev - 0.5) / 6) * plotW;
+          const labelX = Math.max(pad.left + 30, Math.min(pad.left + plotW - 30, lineX));
+          return (
+            <g>
+              <line
+                x1={lineX} y1={lineTop}
+                x2={lineX} y2={barBase}
+                stroke="#dc3545" strokeWidth={2}
+                strokeDasharray="6,4"
+                opacity={0.8}
+              />
+              <circle cx={lineX} cy={barBase} r={3} fill="#dc3545" />
+              <rect
+                x={labelX - 28} y={lineTop}
+                width={56} height={15} rx={4}
+                fill="#dc3545"
+              />
+              <text
+                x={labelX} y={lineTop + 11}
+                textAnchor="middle" fontSize="9" fontWeight="700"
+                fill="#fff" fontFamily="monospace"
+              >
+                {ev.toFixed(4)}
+              </text>
+            </g>
+          );
+        })()}
+
         {/* Baseline */}
         <line
           x1={pad.left} y1={barBase}
@@ -114,80 +137,8 @@ function ImputationDistributionChart({ z, thresholds, imputedValue }) {
           stroke="#d1d5db" strokeWidth={1}
         />
 
-        {/* Expected-value gauge — colored segments */}
-        {Array.from({ length: 6 }, (_, i) => (
-          <rect
-            key={i}
-            x={pad.left + i * segW} y={gaugeTop}
-            width={segW} height={gaugeH}
-            fill={ZONE_FILLS[i]} fillOpacity={0.45}
-            stroke="#d1d5db" strokeWidth={0.5}
-          />
-        ))}
-        <rect
-          x={pad.left} y={gaugeTop}
-          width={plotW} height={gaugeH}
-          fill="none" stroke="#9ca3af" strokeWidth={0.8} rx={3}
-        />
-
-        {/* Gauge tick labels */}
-        {[1, 2, 3, 4, 5, 6].map(v => (
-          <text
-            key={v}
-            x={pad.left + ((v - 1) / 5) * plotW}
-            y={gaugeTop + gaugeH + 11}
-            textAnchor="middle" fontSize="8" fill="#9ca3af"
-            fontFamily="monospace"
-          >
-            {v}
-          </text>
-        ))}
-
-        {/* Diamond marker at expected value */}
-        <polygon
-          points={`${evX},${gaugeTop - 5} ${evX + 5},${gaugeTop + gaugeH / 2} ${evX},${gaugeTop + gaugeH + 5} ${evX - 5},${gaugeTop + gaugeH / 2}`}
-          fill="#dc3545" stroke="#fff" strokeWidth={1}
-        />
-
-        {/* Expected-value pill label */}
-        <rect
-          x={labelX - 20} y={gaugeTop + gaugeH + 15}
-          width={40} height={14} rx={3}
-          fill="#dc3545"
-        />
-        <text
-          x={labelX} y={gaugeTop + gaugeH + 25}
-          textAnchor="middle" fontSize="9" fontWeight="700"
-          fill="#fff" fontFamily="monospace"
-        >
-          {ev.toFixed(2)}
-        </text>
       </svg>
 
-      {/* Expected-value formula */}
-      <div className={styles.formulaRow}>
-        <span className={styles.formulaLabel}>Imputed Value</span>
-        <span className={styles.formulaEquals}>=</span>
-        {probabilities.map((p, i) => {
-          const pct = p * 100;
-          if (pct < 0.05) return null;
-          return (
-            <span key={i} className={styles.formulaTerm}>
-              <span className={styles.termValue} style={{ color: ZONE_STROKES[i] }}>
-                {i + 1}
-              </span>
-              <span className={styles.termMul}>&times;</span>
-              <span className={styles.termProb}>{pct.toFixed(1)}%</span>
-              {i < probabilities.length - 1 &&
-                probabilities.slice(i + 1).some(pp => pp * 100 >= 0.05) && (
-                  <span className={styles.termPlus}>+</span>
-                )}
-            </span>
-          );
-        })}
-        <span className={styles.formulaEquals}>=</span>
-        <span className={styles.formulaResult}>{ev.toFixed(4)}</span>
-      </div>
     </div>
   );
 }
