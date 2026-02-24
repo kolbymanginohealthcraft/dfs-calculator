@@ -22,14 +22,10 @@ export const PortalProvider = ({ children }) => {
       setIsFromPortal(loggedIn);
       setUser(currentUser);
       setIsLoading(false);
-      
-      // Store auth state for quick checks (for backward compatibility)
-      localStorage.setItem('user-authenticated', loggedIn ? 'true' : 'false');
     }).catch((error) => {
       console.error('Error checking authentication:', error);
       setIsFromPortal(false);
       setIsLoading(false);
-      localStorage.setItem('user-authenticated', 'false');
     });
   }, []);
 

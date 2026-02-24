@@ -221,28 +221,3 @@ export async function getImputationAnalysisData(params) {
   });
 }
 
-/**
- * Check if user is authenticated
- * Uses the auth service to check session status
- * @returns {Promise<boolean>}
- */
-export async function isAuthenticated() {
-  try {
-    const { getCurrentUser } = await import('./authService.js');
-    const { loggedIn } = await getCurrentUser();
-    return loggedIn;
-  } catch (error) {
-    console.error('Error checking authentication:', error);
-    return false;
-  }
-}
-
-/**
- * @deprecated Use isAuthenticated() instead
- * Kept for backward compatibility with PortalContext
- */
-export function hasSSOToken() {
-  // For backward compatibility, check localStorage flag
-  // This will be set by PortalContext after checking auth
-  return localStorage.getItem('user-authenticated') === 'true';
-}

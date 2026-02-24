@@ -78,11 +78,3 @@ export function logout(returnUrl = null) {
   
   window.location.href = logoutUrl;
 }
-
-/**
- * Check if user is authenticated (synchronous check using stored state)
- * For real check, use getCurrentUser()
- */
-export function isAuthenticated() {
-  return localStorage.getItem('user-authenticated') === 'true';
-}
