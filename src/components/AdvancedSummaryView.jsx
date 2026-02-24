@@ -16,7 +16,6 @@ import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import { useRedaction } from '../contexts/RedactionContext';
 import { redactName } from '../utils/redactionUtils';
 import { storeFileData } from '../utils/fileDataManager';
-import '../basic/styles/BasicLayout.css';
 import styles from './AdvancedSummaryView.module.css';
 
 const AdvancedSummaryView = () => {

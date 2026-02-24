@@ -9,6 +9,7 @@ import ExpectedScoreSlider from '../components/ExpectedScoreSlider';
 import BasicLayout from '../components/BasicLayout';
 import DataLossWarningModal from '../../components/DataLossWarningModal';
 import { instructionContent } from '../../data/instructionContent';
+import layoutStyles from '../styles/BasicLayout.module.css';
 
 const ExpectedScoreScreen = () => {
   const navigate = useNavigate();
@@ -132,7 +133,7 @@ const ExpectedScoreScreen = () => {
         expectedScore={expectedScore}
         onSwitchToAdvanced={handleSwitchToAdvanced}
       >
-      <div className="score-bar-chart-container">
+      <div className={layoutStyles.scoreBarChartContainer}>
         <ScoreBarChart
           startTotal={startTotal}
           expectedScore={expectedScore}
@@ -148,7 +149,7 @@ const ExpectedScoreScreen = () => {
         onFineAdjustment={handleFineAdjustment}
       />
 
-        <div className="action-buttons">
+        <div className={layoutStyles.actionButtons}>
           {/* Button removed - navigation happens automatically via progress indicator */}
         </div>
       </BasicLayout>

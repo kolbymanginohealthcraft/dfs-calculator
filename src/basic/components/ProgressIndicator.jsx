@@ -1,6 +1,6 @@
 import React from 'react';
 import { getScoreTypeColor } from '../../utils/themeColors';
-import '../styles/ProgressIndicator.css';
+import styles from '../styles/ProgressIndicator.module.css';
 
 const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore, endTotal, hasInteracted, mode = 'basic' }) => {
   const steps = [
@@ -18,8 +18,8 @@ const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore
   const hasNextStep = nextStepIndex < steps.length;
 
   return (
-    <div className="progress-indicator">
-      <div className="progress-bar">
+    <div className={styles.progressIndicator}>
+      <div className={styles.progressBar}>
         {steps.map((step, index) => {
           const isActive = step.key === currentStep;
           const isCompleted = index < currentIndex;
@@ -41,7 +41,7 @@ const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore
                       return (
               <button
                 key={step.key}
-                className={`progress-step ${isActive ? 'active-step' : ''} ${isCompleted ? 'completed-step' : ''} ${!isClickable ? 'disabled-step' : ''}`}
+                className={`${styles.progressStep} ${isActive ? styles.activeStep : ''} ${isCompleted ? styles.completedStep : ''} ${!isClickable ? styles.disabledStep : ''}`}
                 onClick={() => isClickable && onStepPress(step.key)}
                 disabled={!isClickable}
                 data-step={step.key}
@@ -51,10 +51,10 @@ const ProgressIndicator = ({ currentStep, onStepPress, startTotal, expectedScore
                 title={currentStep === 'expected' && step.key === 'end' && (!expectedScore || expectedScore <= startTotal) ? 'Must set an expected score greater than start score' : ''}
               >
                 <div 
-                  className={`step-dot ${isActive ? 'active-dot' : ''} ${isCompleted ? 'completed-dot' : ''}`}
+                  className={`${styles.stepDot} ${isActive ? styles.activeDot : ''} ${isCompleted ? styles.completedDot : ''}`}
                   style={{ backgroundColor: step.color }}
                 />
-                <span className={`step-text ${isActive ? 'active-text' : ''} ${isCompleted ? 'completed-text' : ''} ${!isClickable ? 'disabled-text' : ''}`}>
+                <span className={`${styles.stepText} ${isActive ? styles.activeText : ''} ${isCompleted ? styles.completedText : ''} ${!isClickable ? styles.disabledText : ''}`}>
                   {step.title}
                 </span>
               </button>

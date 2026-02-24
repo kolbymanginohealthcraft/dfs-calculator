@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./ModelEndScore.module.css";
+import layoutStyles from "../basic/styles/BasicLayout.module.css";
 import {
   GG_ITEMS,
   scoreMap,
@@ -41,7 +42,7 @@ const ModelEndScore = ({
 
         {hasFile && (
           <div 
-            className="score-bar-chart-container"
+            className={layoutStyles.scoreBarChartContainer}
             style={{
               borderLeft: `4px solid ${meetsExpectedScore ? '#059669' : '#dc2626'}`,
               background: `linear-gradient(90deg, ${meetsExpectedScore ? '#10b981' : '#ef4444'} 0%, transparent 4px), white`

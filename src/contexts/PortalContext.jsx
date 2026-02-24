@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getCurrentUser } from '../utils/authService';
 
 const PortalContext = createContext();
+const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
 
 export const usePortal = () => {
   const context = useContext(PortalContext);
@@ -17,12 +18,24 @@ export const PortalProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Check authentication status with C# backend (SAML/cookies)
-    getCurrentUser().then(({ loggedIn, user: currentUser }) => {
-      setIsFromPortal(loggedIn);
-      setUser(currentUser);
+    async function checkAuth() {
+      let result = await getCurrentUser();
+
+      if (!result.loggedIn && isDevelopment) {
+        try {
+          const res = await fetch('/account/dev-login', { credentials: 'include' });
+          if (res.ok) {
+            result = await getCurrentUser();
+          }
+        } catch { /* backend may not be running */ }
+      }
+
+      setIsFromPortal(result.loggedIn);
+      setUser(result.user);
       setIsLoading(false);
-    }).catch((error) => {
+    }
+
+    checkAuth().catch((error) => {
       console.error('Error checking authentication:', error);
       setIsFromPortal(false);
       setIsLoading(false);

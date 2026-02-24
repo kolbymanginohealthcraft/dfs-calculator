@@ -11,6 +11,7 @@ import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
 import DataLossWarningModal from '../../components/DataLossWarningModal';
 import { instructionContent } from '../../data/instructionContent';
+import layoutStyles from '../styles/BasicLayout.module.css';
 
 const EndScoreScreen = () => {
   const navigate = useNavigate();
@@ -154,7 +155,7 @@ const EndScoreScreen = () => {
         exportData={exportData}
       >
       <div 
-        className="score-bar-chart-container"
+        className={layoutStyles.scoreBarChartContainer}
         style={{
           borderLeft: `4px solid ${meetsExpectedScore ? '#059669' : '#dc2626'}`,
           background: `linear-gradient(90deg, ${meetsExpectedScore ? '#10b981' : '#ef4444'} 0%, transparent 4px), white`

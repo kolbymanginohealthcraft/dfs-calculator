@@ -3,7 +3,7 @@ import { formatDOB } from "../utils/calculations";
 import { getBasicContributingItems, getContributingGGItemsForDisplay } from "../utils/itemAdapters";
 import { getContributingKeys } from "../utils/itemDefinitions";
 import { GG_ITEMS, scoreMap, resolveScore } from "../utils/calculations";
-import "./ExportView.css";
+import styles from "./ExportView.module.css";
 import { BarChart3 } from "lucide-react";
 
 const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) => {
@@ -66,12 +66,12 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
   };
 
   return (
-    <div className="exportContainer">
-      <h1 className="reportTitle">DFS Report</h1>
+    <div className={styles.exportContainer}>
+      <h1 className={styles.reportTitle}>DFS Report</h1>
 
-      <section className="section">
-        <p className="patientLine">
-          <span className="label">Patient:</span> {patient.name}
+      <section className={styles.section}>
+        <p className={styles.patientLine}>
+          <span className={styles.label}>Patient:</span> {patient.name}
           {(patient.age || patient.ard) && (
             <span>
               {" "}
@@ -81,32 +81,32 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
           )}
         </p>
 
-        <p className="facilityLine">
-          <span className="label">Facility:</span> {patient.facility}
+        <p className={styles.facilityLine}>
+          <span className={styles.label}>Facility:</span> {patient.facility}
         </p>
       </section>
 
-      <section className="section">
-        <h3 className="sectionSubheading">Summary</h3>
-        <div className="summaryGrid">
-          <div className="summaryCell">
-            <div className="summaryLabel">Start Score</div>
-            <div className="summaryValue">{scores.start ?? "—"}</div>
+      <section className={styles.section}>
+        <h3 className={styles.sectionSubheading}>Summary</h3>
+        <div className={styles.summaryGrid}>
+          <div className={styles.summaryCell}>
+            <div className={styles.summaryLabel}>Start Score</div>
+            <div className={styles.summaryValue}>{scores.start ?? "—"}</div>
           </div>
-          <div className="summaryCell">
-            <div className="summaryLabel">Expected Score</div>
-            <div className="summaryValue">
+          <div className={styles.summaryCell}>
+            <div className={styles.summaryLabel}>Expected Score</div>
+            <div className={styles.summaryValue}>
               {scores.expected !== undefined
                 ? Number(scores.expected).toFixed(2)
                 : "—"}
             </div>
           </div>
-          <div className="summaryCell">
-            <div className="summaryLabel">End Score</div>
-            <div className={`summaryValue ${(() => {
+          <div className={styles.summaryCell}>
+            <div className={styles.summaryLabel}>End Score</div>
+            <div className={`${styles.summaryValue} ${(() => {
               if (scores.expected === undefined || scores.modeled === undefined) return '';
               const diff = scores.modeled - scores.expected;
-              return diff >= 0 ? 'over-achieved' : 'under-achieved';
+              return diff >= 0 ? styles.overAchieved : styles.underAchieved;
             })()}`}>
               {(() => {
                 if (scores.modeled === undefined) return "—";
@@ -123,12 +123,12 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
               })()}
             </div>
           </div>
-          <div className="summaryCell">
-            <div className="summaryLabel">Gain</div>
-            <div className={`summaryValue ${(() => {
+          <div className={styles.summaryCell}>
+            <div className={styles.summaryLabel}>Gain</div>
+            <div className={`${styles.summaryValue} ${(() => {
               if (scores.start === undefined || scores.modeled === undefined) return '';
               const gain = scores.modeled - scores.start;
-              return gain >= 0 ? 'over-achieved' : 'under-achieved';
+              return gain >= 0 ? styles.overAchieved : styles.underAchieved;
             })()}`}>
               {(() => {
                 if (scores.start === undefined || scores.modeled === undefined) return "—";
@@ -144,21 +144,21 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
         </div>
       </section>
 
-      <section className="section">
-        <h3 className="sectionSubheading">Function Items Analysis</h3>
-        <div className="functionItemsContainer">
+      <section className={styles.section}>
+        <h3 className={styles.sectionSubheading}>Function Items Analysis</h3>
+        <div className={styles.functionItemsContainer}>
           {Object.entries(functionItemsData).map(([domain, items]) => (
-            <div key={domain} className="domainSection">
-              <h4 className="domainTitle">
+            <div key={domain} className={styles.domainSection}>
+              <h4 className={styles.domainTitle}>
                 {domain === 'selfCare' ? 'Self-Care Items' : 'Mobility Items'}
                 {domain === 'mobility' && (functionItems?.mobilityType || mobilityType) && (
-                  <span className="mobilityType"> ({functionItems?.mobilityType === 'Wheel' ? 'Wheelchair' : functionItems?.mobilityType || (mobilityType === 'Wheel' ? 'Wheelchair' : mobilityType)})</span>
+                  <span className={styles.mobilityType}> ({functionItems?.mobilityType === 'Wheel' ? 'Wheelchair' : functionItems?.mobilityType || (mobilityType === 'Wheel' ? 'Wheelchair' : mobilityType)})</span>
                 )}
                 {domain === 'mobility' && (functionItems?.mobilityType === 'Wheel' || mobilityType === 'Wheel') && (
-                  <span className="footnote">Item R counts double</span>
+                  <span className={styles.footnote}>Item R counts double</span>
                 )}
               </h4>
-              <table className="functionItemsTable">
+              <table className={styles.functionItemsTable}>
                 <thead>
                   <tr>
                     <th>Item</th>
@@ -175,10 +175,10 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
                     
                     return (
                       <tr key={item.key || item.id}>
-                        <td className="itemName">{item.label}</td>
-                        <td className="scoreCell">{startScore}</td>
-                        <td className="scoreCell">{endScore}</td>
-                        <td className={`gainCell ${gain > 0 ? 'positive' : gain < 0 ? 'negative' : ''}`}>
+                        <td className={styles.itemName}>{item.label}</td>
+                        <td className={styles.scoreCell}>{startScore}</td>
+                        <td className={styles.scoreCell}>{endScore}</td>
+                        <td className={`${styles.gainCell} ${gain > 0 ? styles.positive : gain < 0 ? styles.negative : ''}`}>
                           {gain > 0 ? `+${gain}` : gain === 0 ? '—' : gain}
                         </td>
                       </tr>
@@ -191,7 +191,7 @@ const ExportView = ({ patient, scores, functionItems, mobilityType = 'Walk' }) =
         </div>
       </section>
 
-      <p className="footerNote">
+      <p className={styles.footerNote}>
         Generated by DFS Calculator · Aegis Therapies · {today}
       </p>
     </div>

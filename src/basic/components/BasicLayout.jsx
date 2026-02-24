@@ -5,7 +5,7 @@ import Navbar from '../../components/Navbar';
 import ModeBanner from '../../components/ModeBanner';
 import { lazy } from 'react';
 const ExportView = lazy(() => import('../../components/ExportView'));
-import '../styles/BasicLayout.css';
+import layoutStyles from '../styles/BasicLayout.module.css';
 
 const BasicLayout = ({ 
   children, 
@@ -62,7 +62,7 @@ const BasicLayout = ({
     <Navbar onExport={handleExport} />
   ) : navbar;
   return (
-    <div className="score-screen">
+    <div className={layoutStyles.scoreScreen}>
       {showNavbar && (navbarWithExport || <Navbar />)}
       {!navbar && (
         <ModeBanner 
@@ -76,21 +76,21 @@ const BasicLayout = ({
         />
       )}
       
-      <div className={`main-content ${fullWidth ? 'full-width' : ''} ${expandedRight ? 'expanded-right' : ''}`}>
+      <div className={`${layoutStyles.mainContent} ${fullWidth ? layoutStyles.fullWidth : ''} ${expandedRight ? layoutStyles.expandedRight : ''}`}>
         {!fullWidth ? (
           <>
-            <div className="content-left">
-              <div className="left-content-container">
+            <div className={layoutStyles.contentLeft}>
+              <div className={layoutStyles.leftContentContainer}>
                 {children}
               </div>
             </div>
             
-            <div className="content-right">
+            <div className={layoutStyles.contentRight}>
               {rightPanel}
             </div>
           </>
         ) : (
-          <div className="content-full-width">
+          <div className={layoutStyles.contentFullWidth}>
             {rightPanel}
           </div>
         )}

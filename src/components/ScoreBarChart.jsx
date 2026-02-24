@@ -1,6 +1,6 @@
 import React from 'react';
 import { getScoreTypeColor } from '../utils/themeColors';
-import './ScoreBarChart.css';
+import styles from './ScoreBarChart.module.css';
 
 const ScoreBarChart = ({ 
   startTotal, 
@@ -34,12 +34,12 @@ const ScoreBarChart = ({
   const shouldShowAllLegends = true;
 
   return (
-    <div className="score-bar-chart" style={{ paddingTop }}>
-      <div className="chart-title-container">
-        <h3 className="chart-title">{title}</h3>
+    <div className={styles.scoreBarChart} style={{ paddingTop }}>
+      <div className={styles.chartTitleContainer}>
+        <h3 className={styles.chartTitle}>{title}</h3>
         {shouldShowComparisonIndicator && expectedScore && endTotal && (
           <div 
-            className="comparison-indicator" 
+            className={styles.comparisonIndicator} 
             style={{ 
               backgroundColor: endTotal >= expectedScore 
                 ? 'linear-gradient(135deg, #10b981, #059669)' 
@@ -51,7 +51,7 @@ const ScoreBarChart = ({
             }}
           >
             <span 
-              className="comparison-text" 
+              className={styles.comparisonText} 
               style={{ color: '#ffffff' }}
             >
               {endTotal >= expectedScore 
@@ -63,21 +63,21 @@ const ScoreBarChart = ({
         )}
       </div>
       
-      <div className="bar-chart-track">
+      <div className={styles.barChartTrack}>
         {/* Start Score Bar */}
         {shouldShowStartBar && (
           <div 
-            className="start-bar" 
+            className={styles.startBar} 
             style={{ width: `${(startTotal / 60) * 100}%` }}
           >
-            <span className="bar-value-text">{Number.isInteger(startTotal) ? startTotal : startTotal.toFixed(2)}</span>
+            <span className={styles.barValueText}>{Number.isInteger(startTotal) ? startTotal : startTotal.toFixed(2)}</span>
           </div>
         )}
         
         {/* Required Gain Background (Transparent) */}
         {shouldShowRequiredBackground && (
           <div 
-            className="required-background" 
+            className={styles.requiredBackground} 
             style={{ 
               width: `${(requiredGain / 60) * 100}%`,
               left: `${(startTotal / 60) * 100}%`
@@ -88,14 +88,14 @@ const ScoreBarChart = ({
         {/* Gain Bar */}
         {shouldShowGainBar && actualGain > 0 && (
           <div 
-            className="gain-bar" 
+            className={styles.gainBar} 
             style={{ 
               width: `${(actualGain / 60) * 100}%`,
               left: `${(startTotal / 60) * 100}%`
             }}
           >
             {actualGain >= 1 && (
-              <span className="bar-value-text">{Number.isInteger(actualGain) ? actualGain : actualGain.toFixed(2)}</span>
+              <span className={styles.barValueText}>{Number.isInteger(actualGain) ? actualGain : actualGain.toFixed(2)}</span>
             )}
           </div>
         )}
@@ -103,7 +103,7 @@ const ScoreBarChart = ({
         {/* Expected Line */}
         {shouldShowExpectedLine && expectedScore && (
           <div 
-            className="expected-line" 
+            className={styles.expectedLine} 
             style={{ left: `${(expectedScore / 60) * 100}%` }} 
           />
         )}
@@ -111,11 +111,11 @@ const ScoreBarChart = ({
         {/* End Total Label */}
         {endTotal && (
           <div 
-            className="end-total-label" 
+            className={styles.endTotalLabel} 
             style={{ left: `${(endTotal / 60) * 100}%` }}
           >
             <span 
-              className="end-total-text" 
+              className={styles.endTotalText} 
               style={{ color: getScoreTypeColor('end', 'primary') }}
             >
               {Number.isInteger(endTotal) ? endTotal : endTotal.toFixed(2)}
@@ -126,27 +126,27 @@ const ScoreBarChart = ({
         {/* Required Gain Label */}
         {shouldShowRequiredBackground && !shouldShowGainBar && requiredGain > 6 && (
           <div 
-            className="required-gain-label" 
+            className={styles.requiredGainLabel} 
             style={{ 
               left: `${(startTotal / 60) * 100}%`,
               width: `${(requiredGain / 60) * 100}%`
             }}
           >
-            <span className="required-gain-text">{requiredGain.toFixed(2)}</span>
+            <span className={styles.requiredGainText}>{requiredGain.toFixed(2)}</span>
           </div>
         )}
       </div>
       
       {/* Labels - Always show all entries for consistency */}
-      <div className="bar-chart-labels">
+      <div className={styles.barChartLabels}>
         {/* Start Label - Always show */}
-        <div className="bar-chart-label">
+        <div className={styles.barChartLabel}>
           <div 
-            className="label-dot" 
+            className={styles.labelDot} 
             style={{ backgroundColor: getScoreTypeColor('start', 'primary') }} 
           />
           <span 
-            className="label-text" 
+            className={styles.labelText} 
             style={{ color: getScoreTypeColor('start', 'primary') }}
           >
             Start: {Number.isInteger(startTotal) ? startTotal : startTotal.toFixed(2)}
@@ -154,13 +154,13 @@ const ScoreBarChart = ({
         </div>
         
         {/* Expected Label - Show if we have expected score, otherwise show TBD */}
-        <div className="bar-chart-label">
+        <div className={styles.barChartLabel}>
           <div 
-            className="label-dot" 
+            className={styles.labelDot} 
             style={{ backgroundColor: getScoreTypeColor('expected', 'primary') }} 
           />
           <span 
-            className="label-text" 
+            className={styles.labelText} 
             style={{ color: getScoreTypeColor('expected', 'primary') }}
           >
             {expectedScore ? `Expected: ${expectedScore.toFixed(2)}` : 'Expected: TBD'}
@@ -169,15 +169,15 @@ const ScoreBarChart = ({
       </div>
       
       {/* Second Line - Gain and End */}
-      <div className="bar-chart-labels">
+      <div className={styles.barChartLabels}>
         {/* Gain Label - Always show, with required gain info if available */}
-        <div className="bar-chart-label">
+        <div className={styles.barChartLabel}>
           <div 
-            className="label-dot" 
+            className={styles.labelDot} 
             style={{ backgroundColor: '#5bc0de' }} 
           />
           <span 
-            className="label-text" 
+            className={styles.labelText} 
             style={{ color: '#5bc0de' }}
           >
             {expectedScore ? (
@@ -196,13 +196,13 @@ const ScoreBarChart = ({
         </div>
         
         {/* End Label - Always show */}
-        <div className="bar-chart-label">
+        <div className={styles.barChartLabel}>
           <div 
-            className="label-dot" 
+            className={styles.labelDot} 
             style={{ backgroundColor: getScoreTypeColor('end', 'primary') }} 
           />
           <span 
-            className="label-text" 
+            className={styles.labelText} 
             style={{ color: getScoreTypeColor('end', 'primary') }}
           >
             {endTotal ? `${endLabel}: ${Number.isInteger(endTotal) ? endTotal : endTotal.toFixed(2)}` : `${endLabel}: TBD`}

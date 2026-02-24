@@ -1,4 +1,4 @@
-.barbell-chart {
+.barbellChart {
   position: relative;
   display: flex;
   justify-content: center;
@@ -6,7 +6,7 @@
   overflow: visible;
 }
 
-.barbell-track {
+.barbellTrack {
   position: absolute;
   width: calc(100% - 24px);
   height: 3px;
@@ -14,26 +14,10 @@
   border-radius: 3px;
   z-index: 0;
   left: 12px;
-  /* top: 50%; */
-  /* transform: translateY(-50%); */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* .barbell-chart::before {
-  content: '';
-  position: absolute;
-  width: calc(100% - 24px);
-  height: 6px;
-  background-color: #6c757d;
-  border-radius: 3px;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-} */
-
-.barbell-node {
+.barbellNode {
   position: absolute;
   width: 24px;
   height: 24px;
@@ -46,18 +30,16 @@
   align-items: center;
 }
 
-.barbell-start-node {
-  /* Blue for start - styling handled inline */
+.barbellStartNode {
 }
 
-.barbell-end-node {
+.barbellEndNode {
   width: 20px;
   height: 20px;
   border-radius: 10px;
-  /* Green for end - styling handled inline */
 }
 
-.barbell-connection-line {
+.barbellConnectionLine {
   position: absolute;
   height: 4px;
   background-color: #5bc0de;
@@ -69,35 +51,34 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.barbell-node-text {
+.barbellNodeText {
   color: #fff;
   font-size: 10px;
   font-weight: bold;
   text-align: center;
 }
 
-.barbell-end-node-text {
+.barbellEndNodeText {
   color: #fff;
   font-size: 9px;
   font-weight: bold;
   text-align: center;
 }
 
-/* Wider nodes for continuous (non-integer) imputed values */
-.barbell-node-wide {
+.barbellNodeWide {
   width: 36px;
   border-radius: 12px;
 }
 
-.barbell-node-wide .barbell-node-text {
+.barbellNodeWide .barbellNodeText {
   font-size: 11px;
 }
 
-.barbell-end-node-wide {
+.barbellEndNodeWide {
   width: 32px;
   border-radius: 10px;
 }
 
-.barbell-end-node-wide .barbell-end-node-text {
+.barbellEndNodeWide .barbellEndNodeText {
   font-size: 10px;
 }

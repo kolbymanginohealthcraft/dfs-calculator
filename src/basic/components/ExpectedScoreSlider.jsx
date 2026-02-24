@@ -1,5 +1,5 @@
 import React from 'react';
-import './ExpectedScoreSlider.css';
+import styles from './ExpectedScoreSlider.module.css';
 
 const ExpectedScoreSlider = ({ 
   startTotal, 
@@ -9,13 +9,13 @@ const ExpectedScoreSlider = ({
   onFineAdjustment 
 }) => {
   return (
-    <div className="expected-score-slider">
-      <div className="slider-header">
+    <div className={styles.expectedScoreSlider}>
+      <div className={styles.sliderHeader}>
         <h2>Adjust Expected Score</h2>
         <p>Drag the slider or use the fine adjustment buttons</p>
       </div>
       
-      <div className="slider-wrapper">
+      <div className={styles.sliderWrapper}>
         <input
           type="range"
           min={startTotal}
@@ -23,37 +23,37 @@ const ExpectedScoreSlider = ({
           step="0.01"
           value={sliderValue}
           onChange={onSliderChange}
-          className="score-slider"
+          className={styles.scoreSlider}
         />
-        <div className="slider-labels">
+        <div className={styles.sliderLabels}>
           <span>{startTotal}</span>
           <span>{(startTotal + (60 - startTotal) / 2).toFixed(1)}</span>
           <span>60</span>
         </div>
       </div>
 
-      <div className="fine-adjustment">
+      <div className={styles.fineAdjustment}>
         <button 
-          className="adjust-btn"
+          className={styles.adjustBtn}
           onClick={() => onFineAdjustment(-0.01)}
         >
           -0.01
         </button>
         <button 
-          className="adjust-btn"
+          className={styles.adjustBtn}
           onClick={() => onFineAdjustment(-0.1)}
         >
           -0.1
         </button>
-        <span className="current-value">{expectedScore.toFixed(2)}</span>
+        <span className={styles.currentValue}>{expectedScore.toFixed(2)}</span>
         <button 
-          className="adjust-btn"
+          className={styles.adjustBtn}
           onClick={() => onFineAdjustment(0.1)}
         >
           +0.1
         </button>
         <button 
-          className="adjust-btn"
+          className={styles.adjustBtn}
           onClick={() => onFineAdjustment(0.01)}
         >
           +0.01

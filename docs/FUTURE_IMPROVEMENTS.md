@@ -4,27 +4,22 @@ Items identified during the February 2026 codebase cleanup but deferred for a fu
 
 ---
 
-## 1. CSS Normalization
+## ~~1. CSS Normalization~~ (Completed Feb 2026)
 
-**Problem:** The project uses a mix of ~21 `.module.css` files (scoped styles via CSS Modules) and ~12 plain `.css` files (global styles). This inconsistency means some components use `className={styles.foo}` while others use `className="foo"`.
-
-**What it involves:** Converting plain `.css` files to `.module.css` requires updating every `className="..."` string reference in the associated component to use the `styles.xxx` object pattern. It's not just a file rename — it's a JSX refactor for each component.
-
-**Recommendation:** Only worth doing if you're planning significant UI work or encountering style collisions from global CSS leaking between components. Not a functional issue today.
+All plain `.css` component files have been converted to `.module.css` with scoped `className={styles.xxx}` references. The only remaining global CSS files are `src/index.css` and `src/basic/index.css`, which intentionally define `:root` variables, element-level resets, and shared utility classes. Shared layout styles in `BasicLayout.module.css` are imported as a module by each component that uses them.
 
 ---
 
-## 2. Long-Term Testing Strategy
+## 2. ~~Long-Term Testing Strategy~~ (COMPLETED — February 2026)
 
-**Current state:** Two Node.js test scripts exist (`npm test` for coefficient version selection, `npm run test:transformers` for data pipeline). No test framework is installed. No unit tests for frontend utilities or C# algorithm code.
+**Implemented in both tracks:**
 
-**Highest-value targets:**
+- **Frontend (Vitest):** 49 tests across `calculations.test.js` and `coefficientLoader.test.js`. Run with `npm test` (now uses `vitest run`). Legacy scripts available via `npm run test:legacy` and `npm run test:transformers`.
+- **C# backend (xUnit):** 57 tests across `CalculationsTests.cs`, `ImputationsTests.cs`, and `CoefficientLoaderTests.cs`. Run with `dotnet test` from `Aegis.DfsCalculator/`. Solution file `Aegis.DfsCalculator.sln` ties both projects together.
 
-- **C# algorithms (xUnit):** `Calculations.cs` and `Imputations.cs` contain proprietary logic tied to CMS regulatory methodology. Unit tests with known MDS inputs and expected outputs would guard against regressions during annual coefficient updates.
-- **Frontend utilities (Vitest):** `coefficientLoader.js`, `fileParser.js`, and `calculations.js` are the most critical client-side utilities. Vitest integrates natively with Vite (zero config).
+**What was added:**
+- Vitest configured in `vite.config.js` (`test` block), test files in `src/utils/__tests__/`.
+- xUnit test project at `Aegis.DfsCalculator/DFSCalculator.Server.Tests/` with a shared `DataDirectoryFixture` for JSON data file access.
+- Tests cover: score resolution, date formatting, age calculation, mobility type detection, function score computation, coefficient version selection, covariate extraction (age, BMI, cognition, communication, continence, prior functioning, medical conditions), imputation exclusion rules, threshold loading, imputed value ranges, batch imputation, and imputation analysis.
 
-**What it involves:**
-- **Frontend:** Install Vitest, configure it with the existing Vite setup, write unit tests for utility functions, and optionally add component tests with Testing Library.
-- **C# backend:** Add an xUnit test project to the solution, reference `DFSCalculator.Server`, and write tests against the algorithm classes with known inputs/outputs.
-
-**Recommendation:** Start with the C# algorithm tests — they protect the most valuable and least replaceable code. Frontend utility tests are a natural second step.
+**Remaining opportunities:** Component tests with Testing Library, API endpoint integration tests, and coverage reporting.

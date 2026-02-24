@@ -34,8 +34,6 @@ const Covariates = lazy(() => import("./Covariates"));
 const ImputationTab = lazy(() => import("./ImputationTab"));
 const ExportView = lazy(() => import("./ExportView"));
 
-import "../index.css";
-import "../basic/styles/BasicLayout.css";
 import styles from "./AdvancedAppDetail.module.css";
 
 function AdvancedAppDetail() {

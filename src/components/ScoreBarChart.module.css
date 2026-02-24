@@ -1,9 +1,8 @@
-.score-bar-chart {
+.scoreBarChart {
   margin-bottom: 0;
-  /* padding removed - handled by container */
 }
 
-.chart-title-container {
+.chartTitleContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -12,7 +11,7 @@
   min-height: 24px;
 }
 
-.chart-title {
+.chartTitle {
   font-size: 1.4rem;
   font-weight: 700;
   color: #0c436a;
@@ -22,7 +21,7 @@
   letter-spacing: 0.3px;
 }
 
-.bar-chart-track {
+.barChartTrack {
   height: 28px;
   background: linear-gradient(135deg, #e9ecef 0%, #f1f5f9 100%);
   border-radius: 14px;
@@ -33,7 +32,7 @@
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.start-bar {
+.startBar {
   height: 100%;
   background: linear-gradient(135deg, #007cbb 0%, #1a8dd1 100%);
   position: absolute;
@@ -46,14 +45,14 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.required-background {
+.requiredBackground {
   height: 100%;
   background-color: #5bc0de;
   position: absolute;
   border-radius: 10px;
 }
 
-.gain-bar {
+.gainBar {
   height: 100%;
   background: linear-gradient(135deg, #5bc0de 0%, #7dd3fc 100%);
   position: absolute;
@@ -65,7 +64,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.expected-line {
+.expectedLine {
   position: absolute;
   top: 0;
   width: 2px;
@@ -73,7 +72,7 @@
   background-color: #dc3545;
 }
 
-.bar-value-text {
+.barValueText {
   font-size: 15px;
   color: #fff;
   font-weight: 700;
@@ -82,7 +81,7 @@
   letter-spacing: 0.2px;
 }
 
-.end-total-label {
+.endTotalLabel {
   position: absolute;
   top: 0;
   width: auto;
@@ -93,7 +92,7 @@
   margin-left: 5px;
 }
 
-.end-total-text {
+.endTotalText {
   font-size: 14px;
   color: #fff;
   font-weight: 700;
@@ -101,20 +100,20 @@
   letter-spacing: 0.2px;
 }
 
-.bar-chart-labels {
+.barChartLabels {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
 }
 
-.bar-chart-label {
+.barChartLabel {
   display: flex;
   align-items: center;
   margin-bottom: 5px;
   flex: 1;
 }
 
-.label-dot {
+.labelDot {
   width: 10px;
   height: 10px;
   border-radius: 5px;
@@ -122,34 +121,34 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.gain-dot {
+.gainDot {
   background-color: #5bc0de;
 }
 
-.label-text {
+.labelText {
   font-size: 1.2rem;
   color: #0c436a;
   font-weight: 600;
   letter-spacing: 0.2px;
 }
 
-.gain-text {
+.gainText {
   color: #5bc0de;
 }
 
-.required-label {
+.requiredLabel {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   margin-top: 5px;
 }
 
-.required-text {
+.requiredText {
   font-size: 1rem;
   color: #5bc0de;
 }
 
-.required-gain-label {
+.requiredGainLabel {
   position: absolute;
   top: 0;
   height: 100%;
@@ -160,13 +159,13 @@
   border-radius: 10px;
 }
 
-.required-gain-text {
+.requiredGainText {
   font-size: 12px;
   color: #fff;
   font-weight: bold;
 }
 
-.comparison-indicator {
+.comparisonIndicator {
   display: flex;
   align-items: center;
   padding: 8px 16px;
@@ -182,7 +181,7 @@
   backdrop-filter: blur(10px);
 }
 
-.comparison-indicator::before {
+.comparisonIndicator::before {
   content: '';
   position: absolute;
   top: 0;
@@ -193,16 +192,16 @@
   transition: left 0.5s;
 }
 
-.comparison-indicator:hover {
+.comparisonIndicator:hover {
   transform: translateY(-1px) scale(1.01);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-.comparison-indicator:hover::before {
+.comparisonIndicator:hover::before {
   left: 100%;
 }
 
-.comparison-text {
+.comparisonText {
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.3px;
@@ -212,22 +211,22 @@
 }
 
 @media (max-width: 768px) {
-  .chart-title-container {
+  .chartTitleContainer {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
   
-  .comparison-indicator {
+  .comparisonIndicator {
     margin-left: 0;
   }
   
-  .bar-chart-labels {
+  .barChartLabels {
     flex-direction: column;
     gap: 5px;
   }
   
-  .bar-chart-label {
+  .barChartLabel {
     flex: none;
   }
 }

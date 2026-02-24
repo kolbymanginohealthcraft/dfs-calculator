@@ -11,6 +11,7 @@ import BasicLayout from '../components/BasicLayout';
 import FunctionItemsList from '../../components/FunctionItemsList';
 import DataLossWarningModal from '../../components/DataLossWarningModal';
 import { instructionContent } from '../../data/instructionContent';
+import layoutStyles from '../styles/BasicLayout.module.css';
 
 const StartScoreScreen = () => {
   const navigate = useNavigate();
@@ -141,7 +142,7 @@ const StartScoreScreen = () => {
         hasInteracted={hasInteracted}
         onSwitchToAdvanced={handleSwitchToAdvanced}
       >
-        <div className="score-bar-chart-container">
+        <div className={layoutStyles.scoreBarChartContainer}>
           <ScoreBarChart
             startTotal={startTotal}
             variant="start"
@@ -164,7 +165,7 @@ const StartScoreScreen = () => {
           onMobilityTypeChange={handleMobilityTypeChange}
         />
 
-        <div className="action-buttons">
+        <div className={layoutStyles.actionButtons}>
           {/* Button removed - navigation happens automatically via progress indicator */}
         </div>
       </BasicLayout>

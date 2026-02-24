@@ -5,6 +5,10 @@ export default defineConfig({
   plugins: [
     react()
   ],
+  test: {
+    environment: 'node',
+    include: ['src/**/*.test.{js,jsx}'],
+  },
   server: {
     proxy: {
       // Proxy API requests to local C# backend (avoids CORS issues)

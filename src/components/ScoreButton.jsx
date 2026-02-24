@@ -1,5 +1,5 @@
 import React from 'react';
-import './ScoreButton.css';
+import styles from './ScoreButton.module.css';
 
 const ScoreButton = ({ 
   type, // 'plus' or 'minus'
@@ -12,7 +12,7 @@ const ScoreButton = ({
   
   return (
     <button
-      className={`score-btn ${type}-btn`}
+      className={`${styles.scoreBtn} ${type === 'plus' ? styles.plusBtn : styles.minusBtn}`}
       onClick={onClick}
       disabled={disabled}
       style={{ 

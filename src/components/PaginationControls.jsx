@@ -1,5 +1,5 @@
 import React from 'react';
-import './PaginationControls.css';
+import styles from './PaginationControls.module.css';
 
 const PaginationControls = ({ 
   currentPage, 
@@ -60,16 +60,16 @@ const PaginationControls = ({
   const pageNumbers = generatePageNumbers();
 
   return (
-    <div className="paginationContainer">
+    <div className={styles.paginationContainer}>
       {showInfo && (
-        <div className="paginationInfo">
+        <div className={styles.paginationInfo}>
           Showing {startItem}-{endItem} of {totalItems} files
         </div>
       )}
       
-      <div className="paginationControls">
+      <div className={styles.paginationControls}>
         <button
-          className="pageButton navButton"
+          className={`${styles.pageButton} ${styles.navButton}`}
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
           title="First page"
@@ -78,7 +78,7 @@ const PaginationControls = ({
         </button>
         
         <button
-          className="pageButton navButton"
+          className={`${styles.pageButton} ${styles.navButton}`}
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
           title="Previous page"
@@ -89,9 +89,9 @@ const PaginationControls = ({
         {pageNumbers.map((page, index) => (
           <button
             key={index}
-            className={`pageButton ${
-              page === currentPage ? 'activePage' : ''
-            } ${page === '...' ? 'ellipsis' : ''}`}
+            className={`${styles.pageButton} ${
+              page === currentPage ? styles.activePage : ''
+            } ${page === '...' ? styles.ellipsis : ''}`}
             onClick={() => typeof page === 'number' && onPageChange(page)}
             disabled={page === '...'}
           >
@@ -100,7 +100,7 @@ const PaginationControls = ({
         ))}
         
         <button
-          className="pageButton navButton"
+          className={`${styles.pageButton} ${styles.navButton}`}
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
           title="Next page"
@@ -109,7 +109,7 @@ const PaginationControls = ({
         </button>
         
         <button
-          className="pageButton navButton"
+          className={`${styles.pageButton} ${styles.navButton}`}
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage === totalPages}
           title="Last page"
@@ -119,15 +119,15 @@ const PaginationControls = ({
       </div>
       
       {showItemsPerPage && (
-        <div className="itemsPerPageContainer">
-          <label htmlFor="itemsPerPage" className="itemsPerPageLabel">
+        <div className={styles.itemsPerPageContainer}>
+          <label htmlFor="itemsPerPage" className={styles.itemsPerPageLabel}>
             Files per page:
           </label>
           <select
             id="itemsPerPage"
             value={itemsPerPage}
             onChange={(e) => onItemsPerPageChange(parseInt(e.target.value))}
-            className="itemsPerPageSelect"
+            className={styles.itemsPerPageSelect}
           >
             <option value={10}>10</option>
             <option value={20}>20</option>

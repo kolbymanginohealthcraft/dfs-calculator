@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/BasicLayout.css';
+import layoutStyles from '../styles/BasicLayout.module.css';
 
 const InstructionPanel = ({ 
   title, 
@@ -9,19 +9,19 @@ const InstructionPanel = ({
   noContainer = false
 }) => {
   return (
-    <div className={noContainer ? "instructions-content" : "instructions-panel"}>
-      <h3 className="instructions-title">{title}</h3>
+    <div className={noContainer ? layoutStyles.instructionsContent : layoutStyles.instructionsPanel}>
+      <h3 className={layoutStyles.instructionsTitle}>{title}</h3>
       
-      <div className="instruction-section">
-        <h4 className="instruction-subtitle">What you're doing:</h4>
-        <p className="instruction-text">
+      <div className={layoutStyles.instructionSection}>
+        <h4 className={layoutStyles.instructionSubtitle}>What you're doing:</h4>
+        <p className={layoutStyles.instructionText}>
           {whatYoureDoing}
         </p>
       </div>
       
-      <div className="instruction-section">
-        <h4 className="instruction-subtitle">How to use:</h4>
-        <ul className="instruction-list">
+      <div className={layoutStyles.instructionSection}>
+        <h4 className={layoutStyles.instructionSubtitle}>How to use:</h4>
+        <ul className={layoutStyles.instructionList}>
           {howToUse.map((item, index) => (
             <li key={index}>{item}</li>
           ))}
@@ -29,13 +29,13 @@ const InstructionPanel = ({
       </div>
       
       {scoreValues && (
-        <div className="instruction-section">
-          <h4 className="instruction-subtitle">Score Values:</h4>
-          <div className="score-values">
+        <div className={layoutStyles.instructionSection}>
+          <h4 className={layoutStyles.instructionSubtitle}>Score Values:</h4>
+          <div className={layoutStyles.scoreValues}>
             {scoreValues.map((scoreValue, index) => (
-              <div key={index} className="score-value-item">
-                <span className="score-number">{scoreValue.number}</span>
-                <span className="score-description">{scoreValue.description}</span>
+              <div key={index} className={layoutStyles.scoreValueItem}>
+                <span className={layoutStyles.scoreNumber}>{scoreValue.number}</span>
+                <span className={layoutStyles.scoreDescription}>{scoreValue.description}</span>
               </div>
             ))}
           </div>
