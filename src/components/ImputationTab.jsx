@@ -142,7 +142,7 @@ function ImputationTab({
         {hasFile && (
           <p className={styles.imputationNote}>
             This shows how missing or invalid GG items are imputed using covariates and thresholds.
-            Click a row to see detailed covariate breakdown.
+            Click a row to see details.
           </p>
         )}
       </div>
@@ -205,7 +205,7 @@ function ImputationTab({
                         <tr className={styles.expandedRow}>
                           <td colSpan="5">
                             <div className={styles.covariateDetails}>
-                              <h4>Covariate Breakdown for {getGGItemLabel(ggItemId)} ({ggItemId})</h4>
+                              <h4>Imputation Breakdown for {getGGItemLabel(ggItemId)} ({ggItemId})</h4>
                               {/* Imputed value summary */}
                               <div className={styles.thresholdVisualization}>
                                 <h5>

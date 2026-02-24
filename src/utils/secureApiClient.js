@@ -27,12 +27,40 @@ async function tryDevReauth() {
  * In development, a 401 triggers an automatic dev-login + single retry
  * so the browser is never redirected to the external SAML IdP.
  */
+const apiTimings = [];
+
+function logTiming(entry) {
+  apiTimings.push(entry);
+  const style = entry.duration > 500 ? 'color: red; font-weight: bold'
+    : entry.duration > 200 ? 'color: orange'
+    : 'color: green';
+  console.log(
+    `%c[API] ${entry.method} ${entry.endpoint} → ${entry.status} in ${entry.duration}ms`,
+    style
+  );
+}
+
+/**
+ * Returns a copy of all recorded API timings for external consumption.
+ * Each entry: { endpoint, method, status, duration, timestamp }
+ */
+export function getApiTimings() {
+  return [...apiTimings];
+}
+
+export function clearApiTimings() {
+  apiTimings.length = 0;
+}
+
 async function authenticatedFetch(endpoint, options = {}, _isRetry = false) {
   const fullUrl = endpoint.startsWith('http') 
     ? endpoint 
     : isDevelopment 
       ? endpoint
       : `${API_BASE_URL}${endpoint}`;
+
+  const t0 = performance.now();
+  const method = options.method || 'GET';
 
   const response = await fetch(fullUrl, {
     ...options,
@@ -43,7 +71,11 @@ async function authenticatedFetch(endpoint, options = {}, _isRetry = false) {
     },
   });
 
+  const duration = Math.round(performance.now() - t0);
+
   if (!response.ok) {
+    logTiming({ endpoint, method, status: response.status, duration, timestamp: Date.now() });
+
     if (response.status === 401) {
       if (isDevelopment && !_isRetry) {
         const restored = await tryDevReauth();
@@ -76,6 +108,7 @@ async function authenticatedFetch(endpoint, options = {}, _isRetry = false) {
     throw error;
   }
 
+  logTiming({ endpoint, method, status: response.status, duration, timestamp: Date.now() });
   return response.json();
 }
 

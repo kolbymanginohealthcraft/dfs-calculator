@@ -193,18 +193,13 @@ const AdvancedSummaryView = () => {
           // Update the total file count to reflect the extracted files
           setTotalFiles(extractedFiles.length);
           
-          // Create individual file entries for each extracted XML file
-          const extractedFileEntries = [];
           let processedCount = 0;
-          for (const extractedFile of extractedFiles) {
-            // Check for cancellation before processing each extracted file
-            if (cancelledRef.current) {
-              break;
-            }
-            
+
+          const processExtractedFile = async (extractedFile) => {
+            if (cancelledRef.current) return;
+
             const xmlFileObj = createFileFromContent(extractedFile.name, extractedFile.content, extractedFile.size);
-            
-            // Process the XML file
+
             let parsedData = null;
             let groupedData = null;
             let modeledData = null;
@@ -214,44 +209,38 @@ const AdvancedSummaryView = () => {
 
             const result = await handleFileUploadWithValidation(
               xmlFileObj,
-              (name) => {}, // fileName callback - not used in summary view
+              (name) => {},
               (data) => { parsedData = data; },
               (data) => { groupedData = data; },
               (data) => { modeledData = data; },
               (data) => { startData = data; },
               (data) => { imputedData = data; },
-              null, // setValidationError - not used in summary view
-              null, // setValidationWarning - not used in summary view
+              null,
+              null,
               (error) => {
                 if (error && error !== null) {
-                  // Store the detailed error message for later use
                   validationError = error;
                 }
               }
             );
 
-            // Check for cancellation after file validation
-            if (cancelledRef.current) {
-              return;
-            }
-            
+            if (cancelledRef.current) return;
+
             if (result && parsedData && startData) {
-              // Calculate scores
               const startScore = calculateFunctionScore(startData);
-              
-              // Calculate expected score using the same logic as AdvancedAppBulk
+
               let expectedScore = 0;
               let summary = null;
               let icdList = [];
               let covariateResult = null;
-              
+
               try {
                 summary = extractPatientSummary(parsedData);
                 icdList = Object.entries(parsedData)
                   .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
                   .map(([_, value]) => value)
                   .filter(Boolean);
-                
+
                 covariateResult = await calculateFunctionScoreSecure({
                   parsedValues: parsedData,
                   summary,
@@ -260,27 +249,17 @@ const AdvancedSummaryView = () => {
                   ardDate: parsedData["A2300"],
                   manualOverrides: {}
                 });
-                
+
                 expectedScore = covariateResult?.weightedScore || 0;
-                console.log('Expected score calculated (bulk):', expectedScore, 'from result:', covariateResult);
               } catch (error) {
                 console.error('Calculation failed (bulk):', error);
-                console.error('Error details:', {
-                  message: error.message,
-                  status: error.status,
-                  data: error.data
-                });
                 expectedScore = 0;
               }
-              
-              // Check for cancellation before continuing
-              if (cancelledRef.current) {
-                return;
-              }
-              
+
+              if (cancelledRef.current) return;
+
               const scoreDifference = expectedScore - startScore;
 
-              // Create summary data for lazy loading
               const summaryData = {
                 startScore,
                 expectedScore,
@@ -291,7 +270,6 @@ const AdvancedSummaryView = () => {
                 primaryCondition: summary?.primaryCondition || ''
               };
 
-              // Store raw data for lazy loading (only when needed)
               const rawData = {
                 parsedValues: parsedData,
                 groupedSections: groupedData,
@@ -300,7 +278,6 @@ const AdvancedSummaryView = () => {
                 imputedItems: imputedData
               };
 
-              // Create a new file entry for this extracted XML file
               const fileId = `extracted-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
               const extractedFileEntry = {
                 id: fileId,
@@ -310,16 +287,14 @@ const AdvancedSummaryView = () => {
                 size: extractedFile.size,
                 status: 'processed',
                 results: summaryData,
-                _rawData: rawData // Store the data directly for now
+                _rawData: rawData
               };
-              
-              // Add successful file to uploadedFiles immediately so cards update in real-time
+
               setUploadedFiles(prev => {
                 const withoutZip = prev.filter(f => f.id !== fileObj.id);
                 return [...withoutZip, extractedFileEntry];
               });
             } else {
-              // Create error entry for failed extraction
               const errorMessage = validationError ? validationError.message : 'Failed to process file - missing or invalid data';
               const errorFileEntry = {
                 id: `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -327,17 +302,21 @@ const AdvancedSummaryView = () => {
                 status: 'error',
                 error: errorMessage
               };
-              
-              // Add error file to uploadedFiles immediately so cards update in real-time
+
               setUploadedFiles(prev => {
                 const withoutZip = prev.filter(f => f.id !== fileObj.id);
                 return [...withoutZip, errorFileEntry];
               });
             }
-            
-            // Update progress for each processed file
+
             processedCount++;
             setProcessed(processedCount);
+          };
+
+          for (let i = 0; i < extractedFiles.length; i += CONCURRENCY_LIMIT) {
+            if (cancelledRef.current) break;
+            const batch = extractedFiles.slice(i, i + CONCURRENCY_LIMIT);
+            await Promise.all(batch.map(file => processExtractedFile(file)));
           }
           
           // Remove the original zip file (extracted files are already added above)
