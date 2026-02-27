@@ -166,8 +166,12 @@ describe('determineMobilityType', () => {
     expect(determineMobilityType(values)).toBe('Wheel');
   });
 
-  it('returns "Unknown" when GG0170I1 is missing', () => {
-    expect(determineMobilityType({})).toBe('Unknown');
+  it('returns "Walk" when GG0170I1 is missing (remaining patients)', () => {
+    expect(determineMobilityType({})).toBe('Walk');
+  });
+
+  it('returns "Walk" when GG0170I3 is missing but I1 is ANA (remaining patients)', () => {
+    expect(determineMobilityType({ GG0170I1: '09', GG0170R1: '02' })).toBe('Walk');
   });
 
   it('returns "Walk" when I1/I3 are ANA but no wheelchair items are valid', () => {

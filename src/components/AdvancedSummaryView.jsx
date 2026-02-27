@@ -141,9 +141,10 @@ const AdvancedSummaryView = () => {
       });
     }
 
-    // Add new files to the list
+    // Add new files to the list, sorted alphabetically by name
+    const sortByName = (a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase());
     setUploadedFiles(prev => {
-      const updated = [...prev, ...newFiles];
+      const updated = [...prev, ...newFiles].sort(sortByName);
       return updated;
     });
 
@@ -187,8 +188,11 @@ const AdvancedSummaryView = () => {
           // Read the file as ArrayBuffer to avoid consumption issues
           const fileToRead = fileObj.file || fileObj;
           const arrayBuffer = await fileToRead.arrayBuffer();
-          const extractedFiles = await extractXmlFilesFromZip(arrayBuffer);
-          
+          let extractedFiles = await extractXmlFilesFromZip(arrayBuffer);
+          extractedFiles = extractedFiles.sort((a, b) =>
+            (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase())
+          );
+
           // Update the total file count to reflect the extracted files
           setTotalFiles(extractedFiles.length);
           
@@ -306,9 +310,10 @@ const AdvancedSummaryView = () => {
                 _rawData: rawData
               };
 
+              const sortByName = (a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase());
               setUploadedFiles(prev => {
                 const withoutZip = prev.filter(f => f.id !== fileObj.id);
-                return [...withoutZip, extractedFileEntry];
+                return [...withoutZip, extractedFileEntry].sort(sortByName);
               });
             } else {
               const errorMessage = validationError ? validationError.message : 'Failed to process file - missing or invalid data';
@@ -319,9 +324,10 @@ const AdvancedSummaryView = () => {
                 error: errorMessage
               };
 
+              const sortByName = (a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase());
               setUploadedFiles(prev => {
                 const withoutZip = prev.filter(f => f.id !== fileObj.id);
-                return [...withoutZip, errorFileEntry];
+                return [...withoutZip, errorFileEntry].sort(sortByName);
               });
             }
 

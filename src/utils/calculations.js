@@ -145,8 +145,7 @@ export const ANA = new Set(["07", "09", "10", "88"]);
 export const valid = new Set(["01", "02", "03", "04", "05", "06"]);
 
 export function determineMobilityType(parsedValues) {
-  if (!parsedValues["GG0170I1"]) return "Unknown";
-
+  // Wheelchair: I1 and I3 both ANA, and valid R or S. Remaining patients = Walk (including when I1/I3 missing).
   const i1 = parsedValues["GG0170I1"];
   const i3 = parsedValues["GG0170I3"];
   const r1 = parsedValues["GG0170R1"];

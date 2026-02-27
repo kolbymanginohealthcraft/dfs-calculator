@@ -92,8 +92,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
         private static string DetermineMobilityType(Dictionary<string, string> parsedValues)
         {
-            if (String.IsNullOrEmpty(parsedValues.GetValueOrDefault("GG0170I1"))) return "Unknown";
-
+            // Wheelchair: I1 and I3 both ANA, and valid R or S. Remaining patients = Walk (including when I1/I3 missing).
             string i1 = parsedValues.GetValueOrDefault("GG0170I1");
             string i3 = parsedValues.GetValueOrDefault("GG0170I3");
             string r1 = parsedValues.GetValueOrDefault("GG0170R1");

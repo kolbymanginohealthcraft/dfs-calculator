@@ -569,9 +569,10 @@ function AdvancedAppDetail() {
       });
     }
 
-    // Add new files to the list
+    // Add new files to the list, sorted alphabetically by name
+    const sortByName = (a, b) => (a.name || '').toLowerCase().localeCompare((b.name || '').toLowerCase());
     setUploadedFiles(prev => {
-      const updated = [...prev, ...newFiles];
+      const updated = [...prev, ...newFiles].sort(sortByName);
       return updated;
     });
     
