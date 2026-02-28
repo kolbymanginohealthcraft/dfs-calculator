@@ -10,6 +10,8 @@ namespace Aegis.DfsCalculator.Server.Utils
     {
         // Configuration flag for I0020 dependency methodology
         const bool USE_I0020_DEPENDENCIES = true;
+        // Set to true for full CMS spec (I1 and I3 both ANA). Set to false for in-progress patients where discharge (I3) is not yet known.
+        const bool REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR = false;
         static List<string> ANA = new List<string> { "07", "09", "10", "88" };
         static List<string> VALID = new List<string> { "01", "02", "03", "04", "05", "06" };
         static List<string> MODERATELY_IMPAIRED = new List<string> { "08", "09", "10", "11", "12" };
@@ -30,7 +32,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
         private static string DetermineMobilityType(Dictionary<string, string> parsedValues)
         {
-            // Wheelchair: I1 and I3 both ANA, and valid R or S. Remaining patients = Walk (including when I1/I3 missing).
+            // Wheelchair: I1 ANA (and I3 ANA when REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR). Valid R or S. Remaining = Walk.
             string i1 = parsedValues.GetValueOrDefault("GG0170I1");
             string i3 = parsedValues.GetValueOrDefault("GG0170I3");
             string r1 = parsedValues.GetValueOrDefault("GG0170R1");
@@ -38,11 +40,12 @@ namespace Aegis.DfsCalculator.Server.Utils
             string s1 = parsedValues.GetValueOrDefault("GG0170S1");
             string s3 = parsedValues.GetValueOrDefault("GG0170S3");
 
-            return ANA.Any(i => i == i1) &&
-                ANA.Any(i => i == i3) &&
-                (VALID.Any(i => i == r1) || VALID.Any(i => i == r3) || VALID.Any(i => i == s1) || VALID.Any(i => i == s3))
-                ? "Wheel"
-                : "Walk";
+            bool i1AndI3Ana = REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR
+                ? (ANA.Any(i => i == i1) && ANA.Any(i => i == i3))
+                : ANA.Any(i => i == i1);
+            bool hasValidWheelchair = VALID.Any(i => i == r1) || VALID.Any(i => i == r3) || VALID.Any(i => i == s1) || VALID.Any(i => i == s3);
+
+            return i1AndI3Ana && hasValidWheelchair ? "Wheel" : "Walk";
         }
 
         private static double ResolveScore(string? rawValue)
@@ -656,7 +659,10 @@ namespace Aegis.DfsCalculator.Server.Utils
             // covariates["Entry"] = 1;
 
             // 2. Admission Function score + squared
-            double startScore = CalculateFunctionScore(startScores);
+            // Use parsedValues for mobility determination (has GG0170I1, GG0170R1, etc.);
+            // startScores has performance keys (GG0170I, GG0170R) which would yield wrong mobility type
+            string mobilityType = DetermineMobilityType(parsedValues);
+            double startScore = CalculateFunctionScore(startScores, mobilityType);
             covariates["Admission Function - Continuous Form"] = startScore;
             covariates["Admission Function - Squared Form"] = Math.Pow(startScore, 2);
 

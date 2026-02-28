@@ -24,8 +24,15 @@ const ModelEndScore = React.memo(({
   imputedItems = new Set(),
 }) => {
   const [filterContributing, setFilterContributing] = useState(false);
-  const startTotal = useMemo(() => calculateFunctionScore(startScores), [startScores]);
-  const contributingIds = useMemo(() => getContributingItemIds(modeledValues), [modeledValues]);
+  const startTotal = useMemo(
+    () => calculateFunctionScore(startScores, mobilityType),
+    [startScores, mobilityType]
+  );
+  // Use parsedValues (raw MDS format with I1/I3/R1/R3) for mobility type, not modeledValues (performance keys)
+  const contributingIds = useMemo(
+    () => getContributingItemIds(parsedValues),
+    [parsedValues]
+  );
   const meetsExpectedScore = modeledTotal >= weightedScore;
 
   const toggleFilter = () => {

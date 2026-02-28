@@ -10,6 +10,8 @@ namespace Aegis.DfsCalculator.Server.Utils
         static List<string> VALID = new List<string> { "01", "02", "03", "04", "05", "06" };
         static List<string> WALKER_ITEMS = new List<string> { "GG0170I1", "GG0170J1", "GG0170K1", "GG0170L1", "GG0170M1", "GG0170N1", "GG0170O1" };
         static List<string> WHEELCHAIR_ITEMS = new List<string> { "GG0170R1", "GG0170S1" };
+        // Set to true for full CMS spec (I1 and I3 both ANA). Set to false for in-progress patients where discharge (I3) is not yet known.
+        static bool REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR = false;
         static HashSet<string> ITEMS_WITH_SKIPPED_COVARIATE = new HashSet<string> { "GG0170J1", "GG0170K1", "GG0170L1", "GG0170N1", "GG0170O1", "GG0170R1", "GG0170S1" };
 
         /// <summary>
@@ -92,7 +94,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
         private static string DetermineMobilityType(Dictionary<string, string> parsedValues)
         {
-            // Wheelchair: I1 and I3 both ANA, and valid R or S. Remaining patients = Walk (including when I1/I3 missing).
+            // Wheelchair: I1 ANA (and I3 ANA when REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR). Valid R or S. Remaining = Walk.
             string i1 = parsedValues.GetValueOrDefault("GG0170I1");
             string i3 = parsedValues.GetValueOrDefault("GG0170I3");
             string r1 = parsedValues.GetValueOrDefault("GG0170R1");
@@ -100,11 +102,12 @@ namespace Aegis.DfsCalculator.Server.Utils
             string s1 = parsedValues.GetValueOrDefault("GG0170S1");
             string s3 = parsedValues.GetValueOrDefault("GG0170S3");
 
-            return ANA.Any(i => i == i1) &&
-                ANA.Any(i => i == i3) &&
-                (VALID.Any(i => i == r1) || VALID.Any(i => i == r3) || VALID.Any(i => i == s1) || VALID.Any(i => i == s3))
-                ? "Wheel"
-                : "Walk";
+            bool i1AndI3Ana = REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR
+                ? (ANA.Any(i => i == i1) && ANA.Any(i => i == i3))
+                : ANA.Any(i => i == i1);
+            bool hasValidWheelchair = VALID.Any(i => i == r1) || VALID.Any(i => i == r3) || VALID.Any(i => i == s1) || VALID.Any(i => i == s3);
+
+            return i1AndI3Ana && hasValidWheelchair ? "Wheel" : "Walk";
         }
 
         private static double GetGGItemSpecificCovariate(string covariateName, Dictionary<string, string> parsedValues, Dictionary<string, double?>? itemMultipliers = null) 

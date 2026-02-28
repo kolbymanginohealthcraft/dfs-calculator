@@ -170,8 +170,9 @@ describe('determineMobilityType', () => {
     expect(determineMobilityType({})).toBe('Walk');
   });
 
-  it('returns "Walk" when GG0170I3 is missing but I1 is ANA (remaining patients)', () => {
-    expect(determineMobilityType({ GG0170I1: '09', GG0170R1: '02' })).toBe('Walk');
+  it('returns "Wheel" when I1 is ANA and R1 valid (admission-only mode; I3 not required)', () => {
+    // With REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR=false, I3 is not checked
+    expect(determineMobilityType({ GG0170I1: '09', GG0170R1: '02' })).toBe('Wheel');
   });
 
   it('returns "Walk" when I1/I3 are ANA but no wheelchair items are valid', () => {

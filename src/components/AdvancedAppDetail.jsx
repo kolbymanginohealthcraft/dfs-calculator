@@ -300,8 +300,9 @@ function AdvancedAppDetail() {
 
   const subtotal = useCallback((domain) => subtotals[domain] || 0, [subtotals]);
 
-  const startTotal = calculateFunctionScore(startScores);
-  const modeledTotal = calculateFunctionScore(modeledValues);
+  const mobilityType = determineMobilityType(parsedValues);
+  const startTotal = calculateFunctionScore(startScores, mobilityType);
+  const modeledTotal = calculateFunctionScore(modeledValues, mobilityType);
 
   // Memoize patient summary to avoid recalculating with same parameters
   const patientSummary = useMemo(() => 
@@ -319,8 +320,6 @@ function AdvancedAppDetail() {
     age,
     ardGapDays,
   } = patientSummary;
-
-  const mobilityType = determineMobilityType(parsedValues);
   const conditionCode = parsedValues["I0020"];
   const conditionCategory = conditionMap[conditionCode] || "Unknown";
 

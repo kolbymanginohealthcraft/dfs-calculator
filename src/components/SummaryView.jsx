@@ -93,7 +93,8 @@ const SummaryView = React.memo(({ uploadedFiles, onSelectFile, onExportAll, onEx
     if (!file.userModeledValues || !calculateFunctionScore) return null;
     
     try {
-      const userEndScore = calculateFunctionScore(file.userModeledValues);
+      const mobilityType = file.results?.mobilityType || 'Walk';
+      const userEndScore = calculateFunctionScore(file.userModeledValues, mobilityType);
       const startScore = file.results?.startScore || 0;
       
       // Only return the score if there's actual gain (end > start)

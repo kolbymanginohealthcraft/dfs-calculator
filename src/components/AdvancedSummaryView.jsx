@@ -275,7 +275,9 @@ const AdvancedSummaryView = () => {
               if (cancelledRef.current) return;
 
               // Calculate startScore AFTER imputed values are applied to startData
-              const startScore = calculateFunctionScore(startData);
+              // Use parsedData (raw MDS format) for mobility type; startData has performance keys
+              const mobilityType = determineMobilityType(parsedData);
+              const startScore = calculateFunctionScore(startData, mobilityType);
               const scoreDifference = expectedScore - startScore;
 
               const summaryData = {
@@ -284,7 +286,7 @@ const AdvancedSummaryView = () => {
                 scoreDifference,
                 patientFirstName: parsedData?.["A0500A"] || '',
                 patientLastName: parsedData?.["A0500C"] || '',
-                mobilityType: determineMobilityType(startData),
+                mobilityType,
                 primaryCondition: summary?.primaryCondition || ''
               };
 
@@ -434,7 +436,9 @@ const AdvancedSummaryView = () => {
         
         // Calculate startScore AFTER imputed values are applied to startData
         // so that continuous imputed values (e.g. 1.7903) are included
-        const startScore = calculateFunctionScore(startData);
+        // Use parsedData (raw MDS format) for mobility type; startData has performance keys
+        const mobilityType = determineMobilityType(parsedData);
+        const startScore = calculateFunctionScore(startData, mobilityType);
         const scoreDifference = expectedScore - startScore;
 
         // Create summary data for lazy loading
@@ -444,7 +448,7 @@ const AdvancedSummaryView = () => {
           scoreDifference,
           patientFirstName: parsedData?.["A0500A"] || 'Unknown',
           patientLastName: parsedData?.["A0500C"] || 'Patient',
-          mobilityType: 'Unknown' // This would need to be calculated
+          mobilityType
         };
 
         // Store raw data for lazy loading
@@ -516,7 +520,8 @@ const AdvancedSummaryView = () => {
       // Only calculate user end score if userModeledValues exists AND there's actual gain (end > start)
       let userEndScore = null;
       if (file.userModeledValues && calculateFunctionScore) {
-        const endScore = calculateFunctionScore(file.userModeledValues);
+        const mobilityType = file.results?.mobilityType || 'Walk';
+        const endScore = calculateFunctionScore(file.userModeledValues, mobilityType);
         const startScore = file.results?.startScore || 0;
         // Only use the score if there's actual gain (end > start)
         userEndScore = endScore > startScore ? endScore : null;

@@ -144,8 +144,11 @@ export function extractPatientSummary(parsedValues, ardDate) {
 export const ANA = new Set(["07", "09", "10", "88"]);
 export const valid = new Set(["01", "02", "03", "04", "05", "06"]);
 
+// Set to true for full CMS spec (I1 and I3 both ANA). Set to false for in-progress patients where discharge (I3) is not yet known.
+const REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR = false;
+
 export function determineMobilityType(parsedValues) {
-  // Wheelchair: I1 and I3 both ANA, and valid R or S. Remaining patients = Walk (including when I1/I3 missing).
+  // Wheelchair: I1 ANA (and I3 ANA when REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR). Valid R or S. Remaining = Walk.
   const i1 = parsedValues["GG0170I1"];
   const i3 = parsedValues["GG0170I3"];
   const r1 = parsedValues["GG0170R1"];
@@ -153,11 +156,12 @@ export function determineMobilityType(parsedValues) {
   const s1 = parsedValues["GG0170S1"];
   const s3 = parsedValues["GG0170S3"];
 
-  return ANA.has(i1) &&
-    ANA.has(i3) &&
-    (valid.has(r1) || valid.has(r3) || valid.has(s1) || valid.has(s3))
-    ? "Wheel"
-    : "Walk";
+  const i1AndI3Ana = REQUIRE_DISCHARGE_I3_FOR_WHEELCHAIR
+    ? (ANA.has(i1) && ANA.has(i3))
+    : ANA.has(i1);
+  const hasValidWheelchair = valid.has(r1) || valid.has(r3) || valid.has(s1) || valid.has(s3);
+
+  return i1AndI3Ana && hasValidWheelchair ? "Wheel" : "Walk";
 }
 
 export function calculateFunctionScore(values, mobilityType = null) {
