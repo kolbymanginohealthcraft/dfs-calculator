@@ -58,14 +58,22 @@ function Covariates({
     );
   };
 
+  const dischargeTherapyKey = "No Physical or Occupational Therapy - Discharge";
+  const isDischargeTherapyActive = manualOverrides[dischargeTherapyKey] === 1;
+
   // Memoize filtered covariates to avoid recalculating on every render
   const activeCovariates = useMemo(() => {
     return Object.entries(covariates)
       .filter(
         ([_, value]) => value !== 0 && value !== undefined && value !== null
       )
-      .filter(([key]) => key.toLowerCase().includes(searchTerm.toLowerCase()));
-  }, [covariates, searchTerm]);
+      .filter(([key]) => {
+        if (showDischargeTherapyToggle && key === dischargeTherapyKey && !isDischargeTherapyActive) {
+          return false;
+        }
+        return key.toLowerCase().includes(searchTerm.toLowerCase());
+      });
+  }, [covariates, searchTerm, showDischargeTherapyToggle, isDischargeTherapyActive]);
 
   // Memoize grouped covariates
   const groupedCovariates = useMemo(() => {
@@ -94,9 +102,6 @@ function Covariates({
       0
     );
   }, [activeCovariates, multipliers]);
-  
-  const dischargeTherapyKey = "No Physical or Occupational Therapy - Discharge";
-  const isDischargeTherapyActive = manualOverrides[dischargeTherapyKey] === 1;
   
   const handleDischargeTherapyToggle = () => {
     const newValue = isDischargeTherapyActive ? 0 : 1;

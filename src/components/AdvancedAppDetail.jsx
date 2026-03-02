@@ -7,6 +7,7 @@ import {
   calculateFunctionScore,
 } from "../utils/calculations";
 import { fetchFacilityInfo } from "../utils/facilityLookup";
+import { getVersionFromArdDate } from "../utils/coefficientLoader";
 import { calculateFunctionScore as calculateFunctionScoreSecure } from "../utils/secureApiClient";
 import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
@@ -83,6 +84,23 @@ function AdvancedAppDetail() {
 
   const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
+
+  // For FY 2026+, default the discharge therapy override to 0 ("Yes, not applied")
+  // as soon as the file loads, so the backend calculates the score without it.
+  // Uses the functional updater to avoid depending on manualCovariateOverrides.
+  useEffect(() => {
+    if (ardDate) {
+      const version = getVersionFromArdDate(ardDate);
+      const needsToggle = version?.updateId && parseInt(version.updateId, 10) >= 3;
+      if (needsToggle) {
+        const key = "No Physical or Occupational Therapy - Discharge";
+        setManualCovariateOverrides(prev => {
+          if (key in prev) return prev;
+          return { ...prev, [key]: 0 };
+        });
+      }
+    }
+  }, [ardDate]);
 
   // Get current file data (memoized to prevent unnecessary re-renders)
   const currentFile = useMemo(() => 
