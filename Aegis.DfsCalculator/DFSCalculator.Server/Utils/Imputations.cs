@@ -253,13 +253,13 @@ namespace Aegis.DfsCalculator.Server.Utils
             return ComputeImputedValueFromScore(imputationScore, thresholds);
         }
 
-        public static Dictionary<string, double> ImputeMissingGGItems(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, Dictionary<string, string> targetGGItems)
+        public static Dictionary<string, double> ImputeMissingGGItems(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, Dictionary<string, string> targetGGItems, Dictionary<string, double>? manualOverrides = null)
         {
             string ardDateRaw = parsedValues.GetValueOrDefault("A2300");
             DateTime ardDate = CoefficientLoader.ParseArdDate(ardDateRaw) ?? DateTime.UtcNow;
             Dictionary<string, Dictionary<string, double?>> multipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
-            Dictionary<string, double> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
+            Dictionary<string, double> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw, manualOverrides).Covariates;
             bool usesWheelchair = covariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             string mobilityType = DetermineMobilityType(parsedValues);

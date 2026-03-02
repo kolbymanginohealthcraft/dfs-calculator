@@ -27,7 +27,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
                 if (body.TargetGGItems != null && body.TargetGGItems.Count > 0)
                 {
                     imputedValues = ServerImputations.ImputeMissingGGItems(
-                        body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores, body.TargetGGItems);
+                        body.ParsedValues, body.Summary.Age, body.ICDList, body.StartScores, body.TargetGGItems, body.ManualOverrides);
 
                     foreach (var kvp in imputedValues)
                     {
@@ -39,7 +39,7 @@ namespace Aegis.DfsCalculator.Server.Controllers
                 Dictionary<string, double?> multipliers = CoefficientLoader.GetFunctionMultipliers(body.ARDDate);
 
                 FunctionCovariatesReturn covariates = ServerCalculations.GetFunctionCovariates(
-                    body.ParsedValues, body.Summary.Age, body.ICDList, startScores, body.ARDDate);
+                    body.ParsedValues, body.Summary.Age, body.ICDList, startScores, body.ARDDate, body.ManualOverrides);
 
                 return Ok(new
                 {
@@ -68,5 +68,6 @@ namespace Aegis.DfsCalculator.Server.Controllers
         public Dictionary<string, string> StartScores { get; set; }
         public string ARDDate { get; set; }
         public Dictionary<string, string>? TargetGGItems { get; set; }
+        public Dictionary<string, double>? ManualOverrides { get; set; }
     }
 }

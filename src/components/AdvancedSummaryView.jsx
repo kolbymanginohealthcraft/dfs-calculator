@@ -11,6 +11,7 @@ import { extractXmlFilesFromZip, isZipFile, createFileFromContent } from '../uti
 import { handleFileUploadWithValidation } from '../utils/enhancedFileParser';
 import { calculateFunctionScore, extractPatientSummary, determineMobilityType, GG_ITEMS } from '../utils/calculations';
 import { processFileComplete } from '../utils/secureApiClient';
+import { getVersionFromArdDate } from '../utils/coefficientLoader';
 import { useBulkUpload } from '../contexts/BulkUploadContext';
 import { useDataLossWarning } from '../contexts/DataLossWarningContext';
 import { useRedaction } from '../contexts/RedactionContext';
@@ -249,13 +250,21 @@ const AdvancedSummaryView = () => {
                   .map(([_, value]) => value)
                   .filter(Boolean);
 
+                const ardDateVal = parsedData["A2300"];
+                const fileVersion = getVersionFromArdDate(ardDateVal);
+                const defaultOverrides = {};
+                if (fileVersion?.updateId && parseInt(fileVersion.updateId, 10) >= 3) {
+                  defaultOverrides["No Physical or Occupational Therapy - Discharge"] = 0;
+                }
+
                 covariateResult = await processFileComplete({
                   parsedValues: parsedData,
                   summary,
                   icdList,
                   startScores: rawStartScores || startData,
-                  ardDate: parsedData["A2300"],
-                  targetGGItems
+                  ardDate: ardDateVal,
+                  targetGGItems,
+                  manualOverrides: Object.keys(defaultOverrides).length > 0 ? defaultOverrides : undefined
                 });
 
                 expectedScore = covariateResult?.weightedScore || 0;
@@ -407,13 +416,21 @@ const AdvancedSummaryView = () => {
             .map(([_, value]) => value)
             .filter(Boolean);
           
+          const ardDateVal = parsedData["A2300"];
+          const fileVersion = getVersionFromArdDate(ardDateVal);
+          const defaultOverrides = {};
+          if (fileVersion?.updateId && parseInt(fileVersion.updateId, 10) >= 3) {
+            defaultOverrides["No Physical or Occupational Therapy - Discharge"] = 0;
+          }
+
           covariateResult = await processFileComplete({
             parsedValues: parsedData,
             summary,
             icdList,
             startScores: rawStartScores || startData,
-            ardDate: parsedData["A2300"],
-            targetGGItems
+            ardDate: ardDateVal,
+            targetGGItems,
+            manualOverrides: Object.keys(defaultOverrides).length > 0 ? defaultOverrides : undefined
           });
           
           expectedScore = covariateResult?.weightedScore || 0;

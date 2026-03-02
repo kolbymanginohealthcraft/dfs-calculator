@@ -190,7 +190,8 @@ export async function processFileComplete(params) {
     icdList,
     startScores,
     ardDate,
-    targetGGItems
+    targetGGItems,
+    manualOverrides
   } = params;
 
   return authenticatedFetch('/api/process-file', {
@@ -201,7 +202,8 @@ export async function processFileComplete(params) {
       icdList,
       startScores,
       ardDate,
-      targetGGItems
+      targetGGItems,
+      manualOverrides
     })
   });
 }
