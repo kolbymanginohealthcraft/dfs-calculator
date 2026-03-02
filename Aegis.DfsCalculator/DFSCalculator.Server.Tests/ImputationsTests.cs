@@ -13,7 +13,7 @@ public class ImputationsTests
     public void ShouldExclude_WhenCovariateRefersToSameItemBeingImputed()
     {
         bool result = ServerImputations.ShouldExcludeGGItemCovariate(
-            "Walk 10 Feet (GG0170I1) - Valid Score", "GG0170I1", usesWheelchair: false);
+            "Walk 10 Feet (GG0170I1) - Valid Score", "GG0170I1");
         Assert.True(result);
     }
 
@@ -21,53 +21,28 @@ public class ImputationsTests
     public void ShouldNotExclude_WhenCovariateRefersToDifferentItem()
     {
         bool result = ServerImputations.ShouldExcludeGGItemCovariate(
-            "Walk 10 Feet (GG0170I1) - Valid Score", "GG0170J1", usesWheelchair: false);
+            "Walk 10 Feet (GG0170I1) - Valid Score", "GG0170J1");
         Assert.False(result);
     }
 
     [Fact]
-    public void ShouldExclude_WalkItemsWhenUsesWheelchair()
-    {
-        // Walk items are I, J, K, L — should be excluded for wheelchair users
-        Assert.True(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Walk 10 Feet (GG0170I1) - Valid Score", "GG0130A1", usesWheelchair: true));
-        Assert.True(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Walk 50 Feet With 2 Turns (GG0170J1) - Valid Score", "GG0130A1", usesWheelchair: true));
-        Assert.True(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Walk 150 Feet (GG0170K1) - Valid Score", "GG0130A1", usesWheelchair: true));
-        Assert.True(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Walk 10 Feet Uneven Surface (GG0170L1) - Valid Score", "GG0130A1", usesWheelchair: true));
-    }
-
-    [Fact]
-    public void ShouldNotExclude_WalkItemsWhenDoesNotUseWheelchair()
+    public void ShouldNotExclude_CrossMobilityTypeCovariates()
     {
         Assert.False(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Walk 10 Feet (GG0170I1) - Valid Score", "GG0130A1", usesWheelchair: false));
-    }
-
-    [Fact]
-    public void ShouldExclude_WheelchairItemsWhenDoesNotUseWheelchair()
-    {
-        // R, S items should be excluded when not a wheelchair user
-        Assert.True(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Wheel 50 Feet With 2 Turns (GG0170R1) - Valid Score", "GG0130A1", usesWheelchair: false));
-        Assert.True(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Wheel 150 Feet (GG0170S1) - Valid Score", "GG0130A1", usesWheelchair: false));
-    }
-
-    [Fact]
-    public void ShouldNotExclude_WheelchairItemsWhenUsesWheelchair()
-    {
+            "Walk 10 Feet (GG0170I1) - Valid Score", "GG0130A1"));
         Assert.False(ServerImputations.ShouldExcludeGGItemCovariate(
-            "Wheel 50 Feet With 2 Turns (GG0170R1) - Valid Score", "GG0130A1", usesWheelchair: true));
+            "Wheel 50 Feet With 2 Turns (GG0170R1) - Valid Score", "GG0130A1"));
+        Assert.False(ServerImputations.ShouldExcludeGGItemCovariate(
+            "Walk 50 Feet With 2 Turns (GG0170J1) - Valid Score", "GG0170R1"));
+        Assert.False(ServerImputations.ShouldExcludeGGItemCovariate(
+            "Wheel 150 Feet (GG0170S1) - Valid Score", "GG0170I1"));
     }
 
     [Fact]
     public void ShouldNotExclude_CovariateWithoutGGReference()
     {
         Assert.False(ServerImputations.ShouldExcludeGGItemCovariate(
-            "High BMI", "GG0130A1", usesWheelchair: false));
+            "High BMI", "GG0130A1"));
     }
 
     // -----------------------------------------------------------------------

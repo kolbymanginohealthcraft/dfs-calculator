@@ -181,36 +181,14 @@ namespace Aegis.DfsCalculator.Server.Utils
             return 0;
         }
 
-        public static bool ShouldExcludeGGItemCovariate(string covariateName, string itemBeingImputed, bool usesWheelchair)
+        public static bool ShouldExcludeGGItemCovariate(string covariateName, string itemBeingImputed)
         {
-            // Extract GG item ID from covariate name (e.g., "Walk 10 Feet (GG0170I1) - Valid Score" -> "GG0170I1")
             Match match = Regex.Match(covariateName, @"\(GG[0-9]+[A-Z][0-9]\)");
             if (match.Success && match.Length > 0)
             {
                 string ggItemId = match.Value.Substring(1, match.Length - 2);
 
-                // Rule 1: Don't use an item in its own imputation
                 if (ggItemId == itemBeingImputed)
-                {
-                    return true;
-                }
-
-                // Extract the letter from the GG item (e.g., "GG0170I1" -> "I")
-                Match letterMatch = Regex.Match(ggItemId, @"GG[0-9]+([A-Z])[0-9]");
-                if (!letterMatch.Success || letterMatch.Groups.Count < 2)
-                {
-                    return false;
-                }
-                char covariateItemLetter = letterMatch.Groups[1].Value[0];
-
-                // Rule 2: If Uses Wheelchair, exclude Walk items (I, J, K, L)
-                if (usesWheelchair && covariateItemLetter >= 'I' && covariateItemLetter <= 'L')
-                {
-                    return true;
-                }
-
-                // Rule 3: If Not Uses Wheelchair, exclude Wheelchair items (R, S)
-                if (!usesWheelchair && covariateItemLetter >= 'R' && covariateItemLetter <= 'S')
                 {
                     return true;
                 }
@@ -225,9 +203,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             Dictionary<string, double?> multipliers = CoefficientLoader.GetImputationMultipliersForItem(ggItemId, ardDate);
             if (multipliers == null || multipliers.Keys.Count() == 0) return 1.0;
 
-            // Get covariates to determine Uses Wheelchair value (cache for reuse)
             Dictionary<string, double> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
-            bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             List<double> thresholds = GetImputationThresholds(ggItemId, ardDate);
 
@@ -243,7 +219,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                 
                 if (entry.Key.Contains("(GG") || entry.Key.Contains("Valid Score") || entry.Key.Contains("Not Attempted") || entry.Key.Contains("Skipped"))
                 {
-                    if (ShouldExcludeGGItemCovariate(entry.Key, ggItemId, usesWheelchair)) continue;
+                    if (ShouldExcludeGGItemCovariate(entry.Key, ggItemId)) continue;
                 }
 
                 var covariateValue = GetCovariateValue(entry.Key, parsedValues, age, icdList, startScores, ardDate, multipliers, cachedCovariates);
@@ -260,7 +236,6 @@ namespace Aegis.DfsCalculator.Server.Utils
             Dictionary<string, Dictionary<string, double?>> multipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
             Dictionary<string, double> covariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw, manualOverrides).Covariates;
-            bool usesWheelchair = covariates.GetValueOrDefault("Uses Wheelchair") == 1;
 
             string mobilityType = DetermineMobilityType(parsedValues);
 
@@ -289,7 +264,7 @@ namespace Aegis.DfsCalculator.Server.Utils
 
                         if (multiplierEntry.Key.Contains("(GG") || multiplierEntry.Key.Contains("Valid Score") || multiplierEntry.Key.Contains("Not Attempted") || multiplierEntry.Key.Contains("Skipped"))
                         {
-                            if (ShouldExcludeGGItemCovariate(multiplierEntry.Key, ggItemId, usesWheelchair)) continue;
+                            if (ShouldExcludeGGItemCovariate(multiplierEntry.Key, ggItemId)) continue;
 
                             Match match = Regex.Match(multiplierEntry.Key, @"\(GG[0-9]+[A-Z][0-9]\)");
                             if (match.Success && match.Length > 0)
@@ -369,9 +344,6 @@ namespace Aegis.DfsCalculator.Server.Utils
 
             // Get the standard covariates ONCE and cache them (expensive operation - don't repeat for each multiplier)
             Dictionary<string, double> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw, manualOverrides).Covariates;
-            // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
-            bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
-
             // Determine mobility type (same logic as ImputationTab)
             string mobilityType = DetermineMobilityType(parsedValues);
 
@@ -413,7 +385,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                     
                     if (covariateName.Contains("(GG") || covariateName.Contains("Valid Score") || covariateName.Contains("Not Attempted") || covariateName.Contains("Skipped"))
                     {
-                        if (ShouldExcludeGGItemCovariate(covariateName, ggItemId, usesWheelchair))
+                        if (ShouldExcludeGGItemCovariate(covariateName, ggItemId))
                         {
                             continue;
                         }
