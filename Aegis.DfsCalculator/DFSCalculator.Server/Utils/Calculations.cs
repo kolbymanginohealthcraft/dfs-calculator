@@ -417,7 +417,7 @@ namespace Aegis.DfsCalculator.Server.Utils
                 covariates["Lymphoma and Other Cancers (HCC10)"] = 1;
             }
 
-            // Major Head Injury (HCC167), I0020 ≠ "01"
+            // Major Head Injury (HCC167), I0020 ≠ "03"
             if (USE_I0020_DEPENDENCIES)
             {
                 if (hccList.Any(hcc => hcc == 167) && parsedValues.GetValueOrDefault("I0020") != "03")
