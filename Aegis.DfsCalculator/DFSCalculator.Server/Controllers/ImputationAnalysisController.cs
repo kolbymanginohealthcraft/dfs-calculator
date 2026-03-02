@@ -28,7 +28,8 @@ namespace Aegis.DfsCalculator.Server.Controllers
                     body.ParsedValues, 
                     body.Summary.Age, 
                     body.ICDList, 
-                    body.StartScores
+                    body.StartScores,
+                    body.ManualOverrides
                 );
                 // Wrap in object to match frontend expectations: { imputationData: {...} }
                 return Ok(new { imputationData = imputationData });
@@ -49,6 +50,6 @@ namespace Aegis.DfsCalculator.Server.Controllers
         public List<string> ICDList { get; set; }
         public Dictionary<string, string> StartScores { get; set; }
         public string ARDDate { get; set; }
-        public Dictionary<string, string>? ManualOverrides { get; set; }
+        public Dictionary<string, double>? ManualOverrides { get; set; }
     }
 }

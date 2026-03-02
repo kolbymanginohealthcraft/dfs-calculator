@@ -12,6 +12,7 @@ function ImputationTab({
   startScores = {},
   summary = {},
   icdList = [],
+  manualOverrides = {},
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGGItem, setSelectedGGItem] = useState(null);
@@ -72,7 +73,8 @@ function ImputationTab({
             : extractPatientSummary(parsedValues, ardDate),
           icdList: icdList.length > 0 ? icdList : currentIcdList,
           startScores,
-          ardDate
+          ardDate,
+          manualOverrides
         }, { signal: abortController.signal });
 
         if (!abortController.signal.aborted) {
@@ -92,7 +94,7 @@ function ImputationTab({
 
     loadImputationAnalysis();
     return () => abortController.abort();
-  }, [hasFile, parsedValues, startScores, summary, icdList]);
+  }, [hasFile, parsedValues, startScores, summary, icdList, manualOverrides]);
 
   // Helper function to get GG item label (following FunctionItemsList.jsx pattern)
   const getGGItemLabel = (ggItemId) => {

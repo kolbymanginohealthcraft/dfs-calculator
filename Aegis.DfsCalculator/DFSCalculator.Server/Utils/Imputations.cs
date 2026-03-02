@@ -359,7 +359,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             return thresholds.All(t => t != 0) ? thresholds : DEFAULT_THRESHOLDS;
         }
 
-        public static Dictionary<string, ImputationAnalysisData> GetImputationAnalysisData(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores)
+        public static Dictionary<string, ImputationAnalysisData> GetImputationAnalysisData(Dictionary<string, string> parsedValues, int age, List<string> icdList, Dictionary<string, string> startScores, Dictionary<string, double>? manualOverrides = null)
         {
             Dictionary<string, ImputationAnalysisData> data = new Dictionary<string, ImputationAnalysisData> ();
 
@@ -368,7 +368,7 @@ namespace Aegis.DfsCalculator.Server.Utils
             Dictionary<string, Dictionary<string, double?>> imputationMultipliers = CoefficientLoader.GetImputationMultipliers(ardDate);
 
             // Get the standard covariates ONCE and cache them (expensive operation - don't repeat for each multiplier)
-            Dictionary<string, double> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw).Covariates;
+            Dictionary<string, double> cachedCovariates = ServerCalculations.GetFunctionCovariates(parsedValues, age, icdList, startScores, ardDateRaw, manualOverrides).Covariates;
             // Determine if patient uses wheelchair (Uses Wheelchair covariate = 1 or 0)
             bool usesWheelchair = cachedCovariates.GetValueOrDefault("Uses Wheelchair") == 1;
 

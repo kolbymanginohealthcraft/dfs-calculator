@@ -8,7 +8,7 @@ import {
 } from "../utils/calculations";
 import { fetchFacilityInfo } from "../utils/facilityLookup";
 import { getVersionFromArdDate } from "../utils/coefficientLoader";
-import { calculateFunctionScore as calculateFunctionScoreSecure } from "../utils/secureApiClient";
+import { calculateFunctionScore as calculateFunctionScoreSecure, getImputationAnalysisData } from "../utils/secureApiClient";
 import useValueDescriptions from "../utils/useValueDescriptions";
 import { redactFullName, redactFacility, redactAddress } from "../utils/redactionUtils";
 import { useBulkUpload } from "../contexts/BulkUploadContext";
@@ -81,9 +81,13 @@ function AdvancedAppDetail() {
   const [manualCovariateOverrides, setManualCovariateOverrides] = useState({});
   const exportRef = useRef();
   const initialCovariatesLoaded = useRef(false);
+  const startScoresRef = useRef({});
+  const lastImputedOverridesRef = useRef(null);
+  const currentFileIdRef = useRef(null);
 
   const descriptions = useValueDescriptions();
   const ardDate = parsedValues["A2300"];
+  startScoresRef.current = startScores;
 
   // For FY 2026+, default the discharge therapy override to 0 ("Yes, not applied")
   // as soon as the file loads, so the backend calculates the score without it.
@@ -107,6 +111,7 @@ function AdvancedAppDetail() {
     currentFileIndex >= 0 ? uploadedFiles[currentFileIndex] : null,
     [currentFileIndex, uploadedFiles]
   );
+  currentFileIdRef.current = currentFile?.id ?? null;
   
   const hasFile = useMemo(() => 
     !!currentFile && currentFile.status === 'processed',
@@ -367,43 +372,132 @@ function AdvancedAppDetail() {
     };
   }, [clearAllPatientData]);
 
-  // Recalculate only when manual overrides change — skip when covariates are already cached.
-  // covariates/versionMultipliers are NOT in the dependency array because the effect sets them.
+  // Recalculate covariates, weighted score, AND re-impute start scores when
+  // overrides change. Uses startScoresRef instead of startScores in the
+  // dependency array to avoid infinite loops when re-imputation updates them.
+  // Returns a cleanup that cancels stale in-flight requests.
   useEffect(() => {
-    if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScores).length > 0) {
+    let cancelled = false;
+
+    if (hasFile && Object.keys(parsedValues).length > 0 && Object.keys(startScoresRef.current).length > 0) {
       const hasManualOverrides = Object.keys(manualCovariateOverrides).length > 0;
       if (hasManualOverrides || !initialCovariatesLoaded.current) {
+        if (!initialCovariatesLoaded.current) {
+          lastImputedOverridesRef.current = null;
+        }
+
         const icdList = Object.entries(parsedValues)
           .filter(([key]) => key === "I0020B" || /^I8000[A-J]$/.test(key))
           .map(([_, value]) => value)
           .filter(Boolean);
 
-        const calculateScores = async () => {
+        const calculateAll = async () => {
           try {
+            let effectiveStartScores = startScoresRef.current;
+
+            // Re-impute missing GG items when overrides change so the
+            // function items list stays in sync with the imputation tab.
+            const overridesKey = JSON.stringify(manualCovariateOverrides);
+            if (hasManualOverrides && imputedItems.size > 0 && lastImputedOverridesRef.current !== overridesKey) {
+              const imputationResult = await getImputationAnalysisData({
+                parsedValues,
+                summary: extractPatientSummary(parsedValues, ardDate),
+                icdList,
+                startScores: effectiveStartScores,
+                ardDate,
+                manualOverrides: manualCovariateOverrides
+              });
+
+              if (cancelled) return;
+
+              if (imputationResult?.imputationData) {
+                const newStartScores = { ...effectiveStartScores };
+                let hasChanges = false;
+                for (const [ggItemId, data] of Object.entries(imputationResult.imputationData)) {
+                  if (data.needsImputation && data.imputedValue != null) {
+                    const itemId = ggItemId.endsWith('1') ? ggItemId.slice(0, -1) : ggItemId;
+                    const newValue = String(data.imputedValue);
+                    if (newStartScores[itemId] !== newValue) {
+                      newStartScores[itemId] = newValue;
+                      hasChanges = true;
+                    }
+                  }
+                }
+
+                if (hasChanges) {
+                  const oldStartScores = effectiveStartScores;
+                  effectiveStartScores = newStartScores;
+                  startScoresRef.current = newStartScores;
+                  setStartScores(newStartScores);
+                  setModeledValues(prev => {
+                    const updated = { ...prev };
+                    let modelChanged = false;
+                    for (const [ggItemId, data] of Object.entries(imputationResult.imputationData)) {
+                      if (data.needsImputation && data.imputedValue != null) {
+                        const itemId = ggItemId.endsWith('1') ? ggItemId.slice(0, -1) : ggItemId;
+                        if (prev[itemId] === oldStartScores[itemId]) {
+                          updated[itemId] = String(data.imputedValue);
+                          modelChanged = true;
+                        }
+                      }
+                    }
+                    return modelChanged ? updated : prev;
+                  });
+                }
+                lastImputedOverridesRef.current = overridesKey;
+              }
+            }
+
             const result = await calculateFunctionScoreSecure({
               parsedValues,
               summary: extractPatientSummary(parsedValues, ardDate),
               icdList,
-              startScores,
+              startScores: effectiveStartScores,
               ardDate,
               manualOverrides: manualCovariateOverrides
             });
 
+            if (cancelled) return;
+
+            const newExpectedScore = result.weightedScore || 0;
             setVersionMultipliers(result.multipliers || {});
             setCovariates(result.covariates || {});
+            setWeightedScore(newExpectedScore);
             initialCovariatesLoaded.current = true;
-            if (hasManualOverrides) {
-              setWeightedScore(result.weightedScore || 0);
+
+            // Persist the corrected scores to the file object so the summary
+            // view reflects them immediately (it reads file.results).
+            const fileId = currentFileIdRef.current;
+            if (fileId) {
+              const newStartTotal = calculateFunctionScore(
+                effectiveStartScores, determineMobilityType(parsedValues)
+              );
+              setUploadedFiles(prev => prev.map(f =>
+                f.id === fileId
+                  ? {
+                      ...f,
+                      userWeightedScore: newExpectedScore,
+                      results: {
+                        ...f.results,
+                        expectedScore: newExpectedScore,
+                        startScore: newStartTotal,
+                        scoreDifference: newExpectedScore - newStartTotal
+                      }
+                    }
+                  : f
+              ));
             }
           } catch (error) {
             // Silently handle calculation errors - they're already shown in UI if needed
           }
         };
 
-        calculateScores();
+        calculateAll();
       }
     }
-  }, [hasFile, parsedValues, startScores, ardDate, manualCovariateOverrides]);
+
+    return () => { cancelled = true; };
+  }, [hasFile, parsedValues, ardDate, manualCovariateOverrides]);
 
   const handleExport = async () => {
     if (!fileName) return;
@@ -768,6 +862,7 @@ function AdvancedAppDetail() {
                       startScores={startScores}
                       summary={patientSummary}
                       icdList={imputationIcdList}
+                      manualOverrides={manualCovariateOverrides}
                     />
                   </Suspense>
                 </div>

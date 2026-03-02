@@ -225,7 +225,8 @@ export async function getImputationAnalysisData(params, { signal } = {}) {
     summary,
     icdList,
     startScores,
-    ardDate
+    ardDate,
+    manualOverrides
   } = params;
 
   return authenticatedFetch('/api/imputation-analysis', {
@@ -235,7 +236,8 @@ export async function getImputationAnalysisData(params, { signal } = {}) {
       summary,
       icdList,
       startScores,
-      ardDate
+      ardDate,
+      manualOverrides
     }),
     signal
   });
